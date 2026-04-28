@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-primary: #1F4E46;
+  --color-secondary: #3FAE8C;
+  --color-gold: #E6B84C;
+  --color-white: #FFFFFF;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
