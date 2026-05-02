@@ -451,6 +451,10 @@
     pointer-events: none;
   }
 
+  .visible {
+    visibility: visible;
+  }
+
   .absolute {
     position: absolute;
   }
@@ -489,10 +493,6 @@
 
   .top-1\/2 {
     top: 50%;
-  }
-
-  .top-1\/4 {
-    top: 25%;
   }
 
   .top-5 {
@@ -569,10 +569,6 @@
 
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
-  }
-
-  .bottom-1\/4 {
-    bottom: 25%;
   }
 
   .bottom-6 {

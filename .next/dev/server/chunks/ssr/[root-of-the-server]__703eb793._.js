@@ -919,38 +919,82 @@ function HowItWorks() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         className: "bg-white pt-24 pb-10 lg:pt-32 lg:pb-12 relative overflow-hidden",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                src: "/images/Group.png",
-                alt: "",
-                "aria-hidden": "true",
-                className: "absolute top-1/4 hidden lg:block select-none pointer-events-none",
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                width: "0",
+                height: "0",
                 style: {
-                    width: 380,
-                    opacity: 0.5,
-                    filter: "grayscale(1) brightness(0)",
-                    right: 0
-                }
+                    position: "absolute"
+                },
+                "aria-hidden": "true",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("filter", {
+                        id: "s-wm",
+                        colorInterpolationFilters: "sRGB",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("feColorMatrix", {
+                            type: "matrix",
+                            values: "0 0 0 0 0.12 0 0 0 0 0.31 0 0 0 0 0.27 0 0 0 20 0"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/HowItWorks.js",
+                            lineNumber: 87,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/HowItWorks.js",
+                        lineNumber: 85,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/src/components/HowItWorks.js",
+                    lineNumber: 84,
+                    columnNumber: 9
+                }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/HowItWorks.js",
                 lineNumber: 83,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                src: "/images/Group.png",
-                alt: "",
-                "aria-hidden": "true",
-                className: "absolute bottom-1/4 hidden lg:block select-none pointer-events-none",
-                style: {
-                    width: 380,
-                    opacity: 0.5,
-                    filter: "grayscale(1) brightness(0)",
-                    left: 0
+            [
+                {
+                    top: "2%",
+                    left: "-6%"
+                },
+                {
+                    top: "2%",
+                    left: "58%"
+                },
+                {
+                    top: "34%",
+                    left: "-4%"
+                },
+                {
+                    top: "34%",
+                    left: "60%"
+                },
+                {
+                    top: "66%",
+                    left: "-6%"
+                },
+                {
+                    top: "66%",
+                    left: "58%"
                 }
-            }, void 0, false, {
-                fileName: "[project]/src/components/HowItWorks.js",
-                lineNumber: 90,
-                columnNumber: 7
-            }, this),
+            ].map((pos, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                    src: "/images/Group.png",
+                    alt: "",
+                    "aria-hidden": "true",
+                    className: "absolute select-none pointer-events-none",
+                    style: {
+                        width: 300,
+                        top: pos.top,
+                        left: pos.left,
+                        opacity: 0.03,
+                        filter: "url(#s-wm)"
+                    }
+                }, i, false, {
+                    fileName: "[project]/src/components/HowItWorks.js",
+                    lineNumber: 107,
+                    columnNumber: 9
+                }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "max-w-7xl mx-auto px-4 lg:px-8 relative z-10",
                 children: [
@@ -964,12 +1008,12 @@ function HowItWorks() {
                             children: "Comment ça marche ?"
                         }, void 0, false, {
                             fileName: "[project]/src/components/HowItWorks.js",
-                            lineNumber: 100,
+                            lineNumber: 125,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/HowItWorks.js",
-                        lineNumber: 99,
+                        lineNumber: 124,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -993,7 +1037,7 @@ function HowItWorks() {
                                                 children: step.num
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 116,
+                                                lineNumber: 141,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1004,7 +1048,7 @@ function HowItWorks() {
                                                 children: step.title
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 123,
+                                                lineNumber: 148,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1017,7 +1061,7 @@ function HowItWorks() {
                                                 children: step.desc
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 126,
+                                                lineNumber: 151,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
@@ -1029,13 +1073,13 @@ function HowItWorks() {
                                                 children: step.btn
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 127,
+                                                lineNumber: 152,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/HowItWorks.js",
-                                        lineNumber: 114,
+                                        lineNumber: 139,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1052,41 +1096,41 @@ function HowItWorks() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HowItWorks.js",
-                                            lineNumber: 139,
+                                            lineNumber: 164,
                                             columnNumber: 21
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "rounded-3xl bg-slate-50 p-6 flex items-center justify-center h-64",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(IllustrationComponent, {}, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 148,
+                                                lineNumber: 173,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HowItWorks.js",
-                                            lineNumber: 147,
+                                            lineNumber: 172,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HowItWorks.js",
-                                        lineNumber: 137,
+                                        lineNumber: 162,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, step.num, true, {
                                 fileName: "[project]/src/components/HowItWorks.js",
-                                lineNumber: 112,
+                                lineNumber: 137,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/src/components/HowItWorks.js",
-                        lineNumber: 106,
+                        lineNumber: 131,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HowItWorks.js",
-                lineNumber: 97,
+                lineNumber: 122,
                 columnNumber: 7
             }, this)
         ]

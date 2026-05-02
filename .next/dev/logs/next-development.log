@@ -1,5 +1,13 @@
-[00:00:02.767] Server  LOG     ✓ Ready in 2.5s
-[00:00:15.089] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:15.266] Browser WARN    Image with src "/images/logo Sunaala.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:15.266] Browser WARN    Image with src "/images/Group 164.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:00:05.205] Server  LOG     ✓ Ready in 3.6s
+[00:00:16.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:16.360] Browser WARN    Image with src "/images/logo Sunaala.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:03:10.622] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:10.909] Browser WARN    Image with src "/images/logo Sunaala.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:03:54.986] Server  LOG     ✓ Compiled in 572ms
+[00:05:21.934] Server  LOG     ✓ Compiled in 878ms
+[00:09:42.579] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:42.960] Browser WARN    Image with src "/images/logo Sunaala.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:17:40.088] Server  LOG     ✓ Compiled in 1035ms
+[00:20:26.317] Server  LOG     ✓ Compiled in 274ms
+[00:21:00.749] Server  LOG     ✓ Compiled in 166ms
+[00:22:14.808] Server  LOG     ✓ Compiled in 705ms
