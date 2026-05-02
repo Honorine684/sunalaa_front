@@ -5,14 +5,43 @@ export default function LandingHero() {
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: "#1F4E46" }}>
 
-      {/* S watermark — hero background */}
-      <img
-        src="/images/Group.png"
-        alt=""
-        aria-hidden="true"
-        className="absolute select-none pointer-events-none"
-        style={{ width: 520, opacity: 0.20, top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}
-      />
+      {/* Filtre SVG — S en blanc subtil sur fond vert foncé */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+        <defs>
+          <filter id="s-wm-hero" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 20 0"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* S watermarks — gauche et droite comme dans le design */}
+      {[
+        { top: "15%", left: "-5%"  },
+        { top: "15%", right: "0%", left: "auto" },
+      ].map((pos, i) => (
+        <img
+          key={i}
+          src="/images/Group.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute select-none pointer-events-none"
+          style={{
+            width: 300,
+            top: pos.top,
+            left: pos.left ?? undefined,
+            right: pos.right ?? undefined,
+            opacity: 0.03,
+            filter: "url(#s-wm-hero)",
+            zIndex: 1,
+          }}
+        />
+      ))}
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-28 lg:pt-40 pb-20 lg:pb-40">
