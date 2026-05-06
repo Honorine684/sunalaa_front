@@ -79,46 +79,45 @@ const illustrations = [IllustrationStep1, IllustrationStep2, null];
 export default function HowItWorks() {
   return (
     <section className="bg-white pt-24 pb-10 lg:pt-32 lg:pb-12 relative overflow-hidden">
-      {/* Filtre SVG qui amplifie l'alpha de Group.png pour le rendre visible sur fond blanc */}
-      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
-        <defs>
-          <filter id="s-wm" colorInterpolationFilters="sRGB">
-            {/* Multiplie l'alpha par 20 et force la couleur vert SUNALA */}
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0.12
-                      0 0 0 0 0.31
-                      0 0 0 0 0.27
-                      0 0 0 20 0"
-            />
-          </filter>
-        </defs>
-      </svg>
+      {/* S watermark — gauche */}
+      <img
+        src="/images/Group.png"
+        alt="" aria-hidden="true"
+        className="absolute select-none pointer-events-none hidden lg:block"
+        style={{ width: 280, opacity: 0.20, filter: "brightness(0)", left: 200, top: 40 }}
+      />
 
-      {/* S watermarks — 2 colonnes alignées sur chaque étape */}
-      {[
-        { top: "2%",  left: "-6%" },
-        { top: "2%",  left: "58%" },
-        { top: "34%", left: "-4%" },
-        { top: "34%", left: "60%" },
-        { top: "66%", left: "-6%" },
-        { top: "66%", left: "58%" },
-      ].map((pos, i) => (
-        <img
-          key={i}
-          src="/images/Group.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute select-none pointer-events-none"
-          style={{
-            width: 300,
-            top: pos.top,
-            left: pos.left,
-            opacity: 0.03,
-            filter: "url(#s-wm)",
-          }}
-        />
-      ))}
+      {/* S watermark — droite haut, raccord avec hero */}
+      <img
+        src="/images/Group.png"
+        alt="" aria-hidden="true"
+        className="absolute select-none pointer-events-none hidden lg:block"
+        style={{ width: 280, height: 420, opacity: 0.35, filter: "brightness(0) sepia(1) saturate(5) hue-rotate(110deg)", right: -80, top: -220 }}
+      />
+
+      {/* S watermark — gauche, niveau "Invitez votre réseau" */}
+      <img
+        src="/images/Group.png"
+        alt="" aria-hidden="true"
+        className="absolute select-none pointer-events-none hidden lg:block"
+        style={{ width: 320, height: 360, opacity: 0.50, filter: "brightness(0)", left: 150, top: 1520 }}
+      />
+
+      {/* S watermark — gauche, niveau "Collectez chaque jour" */}
+      <img
+        src="/images/Group.png"
+        alt="" aria-hidden="true"
+        className="absolute select-none pointer-events-none hidden lg:block"
+        style={{ width: 280, opacity: 0.35, filter: "brightness(0)", left: 220, top: 570, zIndex: 20 }}
+      />
+
+      {/* S watermark — droite, niveau "Collectez chaque jour" */}
+      <img
+        src="/images/Group.png"
+        alt="" aria-hidden="true"
+        className="absolute select-none pointer-events-none hidden lg:block"
+        style={{ width: 280, opacity: 0.35, filter: "brightness(0)", right: 180, top: 680 }}
+      />
       <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
         {/* Section header */}
         <div className="text-center mb-20">

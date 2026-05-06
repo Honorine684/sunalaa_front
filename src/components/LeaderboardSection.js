@@ -16,7 +16,7 @@ export default function LeaderboardSection() {
           height: 320,
           objectFit: "fill",
           opacity: 0.4,
-          left: -10,
+          left: -20,
           top: "14%",
           filter: "grayscale(1) brightness(0)",
           zIndex: 0,
@@ -48,14 +48,14 @@ export default function LeaderboardSection() {
         aria-hidden="true"
         className="absolute select-none pointer-events-none"
         style={{
-          width: 420,
-          height: 420,
+          width: 300,
+          height: 360,
           objectFit: "fill",
-          opacity: 0.4,
+          opacity: 0.35,
           right: -60,
-          top: "30%",
+          top: "20%",
           filter: "grayscale(1) brightness(0)",
-          zIndex: 0,
+          zIndex: 20,
         }}
       />
 

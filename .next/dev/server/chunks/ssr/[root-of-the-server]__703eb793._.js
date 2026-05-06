@@ -73,69 +73,40 @@ function LandingHero() {
             backgroundColor: "#1F4E46"
         },
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                width: "0",
-                height: "0",
-                style: {
-                    position: "absolute"
-                },
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
                 "aria-hidden": "true",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("filter", {
-                        id: "s-wm-hero",
-                        colorInterpolationFilters: "sRGB",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("feColorMatrix", {
-                            type: "matrix",
-                            values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 20 0"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/LandingHero.js",
-                            lineNumber: 12,
-                            columnNumber: 13
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/LandingHero.js",
-                        lineNumber: 11,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/src/components/LandingHero.js",
-                    lineNumber: 10,
-                    columnNumber: 9
-                }, this)
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 160,
+                    height: 360,
+                    opacity: 0.75,
+                    left: 160,
+                    top: 535
+                }
             }, void 0, false, {
                 fileName: "[project]/src/components/LandingHero.js",
                 lineNumber: 9,
                 columnNumber: 7
             }, this),
-            [
-                {
-                    top: "15%",
-                    left: "-5%"
-                },
-                {
-                    top: "15%",
-                    right: "0%",
-                    left: "auto"
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
+                "aria-hidden": "true",
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 280,
+                    height: 420,
+                    opacity: 0.75,
+                    right: -40,
+                    bottom: -220
                 }
-            ].map((pos, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                    src: "/images/Group.png",
-                    alt: "",
-                    "aria-hidden": "true",
-                    className: "absolute select-none pointer-events-none",
-                    style: {
-                        width: 300,
-                        top: pos.top,
-                        left: pos.left ?? undefined,
-                        right: pos.right ?? undefined,
-                        opacity: 0.03,
-                        filter: "url(#s-wm-hero)",
-                        zIndex: 1
-                    }
-                }, i, false, {
-                    fileName: "[project]/src/components/LandingHero.js",
-                    lineNumber: 28,
-                    columnNumber: 9
-                }, this)),
+            }, void 0, false, {
+                fileName: "[project]/src/components/LandingHero.js",
+                lineNumber: 17,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "max-w-7xl mx-auto px-4 lg:px-8",
                 children: [
@@ -151,13 +122,13 @@ function LandingHero() {
                                             "Rejoignez la",
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 53,
+                                                lineNumber: 31,
                                                 columnNumber: 27
                                             }, this),
                                             "communauté",
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 53,
+                                                lineNumber: 31,
                                                 columnNumber: 43
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -167,13 +138,13 @@ function LandingHero() {
                                                 children: "SUNALA"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 54,
+                                                lineNumber: 32,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 52,
+                                        lineNumber: 30,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -184,7 +155,7 @@ function LandingHero() {
                                         children: "Accumulez des points SNL chaque jour, parrainez votre entourage et grimpez dans le classement. Préparez-vous dès maintenant pour le lancement du token communautaire SUNALA."
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 58,
+                                        lineNumber: 36,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
@@ -210,29 +181,29 @@ function LandingHero() {
                                                         strokeLinejoin: "round"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 71,
+                                                        lineNumber: 49,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/LandingHero.js",
-                                                    lineNumber: 70,
+                                                    lineNumber: 48,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 69,
+                                                lineNumber: 47,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 63,
+                                        lineNumber: 41,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/LandingHero.js",
-                                lineNumber: 50,
+                                lineNumber: 28,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -250,7 +221,7 @@ function LandingHero() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 81,
+                                        lineNumber: 59,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -280,7 +251,7 @@ function LandingHero() {
                                                             d: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 96,
+                                                            lineNumber: 74,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -289,25 +260,25 @@ function LandingHero() {
                                                             r: "4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 97,
+                                                            lineNumber: 75,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                             d: "M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 98,
+                                                            lineNumber: 76,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/LandingHero.js",
-                                                    lineNumber: 95,
+                                                    lineNumber: 73,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 94,
+                                                lineNumber: 72,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -323,7 +294,7 @@ function LandingHero() {
                                                         children: "12,847"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 102,
+                                                        lineNumber: 80,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -337,19 +308,19 @@ function LandingHero() {
                                                         children: "Membres actifs"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 103,
+                                                        lineNumber: 81,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 101,
+                                                lineNumber: 79,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 90,
+                                        lineNumber: 68,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -376,7 +347,7 @@ function LandingHero() {
                                                             strokeWidth: "5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 114,
+                                                            lineNumber: 92,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -391,18 +362,18 @@ function LandingHero() {
                                                             transform: "rotate(-90 26 26)"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 115,
+                                                            lineNumber: 93,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/LandingHero.js",
-                                                    lineNumber: 113,
+                                                    lineNumber: 91,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 112,
+                                                lineNumber: 90,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -413,7 +384,7 @@ function LandingHero() {
                                                 children: "65%"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 122,
+                                                lineNumber: 100,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -422,20 +393,20 @@ function LandingHero() {
                                                     "Taux d'activité",
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 123,
+                                                        lineNumber: 101,
                                                         columnNumber: 93
                                                     }, this),
                                                     "quotidien"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 123,
+                                                lineNumber: 101,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 108,
+                                        lineNumber: 86,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,7 +439,7 @@ function LandingHero() {
                                                             r: "5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 133,
+                                                            lineNumber: 111,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -477,18 +448,18 @@ function LandingHero() {
                                                             r: "5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/LandingHero.js",
-                                                            lineNumber: 133,
+                                                            lineNumber: 111,
                                                             columnNumber: 48
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/LandingHero.js",
-                                                    lineNumber: 132,
+                                                    lineNumber: 110,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 131,
+                                                lineNumber: 109,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -501,7 +472,7 @@ function LandingHero() {
                                                         children: "2.4M+"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 137,
+                                                        lineNumber: 115,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -509,31 +480,31 @@ function LandingHero() {
                                                         children: "Points SNL distribués"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/LandingHero.js",
-                                                        lineNumber: 138,
+                                                        lineNumber: 116,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/LandingHero.js",
-                                                lineNumber: 136,
+                                                lineNumber: 114,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 127,
+                                        lineNumber: 105,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/LandingHero.js",
-                                lineNumber: 79,
+                                lineNumber: 57,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/LandingHero.js",
-                        lineNumber: 47,
+                        lineNumber: 25,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -557,7 +528,7 @@ function LandingHero() {
                                             r: "10"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 150,
+                                            lineNumber: 128,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
@@ -567,20 +538,20 @@ function LandingHero() {
                                             y2: "12"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 150,
+                                            lineNumber: 128,
                                             columnNumber: 51
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                             d: "M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 151,
+                                            lineNumber: 129,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/LandingHero.js",
-                                    lineNumber: 149,
+                                    lineNumber: 127,
                                     columnNumber: 17
                                 }, this)
                             },
@@ -603,7 +574,7 @@ function LandingHero() {
                                             y2: "10"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 159,
+                                            lineNumber: 137,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
@@ -613,7 +584,7 @@ function LandingHero() {
                                             y2: "4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 159,
+                                            lineNumber: 137,
                                             columnNumber: 58
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
@@ -623,13 +594,13 @@ function LandingHero() {
                                             y2: "14"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 159,
+                                            lineNumber: 137,
                                             columnNumber: 96
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/LandingHero.js",
-                                    lineNumber: 158,
+                                    lineNumber: 136,
                                     columnNumber: 17
                                 }, this)
                             },
@@ -649,7 +620,7 @@ function LandingHero() {
                                             d: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 167,
+                                            lineNumber: 145,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -658,13 +629,13 @@ function LandingHero() {
                                             r: "4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/LandingHero.js",
-                                            lineNumber: 168,
+                                            lineNumber: 146,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/LandingHero.js",
-                                    lineNumber: 166,
+                                    lineNumber: 144,
                                     columnNumber: 17
                                 }, this)
                             }
@@ -679,7 +650,7 @@ function LandingHero() {
                                         children: icon
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 174,
+                                        lineNumber: 152,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -687,24 +658,24 @@ function LandingHero() {
                                         children: label
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/LandingHero.js",
-                                        lineNumber: 177,
+                                        lineNumber: 155,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, label, true, {
                                 fileName: "[project]/src/components/LandingHero.js",
-                                lineNumber: 173,
+                                lineNumber: 151,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/LandingHero.js",
-                        lineNumber: 144,
+                        lineNumber: 122,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/LandingHero.js",
-                lineNumber: 46,
+                lineNumber: 24,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -714,7 +685,7 @@ function LandingHero() {
                 }
             }, void 0, false, {
                 fileName: "[project]/src/components/LandingHero.js",
-                lineNumber: 184,
+                lineNumber: 162,
                 columnNumber: 7
             }, this)
         ]
@@ -964,82 +935,94 @@ function HowItWorks() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         className: "bg-white pt-24 pb-10 lg:pt-32 lg:pb-12 relative overflow-hidden",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                width: "0",
-                height: "0",
-                style: {
-                    position: "absolute"
-                },
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
                 "aria-hidden": "true",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("filter", {
-                        id: "s-wm",
-                        colorInterpolationFilters: "sRGB",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("feColorMatrix", {
-                            type: "matrix",
-                            values: "0 0 0 0 0.12 0 0 0 0 0.31 0 0 0 0 0.27 0 0 0 20 0"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/HowItWorks.js",
-                            lineNumber: 87,
-                            columnNumber: 13
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/HowItWorks.js",
-                        lineNumber: 85,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/src/components/HowItWorks.js",
-                    lineNumber: 84,
-                    columnNumber: 9
-                }, this)
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 280,
+                    opacity: 0.20,
+                    filter: "brightness(0)",
+                    left: 200,
+                    top: 40
+                }
             }, void 0, false, {
                 fileName: "[project]/src/components/HowItWorks.js",
                 lineNumber: 83,
                 columnNumber: 7
             }, this),
-            [
-                {
-                    top: "2%",
-                    left: "-6%"
-                },
-                {
-                    top: "2%",
-                    left: "58%"
-                },
-                {
-                    top: "34%",
-                    left: "-4%"
-                },
-                {
-                    top: "34%",
-                    left: "60%"
-                },
-                {
-                    top: "66%",
-                    left: "-6%"
-                },
-                {
-                    top: "66%",
-                    left: "58%"
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
+                "aria-hidden": "true",
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 280,
+                    height: 420,
+                    opacity: 0.35,
+                    filter: "brightness(0) sepia(1) saturate(5) hue-rotate(110deg)",
+                    right: -80,
+                    top: -220
                 }
-            ].map((pos, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                    src: "/images/Group.png",
-                    alt: "",
-                    "aria-hidden": "true",
-                    className: "absolute select-none pointer-events-none",
-                    style: {
-                        width: 300,
-                        top: pos.top,
-                        left: pos.left,
-                        opacity: 0.03,
-                        filter: "url(#s-wm)"
-                    }
-                }, i, false, {
-                    fileName: "[project]/src/components/HowItWorks.js",
-                    lineNumber: 107,
-                    columnNumber: 9
-                }, this)),
+            }, void 0, false, {
+                fileName: "[project]/src/components/HowItWorks.js",
+                lineNumber: 91,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
+                "aria-hidden": "true",
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 320,
+                    height: 360,
+                    opacity: 0.50,
+                    filter: "brightness(0)",
+                    left: 150,
+                    top: 1520
+                }
+            }, void 0, false, {
+                fileName: "[project]/src/components/HowItWorks.js",
+                lineNumber: 99,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
+                "aria-hidden": "true",
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 280,
+                    opacity: 0.35,
+                    filter: "brightness(0)",
+                    left: 220,
+                    top: 570,
+                    zIndex: 20
+                }
+            }, void 0, false, {
+                fileName: "[project]/src/components/HowItWorks.js",
+                lineNumber: 107,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                src: "/images/Group.png",
+                alt: "",
+                "aria-hidden": "true",
+                className: "absolute select-none pointer-events-none hidden lg:block",
+                style: {
+                    width: 280,
+                    opacity: 0.35,
+                    filter: "brightness(0)",
+                    right: 180,
+                    top: 680
+                }
+            }, void 0, false, {
+                fileName: "[project]/src/components/HowItWorks.js",
+                lineNumber: 115,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "max-w-7xl mx-auto px-4 lg:px-8 relative z-10",
                 children: [
@@ -1053,12 +1036,12 @@ function HowItWorks() {
                             children: "Comment ça marche ?"
                         }, void 0, false, {
                             fileName: "[project]/src/components/HowItWorks.js",
-                            lineNumber: 125,
+                            lineNumber: 124,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/HowItWorks.js",
-                        lineNumber: 124,
+                        lineNumber: 123,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1082,7 +1065,7 @@ function HowItWorks() {
                                                 children: step.num
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 141,
+                                                lineNumber: 140,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1093,7 +1076,7 @@ function HowItWorks() {
                                                 children: step.title
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 148,
+                                                lineNumber: 147,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1106,7 +1089,7 @@ function HowItWorks() {
                                                 children: step.desc
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 151,
+                                                lineNumber: 150,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
@@ -1118,13 +1101,13 @@ function HowItWorks() {
                                                 children: step.btn
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 152,
+                                                lineNumber: 151,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/HowItWorks.js",
-                                        lineNumber: 139,
+                                        lineNumber: 138,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1141,41 +1124,41 @@ function HowItWorks() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HowItWorks.js",
-                                            lineNumber: 164,
+                                            lineNumber: 163,
                                             columnNumber: 21
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "rounded-3xl bg-slate-50 p-6 flex items-center justify-center h-64",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(IllustrationComponent, {}, void 0, false, {
                                                 fileName: "[project]/src/components/HowItWorks.js",
-                                                lineNumber: 173,
+                                                lineNumber: 172,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HowItWorks.js",
-                                            lineNumber: 172,
+                                            lineNumber: 171,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HowItWorks.js",
-                                        lineNumber: 162,
+                                        lineNumber: 161,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, step.num, true, {
                                 fileName: "[project]/src/components/HowItWorks.js",
-                                lineNumber: 137,
+                                lineNumber: 136,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/src/components/HowItWorks.js",
-                        lineNumber: 131,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HowItWorks.js",
-                lineNumber: 122,
+                lineNumber: 121,
                 columnNumber: 7
             }, this)
         ]
@@ -1247,11 +1230,14 @@ function WhySunala() {
                 src: "/images/Group.png",
                 alt: "",
                 "aria-hidden": "true",
-                className: "absolute left-0 top-1/2 -translate-y-1/2 select-none pointer-events-none",
+                className: "absolute select-none pointer-events-none hidden lg:block",
                 style: {
-                    width: 480,
-                    opacity: 0.5,
-                    filter: "grayscale(1) brightness(0)"
+                    width: 320,
+                    height: 360,
+                    opacity: 0.50,
+                    filter: "brightness(0)",
+                    left: 150,
+                    top: -250
                 }
             }, void 0, false, {
                 fileName: "[project]/src/components/WhySunala.js",
@@ -1274,7 +1260,7 @@ function WhySunala() {
                                 children: "Pourquoi SUNALA ?"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/WhySunala.js",
-                                lineNumber: 46,
+                                lineNumber: 45,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1288,20 +1274,20 @@ function WhySunala() {
                                     "Une plateforme conçue pour récompenser votre engagement et celui de votre communauté.",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                         fileName: "[project]/src/components/WhySunala.js",
-                                        lineNumber: 50,
+                                        lineNumber: 49,
                                         columnNumber: 98
                                     }, this),
                                     "Chaque action compte : progressez, partagez et préparez-vous pour le lancement du token SNL."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/WhySunala.js",
-                                lineNumber: 49,
+                                lineNumber: 48,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/WhySunala.js",
-                        lineNumber: 45,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1327,13 +1313,13 @@ function WhySunala() {
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WhySunala.js",
-                                                lineNumber: 67,
+                                                lineNumber: 66,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/WhySunala.js",
-                                        lineNumber: 64,
+                                        lineNumber: 63,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1341,7 +1327,7 @@ function WhySunala() {
                                         children: card.title
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/WhySunala.js",
-                                        lineNumber: 72,
+                                        lineNumber: 71,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1355,24 +1341,24 @@ function WhySunala() {
                                         children: card.desc
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/WhySunala.js",
-                                        lineNumber: 77,
+                                        lineNumber: 76,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, card.title, true, {
                                 fileName: "[project]/src/components/WhySunala.js",
-                                lineNumber: 58,
+                                lineNumber: 57,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/WhySunala.js",
-                        lineNumber: 56,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/WhySunala.js",
-                lineNumber: 43,
+                lineNumber: 42,
                 columnNumber: 7
             }, this)
         ]

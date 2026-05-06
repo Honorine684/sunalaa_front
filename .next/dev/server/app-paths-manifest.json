@@ -1,3 +1,8 @@
 {
-  "/page": "app/page.js"
+  "/bonus/page": "app/bonus/page.js",
+  "/classement/page": "app/classement/page.js",
+  "/collecter/page": "app/collecter/page.js",
+  "/formations/page": "app/formations/page.js",
+  "/page": "app/page.js",
+  "/profil/page": "app/profil/page.js"
 }
