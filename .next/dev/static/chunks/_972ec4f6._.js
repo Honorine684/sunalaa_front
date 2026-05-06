@@ -1,0 +1,3122 @@
+(globalThis.TURBOPACK || (globalThis.TURBOPACK = [])).push([typeof document === "object" ? document.currentScript : undefined,
+"[project]/src/components/admin/Sidebar.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>Sidebar
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
+"use client";
+;
+;
+const navLinks = [
+    {
+        id: "overview",
+        label: "Vue d'ensemble",
+        href: "/admin",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "3",
+                    y: "3",
+                    width: "7",
+                    height: "7",
+                    rx: "1",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 12,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "14",
+                    y: "3",
+                    width: "7",
+                    height: "7",
+                    rx: "1",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 13,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "3",
+                    y: "14",
+                    width: "7",
+                    height: "7",
+                    rx: "1",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 14,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "14",
+                    y: "14",
+                    width: "7",
+                    height: "7",
+                    rx: "1",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 15,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 11,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "users",
+        label: "Utilisateurs",
+        href: "/admin/utilisateurs",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2",
+                    stroke: "currentColor",
+                    strokeWidth: "2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 25,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "9",
+                    cy: "7",
+                    r: "4",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 26,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",
+                    stroke: "currentColor",
+                    strokeWidth: "2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 27,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 24,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "points",
+        label: "Points SNL",
+        href: "/admin/points",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "10",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 37,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "4",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 38,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 2v4M12 18v4M2 12h4M18 12h4",
+                    stroke: "currentColor",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 39,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 36,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "stats",
+        label: "Statistiques",
+        href: "/admin/statistiques",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M18 20V10M12 20V4M6 20v-6",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 49,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 48,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "exports",
+        label: "Exports",
+        href: "/admin/exports",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 59,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 58,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "notifications",
+        label: "Notifications",
+        href: "/admin/notifications",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 69,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 68,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    },
+    {
+        id: "missions",
+        label: "Missions",
+        href: "/admin/missions",
+        icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "10",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 79,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "5",
+                    stroke: "currentColor",
+                    strokeWidth: "2"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 80,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "1.5",
+                    fill: "currentColor"
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 81,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/admin/Sidebar.js",
+            lineNumber: 78,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    }
+];
+function Sidebar({ active = "overview", mobileOpen = false, onClose }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
+        className: [
+            "fixed top-0 left-0 h-screen w-[260px] flex flex-col z-30 transition-transform duration-300",
+            mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        ].join(" "),
+        style: {
+            backgroundColor: "#1A3A2E"
+        },
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-6 pt-7 pb-6 flex items-start justify-between",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-white text-[20px] font-bold tracking-wide leading-none mb-1",
+                                children: "SUNALAA"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 99,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-[12px] font-normal tracking-widest",
+                                style: {
+                                    color: "#90A1B9"
+                                },
+                                children: "Administration"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 100,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/admin/Sidebar.js",
+                        lineNumber: 98,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        className: "lg:hidden text-white/60 hover:text-white transition mt-1 cursor-pointer",
+                        onClick: onClose,
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                            width: "18",
+                            height: "18",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                d: "M18 6L6 18M6 6l12 12",
+                                stroke: "currentColor",
+                                strokeWidth: "2",
+                                strokeLinecap: "round"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 108,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/Sidebar.js",
+                            lineNumber: 107,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/Sidebar.js",
+                        lineNumber: 103,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 97,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mx-6 border-t border-white/10 mb-4"
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 114,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                className: "flex-1 px-3 flex flex-col gap-1 overflow-y-auto",
+                children: navLinks.map((link)=>{
+                    const isActive = active === link.id;
+                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        href: link.href,
+                        onClick: onClose,
+                        className: [
+                            "flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-normal transition-all duration-200",
+                            isActive ? "bg-secondary text-white" : "text-white/60 hover:text-white hover:bg-white/10"
+                        ].join(" "),
+                        children: [
+                            link.icon,
+                            link.label
+                        ]
+                    }, link.id, true, {
+                        fileName: "[project]/src/components/admin/Sidebar.js",
+                        lineNumber: 121,
+                        columnNumber: 13
+                    }, this);
+                })
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 117,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mx-6 border-t border-white/10 mt-4 pt-4 flex items-center gap-3",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-9 h-9 rounded-full bg-secondary flex items-center justify-center shrink-0",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-white text-[13px] font-bold",
+                            children: "AD"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/Sidebar.js",
+                            lineNumber: 142,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/Sidebar.js",
+                        lineNumber: 141,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "min-w-0",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-white text-[13px] font-bold leading-none mb-0.5 truncate",
+                                children: "Admin"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 145,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-white/40 text-[11px] truncate",
+                                children: "Super Utilisateur"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 146,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/admin/Sidebar.js",
+                        lineNumber: 144,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 140,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-3 pb-5 pt-2",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    className: "flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-[14px] text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 cursor-pointer",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                            width: "18",
+                            height: "18",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                d: "M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9",
+                                stroke: "currentColor",
+                                strokeWidth: "2",
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/Sidebar.js",
+                                lineNumber: 154,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/Sidebar.js",
+                            lineNumber: 153,
+                            columnNumber: 11
+                        }, this),
+                        "Déconnexion"
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/admin/Sidebar.js",
+                    lineNumber: 152,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/Sidebar.js",
+                lineNumber: 151,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/Sidebar.js",
+        lineNumber: 89,
+        columnNumber: 5
+    }, this);
+}
+_c = Sidebar;
+var _c;
+__turbopack_context__.k.register(_c, "Sidebar");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/src/components/admin/AdminShell.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>AdminShell
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$admin$2f$Sidebar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/admin/Sidebar.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+function AdminShell({ active, title, backHref = "/admin", headerRight, children }) {
+    _s();
+    const [sidebarOpen, setSidebarOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex min-h-screen",
+        style: {
+            backgroundColor: "#F8FAFC"
+        },
+        children: [
+            sidebarOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 bg-black/50 z-20 lg:hidden",
+                onClick: ()=>setSidebarOpen(false)
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/AdminShell.js",
+                lineNumber: 15,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$admin$2f$Sidebar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                active: active,
+                mobileOpen: sidebarOpen,
+                onClose: ()=>setSidebarOpen(false)
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/AdminShell.js",
+                lineNumber: 22,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "w-full min-w-0 flex flex-col min-h-screen lg:ml-[260px]",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
+                        className: "bg-white border-b border-slate-100 px-4 lg:px-8 py-4 flex items-center gap-3 sticky top-0 z-10",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                className: "lg:hidden text-slate-400 hover:text-slate-600 transition shrink-0 cursor-pointer",
+                                onClick: ()=>setSidebarOpen(true),
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    width: "22",
+                                    height: "22",
+                                    viewBox: "0 0 24 24",
+                                    fill: "none",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        d: "M3 12h18M3 6h18M3 18h18",
+                                        stroke: "currentColor",
+                                        strokeWidth: "2",
+                                        strokeLinecap: "round"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/AdminShell.js",
+                                        lineNumber: 35,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/admin/AdminShell.js",
+                                    lineNumber: 34,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/AdminShell.js",
+                                lineNumber: 30,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                href: backHref,
+                                className: "hidden lg:block text-slate-400 hover:text-slate-600 transition shrink-0",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    width: "20",
+                                    height: "20",
+                                    viewBox: "0 0 24 24",
+                                    fill: "none",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        d: "M18 6L6 18M6 6l12 12",
+                                        stroke: "currentColor",
+                                        strokeWidth: "2",
+                                        strokeLinecap: "round"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/AdminShell.js",
+                                        lineNumber: 42,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/admin/AdminShell.js",
+                                    lineNumber: 41,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/AdminShell.js",
+                                lineNumber: 40,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                className: "text-[16px] font-bold flex-1 truncate",
+                                style: {
+                                    color: "#0F172B"
+                                },
+                                children: title
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/AdminShell.js",
+                                lineNumber: 46,
+                                columnNumber: 11
+                            }, this),
+                            headerRight && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "shrink-0",
+                                children: headerRight
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/AdminShell.js",
+                                lineNumber: 48,
+                                columnNumber: 27
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/admin/AdminShell.js",
+                        lineNumber: 28,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+                        className: "flex-1 px-4 lg:px-8 py-6 lg:py-8",
+                        children: children
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/AdminShell.js",
+                        lineNumber: 52,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/AdminShell.js",
+                lineNumber: 25,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/AdminShell.js",
+        lineNumber: 11,
+        columnNumber: 5
+    }, this);
+}
+_s(AdminShell, "5rGDkYpGQ8fHM9RkMWnKOwsxadk=");
+_c = AdminShell;
+var _c;
+__turbopack_context__.k.register(_c, "AdminShell");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/src/components/admin/StatisticsPage.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>StatisticsPage
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+"use client";
+;
+/* ── Data ── */ const lineData = [
+    {
+        label: "01/12",
+        value: 8500
+    },
+    {
+        label: "05/12",
+        value: 9200
+    },
+    {
+        label: "10/12",
+        value: 9800
+    },
+    {
+        label: "15/12",
+        value: 10500
+    },
+    {
+        label: "20/12",
+        value: 11400
+    },
+    {
+        label: "25/12",
+        value: 12600
+    },
+    {
+        label: "30/12",
+        value: 13400
+    }
+];
+const barData = [
+    {
+        label: "Lun",
+        value: 7200
+    },
+    {
+        label: "Mar",
+        value: 8100
+    },
+    {
+        label: "Mer",
+        value: 7800
+    },
+    {
+        label: "Jeu",
+        value: 8600
+    },
+    {
+        label: "Ven",
+        value: 9300
+    },
+    {
+        label: "Sam",
+        value: 9100
+    },
+    {
+        label: "Dim",
+        value: 8400
+    }
+];
+const pieData = [
+    {
+        label: "Collectes quotidiennes",
+        pct: 51,
+        value: "1,245,678 SNL",
+        color: "#3B82F6"
+    },
+    {
+        label: "Bonus parrainage",
+        pct: 35,
+        value: "856,234 SNL",
+        color: "#8B5CF6"
+    },
+    {
+        label: "Récompenses admin",
+        pct: 14,
+        value: "357,009 SNL",
+        color: "#3FAE8C"
+    }
+];
+const referralData = [
+    {
+        level: "Niveau 1",
+        users: "4,250",
+        pct: 45
+    },
+    {
+        level: "Niveau 2",
+        users: "3,180",
+        pct: 33
+    },
+    {
+        level: "Niveau 3",
+        users: "1,890",
+        pct: 20
+    },
+    {
+        level: "Niveau 4+",
+        users: "580",
+        pct: 2
+    }
+];
+/* ── Line Chart SVG ── */ function LineChart() {
+    const W = 480, H = 220;
+    const padL = 52, padR = 20, padT = 16, padB = 40;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const maxV = 14000, minV = 0;
+    const yLabels = [
+        0,
+        3500,
+        7000,
+        10500,
+        14000
+    ];
+    const px = (i)=>padL + i / (lineData.length - 1) * plotW;
+    const py = (v)=>padT + plotH - (v - minV) / (maxV - minV) * plotH;
+    const points = lineData.map((d, i)=>`${px(i)},${py(d.value)}`).join(" ");
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+        viewBox: `0 0 ${W} ${H}`,
+        className: "w-full h-full",
+        children: [
+            yLabels.map((y)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                            x1: padL,
+                            y1: py(y),
+                            x2: W - padR,
+                            y2: py(y),
+                            stroke: "#E2E8F0",
+                            strokeWidth: "1",
+                            strokeDasharray: "4 4"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 56,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                            x: padL - 6,
+                            y: py(y) + 4,
+                            textAnchor: "end",
+                            fontSize: "10",
+                            fill: "#94A3B8",
+                            children: y === 0 ? "0" : `${y / 1000 * 1}`.replace(".", ",")
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 57,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, y, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 55,
+                    columnNumber: 9
+                }, this)),
+            lineData.map((d, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                    x: px(i),
+                    y: H - 6,
+                    textAnchor: "middle",
+                    fontSize: "10",
+                    fill: "#94A3B8",
+                    children: d.label
+                }, i, false, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 62,
+                    columnNumber: 9
+                }, this)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
+                points: points,
+                fill: "none",
+                stroke: "#3B82F6",
+                strokeWidth: "2.5",
+                strokeLinejoin: "round",
+                strokeLinecap: "round"
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 65,
+                columnNumber: 7
+            }, this),
+            lineData.map((d, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: px(i),
+                    cy: py(d.value),
+                    r: "4",
+                    fill: "#3B82F6",
+                    stroke: "white",
+                    strokeWidth: "2"
+                }, i, false, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 68,
+                    columnNumber: 9
+                }, this))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 52,
+        columnNumber: 5
+    }, this);
+}
+_c = LineChart;
+/* ── Bar Chart ── */ function BarChart() {
+    const maxV = Math.max(...barData.map((d)=>d.value));
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex items-end justify-between gap-2 h-[190px] px-2",
+        children: barData.map((d)=>{
+            const heightPct = d.value / maxV * 100;
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-col items-center gap-1.5 flex-1",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full rounded-t-md transition-all duration-300 hover:brightness-110",
+                        style: {
+                            height: `${heightPct}%`,
+                            backgroundColor: "#3FAE8C"
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 83,
+                        columnNumber: 13
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[10px]",
+                        style: {
+                            color: "#94A3B8"
+                        },
+                        children: d.label
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 87,
+                        columnNumber: 13
+                    }, this)
+                ]
+            }, d.label, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 82,
+                columnNumber: 11
+            }, this);
+        })
+    }, void 0, false, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 78,
+        columnNumber: 5
+    }, this);
+}
+_c1 = BarChart;
+/* ── Y axis labels for bar chart ── */ function BarChartWithAxis() {
+    const maxV = 10000;
+    const yLabels = [
+        0,
+        2500,
+        5000,
+        7500,
+        10000
+    ];
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex gap-2 h-[230px]",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-col-reverse justify-between pb-6 shrink-0",
+                children: yLabels.map((y)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[10px] text-right w-10",
+                        style: {
+                            color: "#94A3B8"
+                        },
+                        children: [
+                            y === 0 ? "0" : `${y / 1000}`.replace(".", ","),
+                            "00"
+                        ]
+                    }, y, true, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 104,
+                        columnNumber: 11
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 102,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex-1 flex flex-col",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex-1 flex items-end justify-between gap-1.5 border-l border-b border-slate-100 pl-2 pb-1",
+                        children: barData.map((d)=>{
+                            const heightPct = d.value / maxV * 100;
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col items-center gap-1.5 flex-1 h-full justify-end",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "w-full rounded-t-md hover:brightness-110 transition-all duration-300",
+                                    style: {
+                                        height: `${heightPct}%`,
+                                        backgroundColor: "#3FAE8C"
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                    lineNumber: 114,
+                                    columnNumber: 17
+                                }, this)
+                            }, d.label, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 113,
+                                columnNumber: 15
+                            }, this);
+                        })
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 109,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between pl-2 pt-1",
+                        children: barData.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "flex-1 text-center text-[10px]",
+                                style: {
+                                    color: "#94A3B8"
+                                },
+                                children: d.label
+                            }, d.label, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 125,
+                                columnNumber: 13
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 123,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 108,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 100,
+        columnNumber: 5
+    }, this);
+}
+_c2 = BarChartWithAxis;
+/* ── Pie Chart ── */ function PieChart() {
+    const cx = 130, cy = 120, r = 100;
+    let cur = -Math.PI / 2;
+    const slices = pieData.map((d)=>{
+        const start = cur;
+        const sweep = d.pct / 100 * 2 * Math.PI;
+        cur += sweep;
+        return {
+            ...d,
+            start,
+            end: cur,
+            mid: start + sweep / 2
+        };
+    });
+    const pt = (a, rad)=>[
+            cx + rad * Math.cos(a),
+            cy + rad * Math.sin(a)
+        ];
+    const arcPath = (s)=>{
+        const [x1, y1] = pt(s.start, r);
+        const [x2, y2] = pt(s.end, r);
+        const large = s.end - s.start > Math.PI ? 1 : 0;
+        return `M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2}Z`;
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex flex-col gap-5",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-center",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                    viewBox: "0 0 260 240",
+                    className: "w-full max-w-[260px]",
+                    children: [
+                        slices.map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                d: arcPath(s),
+                                fill: s.color
+                            }, s.label, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 160,
+                                columnNumber: 13
+                            }, this)),
+                        slices.map((s)=>{
+                            const [x, y] = pt(s.start, r);
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                                x1: cx,
+                                y1: cy,
+                                x2: x,
+                                y2: y,
+                                stroke: "white",
+                                strokeWidth: "2.5"
+                            }, s.label + "sep", false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 166,
+                                columnNumber: 15
+                            }, this);
+                        }),
+                        slices.map((s)=>{
+                            const [lx, ly] = pt(s.mid, r * 0.62);
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                x: lx,
+                                y: ly,
+                                textAnchor: "middle",
+                                dominantBaseline: "middle",
+                                fontSize: "13",
+                                fontWeight: "700",
+                                fill: "white",
+                                fontFamily: "Inter, sans-serif",
+                                children: [
+                                    s.pct,
+                                    "%"
+                                ]
+                            }, s.label + "pct", true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 174,
+                                columnNumber: 15
+                            }, this);
+                        })
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 158,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 157,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-col gap-3",
+                children: pieData.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-between",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-2.5",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "w-3 h-3 rounded-full shrink-0",
+                                        style: {
+                                            backgroundColor: d.color
+                                        }
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 189,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-[13px]",
+                                        style: {
+                                            color: "#45556C"
+                                        },
+                                        children: d.label
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 190,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 188,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "text-[13px] font-semibold",
+                                style: {
+                                    color: "#0F172B"
+                                },
+                                children: d.value
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 192,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, d.label, true, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 187,
+                        columnNumber: 11
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 185,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 155,
+        columnNumber: 5
+    }, this);
+}
+_c3 = PieChart;
+/* ── Progress Bar ── */ function ReferralProgress() {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex flex-col gap-4",
+        children: [
+            referralData.map((r)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center justify-between mb-1.5",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-[14px]",
+                                    style: {
+                                        color: "#0F172B"
+                                    },
+                                    children: r.level
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                    lineNumber: 207,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-3",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[13px]",
+                                            style: {
+                                                color: "#45556C"
+                                            },
+                                            children: [
+                                                r.users,
+                                                " utilisateurs"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                            lineNumber: 209,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[13px] font-normal w-8 text-right",
+                                            style: {
+                                                color: "#45556C"
+                                            },
+                                            children: [
+                                                r.pct,
+                                                "%"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                            lineNumber: 210,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                    lineNumber: 208,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 206,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "w-full h-2 rounded-full",
+                            style: {
+                                backgroundColor: "#EDE9FE"
+                            },
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "h-2 rounded-full transition-all duration-500",
+                                style: {
+                                    width: `${r.pct}%`,
+                                    backgroundColor: "#8B5CF6"
+                                }
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 214,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 213,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, r.level, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 205,
+                    columnNumber: 9
+                }, this)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-between pt-4 border-t border-slate-100 mt-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[14px]",
+                        style: {
+                            color: "#45556C"
+                        },
+                        children: "Total parrainages actifs"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 219,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[20px] font-bold",
+                        style: {
+                            color: "#0F172B"
+                        },
+                        children: "9,900"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 220,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 218,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 203,
+        columnNumber: 5
+    }, this);
+}
+_c4 = ReferralProgress;
+/* ── Chart card shell ── */ function ChartCard({ icon, iconBg, iconColor, title, subtitle, children }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-white rounded-2xl border border-slate-100 shadow-sm p-6",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-start gap-3 mb-5",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                        style: {
+                            backgroundColor: iconBg
+                        },
+                        children: icon(iconColor)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 231,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-[15px] font-bold",
+                                style: {
+                                    color: "#0F172B"
+                                },
+                                children: title
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 235,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-[12px]",
+                                style: {
+                                    color: "#45556C"
+                                },
+                                children: subtitle
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 236,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 234,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 230,
+                columnNumber: 7
+            }, this),
+            children
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 229,
+        columnNumber: 5
+    }, this);
+}
+_c5 = ChartCard;
+function StatisticsPage() {
+    const stats = [
+        {
+            iconBg: "#EFF6FF",
+            iconColor: "#3FAE8C",
+            icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                    width: "20",
+                    height: "20",
+                    viewBox: "0 0 24 24",
+                    fill: "none",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                            d: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2",
+                            stroke: c,
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 251,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                            cx: "9",
+                            cy: "7",
+                            r: "4",
+                            stroke: c,
+                            strokeWidth: "2"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 252,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                            d: "M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",
+                            stroke: c,
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 253,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 250,
+                    columnNumber: 9
+                }, this),
+            trend: "+12.5%",
+            label: "Utilisateurs totaux",
+            value: "12,847"
+        },
+        {
+            iconBg: "#ECFDF5",
+            iconColor: "#059669",
+            icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                    width: "20",
+                    height: "20",
+                    viewBox: "0 0 24 24",
+                    fill: "none",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                        d: "M22 12h-4l-3 9L9 3l-3 9H2",
+                        stroke: c,
+                        strokeWidth: "2",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 262,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 261,
+                    columnNumber: 9
+                }, this),
+            trend: "+5.1%",
+            label: "Utilisateurs actifs (24h)",
+            value: "8,432"
+        },
+        {
+            iconBg: "#FEF3C7",
+            iconColor: "#D97706",
+            icon: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "relative w-6 h-5 shrink-0",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "absolute left-0 top-0 w-5 h-5 rounded-full bg-[#E6B84C] border-2 border-white"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 271,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "absolute left-2.5 top-0 w-5 h-5 rounded-full bg-[#E6B84C] border-2 border-white"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 272,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 270,
+                    columnNumber: 9
+                }, this),
+            trend: "+8.2%",
+            label: "Points SNL distribués",
+            value: "2,458,921"
+        },
+        {
+            iconBg: "#EDE9FE",
+            iconColor: "#7C3AED",
+            icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                    width: "20",
+                    height: "20",
+                    viewBox: "0 0 24 24",
+                    fill: "none",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                            d: "M22 7l-9.5 9.5-5-5L1 17",
+                            stroke: c,
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 281,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                            d: "M16 7h6v6",
+                            stroke: c,
+                            strokeWidth: "2",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 282,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                    lineNumber: 280,
+                    columnNumber: 9
+                }, this),
+            trend: "+2.3%",
+            label: "Taux de collecte",
+            value: "65.6%"
+        }
+    ];
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex flex-col gap-6",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        className: "text-[20px] sm:text-[26px] font-bold mb-1",
+                        style: {
+                            color: "#0F172B"
+                        },
+                        children: "Statistiques globales"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 293,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-[14px]",
+                        style: {
+                            color: "#45556C"
+                        },
+                        children: "Analyser la santé et la performance de la plateforme"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 294,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 292,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5",
+                children: stats.map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "bg-white rounded-xl border border-slate-100 p-6 hover:shadow-md transition-shadow duration-200",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-start justify-between mb-6",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-11 h-11 rounded-xl flex items-center justify-center shrink-0",
+                                        style: {
+                                            backgroundColor: s.iconBg
+                                        },
+                                        children: s.icon(s.iconColor)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 302,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center gap-1 text-[13px]",
+                                        style: {
+                                            color: "#3FAE8C"
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                width: "13",
+                                                height: "13",
+                                                viewBox: "0 0 24 24",
+                                                fill: "none",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        d: "M22 7l-9.5 9.5-5-5L1 17",
+                                                        stroke: "currentColor",
+                                                        strokeWidth: "2",
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                                        lineNumber: 307,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        d: "M16 7h6v6",
+                                                        stroke: "currentColor",
+                                                        strokeWidth: "2",
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                                        lineNumber: 308,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                                lineNumber: 306,
+                                                columnNumber: 17
+                                            }, this),
+                                            s.trend
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 305,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 301,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-[13px] mb-1",
+                                style: {
+                                    color: "#45556C"
+                                },
+                                children: s.label
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 313,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-[28px] font-bold",
+                                style: {
+                                    color: "#1F4E46"
+                                },
+                                children: s.value
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 314,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, s.label, true, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 300,
+                        columnNumber: 11
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 298,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-5",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ChartCard, {
+                        iconBg: "#EFF6FF",
+                        iconColor: "#3FAE8C",
+                        icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                width: "20",
+                                height: "20",
+                                viewBox: "0 0 24 24",
+                                fill: "none",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        d: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2",
+                                        stroke: c,
+                                        strokeWidth: "2",
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 325,
+                                        columnNumber: 15
+                                    }, void 0),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                        cx: "9",
+                                        cy: "7",
+                                        r: "4",
+                                        stroke: c,
+                                        strokeWidth: "2"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 326,
+                                        columnNumber: 15
+                                    }, void 0),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        d: "M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",
+                                        stroke: c,
+                                        strokeWidth: "2",
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 327,
+                                        columnNumber: 15
+                                    }, void 0)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 324,
+                                columnNumber: 13
+                            }, void 0),
+                        title: "Croissance des utilisateurs",
+                        subtitle: "Évolution mensuelle",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "h-[230px] w-full",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LineChart, {}, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 334,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 333,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 321,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ChartCard, {
+                        iconBg: "#ECFDF5",
+                        iconColor: "#059669",
+                        icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                width: "20",
+                                height: "20",
+                                viewBox: "0 0 24 24",
+                                fill: "none",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                                        x: "3",
+                                        y: "4",
+                                        width: "18",
+                                        height: "18",
+                                        rx: "2",
+                                        stroke: c,
+                                        strokeWidth: "2"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 342,
+                                        columnNumber: 15
+                                    }, void 0),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        d: "M16 2v4M8 2v4M3 10h18",
+                                        stroke: c,
+                                        strokeWidth: "2",
+                                        strokeLinecap: "round"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 343,
+                                        columnNumber: 15
+                                    }, void 0)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 341,
+                                columnNumber: 13
+                            }, void 0),
+                        title: "Collectes quotidiennes",
+                        subtitle: "7 derniers jours",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BarChartWithAxis, {}, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 349,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 338,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 320,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-5",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ChartCard, {
+                        iconBg: "#FEF3C7",
+                        iconColor: "#D97706",
+                        icon: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "relative w-6 h-5 shrink-0",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "absolute left-0 top-0 w-5 h-5 rounded-full bg-[#E6B84C] border-2 border-white"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 359,
+                                        columnNumber: 15
+                                    }, void 0),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "absolute left-2.5 top-0 w-5 h-5 rounded-full bg-[#E6B84C] border-2 border-white"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 360,
+                                        columnNumber: 15
+                                    }, void 0)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 358,
+                                columnNumber: 13
+                            }, void 0),
+                        title: "Distribution des points SNL",
+                        subtitle: "Par type d'attribution",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PieChart, {}, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 366,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 355,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ChartCard, {
+                        iconBg: "#EDE9FE",
+                        iconColor: "#8B5CF6",
+                        icon: (c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                width: "20",
+                                height: "20",
+                                viewBox: "0 0 24 24",
+                                fill: "none",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                    d: "M22 12h-4l-3 9L9 3l-3 9H2",
+                                    stroke: c,
+                                    strokeWidth: "2",
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                    lineNumber: 373,
+                                    columnNumber: 15
+                                }, void 0)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 372,
+                                columnNumber: 13
+                            }, void 0),
+                        title: "Activité de parrainage",
+                        subtitle: "Répartition par niveau",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ReferralProgress, {}, void 0, false, {
+                            fileName: "[project]/src/components/admin/StatisticsPage.js",
+                            lineNumber: 379,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 369,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 354,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "rounded-2xl px-8 py-7",
+                style: {
+                    backgroundColor: "#3FAE8C"
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-white text-[16px] font-bold mb-5",
+                        children: "Résumé de la période"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 385,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-1 sm:grid-cols-3 gap-6",
+                        children: [
+                            {
+                                label: "Taux de rétention (7j)",
+                                value: "78.5%"
+                            },
+                            {
+                                label: "Moyenne SNL par utilisateur",
+                                value: "191"
+                            },
+                            {
+                                label: "Nouveaux utilisateurs (30j)",
+                                value: "4,427"
+                            }
+                        ].map((kpi)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-white/80 text-[13px] mb-1",
+                                        children: kpi.label
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 393,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-white text-[36px] font-bold leading-none",
+                                        children: kpi.value
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                        lineNumber: 394,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, kpi.label, true, {
+                                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                                lineNumber: 392,
+                                columnNumber: 13
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/admin/StatisticsPage.js",
+                        lineNumber: 386,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/admin/StatisticsPage.js",
+                lineNumber: 384,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/admin/StatisticsPage.js",
+        lineNumber: 290,
+        columnNumber: 5
+    }, this);
+}
+_c6 = StatisticsPage;
+var _c, _c1, _c2, _c3, _c4, _c5, _c6;
+__turbopack_context__.k.register(_c, "LineChart");
+__turbopack_context__.k.register(_c1, "BarChart");
+__turbopack_context__.k.register(_c2, "BarChartWithAxis");
+__turbopack_context__.k.register(_c3, "PieChart");
+__turbopack_context__.k.register(_c4, "ReferralProgress");
+__turbopack_context__.k.register(_c5, "ChartCard");
+__turbopack_context__.k.register(_c6, "StatisticsPage");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/node_modules/next/dist/compiled/react/cjs/react-jsx-dev-runtime.development.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+/**
+ * @license React
+ * react-jsx-dev-runtime.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+"production" !== ("TURBOPACK compile-time value", "development") && function() {
+    function getComponentNameFromType(type) {
+        if (null == type) return null;
+        if ("function" === typeof type) return type.$$typeof === REACT_CLIENT_REFERENCE ? null : type.displayName || type.name || null;
+        if ("string" === typeof type) return type;
+        switch(type){
+            case REACT_FRAGMENT_TYPE:
+                return "Fragment";
+            case REACT_PROFILER_TYPE:
+                return "Profiler";
+            case REACT_STRICT_MODE_TYPE:
+                return "StrictMode";
+            case REACT_SUSPENSE_TYPE:
+                return "Suspense";
+            case REACT_SUSPENSE_LIST_TYPE:
+                return "SuspenseList";
+            case REACT_ACTIVITY_TYPE:
+                return "Activity";
+            case REACT_VIEW_TRANSITION_TYPE:
+                return "ViewTransition";
+        }
+        if ("object" === typeof type) switch("number" === typeof type.tag && console.error("Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."), type.$$typeof){
+            case REACT_PORTAL_TYPE:
+                return "Portal";
+            case REACT_CONTEXT_TYPE:
+                return type.displayName || "Context";
+            case REACT_CONSUMER_TYPE:
+                return (type._context.displayName || "Context") + ".Consumer";
+            case REACT_FORWARD_REF_TYPE:
+                var innerType = type.render;
+                type = type.displayName;
+                type || (type = innerType.displayName || innerType.name || "", type = "" !== type ? "ForwardRef(" + type + ")" : "ForwardRef");
+                return type;
+            case REACT_MEMO_TYPE:
+                return innerType = type.displayName || null, null !== innerType ? innerType : getComponentNameFromType(type.type) || "Memo";
+            case REACT_LAZY_TYPE:
+                innerType = type._payload;
+                type = type._init;
+                try {
+                    return getComponentNameFromType(type(innerType));
+                } catch (x) {}
+        }
+        return null;
+    }
+    function testStringCoercion(value) {
+        return "" + value;
+    }
+    function checkKeyStringCoercion(value) {
+        try {
+            testStringCoercion(value);
+            var JSCompiler_inline_result = !1;
+        } catch (e) {
+            JSCompiler_inline_result = !0;
+        }
+        if (JSCompiler_inline_result) {
+            JSCompiler_inline_result = console;
+            var JSCompiler_temp_const = JSCompiler_inline_result.error;
+            var JSCompiler_inline_result$jscomp$0 = "function" === typeof Symbol && Symbol.toStringTag && value[Symbol.toStringTag] || value.constructor.name || "Object";
+            JSCompiler_temp_const.call(JSCompiler_inline_result, "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.", JSCompiler_inline_result$jscomp$0);
+            return testStringCoercion(value);
+        }
+    }
+    function getTaskName(type) {
+        if (type === REACT_FRAGMENT_TYPE) return "<>";
+        if ("object" === typeof type && null !== type && type.$$typeof === REACT_LAZY_TYPE) return "<...>";
+        try {
+            var name = getComponentNameFromType(type);
+            return name ? "<" + name + ">" : "<...>";
+        } catch (x) {
+            return "<...>";
+        }
+    }
+    function getOwner() {
+        var dispatcher = ReactSharedInternals.A;
+        return null === dispatcher ? null : dispatcher.getOwner();
+    }
+    function UnknownOwner() {
+        return Error("react-stack-top-frame");
+    }
+    function hasValidKey(config) {
+        if (hasOwnProperty.call(config, "key")) {
+            var getter = Object.getOwnPropertyDescriptor(config, "key").get;
+            if (getter && getter.isReactWarning) return !1;
+        }
+        return void 0 !== config.key;
+    }
+    function defineKeyPropWarningGetter(props, displayName) {
+        function warnAboutAccessingKey() {
+            specialPropKeyWarningShown || (specialPropKeyWarningShown = !0, console.error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)", displayName));
+        }
+        warnAboutAccessingKey.isReactWarning = !0;
+        Object.defineProperty(props, "key", {
+            get: warnAboutAccessingKey,
+            configurable: !0
+        });
+    }
+    function elementRefGetterWithDeprecationWarning() {
+        var componentName = getComponentNameFromType(this.type);
+        didWarnAboutElementRef[componentName] || (didWarnAboutElementRef[componentName] = !0, console.error("Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."));
+        componentName = this.props.ref;
+        return void 0 !== componentName ? componentName : null;
+    }
+    function ReactElement(type, key, props, owner, debugStack, debugTask) {
+        var refProp = props.ref;
+        type = {
+            $$typeof: REACT_ELEMENT_TYPE,
+            type: type,
+            key: key,
+            props: props,
+            _owner: owner
+        };
+        null !== (void 0 !== refProp ? refProp : null) ? Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            get: elementRefGetterWithDeprecationWarning
+        }) : Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            value: null
+        });
+        type._store = {};
+        Object.defineProperty(type._store, "validated", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: 0
+        });
+        Object.defineProperty(type, "_debugInfo", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: null
+        });
+        Object.defineProperty(type, "_debugStack", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugStack
+        });
+        Object.defineProperty(type, "_debugTask", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugTask
+        });
+        Object.freeze && (Object.freeze(type.props), Object.freeze(type));
+        return type;
+    }
+    function jsxDEVImpl(type, config, maybeKey, isStaticChildren, debugStack, debugTask) {
+        var children = config.children;
+        if (void 0 !== children) if (isStaticChildren) if (isArrayImpl(children)) {
+            for(isStaticChildren = 0; isStaticChildren < children.length; isStaticChildren++)validateChildKeys(children[isStaticChildren]);
+            Object.freeze && Object.freeze(children);
+        } else console.error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
+        else validateChildKeys(children);
+        if (hasOwnProperty.call(config, "key")) {
+            children = getComponentNameFromType(type);
+            var keys = Object.keys(config).filter(function(k) {
+                return "key" !== k;
+            });
+            isStaticChildren = 0 < keys.length ? "{key: someKey, " + keys.join(": ..., ") + ": ...}" : "{key: someKey}";
+            didWarnAboutKeySpread[children + isStaticChildren] || (keys = 0 < keys.length ? "{" + keys.join(": ..., ") + ": ...}" : "{}", console.error('A props object containing a "key" prop is being spread into JSX:\n  let props = %s;\n  <%s {...props} />\nReact keys must be passed directly to JSX without using spread:\n  let props = %s;\n  <%s key={someKey} {...props} />', isStaticChildren, children, keys, children), didWarnAboutKeySpread[children + isStaticChildren] = !0);
+        }
+        children = null;
+        void 0 !== maybeKey && (checkKeyStringCoercion(maybeKey), children = "" + maybeKey);
+        hasValidKey(config) && (checkKeyStringCoercion(config.key), children = "" + config.key);
+        if ("key" in config) {
+            maybeKey = {};
+            for(var propName in config)"key" !== propName && (maybeKey[propName] = config[propName]);
+        } else maybeKey = config;
+        children && defineKeyPropWarningGetter(maybeKey, "function" === typeof type ? type.displayName || type.name || "Unknown" : type);
+        return ReactElement(type, children, maybeKey, getOwner(), debugStack, debugTask);
+    }
+    function validateChildKeys(node) {
+        isValidElement(node) ? node._store && (node._store.validated = 1) : "object" === typeof node && null !== node && node.$$typeof === REACT_LAZY_TYPE && ("fulfilled" === node._payload.status ? isValidElement(node._payload.value) && node._payload.value._store && (node._payload.value._store.validated = 1) : node._store && (node._store.validated = 1));
+    }
+    function isValidElement(object) {
+        return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+    var React = __turbopack_context__.r("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        return null;
+    };
+    React = {
+        react_stack_bottom_frame: function(callStackForError) {
+            return callStackForError();
+        }
+    };
+    var specialPropKeyWarningShown;
+    var didWarnAboutElementRef = {};
+    var unknownOwnerDebugStack = React.react_stack_bottom_frame.bind(React, UnknownOwner)();
+    var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
+    var didWarnAboutKeySpread = {};
+    exports.Fragment = REACT_FRAGMENT_TYPE;
+    exports.jsxDEV = function(type, config, maybeKey, isStaticChildren) {
+        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
+        if (trackActualOwner) {
+            var previousStackTraceLimit = Error.stackTraceLimit;
+            Error.stackTraceLimit = 10;
+            var debugStackDEV = Error("react-stack-top-frame");
+            Error.stackTraceLimit = previousStackTraceLimit;
+        } else debugStackDEV = unknownOwnerDebugStack;
+        return jsxDEVImpl(type, config, maybeKey, isStaticChildren, debugStackDEV, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
+    };
+}();
+}),
+"[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+'use strict';
+if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+;
+else {
+    module.exports = __turbopack_context__.r("[project]/node_modules/next/dist/compiled/react/cjs/react-jsx-dev-runtime.development.js [app-client] (ecmascript)");
+}
+}),
+"[project]/node_modules/next/dist/shared/lib/router/utils/querystring.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    assign: null,
+    searchParamsToUrlQuery: null,
+    urlQueryToSearchParams: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    assign: function() {
+        return assign;
+    },
+    searchParamsToUrlQuery: function() {
+        return searchParamsToUrlQuery;
+    },
+    urlQueryToSearchParams: function() {
+        return urlQueryToSearchParams;
+    }
+});
+function searchParamsToUrlQuery(searchParams) {
+    const query = {};
+    for (const [key, value] of searchParams.entries()){
+        const existing = query[key];
+        if (typeof existing === 'undefined') {
+            query[key] = value;
+        } else if (Array.isArray(existing)) {
+            existing.push(value);
+        } else {
+            query[key] = [
+                existing,
+                value
+            ];
+        }
+    }
+    return query;
+}
+function stringifyUrlQueryParam(param) {
+    if (typeof param === 'string') {
+        return param;
+    }
+    if (typeof param === 'number' && !isNaN(param) || typeof param === 'boolean') {
+        return String(param);
+    } else {
+        return '';
+    }
+}
+function urlQueryToSearchParams(query) {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)){
+        if (Array.isArray(value)) {
+            for (const item of value){
+                searchParams.append(key, stringifyUrlQueryParam(item));
+            }
+        } else {
+            searchParams.set(key, stringifyUrlQueryParam(value));
+        }
+    }
+    return searchParams;
+}
+function assign(target, ...searchParamsList) {
+    for (const searchParams of searchParamsList){
+        for (const key of searchParams.keys()){
+            target.delete(key);
+        }
+        for (const [key, value] of searchParams.entries()){
+            target.append(key, value);
+        }
+    }
+    return target;
+} //# sourceMappingURL=querystring.js.map
+}),
+"[project]/node_modules/next/dist/shared/lib/router/utils/format-url.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+// Format function modified from nodejs
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    formatUrl: null,
+    formatWithValidation: null,
+    urlObjectKeys: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    formatUrl: function() {
+        return formatUrl;
+    },
+    formatWithValidation: function() {
+        return formatWithValidation;
+    },
+    urlObjectKeys: function() {
+        return urlObjectKeys;
+    }
+});
+const _interop_require_wildcard = __turbopack_context__.r("[project]/node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs [app-client] (ecmascript)");
+const _querystring = /*#__PURE__*/ _interop_require_wildcard._(__turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/router/utils/querystring.js [app-client] (ecmascript)"));
+const slashedProtocols = /https?|ftp|gopher|file/;
+function formatUrl(urlObj) {
+    let { auth, hostname } = urlObj;
+    let protocol = urlObj.protocol || '';
+    let pathname = urlObj.pathname || '';
+    let hash = urlObj.hash || '';
+    let query = urlObj.query || '';
+    let host = false;
+    auth = auth ? encodeURIComponent(auth).replace(/%3A/i, ':') + '@' : '';
+    if (urlObj.host) {
+        host = auth + urlObj.host;
+    } else if (hostname) {
+        host = auth + (~hostname.indexOf(':') ? `[${hostname}]` : hostname);
+        if (urlObj.port) {
+            host += ':' + urlObj.port;
+        }
+    }
+    if (query && typeof query === 'object') {
+        query = String(_querystring.urlQueryToSearchParams(query));
+    }
+    let search = urlObj.search || query && `?${query}` || '';
+    if (protocol && !protocol.endsWith(':')) protocol += ':';
+    if (urlObj.slashes || (!protocol || slashedProtocols.test(protocol)) && host !== false) {
+        host = '//' + (host || '');
+        if (pathname && pathname[0] !== '/') pathname = '/' + pathname;
+    } else if (!host) {
+        host = '';
+    }
+    if (hash && hash[0] !== '#') hash = '#' + hash;
+    if (search && search[0] !== '?') search = '?' + search;
+    pathname = pathname.replace(/[?#]/g, encodeURIComponent);
+    search = search.replace('#', '%23');
+    return `${protocol}${host}${pathname}${search}${hash}`;
+}
+const urlObjectKeys = [
+    'auth',
+    'hash',
+    'host',
+    'hostname',
+    'href',
+    'path',
+    'pathname',
+    'port',
+    'protocol',
+    'query',
+    'search',
+    'slashes'
+];
+function formatWithValidation(url) {
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (url !== null && typeof url === 'object') {
+            Object.keys(url).forEach((key)=>{
+                if (!urlObjectKeys.includes(key)) {
+                    console.warn(`Unknown key passed via urlObject into url.format: ${key}`);
+                }
+            });
+        }
+    }
+    return formatUrl(url);
+} //# sourceMappingURL=format-url.js.map
+}),
+"[project]/node_modules/next/dist/client/use-merged-ref.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "useMergedRef", {
+    enumerable: true,
+    get: function() {
+        return useMergedRef;
+    }
+});
+const _react = __turbopack_context__.r("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+function useMergedRef(refA, refB) {
+    const cleanupA = (0, _react.useRef)(null);
+    const cleanupB = (0, _react.useRef)(null);
+    // NOTE: In theory, we could skip the wrapping if only one of the refs is non-null.
+    // (this happens often if the user doesn't pass a ref to Link/Form/Image)
+    // But this can cause us to leak a cleanup-ref into user code (previously via `<Link legacyBehavior>`),
+    // and the user might pass that ref into ref-merging library that doesn't support cleanup refs
+    // (because it hasn't been updated for React 19)
+    // which can then cause things to blow up, because a cleanup-returning ref gets called with `null`.
+    // So in practice, it's safer to be defensive and always wrap the ref, even on React 19.
+    return (0, _react.useCallback)((current)=>{
+        if (current === null) {
+            const cleanupFnA = cleanupA.current;
+            if (cleanupFnA) {
+                cleanupA.current = null;
+                cleanupFnA();
+            }
+            const cleanupFnB = cleanupB.current;
+            if (cleanupFnB) {
+                cleanupB.current = null;
+                cleanupFnB();
+            }
+        } else {
+            if (refA) {
+                cleanupA.current = applyRef(refA, current);
+            }
+            if (refB) {
+                cleanupB.current = applyRef(refB, current);
+            }
+        }
+    }, [
+        refA,
+        refB
+    ]);
+}
+function applyRef(refA, current) {
+    if (typeof refA === 'function') {
+        const cleanup = refA(current);
+        if (typeof cleanup === 'function') {
+            return cleanup;
+        } else {
+            return ()=>refA(null);
+        }
+    } else {
+        refA.current = current;
+        return ()=>{
+            refA.current = null;
+        };
+    }
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=use-merged-ref.js.map
+}),
+"[project]/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    DecodeError: null,
+    MiddlewareNotFoundError: null,
+    MissingStaticPage: null,
+    NormalizeError: null,
+    PageNotFoundError: null,
+    SP: null,
+    ST: null,
+    WEB_VITALS: null,
+    execOnce: null,
+    getDisplayName: null,
+    getLocationOrigin: null,
+    getURL: null,
+    isAbsoluteUrl: null,
+    isResSent: null,
+    loadGetInitialProps: null,
+    normalizeRepeatedSlashes: null,
+    stringifyError: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    DecodeError: function() {
+        return DecodeError;
+    },
+    MiddlewareNotFoundError: function() {
+        return MiddlewareNotFoundError;
+    },
+    MissingStaticPage: function() {
+        return MissingStaticPage;
+    },
+    NormalizeError: function() {
+        return NormalizeError;
+    },
+    PageNotFoundError: function() {
+        return PageNotFoundError;
+    },
+    SP: function() {
+        return SP;
+    },
+    ST: function() {
+        return ST;
+    },
+    WEB_VITALS: function() {
+        return WEB_VITALS;
+    },
+    execOnce: function() {
+        return execOnce;
+    },
+    getDisplayName: function() {
+        return getDisplayName;
+    },
+    getLocationOrigin: function() {
+        return getLocationOrigin;
+    },
+    getURL: function() {
+        return getURL;
+    },
+    isAbsoluteUrl: function() {
+        return isAbsoluteUrl;
+    },
+    isResSent: function() {
+        return isResSent;
+    },
+    loadGetInitialProps: function() {
+        return loadGetInitialProps;
+    },
+    normalizeRepeatedSlashes: function() {
+        return normalizeRepeatedSlashes;
+    },
+    stringifyError: function() {
+        return stringifyError;
+    }
+});
+const WEB_VITALS = [
+    'CLS',
+    'FCP',
+    'FID',
+    'INP',
+    'LCP',
+    'TTFB'
+];
+function execOnce(fn) {
+    let used = false;
+    let result;
+    return (...args)=>{
+        if (!used) {
+            used = true;
+            result = fn(...args);
+        }
+        return result;
+    };
+}
+// Scheme: https://tools.ietf.org/html/rfc3986#section-3.1
+// Absolute URL: https://tools.ietf.org/html/rfc3986#section-4.3
+const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/;
+const isAbsoluteUrl = (url)=>ABSOLUTE_URL_REGEX.test(url);
+function getLocationOrigin() {
+    const { protocol, hostname, port } = window.location;
+    return `${protocol}//${hostname}${port ? ':' + port : ''}`;
+}
+function getURL() {
+    const { href } = window.location;
+    const origin = getLocationOrigin();
+    return href.substring(origin.length);
+}
+function getDisplayName(Component) {
+    return typeof Component === 'string' ? Component : Component.displayName || Component.name || 'Unknown';
+}
+function isResSent(res) {
+    return res.finished || res.headersSent;
+}
+function normalizeRepeatedSlashes(url) {
+    const urlParts = url.split('?');
+    const urlNoQuery = urlParts[0];
+    return urlNoQuery // first we replace any non-encoded backslashes with forward
+    // then normalize repeated forward slashes
+    .replace(/\\/g, '/').replace(/\/\/+/g, '/') + (urlParts[1] ? `?${urlParts.slice(1).join('?')}` : '');
+}
+async function loadGetInitialProps(App, ctx) {
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (App.prototype?.getInitialProps) {
+            const message = `"${getDisplayName(App)}.getInitialProps()" is defined as an instance method - visit https://nextjs.org/docs/messages/get-initial-props-as-an-instance-method for more information.`;
+            throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+                value: "E394",
+                enumerable: false,
+                configurable: true
+            });
+        }
+    }
+    // when called from _app `ctx` is nested in `ctx`
+    const res = ctx.res || ctx.ctx && ctx.ctx.res;
+    if (!App.getInitialProps) {
+        if (ctx.ctx && ctx.Component) {
+            // @ts-ignore pageProps default
+            return {
+                pageProps: await loadGetInitialProps(ctx.Component, ctx.ctx)
+            };
+        }
+        return {};
+    }
+    const props = await App.getInitialProps(ctx);
+    if (res && isResSent(res)) {
+        return props;
+    }
+    if (!props) {
+        const message = `"${getDisplayName(App)}.getInitialProps()" should resolve to an object. But found "${props}" instead.`;
+        throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+            value: "E394",
+            enumerable: false,
+            configurable: true
+        });
+    }
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (Object.keys(props).length === 0 && !ctx.ctx) {
+            console.warn(`${getDisplayName(App)} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://nextjs.org/docs/messages/empty-object-getInitialProps`);
+        }
+    }
+    return props;
+}
+const SP = typeof performance !== 'undefined';
+const ST = SP && [
+    'mark',
+    'measure',
+    'getEntriesByName'
+].every((method)=>typeof performance[method] === 'function');
+class DecodeError extends Error {
+}
+class NormalizeError extends Error {
+}
+class PageNotFoundError extends Error {
+    constructor(page){
+        super();
+        this.code = 'ENOENT';
+        this.name = 'PageNotFoundError';
+        this.message = `Cannot find module for page: ${page}`;
+    }
+}
+class MissingStaticPage extends Error {
+    constructor(page, message){
+        super();
+        this.message = `Failed to load static file for page: ${page} ${message}`;
+    }
+}
+class MiddlewareNotFoundError extends Error {
+    constructor(){
+        super();
+        this.code = 'ENOENT';
+        this.message = `Cannot find the middleware module`;
+    }
+}
+function stringifyError(error) {
+    return JSON.stringify({
+        message: error.message,
+        stack: error.stack
+    });
+} //# sourceMappingURL=utils.js.map
+}),
+"[project]/node_modules/next/dist/shared/lib/router/utils/is-local-url.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "isLocalURL", {
+    enumerable: true,
+    get: function() {
+        return isLocalURL;
+    }
+});
+const _utils = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _hasbasepath = __turbopack_context__.r("[project]/node_modules/next/dist/client/has-base-path.js [app-client] (ecmascript)");
+function isLocalURL(url) {
+    // prevent a hydration mismatch on href for url with anchor refs
+    if (!(0, _utils.isAbsoluteUrl)(url)) return true;
+    try {
+        // absolute urls can be local if they are on the same origin
+        const locationOrigin = (0, _utils.getLocationOrigin)();
+        const resolved = new URL(url, locationOrigin);
+        return resolved.origin === locationOrigin && (0, _hasbasepath.hasBasePath)(resolved.pathname);
+    } catch (_) {
+        return false;
+    }
+} //# sourceMappingURL=is-local-url.js.map
+}),
+"[project]/node_modules/next/dist/shared/lib/utils/error-once.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "errorOnce", {
+    enumerable: true,
+    get: function() {
+        return errorOnce;
+    }
+});
+let errorOnce = (_)=>{};
+if ("TURBOPACK compile-time truthy", 1) {
+    const errors = new Set();
+    errorOnce = (msg)=>{
+        if (!errors.has(msg)) {
+            console.error(msg);
+        }
+        errors.add(msg);
+    };
+} //# sourceMappingURL=error-once.js.map
+}),
+"[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+'use client';
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    default: null,
+    useLinkStatus: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    /**
+ * A React component that extends the HTML `<a>` element to provide
+ * [prefetching](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#2-prefetching)
+ * and client-side navigation. This is the primary way to navigate between routes in Next.js.
+ *
+ * @remarks
+ * - Prefetching is only enabled in production.
+ *
+ * @see https://nextjs.org/docs/app/api-reference/components/link
+ */ default: function() {
+        return LinkComponent;
+    },
+    useLinkStatus: function() {
+        return useLinkStatus;
+    }
+});
+const _interop_require_wildcard = __turbopack_context__.r("[project]/node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs [app-client] (ecmascript)");
+const _jsxruntime = __turbopack_context__.r("[project]/node_modules/next/dist/compiled/react/jsx-runtime.js [app-client] (ecmascript)");
+const _react = /*#__PURE__*/ _interop_require_wildcard._(__turbopack_context__.r("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)"));
+const _formaturl = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/router/utils/format-url.js [app-client] (ecmascript)");
+const _approutercontextsharedruntime = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js [app-client] (ecmascript)");
+const _usemergedref = __turbopack_context__.r("[project]/node_modules/next/dist/client/use-merged-ref.js [app-client] (ecmascript)");
+const _utils = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _addbasepath = __turbopack_context__.r("[project]/node_modules/next/dist/client/add-base-path.js [app-client] (ecmascript)");
+const _warnonce = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/utils/warn-once.js [app-client] (ecmascript)");
+const _links = __turbopack_context__.r("[project]/node_modules/next/dist/client/components/links.js [app-client] (ecmascript)");
+const _islocalurl = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/router/utils/is-local-url.js [app-client] (ecmascript)");
+const _types = __turbopack_context__.r("[project]/node_modules/next/dist/client/components/segment-cache/types.js [app-client] (ecmascript)");
+const _erroronce = __turbopack_context__.r("[project]/node_modules/next/dist/shared/lib/utils/error-once.js [app-client] (ecmascript)");
+function isModifiedEvent(event) {
+    const eventTarget = event.currentTarget;
+    const target = eventTarget.getAttribute('target');
+    return target && target !== '_self' || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || // triggers resource download
+    event.nativeEvent && event.nativeEvent.which === 2;
+}
+function linkClicked(e, href, as, linkInstanceRef, replace, scroll, onNavigate) {
+    if (typeof window !== 'undefined') {
+        const { nodeName } = e.currentTarget;
+        // anchors inside an svg have a lowercase nodeName
+        const isAnchorNodeName = nodeName.toUpperCase() === 'A';
+        if (isAnchorNodeName && isModifiedEvent(e) || e.currentTarget.hasAttribute('download')) {
+            // ignore click for browser’s default behavior
+            return;
+        }
+        if (!(0, _islocalurl.isLocalURL)(href)) {
+            if (replace) {
+                // browser default behavior does not replace the history state
+                // so we need to do it manually
+                e.preventDefault();
+                location.replace(href);
+            }
+            // ignore click for browser’s default behavior
+            return;
+        }
+        e.preventDefault();
+        if (onNavigate) {
+            let isDefaultPrevented = false;
+            onNavigate({
+                preventDefault: ()=>{
+                    isDefaultPrevented = true;
+                }
+            });
+            if (isDefaultPrevented) {
+                return;
+            }
+        }
+        const { dispatchNavigateAction } = __turbopack_context__.r("[project]/node_modules/next/dist/client/components/app-router-instance.js [app-client] (ecmascript)");
+        _react.default.startTransition(()=>{
+            dispatchNavigateAction(as || href, replace ? 'replace' : 'push', scroll ?? true, linkInstanceRef.current);
+        });
+    }
+}
+function formatStringOrUrl(urlObjOrString) {
+    if (typeof urlObjOrString === 'string') {
+        return urlObjOrString;
+    }
+    return (0, _formaturl.formatUrl)(urlObjOrString);
+}
+function LinkComponent(props) {
+    const [linkStatus, setOptimisticLinkStatus] = (0, _react.useOptimistic)(_links.IDLE_LINK_STATUS);
+    let children;
+    const linkInstanceRef = (0, _react.useRef)(null);
+    const { href: hrefProp, as: asProp, children: childrenProp, prefetch: prefetchProp = null, passHref, replace, shallow, scroll, onClick, onMouseEnter: onMouseEnterProp, onTouchStart: onTouchStartProp, legacyBehavior = false, onNavigate, ref: forwardedRef, unstable_dynamicOnHover, ...restProps } = props;
+    children = childrenProp;
+    if (legacyBehavior && (typeof children === 'string' || typeof children === 'number')) {
+        children = /*#__PURE__*/ (0, _jsxruntime.jsx)("a", {
+            children: children
+        });
+    }
+    const router = _react.default.useContext(_approutercontextsharedruntime.AppRouterContext);
+    const prefetchEnabled = prefetchProp !== false;
+    const fetchStrategy = prefetchProp !== false ? getFetchStrategyFromPrefetchProp(prefetchProp) : _types.FetchStrategy.PPR;
+    if ("TURBOPACK compile-time truthy", 1) {
+        function createPropError(args) {
+            return Object.defineProperty(new Error(`Failed prop type: The prop \`${args.key}\` expects a ${args.expected} in \`<Link>\`, but got \`${args.actual}\` instead.` + (typeof window !== 'undefined' ? "\nOpen your browser's console to view the Component stack trace." : '')), "__NEXT_ERROR_CODE", {
+                value: "E319",
+                enumerable: false,
+                configurable: true
+            });
+        }
+        // TypeScript trick for type-guarding:
+        const requiredPropsGuard = {
+            href: true
+        };
+        const requiredProps = Object.keys(requiredPropsGuard);
+        requiredProps.forEach((key)=>{
+            if (key === 'href') {
+                if (props[key] == null || typeof props[key] !== 'string' && typeof props[key] !== 'object') {
+                    throw createPropError({
+                        key,
+                        expected: '`string` or `object`',
+                        actual: props[key] === null ? 'null' : typeof props[key]
+                    });
+                }
+            } else {
+                // TypeScript trick for type-guarding:
+                const _ = key;
+            }
+        });
+        // TypeScript trick for type-guarding:
+        const optionalPropsGuard = {
+            as: true,
+            replace: true,
+            scroll: true,
+            shallow: true,
+            passHref: true,
+            prefetch: true,
+            unstable_dynamicOnHover: true,
+            onClick: true,
+            onMouseEnter: true,
+            onTouchStart: true,
+            legacyBehavior: true,
+            onNavigate: true
+        };
+        const optionalProps = Object.keys(optionalPropsGuard);
+        optionalProps.forEach((key)=>{
+            const valType = typeof props[key];
+            if (key === 'as') {
+                if (props[key] && valType !== 'string' && valType !== 'object') {
+                    throw createPropError({
+                        key,
+                        expected: '`string` or `object`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'onClick' || key === 'onMouseEnter' || key === 'onTouchStart' || key === 'onNavigate') {
+                if (props[key] && valType !== 'function') {
+                    throw createPropError({
+                        key,
+                        expected: '`function`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'replace' || key === 'scroll' || key === 'shallow' || key === 'passHref' || key === 'legacyBehavior' || key === 'unstable_dynamicOnHover') {
+                if (props[key] != null && valType !== 'boolean') {
+                    throw createPropError({
+                        key,
+                        expected: '`boolean`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'prefetch') {
+                if (props[key] != null && valType !== 'boolean' && props[key] !== 'auto') {
+                    throw createPropError({
+                        key,
+                        expected: '`boolean | "auto"`',
+                        actual: valType
+                    });
+                }
+            } else {
+                // TypeScript trick for type-guarding:
+                const _ = key;
+            }
+        });
+    }
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (props.locale) {
+            (0, _warnonce.warnOnce)('The `locale` prop is not supported in `next/link` while using the `app` router. Read more about app router internalization: https://nextjs.org/docs/app/building-your-application/routing/internationalization');
+        }
+        if (!asProp) {
+            let href;
+            if (typeof hrefProp === 'string') {
+                href = hrefProp;
+            } else if (typeof hrefProp === 'object' && typeof hrefProp.pathname === 'string') {
+                href = hrefProp.pathname;
+            }
+            if (href) {
+                const hasDynamicSegment = href.split('/').some((segment)=>segment.startsWith('[') && segment.endsWith(']'));
+                if (hasDynamicSegment) {
+                    throw Object.defineProperty(new Error(`Dynamic href \`${href}\` found in <Link> while using the \`/app\` router, this is not supported. Read more: https://nextjs.org/docs/messages/app-dir-dynamic-href`), "__NEXT_ERROR_CODE", {
+                        value: "E267",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+            }
+        }
+    }
+    const { href, as } = _react.default.useMemo({
+        "LinkComponent.useMemo": ()=>{
+            const resolvedHref = formatStringOrUrl(hrefProp);
+            return {
+                href: resolvedHref,
+                as: asProp ? formatStringOrUrl(asProp) : resolvedHref
+            };
+        }
+    }["LinkComponent.useMemo"], [
+        hrefProp,
+        asProp
+    ]);
+    // This will return the first child, if multiple are provided it will throw an error
+    let child;
+    if (legacyBehavior) {
+        if (children?.$$typeof === Symbol.for('react.lazy')) {
+            throw Object.defineProperty(new Error(`\`<Link legacyBehavior>\` received a direct child that is either a Server Component, or JSX that was loaded with React.lazy(). This is not supported. Either remove legacyBehavior, or make the direct child a Client Component that renders the Link's \`<a>\` tag.`), "__NEXT_ERROR_CODE", {
+                value: "E863",
+                enumerable: false,
+                configurable: true
+            });
+        }
+        if ("TURBOPACK compile-time truthy", 1) {
+            if (onClick) {
+                console.warn(`"onClick" was passed to <Link> with \`href\` of \`${hrefProp}\` but "legacyBehavior" was set. The legacy behavior requires onClick be set on the child of next/link`);
+            }
+            if (onMouseEnterProp) {
+                console.warn(`"onMouseEnter" was passed to <Link> with \`href\` of \`${hrefProp}\` but "legacyBehavior" was set. The legacy behavior requires onMouseEnter be set on the child of next/link`);
+            }
+            try {
+                child = _react.default.Children.only(children);
+            } catch (err) {
+                if (!children) {
+                    throw Object.defineProperty(new Error(`No children were passed to <Link> with \`href\` of \`${hrefProp}\` but one child is required https://nextjs.org/docs/messages/link-no-children`), "__NEXT_ERROR_CODE", {
+                        value: "E320",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+                throw Object.defineProperty(new Error(`Multiple children were passed to <Link> with \`href\` of \`${hrefProp}\` but only one child is supported https://nextjs.org/docs/messages/link-multiple-children` + (typeof window !== 'undefined' ? " \nOpen your browser's console to view the Component stack trace." : '')), "__NEXT_ERROR_CODE", {
+                    value: "E266",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+        } else //TURBOPACK unreachable
+        ;
+    } else {
+        if ("TURBOPACK compile-time truthy", 1) {
+            if (children?.type === 'a') {
+                throw Object.defineProperty(new Error('Invalid <Link> with <a> child. Please remove <a> or use <Link legacyBehavior>.\nLearn more: https://nextjs.org/docs/messages/invalid-new-link-with-extra-anchor'), "__NEXT_ERROR_CODE", {
+                    value: "E209",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+        }
+    }
+    const childRef = legacyBehavior ? child && typeof child === 'object' && child.ref : forwardedRef;
+    // Use a callback ref to attach an IntersectionObserver to the anchor tag on
+    // mount. In the future we will also use this to keep track of all the
+    // currently mounted <Link> instances, e.g. so we can re-prefetch them after
+    // a revalidation or refresh.
+    const observeLinkVisibilityOnMount = _react.default.useCallback({
+        "LinkComponent.useCallback[observeLinkVisibilityOnMount]": (element)=>{
+            if (router !== null) {
+                linkInstanceRef.current = (0, _links.mountLinkInstance)(element, href, router, fetchStrategy, prefetchEnabled, setOptimisticLinkStatus);
+            }
+            return ({
+                "LinkComponent.useCallback[observeLinkVisibilityOnMount]": ()=>{
+                    if (linkInstanceRef.current) {
+                        (0, _links.unmountLinkForCurrentNavigation)(linkInstanceRef.current);
+                        linkInstanceRef.current = null;
+                    }
+                    (0, _links.unmountPrefetchableInstance)(element);
+                }
+            })["LinkComponent.useCallback[observeLinkVisibilityOnMount]"];
+        }
+    }["LinkComponent.useCallback[observeLinkVisibilityOnMount]"], [
+        prefetchEnabled,
+        href,
+        router,
+        fetchStrategy,
+        setOptimisticLinkStatus
+    ]);
+    const mergedRef = (0, _usemergedref.useMergedRef)(observeLinkVisibilityOnMount, childRef);
+    const childProps = {
+        ref: mergedRef,
+        onClick (e) {
+            if ("TURBOPACK compile-time truthy", 1) {
+                if (!e) {
+                    throw Object.defineProperty(new Error(`Component rendered inside next/link has to pass click event to "onClick" prop.`), "__NEXT_ERROR_CODE", {
+                        value: "E312",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+            }
+            if (!legacyBehavior && typeof onClick === 'function') {
+                onClick(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onClick === 'function') {
+                child.props.onClick(e);
+            }
+            if (!router) {
+                return;
+            }
+            if (e.defaultPrevented) {
+                return;
+            }
+            linkClicked(e, href, as, linkInstanceRef, replace, scroll, onNavigate);
+        },
+        onMouseEnter (e) {
+            if (!legacyBehavior && typeof onMouseEnterProp === 'function') {
+                onMouseEnterProp(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onMouseEnter === 'function') {
+                child.props.onMouseEnter(e);
+            }
+            if (!router) {
+                return;
+            }
+            if ("TURBOPACK compile-time truthy", 1) {
+                return;
+            }
+            //TURBOPACK unreachable
+            ;
+            const upgradeToDynamicPrefetch = undefined;
+        },
+        onTouchStart: ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : function onTouchStart(e) {
+            if (!legacyBehavior && typeof onTouchStartProp === 'function') {
+                onTouchStartProp(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onTouchStart === 'function') {
+                child.props.onTouchStart(e);
+            }
+            if (!router) {
+                return;
+            }
+            if (!prefetchEnabled) {
+                return;
+            }
+            const upgradeToDynamicPrefetch = unstable_dynamicOnHover === true;
+            (0, _links.onNavigationIntent)(e.currentTarget, upgradeToDynamicPrefetch);
+        }
+    };
+    // If the url is absolute, we can bypass the logic to prepend the basePath.
+    if ((0, _utils.isAbsoluteUrl)(as)) {
+        childProps.href = as;
+    } else if (!legacyBehavior || passHref || child.type === 'a' && !('href' in child.props)) {
+        childProps.href = (0, _addbasepath.addBasePath)(as);
+    }
+    let link;
+    if (legacyBehavior) {
+        if ("TURBOPACK compile-time truthy", 1) {
+            (0, _erroronce.errorOnce)('`legacyBehavior` is deprecated and will be removed in a future ' + 'release. A codemod is available to upgrade your components:\n\n' + 'npx @next/codemod@latest new-link .\n\n' + 'Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components');
+        }
+        link = /*#__PURE__*/ _react.default.cloneElement(child, childProps);
+    } else {
+        link = /*#__PURE__*/ (0, _jsxruntime.jsx)("a", {
+            ...restProps,
+            ...childProps,
+            children: children
+        });
+    }
+    return /*#__PURE__*/ (0, _jsxruntime.jsx)(LinkStatusContext.Provider, {
+        value: linkStatus,
+        children: link
+    });
+}
+const LinkStatusContext = /*#__PURE__*/ (0, _react.createContext)(_links.IDLE_LINK_STATUS);
+const useLinkStatus = ()=>{
+    return (0, _react.useContext)(LinkStatusContext);
+};
+function getFetchStrategyFromPrefetchProp(prefetchProp) {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    else {
+        return prefetchProp === null || prefetchProp === 'auto' ? _types.FetchStrategy.PPR : // (although invalid values should've been filtered out by prop validation in dev)
+        _types.FetchStrategy.Full;
+    }
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=link.js.map
+}),
+]);
+
+//# sourceMappingURL=_972ec4f6._.js.map

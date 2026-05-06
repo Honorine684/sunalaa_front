@@ -47,6 +47,20 @@ export default function HomeDashboard() {
 
       <Container className="relative z-10 pt-16 pb-20">
 
+        {/* ── Actions top ── */}
+        <div className="flex justify-end mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-primary text-white text-[14px] font-semibold px-5 py-2.5 rounded-full hover:brightness-110 transition"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Voir le site
+          </Link>
+        </div>
+
         {/* ── Section title ── */}
         <div className="text-center mb-10">
           <h2 className="font-bold text-primary mb-3 text-[28px] lg:text-[48px]" style={{ lineHeight: "1.1", letterSpacing: "0.35px" }}>

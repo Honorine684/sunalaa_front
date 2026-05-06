@@ -8,14 +8,14 @@ import { useState } from "react";
 function Input({ label, type = "text", placeholder, name, children }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label style={{ fontSize: 18, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>{label}</label>
+      <label style={{ fontSize: 14, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>{label}</label>
       <div className="relative">
         <input
           type={type}
           name={name}
           placeholder={placeholder}
           className="w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] placeholder:text-[14px] placeholder:font-normal outline-none focus:ring-2 focus:ring-secondary/50 transition"
-          style={{ height: 50, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 17, paddingBottom: 17, paddingLeft: 23, paddingRight: 23 }}
+          style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 16 }}
         />
         {children}
       </div>
@@ -56,13 +56,21 @@ export default function LoginPage() {
           />
         </Link>
 
+        {/* Retour accueil */}
+        <Link href="/" className="flex items-center gap-1.5 text-white/60 hover:text-white text-[13px] transition-colors -mt-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Retour à l&apos;accueil
+        </Link>
+
         {/* Card */}
-        <div className="w-full bg-white/10 backdrop-blur-md border-[3px] border-white/70 rounded-[32px]" style={{ paddingTop: 70, paddingBottom: 70, paddingLeft: 91, paddingRight: 91 }}>
+        <div className="w-full bg-white/10 backdrop-blur-md border-[3px] border-white/70 rounded-[32px] px-6 sm:px-[91px]" style={{ paddingTop: 40, paddingBottom: 40 }}>
 
         {/* Title */}
-        <h1 className="text-white mb-7" style={{ fontSize: 38, fontWeight: 700, lineHeight: "100%", color: "#FFFFFF" }}>Login</h1>
+        <h1 className="text-white mb-5" style={{ fontSize: 28, fontWeight: 700, lineHeight: "100%", color: "#FFFFFF" }}>Login</h1>
 
-        <form className="flex flex-col gap-[26px]">
+        <form className="flex flex-col gap-[18px]">
           {/* Email */}
           <Input
             label="Email"
@@ -80,7 +88,7 @@ export default function LoginPage() {
                 name="password"
                 placeholder="Password"
                 className="w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] placeholder:text-[14px] placeholder:font-normal outline-none focus:ring-2 focus:ring-secondary/50 transition"
-                style={{ height: 50, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 17, paddingBottom: 17, paddingLeft: 23, paddingRight: 44 }}
+                style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 40 }}
               />
               <button
                 type="button"

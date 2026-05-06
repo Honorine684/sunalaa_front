@@ -228,7 +228,7 @@ function Navbar() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: `fixed inset-0 z-40 flex flex-col lg:hidden transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`,
+                className: `fixed inset-x-0 top-0 z-40 flex flex-col lg:hidden transition-all duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`,
                 style: {
                     backgroundColor: "#1F4E46"
                 },
@@ -242,11 +242,11 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                        className: "flex flex-col flex-1 px-8 py-10 gap-2 overflow-y-auto",
+                        className: "flex flex-col px-6 py-4 gap-1 overflow-y-auto",
                         children: navLinks.map((link, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 href: link.href,
                                 onClick: ()=>setOpen(false),
-                                className: "text-white text-[22px] font-semibold py-4 border-b border-white/10 transition-opacity hover:opacity-75",
+                                className: "text-white text-[15px] font-semibold py-2.5 border-b border-white/10 transition-opacity hover:opacity-75",
                                 style: {
                                     transitionDelay: open ? `${i * 50}ms` : "0ms"
                                 },
@@ -262,12 +262,12 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-col gap-4 px-8 pb-12",
+                        className: "flex flex-col gap-3 px-6 py-4 pb-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 href: "/login",
                                 onClick: ()=>setOpen(false),
-                                className: "w-full text-center py-4 rounded-full text-white text-[16px] font-semibold",
+                                className: "w-full text-center py-3 rounded-full text-white text-[14px] font-semibold",
                                 style: {
                                     backgroundColor: "rgba(255,255,255,0.10)"
                                 },
@@ -280,7 +280,7 @@ function Navbar() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 href: "/register",
                                 onClick: ()=>setOpen(false),
-                                className: "w-full text-center py-4 rounded-full text-white text-[16px] font-semibold",
+                                className: "w-full text-center py-3 rounded-full text-white text-[14px] font-semibold",
                                 style: {
                                     backgroundColor: "#E6B84C"
                                 },
@@ -1223,63 +1223,70 @@ function FormationsContent() {
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "relative shrink-0 w-full sm:w-[260px] px-5 sm:px-0 sm:pr-5",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                        className: "absolute left-3 top-1/2 -translate-y-1/2 text-slate-400",
-                                        width: "15",
-                                        height: "15",
-                                        viewBox: "0 0 24 24",
-                                        fill: "none",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
-                                                cx: "11",
-                                                cy: "11",
-                                                r: "8",
-                                                stroke: "currentColor",
-                                                strokeWidth: "2"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/components/FormationsContent.js",
-                                                lineNumber: 340,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                                d: "M21 21l-4.35-4.35",
-                                                stroke: "currentColor",
-                                                strokeWidth: "2",
-                                                strokeLinecap: "round"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/components/FormationsContent.js",
-                                                lineNumber: 341,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 339,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        value: search,
-                                        onChange: (e)=>setSearch(e.target.value),
-                                        placeholder: "Rechercher d'une formation ...",
-                                        className: "w-full bg-white border border-secondary text-slate-700 placeholder:text-[#0A0A0A]/50 rounded-xl pl-9 pr-4 outline-none focus:ring-2 focus:ring-secondary/30 transition",
-                                        style: {
-                                            fontSize: 14,
-                                            fontFamily: "Inter, sans-serif",
-                                            fontWeight: 400,
-                                            lineHeight: "100%",
-                                            paddingTop: 10,
-                                            paddingBottom: 10
-                                        }
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 343,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                className: "shrink-0 w-full sm:w-[260px] px-5 sm:px-0 sm:pr-5",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "relative",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                            className: "absolute left-3 top-1/2 -translate-y-1/2 text-slate-400",
+                                            width: "15",
+                                            height: "15",
+                                            viewBox: "0 0 24 24",
+                                            fill: "none",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                                    cx: "11",
+                                                    cy: "11",
+                                                    r: "8",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/FormationsContent.js",
+                                                    lineNumber: 341,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                    d: "M21 21l-4.35-4.35",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    strokeLinecap: "round"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/FormationsContent.js",
+                                                    lineNumber: 342,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/FormationsContent.js",
+                                            lineNumber: 340,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "text",
+                                            value: search,
+                                            onChange: (e)=>setSearch(e.target.value),
+                                            placeholder: "Rechercher d'une formation ...",
+                                            className: "w-full bg-white border border-secondary text-slate-700 placeholder:text-[#0A0A0A]/50 rounded-xl pl-9 pr-4 outline-none focus:ring-2 focus:ring-secondary/30 transition",
+                                            style: {
+                                                fontSize: 14,
+                                                fontFamily: "Inter, sans-serif",
+                                                fontWeight: 400,
+                                                lineHeight: "100%",
+                                                paddingTop: 10,
+                                                paddingBottom: 10
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/FormationsContent.js",
+                                            lineNumber: 344,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/FormationsContent.js",
+                                    lineNumber: 339,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
                                 fileName: "[project]/src/components/FormationsContent.js",
                                 lineNumber: 338,
                                 columnNumber: 11
@@ -1296,12 +1303,12 @@ function FormationsContent() {
                                 course: course
                             }, course.id, false, {
                                 fileName: "[project]/src/components/FormationsContent.js",
-                                lineNumber: 358,
+                                lineNumber: 359,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/FormationsContent.js",
-                        lineNumber: 356,
+                        lineNumber: 357,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1322,17 +1329,17 @@ function FormationsContent() {
                                         strokeLinejoin: "round"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 366,
+                                        lineNumber: 367,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/FormationsContent.js",
-                                    lineNumber: 365,
+                                    lineNumber: 366,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/FormationsContent.js",
-                                lineNumber: 364,
+                                lineNumber: 365,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1349,7 +1356,7 @@ function FormationsContent() {
                                         children: "Apprenez à votre rythme"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 370,
+                                        lineNumber: 371,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1365,7 +1372,7 @@ function FormationsContent() {
                                         children: "Nos formations sont conçues pour vous aider à comprendre la crypto de manière responsable et sécurisée. Aucune connaissance technique préalable n'est requise pour les cours débutants."
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 371,
+                                        lineNumber: 372,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1384,24 +1391,24 @@ function FormationsContent() {
                                                 children: tag
                                             }, tag, false, {
                                                 fileName: "[project]/src/components/FormationsContent.js",
-                                                lineNumber: 377,
+                                                lineNumber: 378,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/FormationsContent.js",
-                                        lineNumber: 375,
+                                        lineNumber: 376,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/FormationsContent.js",
-                                lineNumber: 369,
+                                lineNumber: 370,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/FormationsContent.js",
-                        lineNumber: 363,
+                        lineNumber: 364,
                         columnNumber: 9
                     }, this)
                 ]

@@ -8,14 +8,14 @@ import { useState } from "react";
 function Input({ label, type = "text", placeholder, name, children }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label style={{ fontSize: 18, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>{label}</label>
+      <label style={{ fontSize: 14, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>{label}</label>
       <div className="relative">
         <input
           type={type}
           name={name}
           placeholder={placeholder}
           className="w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] placeholder:text-[14px] placeholder:font-normal outline-none focus:ring-2 focus:ring-secondary/50 transition"
-          style={{ height: 50, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 17, paddingBottom: 17, paddingLeft: 23, paddingRight: 23 }}
+          style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 16 }}
         />
         {children}
       </div>
@@ -57,13 +57,21 @@ export default function RegisterPage() {
           />
         </Link>
 
+        {/* Retour accueil */}
+        <Link href="/" className="flex items-center gap-1.5 text-white/60 hover:text-white text-[13px] transition-colors -mt-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Retour à l&apos;accueil
+        </Link>
+
         {/* Card */}
-        <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-[32px]" style={{ paddingTop: 46, paddingBottom: 46, paddingLeft: 91, paddingRight: 91 }}>
+        <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-[32px] px-6 sm:px-[91px]" style={{ paddingTop: 36, paddingBottom: 36 }}>
 
         {/* Title */}
-        <h1 className="text-white mb-6" style={{ fontSize: 38, fontWeight: 700, lineHeight: "100%", color: "#FFFFFF" }}>Register</h1>
+        <h1 className="text-white mb-5" style={{ fontSize: 28, fontWeight: 700, lineHeight: "100%", color: "#FFFFFF" }}>Register</h1>
 
-        <form className="flex flex-col gap-[26px]">
+        <form className="flex flex-col gap-[18px]">
           {/* Row 1 — Username / Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
@@ -88,7 +96,7 @@ export default function RegisterPage() {
               placeholder="Password"
             />
             <div className="flex flex-col gap-1.5">
-              <label style={{ fontSize: 18, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>
+              <label style={{ fontSize: 14, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>
                 Confirmation Password
               </label>
               <div className="relative">
@@ -97,7 +105,7 @@ export default function RegisterPage() {
                   name="confirm_password"
                   placeholder="Password"
                   className="w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] placeholder:text-[14px] placeholder:font-normal outline-none focus:ring-2 focus:ring-secondary/50 transition"
-                  style={{ height: 50, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 17, paddingBottom: 17, paddingLeft: 23, paddingRight: 44 }}
+                  style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 40 }}
                 />
                 <button
                   type="button"
@@ -128,7 +136,7 @@ export default function RegisterPage() {
 
           {/* Referral code */}
           <div className="flex flex-col gap-1.5">
-            <label style={{ fontSize: 18, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>
+            <label style={{ fontSize: 14, fontWeight: 400, lineHeight: "100%", color: "#FFFFFF" }}>
               code de parainage <span className="text-red-400">*</span>
             </label>
             <input
@@ -136,7 +144,7 @@ export default function RegisterPage() {
               name="referral"
               placeholder="Default code"
               className="w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] placeholder:text-[14px] placeholder:font-normal outline-none focus:ring-2 focus:ring-secondary/50 transition"
-              style={{ height: 50, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 17, paddingBottom: 17, paddingLeft: 23, paddingRight: 23 }}
+              style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 16 }}
             />
           </div>
 
@@ -169,13 +177,13 @@ export default function RegisterPage() {
               onChange={() => setAgreed(!agreed)}
               className="w-4 h-4 accent-secondary cursor-pointer"
             />
-            <label htmlFor="terms" className="cursor-pointer" style={{ fontSize: 18, fontWeight: 500, lineHeight: "24px", color: "rgba(255,255,255,0.7)" }}>
+            <label htmlFor="terms" className="cursor-pointer" style={{ fontSize: 13, fontWeight: 500, lineHeight: "20px", color: "rgba(255,255,255,0.7)" }}>
               I agree to the{" "}
-              <Link href="/terms" className="text-secondary underline-offset-2 hover:underline" style={{ fontSize: 18, fontWeight: 500, lineHeight: "24px" }}>
+              <Link href="/terms" className="text-secondary underline-offset-2 hover:underline" style={{ fontSize: 13, fontWeight: 500 }}>
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-secondary underline-offset-2 hover:underline" style={{ fontSize: 18, fontWeight: 500, lineHeight: "24px" }}>
+              <Link href="/privacy" className="text-secondary underline-offset-2 hover:underline" style={{ fontSize: 13, fontWeight: 500 }}>
                 Privacy Policy
               </Link>
             </label>

@@ -147,8 +147,18 @@ export default function Sidebar({ active = "overview", mobileOpen = false, onClo
         </div>
       </div>
 
-      {/* Déconnexion */}
-      <div className="px-3 pb-5 pt-2">
+      {/* Voir le site + Déconnexion */}
+      <div className="px-3 pb-5 pt-2 flex flex-col gap-1">
+        <Link
+          href="/"
+          className="flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-[14px] text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Voir le site
+        </Link>
         <button className="flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-[14px] text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 cursor-pointer">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

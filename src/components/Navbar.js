@@ -96,7 +96,7 @@ export default function Navbar() {
 
       {/* Mobile menu overlay */}
       <div
-        className={`fixed inset-0 z-40 flex flex-col lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-x-0 top-0 z-40 flex flex-col lg:hidden transition-all duration-300 ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         style={{ backgroundColor: "#1F4E46" }}
@@ -106,13 +106,13 @@ export default function Navbar() {
         <div className="h-20 shrink-0" />
 
         {/* Links */}
-        <nav className="flex flex-col flex-1 px-8 py-10 gap-2 overflow-y-auto">
+        <nav className="flex flex-col px-6 py-4 gap-1 overflow-y-auto">
           {navLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-white text-[22px] font-semibold py-4 border-b border-white/10 transition-opacity hover:opacity-75"
+              className="text-white text-[15px] font-semibold py-2.5 border-b border-white/10 transition-opacity hover:opacity-75"
               style={{
                 transitionDelay: open ? `${i * 50}ms` : "0ms",
               }}
@@ -123,11 +123,11 @@ export default function Navbar() {
         </nav>
 
         {/* Auth buttons */}
-        <div className="flex flex-col gap-4 px-8 pb-12">
+        <div className="flex flex-col gap-3 px-6 py-4 pb-6">
           <Link
             href="/login"
             onClick={() => setOpen(false)}
-            className="w-full text-center py-4 rounded-full text-white text-[16px] font-semibold"
+            className="w-full text-center py-3 rounded-full text-white text-[14px] font-semibold"
             style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
           >
             Login
@@ -135,7 +135,7 @@ export default function Navbar() {
           <Link
             href="/register"
             onClick={() => setOpen(false)}
-            className="w-full text-center py-4 rounded-full text-white text-[16px] font-semibold"
+            className="w-full text-center py-3 rounded-full text-white text-[14px] font-semibold"
             style={{ backgroundColor: "#E6B84C" }}
           >
             Register

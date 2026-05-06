@@ -435,24 +435,24 @@ function FormationsHero() {
                         href: "#formations",
                         className: "inline-flex items-center bg-secondary text-white hover:brightness-110 transition",
                         style: {
-                            height: 54,
-                            paddingTop: 16,
-                            paddingBottom: 16,
-                            paddingLeft: 24,
-                            paddingRight: 18,
-                            gap: 24,
+                            height: 44,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                            paddingLeft: 20,
+                            paddingRight: 14,
+                            gap: 14,
                             borderRadius: 32,
-                            fontSize: 18,
+                            fontSize: 15,
                             fontWeight: 500,
                             lineHeight: "150%"
                         },
                         children: [
                             "Commencer une formation",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-9 h-9 bg-white rounded-full flex items-center justify-center shrink-0",
+                                className: "w-7 h-7 bg-white rounded-full flex items-center justify-center shrink-0",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                    width: "16",
-                                    height: "16",
+                                    width: "13",
+                                    height: "13",
                                     viewBox: "0 0 24 24",
                                     fill: "none",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {

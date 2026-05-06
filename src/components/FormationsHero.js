@@ -35,11 +35,11 @@ export default function FormationsHero() {
         <Link
           href="#formations"
           className="inline-flex items-center bg-secondary text-white hover:brightness-110 transition"
-          style={{ height: 54, paddingTop: 16, paddingBottom: 16, paddingLeft: 24, paddingRight: 18, gap: 24, borderRadius: 32, fontSize: 18, fontWeight: 500, lineHeight: "150%" }}
+          style={{ height: 44, paddingTop: 10, paddingBottom: 10, paddingLeft: 20, paddingRight: 14, gap: 14, borderRadius: 32, fontSize: 15, fontWeight: 500, lineHeight: "150%" }}
         >
           Commencer une formation
-          <span className="w-9 h-9 bg-white rounded-full flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <span className="w-7 h-7 bg-white rounded-full flex items-center justify-center shrink-0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
               <path d="M9 18l6-6-6-6" stroke="#1F4E46" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>

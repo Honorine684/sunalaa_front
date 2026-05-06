@@ -234,7 +234,7 @@ function Navbar() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: `fixed inset-0 z-40 flex flex-col lg:hidden transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`,
+                className: `fixed inset-x-0 top-0 z-40 flex flex-col lg:hidden transition-all duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`,
                 style: {
                     backgroundColor: "#1F4E46"
                 },
@@ -248,11 +248,11 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                        className: "flex flex-col flex-1 px-8 py-10 gap-2 overflow-y-auto",
+                        className: "flex flex-col px-6 py-4 gap-1 overflow-y-auto",
                         children: navLinks.map((link, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 href: link.href,
                                 onClick: ()=>setOpen(false),
-                                className: "text-white text-[22px] font-semibold py-4 border-b border-white/10 transition-opacity hover:opacity-75",
+                                className: "text-white text-[15px] font-semibold py-2.5 border-b border-white/10 transition-opacity hover:opacity-75",
                                 style: {
                                     transitionDelay: open ? `${i * 50}ms` : "0ms"
                                 },
@@ -268,12 +268,12 @@ function Navbar() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-col gap-4 px-8 pb-12",
+                        className: "flex flex-col gap-3 px-6 py-4 pb-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 href: "/login",
                                 onClick: ()=>setOpen(false),
-                                className: "w-full text-center py-4 rounded-full text-white text-[16px] font-semibold",
+                                className: "w-full text-center py-3 rounded-full text-white text-[14px] font-semibold",
                                 style: {
                                     backgroundColor: "rgba(255,255,255,0.10)"
                                 },
@@ -286,7 +286,7 @@ function Navbar() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 href: "/register",
                                 onClick: ()=>setOpen(false),
-                                className: "w-full text-center py-4 rounded-full text-white text-[16px] font-semibold",
+                                className: "w-full text-center py-3 rounded-full text-white text-[14px] font-semibold",
                                 style: {
                                     backgroundColor: "#E6B84C"
                                 },

@@ -81,10 +81,10 @@ export default function LandingCTA() {
           </div>
 
           {/* Right — button */}
-          <div className="relative z-10 shrink-0">
+          <div className="relative z-10 shrink-0 w-full lg:w-auto">
             <Link
               href="/login"
-              className="inline-flex items-center gap-3 bg-white font-bold text-[13px] lg:text-[15px] rounded-full px-6 lg:px-8 py-3 lg:py-4 hover:brightness-95 transition-all duration-300 whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-3 bg-white font-bold text-[13px] lg:text-[15px] rounded-full px-6 lg:px-8 py-3 lg:py-4 hover:brightness-95 transition-all duration-300 whitespace-nowrap w-full lg:w-auto"
               style={{ color: "#1A3A34" }}
             >
               Créer mon compte gratuitement

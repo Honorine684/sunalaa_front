@@ -168,7 +168,7 @@ export default function MissionsSection() {
               <div
                 key={mission.id}
                 className="flex flex-col justify-between bg-white hover:scale-[1.01] transition-transform duration-200"
-                style={{ height: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12 }}
+                style={{ minHeight: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12 }}
               >
                 {/* Top row */}
                 <div className="flex items-start gap-4">

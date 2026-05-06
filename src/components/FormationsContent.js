@@ -335,20 +335,21 @@ export default function FormationsContent() {
           </div>
 
           {/* Search */}
-          <div className="relative shrink-0 w-full sm:w-[260px] px-5 sm:px-0 sm:pr-5">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" width="15" height="15" viewBox="0 0 24 24" fill="none">
-              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-              <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher d'une formation ..."
-              className="w-full bg-white border border-secondary text-slate-700 placeholder:text-[#0A0A0A]/50 rounded-xl pl-9 pr-4 outline-none focus:ring-2 focus:ring-secondary/30 transition"
-              style={{ fontSize: 14, fontFamily: "Inter, sans-serif", fontWeight: 400, lineHeight: "100%", paddingTop: 10, paddingBottom: 10 }}
-
-            />
+          <div className="shrink-0 w-full sm:w-[260px] px-5 sm:px-0 sm:pr-5">
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" width="15" height="15" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher d'une formation ..."
+                className="w-full bg-white border border-secondary text-slate-700 placeholder:text-[#0A0A0A]/50 rounded-xl pl-9 pr-4 outline-none focus:ring-2 focus:ring-secondary/30 transition"
+                style={{ fontSize: 14, fontFamily: "Inter, sans-serif", fontWeight: 400, lineHeight: "100%", paddingTop: 10, paddingBottom: 10 }}
+              />
+            </div>
           </div>
         </div>
 
