@@ -23,7 +23,7 @@ export default function HomeHero() {
           <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />
         </div>
 
-        <Container className="relative z-10 text-center pt-36 pb-20">
+        <Container className="relative z-10 text-center pt-16 pb-20">
           <h1 className="text-[32px] lg:text-[58px] font-bold text-white leading-[1.15] mb-8">
             Bienvenue dans la
             <br />

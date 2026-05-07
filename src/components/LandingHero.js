@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import LaunchCountdown from "./LaunchCountdown";
 
 export default function LandingHero() {
   return (
@@ -22,7 +23,7 @@ export default function LandingHero() {
       />
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-28 lg:pt-40 pb-20 lg:pb-40">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-10 lg:pt-16 pb-20 lg:pb-40">
 
           {/* Left content */}
           <div className="relative z-10 text-center lg:text-left">
@@ -50,6 +51,8 @@ export default function LandingHero() {
                 </svg>
               </span>
             </Link>
+
+            <LaunchCountdown />
 
           </div>
 

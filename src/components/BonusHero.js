@@ -29,7 +29,7 @@ export default function BonusHero() {
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />
       </div>
 
-      <Container className="relative z-10 pt-36 pb-20 text-center">
+      <Container className="relative z-10 pt-16 pb-20 text-center">
         {/* Title */}
         <h1 className="text-white text-[32px] lg:text-[64px] font-bold leading-none mb-12" style={{ fontFamily: "Rubik, sans-serif", letterSpacing: 0 }}>
           Gagnez jusqu&apos;à{" "}

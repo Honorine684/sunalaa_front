@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-50 py-5">
+      <nav className="sticky top-0 left-0 w-full z-50 py-5" style={{ backgroundColor: "#1F4E46" }}>
         <Container>
           <div className="flex items-center justify-between gap-12">
             {/* Logo */}

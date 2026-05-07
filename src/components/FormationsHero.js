@@ -18,7 +18,7 @@ export default function FormationsHero() {
       </div>
 
       {/* Content */}
-      <Container className="relative z-10 text-center pt-36 pb-20">
+      <Container className="relative z-10 text-center pt-16 pb-20">
         <h1 className="text-[32px] lg:text-[64px] font-bold text-white mb-6" style={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, lineHeight: "100%", letterSpacing: "0%" }}>
           Formations &amp; Masterclass sur
           <br />
