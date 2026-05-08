@@ -51,10 +51,10 @@ const utilites = [
 ];
 
 const navItems = [
-  { href: "#comprendre", label: "C'est quoi ?" },
-  { href: "#utilites", label: "Les utilités" },
-  { href: "#usage", label: "Exemples" },
-  { href: "#valeur", label: "La valeur" },
+  { href: "#comprendre", label: "C'est quoi ?", color: "#3FAE8C" },
+  { href: "#utilites", label: "Les utilités", color: "#1F4E46" },
+  { href: "#usage", label: "Exemples concrets", color: "#E6B84C" },
+  { href: "#valeur", label: "La valeur", color: "#3FAE8C" },
 ];
 
 export default function SnlPage() {
@@ -67,13 +67,13 @@ export default function SnlPage() {
         className="sticky top-17 z-40 bg-white overflow-x-auto"
         style={{ borderBottom: "1px solid rgba(31,78,70,0.08)" }}
       >
-        <div className="flex items-center px-4 py-2 gap-1 w-max min-w-full sm:w-auto sm:min-w-0 max-w-3xl mx-auto sm:justify-center">
-          {navItems.map(({ href, label }) => (
+        <div className="flex items-center px-4 py-3 gap-2 w-max min-w-full sm:w-auto sm:min-w-0 max-w-3xl mx-auto sm:justify-center">
+          {navItems.map(({ href, label, color }) => (
             <a
               key={href}
               href={href}
-              className="px-4 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all hover:text-secondary"
-              style={{ color: "#45556C" }}
+              className="inline-flex items-center px-5 py-2 rounded-full text-[13px] font-bold whitespace-nowrap text-white hover:brightness-90 transition"
+              style={{ backgroundColor: color }}
             >
               {label}
             </a>
@@ -161,16 +161,6 @@ export default function SnlPage() {
               </div>
             ))}
           </div>
-          <div className="flex justify-center">
-            <a href="#utilites"
-              className="inline-flex items-center gap-2 font-bold text-[14px] text-white px-8 py-4 rounded-full hover:brightness-90 transition"
-              style={{ backgroundColor: "#3FAE8C" }}>
-              Voir toutes les utilités du $SNL
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-          </div>
         </div>
       </section>
 
@@ -217,16 +207,6 @@ export default function SnlPage() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex justify-center mt-14">
-            <a href="#usage"
-              className="inline-flex items-center gap-2 font-bold text-[14px] text-white px-8 py-4 rounded-full hover:brightness-90 transition"
-              style={{ backgroundColor: "#3FAE8C" }}>
-              Voir des exemples concrets
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
           </div>
         </div>
       </section>
@@ -349,16 +329,6 @@ export default function SnlPage() {
           </div>
         </div>
 
-        <div className="flex justify-center mt-14">
-          <a href="#valeur"
-            className="inline-flex items-center gap-2 font-bold text-[14px] text-white px-8 py-4 rounded-full hover:brightness-90 transition"
-            style={{ backgroundColor: "#3FAE8C" }}>
-            Comprendre pourquoi le $SNL a de la valeur
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </a>
-        </div>
       </section>
 
       {/* ══════════════════════════════════════════
