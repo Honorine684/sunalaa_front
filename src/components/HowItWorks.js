@@ -79,14 +79,6 @@ const illustrations = [IllustrationStep1, IllustrationStep2, null];
 export default function HowItWorks() {
   return (
     <section className="bg-white pt-24 pb-10 lg:pt-32 lg:pb-12 relative overflow-hidden">
-      {/* S watermark — gauche */}
-      <img
-        src="/images/Group.png"
-        alt="" aria-hidden="true"
-        className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 280, opacity: 0.20, filter: "brightness(0)", left: 200, top: 40 }}
-      />
-
       {/* S watermark — droite haut, raccord avec hero */}
       <img
         src="/images/Group.png"
@@ -95,29 +87,20 @@ export default function HowItWorks() {
         style={{ width: 280, height: 420, opacity: 0.35, filter: "brightness(0) sepia(1) saturate(5) hue-rotate(110deg)", right: -80, top: -220 }}
       />
 
-      {/* S watermark — gauche, niveau "Invitez votre réseau" */}
-      <img
-        src="/images/Group.png"
-        alt="" aria-hidden="true"
-        className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 320, height: 360, opacity: 0.50, filter: "brightness(0)", left: 150, top: 1520 }}
-      />
+      {/* S watermark — gauche, zone "Collectez chaque jour" */}
+      <div className="absolute hidden lg:block pointer-events-none select-none overflow-hidden"
+        style={{ width: 280, height: 500, left: 220, top: 570, zIndex: 20 }}>
+        <img src="/images/Group.png" alt="" aria-hidden="true"
+          style={{ width: 280, opacity: 0.35, filter: "brightness(0)" }} />
+      </div>
 
-      {/* S watermark — gauche, niveau "Collectez chaque jour" */}
-      <img
-        src="/images/Group.png"
-        alt="" aria-hidden="true"
-        className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 280, opacity: 0.35, filter: "brightness(0)", left: 220, top: 570, zIndex: 20 }}
-      />
+{/* S watermark — droite, niveau "Collectez chaque jour" */}
+      <div className="absolute hidden lg:block pointer-events-none select-none overflow-hidden"
+        style={{ width: 280, height: 500, right: 180, top: 680 }}>
+        <img src="/images/Group.png" alt="" aria-hidden="true"
+          style={{ width: 280, opacity: 0.35, filter: "brightness(0)" }} />
+      </div>
 
-      {/* S watermark — droite, niveau "Collectez chaque jour" */}
-      <img
-        src="/images/Group.png"
-        alt="" aria-hidden="true"
-        className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 280, opacity: 0.35, filter: "brightness(0)", right: 180, top: 680 }}
-      />
       <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
         {/* Section header */}
         <div className="text-center mb-20">
@@ -176,6 +159,19 @@ export default function HowItWorks() {
               </div>
             );
           })}
+        </div>
+
+        {/* Lien token utilité */}
+        <div className="flex justify-center mt-16">
+          <Link
+            href="/snl/utilite"
+            className="inline-flex items-center gap-2 font-semibold text-[14px] text-primary border-primary px-6 py-3 rounded-full transition-all border hover:bg-primary hover:text-white active:text-white group w-full sm:w-auto justify-center"
+          >
+            Découvrir toute l&apos;utilité du token
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="group-hover:translate-x-0.5 transition-transform">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

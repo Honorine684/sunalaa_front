@@ -31,13 +31,6 @@ export default function WhySunala() {
   return (
     <section className="relative overflow-hidden pt-10 pb-24 lg:pt-12 lg:pb-32 bg-white">
 
-      {/* S watermark — raccord avec HowItWorks */}
-      <img
-        src="/images/Group.png"
-        alt="" aria-hidden="true"
-        className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 320, height: 360, opacity: 0.50, filter: "brightness(0)", left: 150, top: -250 }}
-      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-8">
         {/* Section header */}

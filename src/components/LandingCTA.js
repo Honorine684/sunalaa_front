@@ -94,6 +94,19 @@ export default function LandingCTA() {
             </Link>
           </div>
         </div>
+
+        {/* CTA secondaire */}
+        <div className="flex justify-center mt-8 px-4">
+          <Link
+            href="/snl/valeur"
+            className="inline-flex items-center gap-2 text-white text-[14px] lg:text-[15px] font-medium hover:opacity-80 transition-opacity group text-center"
+          >
+            <span>Tu veux comprendre pourquoi le $SNL a de la valeur&nbsp;?</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0 group-hover:translate-x-0.5 transition-transform">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
+        </div>
       </div>
 
     </section>

@@ -38,19 +38,32 @@ export default function LandingHero() {
               Accumulez des points SNL chaque jour, parrainez votre entourage et grimpez dans le classement. Préparez-vous dès maintenant pour le lancement du token communautaire SUNALA.
             </p>
 
-            {/* CTA Button */}
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3FAE8C" }}
-            >
-              Commencer gratuitement
-              <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-4 justify-center lg:justify-start">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#3FAE8C" }}
+              >
+                Commencer gratuitement
+                <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </Link>
+
+              <Link
+                href="/snl"
+                className="inline-flex items-center gap-2 rounded-full font-semibold text-[15px] text-white px-6 py-4 transition-all hover:bg-white/10"
+                style={{ border: "1.5px solid rgba(255,255,255,0.35)" }}
+              >
+                Comprendre le $SNL
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </span>
-            </Link>
+              </Link>
+            </div>
 
             <LaunchCountdown />
 
@@ -159,6 +172,7 @@ export default function LandingHero() {
             </div>
           ))}
         </div>
+
       </div>
 
       {/* Bottom angled transition */}

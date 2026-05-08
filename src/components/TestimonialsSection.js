@@ -93,6 +93,20 @@ export default function TestimonialsSection() {
             </div>
           ))}
         </div>
+
+        {/* À quoi sert le $SNL */}
+        <div className="flex justify-center mt-10">
+          <a
+            href="/snl/usage"
+            className="inline-flex items-center gap-2 font-semibold text-[14px] px-5 py-2.5 rounded-full transition-all hover:brightness-110 group"
+            style={{ backgroundColor: "#3FAE8C", color: "#fff" }}
+          >
+            À quoi sert vraiment le $SNL ?
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="group-hover:translate-x-0.5 transition-transform">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
   );
