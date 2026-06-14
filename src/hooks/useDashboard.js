@@ -1,0 +1,76 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { usersApi, networkApi, getApiError } from "@/lib/api";
+
+export function useDashboard() {
+  const [data, setData]                 = useState(null);
+  const [network, setNetwork]           = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance]           = useState(null);
+  const [levelData, setLevelData]       = useState(null);
+  const [referralCode, setReferralCode] = useState(null);
+  const [rank, setRank]                 = useState(null);
+  const [streak, setStreak]             = useState(0);
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState("");
+
+  useEffect(() => {
+    function catchOrNull(promise) {
+      return promise.catch((err) => {
+        if (err?.response?.status === 401) {
+          localStorage.removeItem("snl_access_token");
+          localStorage.removeItem("snl_refresh_token");
+          localStorage.removeItem("snl_user");
+          document.cookie = "snl_access_token=; path=/; max-age=0";
+          document.cookie = "snl_user_role=; path=/; max-age=0";
+          window.location.href = "/login";
+        }
+        return null;
+      });
+    }
+
+    Promise.all([
+      catchOrNull(usersApi.getDashboard()),
+      catchOrNull(networkApi.getStats()),
+      catchOrNull(usersApi.getPointsHistory({ limit: 5 })),
+      catchOrNull(usersApi.getProfile()),
+      catchOrNull(usersApi.getStreak()),
+    ])
+      .then(([dashRes, netRes, txRes, profileRes, streakRes]) => {
+        if (dashRes) setData(dashRes.data?.data ?? dashRes.data);
+        if (netRes)  setNetwork(netRes.data?.data ?? netRes.data);
+
+        const txPayload = txRes?.data?.data ?? txRes?.data;
+        const txRaw     = txPayload?.data ?? txPayload;
+        setTransactions(Array.isArray(txRaw) ? txRaw.slice(0, 5) : []);
+
+        const profile  = profileRes?.data?.data ?? profileRes?.data;
+        const dashData = dashRes?.data?.data ?? dashRes?.data;
+
+        const bal = profile?.snlBalance ?? profile?.points ?? profile?.totalPoints;
+        if (bal != null) setBalance(Number(bal));
+        if (profile?.level) setLevelData(profile.level);
+
+        const code = profile?.referralCode ?? profile?.referral_code;
+        if (code) setReferralCode(code);
+
+        const rankVal = profile?.leaderboardRank ?? profile?.position
+          ?? dashData?.leaderboardRank ?? dashData?.position
+          ?? (typeof profile?.rank === "number" ? profile.rank : null)
+          ?? (typeof dashData?.rank === "number" ? dashData.rank : null)
+          ?? null;
+        if (rankVal != null && !isNaN(Number(rankVal))) setRank(Number(rankVal));
+
+        // Streak depuis /users/me/streak, fallback sur dashboard
+        const streakData = streakRes?.data?.data ?? streakRes?.data;
+        const streakVal  = streakData?.currentStreak ?? streakData?.streak ?? streakData?.currentDay
+          ?? dashData?.streak ?? dashData?.currentStreak ?? dashData?.streakDay ?? 0;
+        setStreak(Number(streakVal) || 0);
+      })
+      .catch((err) => setError(getApiError(err)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { data, network, transactions, balance, levelData, referralCode, rank, streak, loading, error };
+}

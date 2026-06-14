@@ -1,55 +1,202 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { adminApi, getApiError } from "@/lib/api";
 
-const history = [
-  { id: 1, date: "2025-12-30", time: "14:32", initials: "CR", name: "crypto_master",   amount: +5000,  justification: "Bonus de parrainage exceptionnel",          admin: "Admin" },
-  { id: 2, date: "2025-12-30", time: "12:15", initials: "MO", name: "moon_walker",     amount: -2000,  justification: "Correction - activité suspecte détectée",    admin: "Admin" },
-  { id: 3, date: "2025-12-29", time: "18:45", initials: "HO", name: "hodl_king",       amount: +10000, justification: "Récompense ambassadeur communautaire",        admin: "Admin" },
-  { id: 4, date: "2025-12-29", time: "10:20", initials: "AI", name: "airdrop_hunter",  amount: +3000,  justification: "Compensation technique suite à un bug",       admin: "Admin" },
-  { id: 5, date: "2025-12-28", time: "16:00", initials: "DE", name: "degen_trader",    amount: -5000,  justification: "Violation des conditions d'utilisation",      admin: "Admin" },
-  { id: 6, date: "2025-12-28", time: "09:30", initials: "WH", name: "whale_player",    amount: +7500,  justification: "Promotion spéciale fidélité",                 admin: "Admin" },
-];
+function fmt(n) { return Number(n ?? 0).toLocaleString("fr-FR"); }
 
-const COLS = ["DATE &\nHEURE", "UTILISATEUR", "MONTANT", "JUSTIFICATION", "ADMINISTRATEUR"];
+function Skeleton({ className }) {
+  return <div className={`animate-pulse bg-slate-200 rounded-lg ${className}`} />;
+}
+
+/* ── Modal ── */
+function AdjustModal({ type, onClose, onSuccess }) {
+  const [userId, setUserId] = useState("");
+  const [amount, setAmount] = useState("");
+  const [justification, setJustification] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const isAdd = type === "add";
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!userId.trim() || !amount || !justification.trim()) {
+      setError("Tous les champs sont requis.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      await adminApi.adjustPoints(userId.trim(), {
+        amount: Math.abs(Number(amount)),
+        justification: justification.trim(),
+        type: isAdd ? "credit" : "debit",
+      });
+      onSuccess();
+    } catch (err) {
+      setError(getApiError(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.4)" }}>
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="text-[17px] font-bold" style={{ color: "#0F172B" }}>
+            {isAdd ? "Ajouter des points SNL" : "Retirer des points SNL"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition cursor-pointer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {error && (
+          <div className="mb-4 px-4 py-3 rounded-xl text-[13px]" style={{ backgroundColor: "#FFF1F2", color: "#E11D48", border: "1px solid #FFE4E6" }}>
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "#45556C" }}>ID utilisateur</label>
+            <input
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="ex: caeea2cb-ada7-..."
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-secondary/30 transition"
+              style={{ color: "#0F172B" }}
+            />
+          </div>
+
+          <div>
+            <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "#45556C" }}>Montant SNL</label>
+            <input
+              type="number"
+              min="1"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="ex: 500"
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-secondary/30 transition"
+              style={{ color: "#0F172B" }}
+            />
+          </div>
+
+          <div>
+            <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "#45556C" }}>Justification</label>
+            <textarea
+              value={justification}
+              onChange={(e) => setJustification(e.target.value)}
+              placeholder="Raison de l'ajustement..."
+              rows={3}
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-secondary/30 transition resize-none"
+              style={{ color: "#0F172B" }}
+            />
+          </div>
+
+          <div className="flex gap-3 mt-1">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-3 rounded-xl text-[14px] font-semibold border border-slate-200 hover:bg-slate-50 transition cursor-pointer"
+              style={{ color: "#45556C" }}>
+              Annuler
+            </button>
+            <button type="submit" disabled={loading}
+              className="flex-1 py-3 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+              style={{ backgroundColor: isAdd ? "#3FAE8C" : "#E11D48" }}>
+              {loading && (
+                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+              )}
+              {loading ? "En cours..." : isAdd ? "Ajouter" : "Retirer"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+const COLS = ["DATE & HEURE", "UTILISATEUR", "MONTANT", "JUSTIFICATION", "ADMIN"];
 
 export default function PointsManagement() {
-  const [search, setSearch] = useState("");
+  const [modal, setModal]       = useState(null);
+  const [history, setHistory]   = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [search, setSearch]     = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [error, setError]       = useState("");
 
-  const filtered = history.filter(
-    (h) =>
-      h.name.toLowerCase().includes(search.toLowerCase()) ||
-      h.justification.toLowerCase().includes(search.toLowerCase())
-  );
+  const loadHistory = useCallback(async () => {
+    setLoading(true); setError("");
+    try {
+      const res = await adminApi.getPointsHistory({ page: 1, limit: 50 });
+      const raw = res.data?.data ?? res.data;
+      setHistory(Array.isArray(raw) ? raw : (raw?.data ?? []));
+    } catch (err) {
+      setError(getApiError(err));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { loadHistory(); }, [loadHistory]);
+
+  function handleSuccess() {
+    setModal(null);
+    setSuccessMsg("Opération effectuée avec succès.");
+    setTimeout(() => setSuccessMsg(""), 4000);
+    loadHistory();
+  }
+
+  const filtered = history.filter((h) => {
+    const name = (h?.user?.firstName ?? h?.userName ?? h?.name ?? "").toLowerCase();
+    const just = (h?.justification ?? h?.reason ?? "").toLowerCase();
+    return !search || name.includes(search.toLowerCase()) || just.includes(search.toLowerCase());
+  });
 
   return (
     <div className="flex flex-col gap-6">
 
-      {/* Title */}
+      {modal && <AdjustModal type={modal} onClose={() => setModal(null)} onSuccess={handleSuccess} />}
+
       <div>
         <h2 className="text-[20px] sm:text-[26px] font-bold mb-1" style={{ color: "#0F172B" }}>Gestion des points SNL</h2>
-        <p className="text-[14px]" style={{ color: "#45556C" }}>Ajuster les soldes de points et consulter l&apos;historique des modifications</p>
+        <p className="text-[14px]" style={{ color: "#45556C" }}>Ajuster les soldes de points et consulter l&apos;historique</p>
       </div>
 
-      {/* Warning banner */}
+      {successMsg && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-[13px]" style={{ backgroundColor: "#ECFDF5", color: "#059669", border: "1px solid #D1FAE5" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {successMsg}
+        </div>
+      )}
+
       <div className="flex items-start gap-3 rounded-xl px-5 py-4 border" style={{ backgroundColor: "#FFFBEB", borderColor: "#FDE68A" }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5">
           <circle cx="12" cy="12" r="10" stroke="#D97706" strokeWidth="2"/>
           <path d="M12 8v4M12 16h.01" stroke="#D97706" strokeWidth="2" strokeLinecap="round"/>
         </svg>
-        <div>
-          <p className="text-[14px] font-bold mb-1" style={{ color: "#D97706" }}>Attention</p>
-          <p className="text-[13px] leading-relaxed" style={{ color: "#92400E" }}>
-            Toute modification de points SNL doit être justifiée et sera enregistrée dans l&apos;historique. Assurez-vous de la légitimité de l&apos;action avant de confirmer.
-          </p>
-        </div>
+        <p className="text-[13px] leading-relaxed" style={{ color: "#92400E" }}>
+          Toute modification est enregistrée dans l&apos;historique. Assurez-vous de la légitimité de l&apos;action avant de confirmer.
+        </p>
       </div>
 
-      {/* Action cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {error && (
+        <div className="px-4 py-3 rounded-xl text-[13px]" style={{ backgroundColor: "#FFF1F2", color: "#E11D48", border: "1px solid #FFE4E6" }}>
+          {error}
+        </div>
+      )}
 
-        {/* Ajouter */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-5">
           <div className="flex items-start gap-4">
             <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "#ECFDF5" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -61,13 +208,14 @@ export default function PointsManagement() {
               <p className="text-[13px]" style={{ color: "#45556C" }}>Créditer le compte d&apos;un utilisateur</p>
             </div>
           </div>
-          <button className="w-full py-3.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer" style={{ backgroundColor: "#3FAE8C" }}>
-            Ajouter des points SNL
+          <button onClick={() => setModal("add")}
+            className="w-full py-3.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer"
+            style={{ backgroundColor: "#3FAE8C" }}>
+            Ajouter des points
           </button>
         </div>
 
-        {/* Retirer */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col gap-5">
+        <div className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-5">
           <div className="flex items-start gap-4">
             <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "#FFF1F2" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -79,15 +227,15 @@ export default function PointsManagement() {
               <p className="text-[13px]" style={{ color: "#45556C" }}>Débiter le compte d&apos;un utilisateur</p>
             </div>
           </div>
-          <button className="w-full py-3.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer" style={{ backgroundColor: "#E11D48" }}>
-            Retirer des points SNL
+          <button onClick={() => setModal("remove")}
+            className="w-full py-3.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer"
+            style={{ backgroundColor: "#E11D48" }}>
+            Retirer des points
           </button>
         </div>
       </div>
 
-      {/* Historique */}
       <div>
-        {/* Section title */}
         <div className="flex items-center gap-2 mb-4">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path d="M1 4v6h6" stroke="#0F172B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -97,7 +245,6 @@ export default function PointsManagement() {
           <h3 className="text-[18px] font-bold" style={{ color: "#0F172B" }}>Historique des modifications</h3>
         </div>
 
-        {/* Search */}
         <div className="relative mb-4">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" width="16" height="16" viewBox="0 0 24 24" fill="none">
             <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
@@ -108,77 +255,81 @@ export default function PointsManagement() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher dans l'historique..."
-            className="w-full rounded-xl pl-10 pr-4 py-3 text-[14px] placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-secondary/30 transition border border-slate-300"
-            style={{ backgroundColor: "#CAD5E2", color: "#45556C" }}
+            className="w-full rounded-xl pl-10 pr-4 py-3 text-[14px] placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-secondary/30 transition border border-slate-200"
             style={{ color: "#45556C" }}
           />
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto rounded-xl border border-slate-100">
-        <div className="bg-white min-w-[640px]">
-          {/* Head */}
-          <div className="grid grid-cols-[1.2fr_2fr_1fr_2.5fr_1fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
-            {COLS.map((col) => (
-              <span key={col} className="text-[11px] font-bold tracking-wider uppercase whitespace-pre-line" style={{ color: "#45556C" }}>
-                {col}
-              </span>
-            ))}
+          <div className="bg-white min-w-[640px]">
+            <div className="grid grid-cols-[1.2fr_2fr_1fr_2.5fr_1fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+              {COLS.map((col) => (
+                <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>{col}</span>
+              ))}
+            </div>
+
+            {loading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="grid grid-cols-[1.2fr_2fr_1fr_2.5fr_1fr] px-6 py-4 items-center border-b border-slate-100 gap-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-9 w-36" />
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              ))
+            ) : filtered.length === 0 ? (
+              <div className="px-6 py-12 text-center text-[14px]" style={{ color: "#45556C" }}>
+                Aucune modification enregistrée.
+              </div>
+            ) : (
+              filtered.map((row, i) => {
+                const amount = row?.amount ?? 0;
+                const isCredit = row?.type === "credit";
+                const name = [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ") || "—";
+                const initials = name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "?";
+                const createdAt = row?.createdAt ?? row?.date;
+                return (
+                  <div key={row?.id ?? i}
+                    className={["grid grid-cols-[1.2fr_2fr_1fr_2.5fr_1fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors", i < filtered.length - 1 ? "border-b border-slate-100" : ""].join(" ")}>
+                    <div>
+                      <p className="text-[13px]" style={{ color: "#45556C" }}>
+                        {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}
+                      </p>
+                      <p className="text-[11px]" style={{ color: "#94A3B8" }}>
+                        {createdAt ? new Date(createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : ""}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#3FAE8C" }}>
+                        <span className="text-white text-[12px] font-bold">{initials}</span>
+                      </div>
+                      <span className="text-[14px] font-normal" style={{ color: "#0F172B" }}>{name}</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[13px] font-bold" style={{ color: isCredit ? "#059669" : "#E11D48" }}>
+                        {isCredit ? "+" : "−"}
+                      </span>
+                      <div>
+                        <p className="text-[14px] font-bold leading-none" style={{ color: isCredit ? "#059669" : "#E11D48" }}>
+                          {fmt(Math.abs(amount))}
+                        </p>
+                        <p className="text-[11px] font-bold" style={{ color: isCredit ? "#059669" : "#E11D48" }}>SNL</p>
+                      </div>
+                    </div>
+                    <span className="text-[13px] leading-relaxed" style={{ color: "#45556C" }}>
+                      {row?.justification ?? row?.reason ?? "—"}
+                    </span>
+                    <span className="text-[14px]" style={{ color: "#45556C" }}>
+                      {[row?.adminUser?.firstName, row?.adminUser?.lastName].filter(Boolean).join(" ") || "Admin"}
+                    </span>
+                  </div>
+                );
+              })
+            )}
           </div>
-
-          {/* Rows */}
-          {filtered.map((row, i) => (
-            <div
-              key={row.id}
-              className={[
-                "grid grid-cols-[1.2fr_2fr_1fr_2.5fr_1fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
-                i < filtered.length - 1 ? "border-b border-slate-100" : "",
-              ].join(" ")}
-            >
-              {/* Date & Heure */}
-              <div>
-                <p className="text-[13px]" style={{ color: "#45556C" }}>{row.date}</p>
-                <p className="text-[13px]" style={{ color: "#45556C" }}>{row.time}</p>
-              </div>
-
-              {/* Utilisateur */}
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#3FAE8C" }}>
-                  <span className="text-white text-[12px] font-bold">{row.initials}</span>
-                </div>
-                <span className="text-[14px] font-normal" style={{ color: "#0F172B" }}>{row.name}</span>
-              </div>
-
-              {/* Montant */}
-              <div className="flex items-baseline gap-1">
-                <span className="text-[13px] font-bold" style={{ color: row.amount > 0 ? "#059669" : "#E11D48" }}>
-                  {row.amount > 0 ? "+" : "−"}
-                </span>
-                <div>
-                  <p className="text-[14px] font-bold leading-none" style={{ color: row.amount > 0 ? "#059669" : "#E11D48" }}>
-                    {Math.abs(row.amount).toLocaleString()}
-                  </p>
-                  <p className="text-[12px] font-bold" style={{ color: row.amount > 0 ? "#059669" : "#E11D48" }}>SNL</p>
-                </div>
-              </div>
-
-              {/* Justification */}
-              <span className="text-[13px] leading-relaxed" style={{ color: "#45556C" }}>{row.justification}</span>
-
-              {/* Admin */}
-              <span className="text-[14px]" style={{ color: "#45556C" }}>{row.admin}</span>
-            </div>
-          ))}
-
-          {filtered.length === 0 && (
-            <div className="px-6 py-12 text-center text-[14px]" style={{ color: "#45556C" }}>
-              Aucune entrée trouvée.
-            </div>
-          )}
-        </div>
         </div>
       </div>
-
     </div>
   );
 }

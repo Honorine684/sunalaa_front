@@ -1,8 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Hero() {
+  const { user } = useAuth();
+
+  const href = !user
+    ? "/login"
+    : user.role?.toLowerCase() === "admin"
+      ? "/admin"
+      : "/collecter";
   return (
     <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
       {/* Background coin */}
@@ -27,13 +37,13 @@ export default function Hero() {
         </h1>
 
         <p className="text-white/70 text-[16px] leading-relaxed mb-10 max-w-xl mx-auto">
-          Accumulez des points SNL grâce à votre activité quotidienne
+          Accumulate SNL points through your daily activity
           <br />
-          et préparez l&apos;arrivée du token communautaire
+          and prepare for the arrival of the community token
         </p>
 
         <Link
-          href="/login"
+          href={href}
           className="inline-flex items-center gap-3 bg-secondary text-white font-semibold text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition"
         >
           Try for FREE

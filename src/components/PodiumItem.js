@@ -61,16 +61,18 @@ const config = {
   },
 };
 
-export default function PodiumItem({ rank, username, score }) {
+export default function PodiumItem({ rank, username, score, avatar }) {
   const { gradient, badgeBg, size, icon } = config[rank];
 
   return (
     <div className="flex flex-col items-center gap-3 flex-1">
       <div className="relative">
         <div
-          className={`${size} bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-lg`}
+          className={`${size} bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-lg overflow-hidden`}
         >
-          {icon}
+          {avatar
+            ? <img src={avatar} alt={username} className="w-full h-full object-cover" />
+            : icon}
           {/* Badge rang centré en bas */}
           <span
             className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 ${badgeBg} text-white text-xs font-normal w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow`}

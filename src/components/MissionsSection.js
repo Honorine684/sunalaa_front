@@ -1,215 +1,144 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import Container from "./Container";
+import { missionsApi } from "@/lib/api";
+import { useTranslations } from "next-intl";
 
-/* ── Mission data ── */
-const missions = [
-  {
-    id: 1,
-    platform: "Telegram",
-    title: "Rejoindre le canal Telegram SUNALAA",
-    desc: "Rejoignez notre communauté officielle sur Telegram",
-    snl: 10,
-    state: "start",
-    iconBg: "#1A3C34",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-      </svg>
-    ),
-  },
-  {
-    id: 2,
-    platform: "Twitter / X",
-    title: "Suivre SUNALAA sur X (Twitter)",
-    desc: "Suivez-nous pour les dernières actualités",
-    snl: 10,
-    state: "start",
-    iconBg: "#1A3C34",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
-      </svg>
-    ),
-  },
-  {
-    id: 3,
-    platform: "WhatsApp",
-    title: "Partager SUNALAA sur WhatsApp",
-    desc: "Partagez avec 3 contacts minimum",
-    snl: 20,
-    state: "start",
-    iconBg: "#25D366",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" stroke="white" strokeWidth="0.5" />
-      </svg>
-    ),
-  },
-  {
-    id: 4,
-    platform: "Twitter / X",
-    title: "Retweeter notre post épinglé",
-    desc: "Aidez-nous à faire connaître SUNALAA",
-    snl: 20,
-    state: "verify",
-    iconBg: "#1A3C34",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
-      </svg>
-    ),
-  },
-  {
-    id: 5,
-    platform: "Facebook",
-    title: "Liker la page Facebook SUNALAA",
-    desc: "Aidez-nous à faire connaître SUNALAA",
-    snl: 15,
-    state: "claimed-gold",
-    iconBg: "#1877F2",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-      </svg>
-    ),
-  },
-  {
-    id: 6,
-    platform: "Telegram",
-    title: "Inviter 5 amis sur Telegram",
-    desc: "Invitez vos amis à rejoindre le canal",
-    snl: 15,
-    state: "claimed-gray",
-    iconBg: "#1A3C34",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-      </svg>
-    ),
-  },
-];
+const PLATFORM_COLORS = {
+  telegram:  "#1A3C34",
+  twitter:   "#1A3C34",
+  youtube:   "#FF0000",
+  discord:   "#5865F2",
+  facebook:  "#1877F2",
+  instagram: "#E1306C",
+  whatsapp:  "#25D366",
+};
 
-/* ── Action button ── */
-function ActionButton({ state }) {
-  if (state === "start") {
-    return (
-      <button className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer">
-        Commencer
-      </button>
-    );
-  }
-  if (state === "verify") {
-    return (
-      <button className="w-full bg-[#E17100] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer">
-        Vérifier
-      </button>
-    );
-  }
-  if (state === "claimed-gold") {
-    return (
-      <button disabled className="w-full bg-[#E6B84C] text-white text-[14px] font-normal py-3 rounded-xl cursor-default">
-        Réclamé
-      </button>
-    );
-  }
-  return (
-    <button disabled className="w-full bg-[#E2E8F0] text-gray-400 text-[14px] font-normal py-3 rounded-xl cursor-default">
-      Réclamé
-    </button>
-  );
-}
+const PLATFORM_ICONS = {
+  telegram: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+      <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+    </svg>
+  ),
+  twitter: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+    </svg>
+  ),
+  youtube: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+      <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/>
+      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+    </svg>
+  ),
+  discord: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+      <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/>
+    </svg>
+  ),
+  facebook: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  ),
+  instagram: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+    </svg>
+  ),
+  whatsapp: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+    </svg>
+  ),
+};
 
 export default function MissionsSection() {
+  const t = useTranslations("MissionsSection");
+  const [missions, setMissions] = useState([]);
+
+  useEffect(() => {
+    missionsApi.getPublic()
+      .then((res) => {
+        const raw = res.data?.data ?? res.data;
+        setMissions(Array.isArray(raw) ? raw.slice(0, 6) : []);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="bg-white py-16 relative overflow-hidden">
-      {/* Decorative concentric circles — left (décollés du bord) */}
-      <div className="absolute left-[13%] top-[178px] pointer-events-none select-none">
+      <div className="absolute left-[13%] top-44.5 pointer-events-none select-none">
         {[338, 281, 224, 140].map((size) => (
-          <div
-            key={size}
-            className="absolute rounded-full border border-secondary/25"
-            style={{ width: size, height: size, left: -size / 2, top: -size / 2 }}
-          />
+          <div key={size} className="absolute rounded-full border border-secondary/25"
+            style={{ width: size, height: size, left: -size / 2, top: -size / 2 }} />
         ))}
       </div>
-
-      {/* Decorative concentric circles — right (décollés du bord) */}
-      <div className="absolute right-[13%] top-[202px] pointer-events-none select-none">
+      <div className="absolute right-[13%] top-50.5 pointer-events-none select-none">
         {[338, 281, 224, 140].map((size) => (
-          <div
-            key={size}
-            className="absolute rounded-full border border-secondary/25"
-            style={{ width: size, height: size, right: -size / 2, top: -size / 2 }}
-          />
+          <div key={size} className="absolute rounded-full border border-secondary/25"
+            style={{ width: size, height: size, right: -size / 2, top: -size / 2 }} />
         ))}
       </div>
 
       <Container className="relative z-10">
-        {/* Header */}
         <div className="text-center mb-10">
           <h2 className="font-bold mb-4" style={{ fontSize: 48, lineHeight: "48px", letterSpacing: "-0.33px", color: "#0F172B" }}>
-            Gagnez des SNL
+            {t("title")}
           </h2>
           <p className="max-w-lg mx-auto text-center" style={{ fontSize: 18, fontWeight: 400, lineHeight: "29.25px", color: "#0F172B" }}>
-            Complétez des missions simples sur les réseaux sociaux et boostez votre
-            solde de points SNL en quelques clics.
+            {t("subtitle")}
           </p>
         </div>
 
-        {/* "Points à gagner" label */}
-        <p className="mb-5" style={{ fontSize: 24, fontWeight: 600, lineHeight: "21.5px", letterSpacing: 0, color: "#0A3706" }}>Points à gagner</p>
+        <p className="mb-5" style={{ fontSize: 24, fontWeight: 600, lineHeight: "21.5px", letterSpacing: 0, color: "#0A3706" }}>
+          {t("points_label")}
+        </p>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {missions.map((mission) => {
-            const faded = mission.state === "claimed-gray";
-            const snlColor = faded ? "#CBD5E1" : "#0A3706";
+            const key    = mission.platform?.toLowerCase();
+            const iconBg = PLATFORM_COLORS[key] ?? "#1A3C34";
+            const icon   = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
             return (
               <div
                 key={mission.id}
                 className="flex flex-col justify-between bg-white hover:scale-[1.01] transition-transform duration-200"
                 style={{ minHeight: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12 }}
               >
-                {/* Top row */}
                 <div className="flex items-start gap-4">
-                  {/* Icon */}
-                  <div
-                    className="flex items-center justify-center shrink-0"
-                    style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: mission.iconBg }}
-                  >
-                    {mission.icon}
+                  <div className="flex items-center justify-center shrink-0" style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: iconBg }}>
+                    {icon}
                   </div>
-
-                  {/* Title / desc — et coin / SNL alignés sur la même ligne */}
                   <div className="flex-1 min-w-0">
-                    {/* Ligne 1 : titre + coin */}
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-[14px] sm:text-[20px]" style={{ fontWeight: 600, lineHeight: "22px", color: "#0F172B" }}>
                         {mission.title}
                       </p>
-                      <div className={`relative w-6 h-6 sm:w-8 sm:h-8 shrink-0 ${faded ? "opacity-40" : ""}`}>
-                        <Image
-                          src="/images/4.png"
-                          alt="coins"
-                          fill
-                          className="object-contain"
-                        />
+                      <div className="relative w-6 h-6 sm:w-8 sm:h-8 shrink-0">
+                        <Image src="/images/4.png" alt="coins" fill className="object-contain" />
                       </div>
                     </div>
-                    {/* Ligne 2 : desc + SNL */}
                     <div className="flex items-center justify-between gap-2 mt-0.5">
                       <p className="text-[12px] sm:text-[16px]" style={{ fontWeight: 400, lineHeight: "22.75px", color: "#45556C" }}>
-                        {mission.desc}
+                        {mission.description}
                       </p>
-                      <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: snlColor }}>
-                        {mission.snl} SNL
+                      <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: "#0A3706" }}>
+                        {mission.reward} SNL
                       </span>
                     </div>
                   </div>
                 </div>
-
-                {/* Button */}
-                <ActionButton state={mission.state} />
+                <button
+                  onClick={() => mission.actionUrl && window.open(mission.actionUrl, "_blank", "noopener")}
+                  className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer"
+                >
+                  {t("complete_btn")}
+                </button>
               </div>
             );
           })}

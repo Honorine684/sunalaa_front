@@ -1,20 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { levelsApi } from "@/lib/api";
 
-const tabs = ["Tout", "Diamond", "Platinum", "Gold", "Sylver", "Bronze"];
+export default function FilterTabs({ onFilterChange, onSearch, search = "" }) {
+  const [active, setActive] = useState("All");
+  const [levels, setLevels] = useState([]);
 
-export default function FilterTabs({ onFilterChange }) {
-  const [active, setActive] = useState("Tout");
+  useEffect(() => {
+    levelsApi.getAll()
+      .then((res) => {
+        const body = res.data?.data ?? res.data;
+        const raw  = Array.isArray(body) ? body : (body?.data ?? []);
+        const sorted = [...raw].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        setLevels(sorted);
+      })
+      .catch(() => {});
+  }, []);
 
-  const handleClick = (tab) => {
+  const tabs = ["All", ...levels.map((l) => l.name)];
+
+  function handleClick(tab) {
     setActive(tab);
     onFilterChange?.(tab);
-  };
+  }
 
   return (
     <div className="flex items-center justify-between gap-4 flex-wrap">
-      {/* Tabs */}
+      {/* Tabs niveaux */}
       <div className="flex items-center bg-[#2a1a0a] rounded-lg overflow-x-auto scrollbar-none">
         {tabs.map((tab) => (
           <button
@@ -31,19 +44,30 @@ export default function FilterTabs({ onFilterChange }) {
         ))}
       </div>
 
-      {/* Filtre button */}
-      <button className="flex items-center gap-2 bg-[#111] text-white font-bold text-[15px] px-6 py-3 rounded-lg hover:bg-[#222] transition cursor-pointer">
-        Filtre
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M6 9l6 6 6-6"
-            stroke="white"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+      {/* Barre de recherche à la place du bouton Filtre */}
+      <div className="relative">
+        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
-      </button>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => onSearch?.(e.target.value)}
+          placeholder="Search for a user…"
+          className="pl-9 pr-8 py-3 rounded-lg border border-gray-200 text-[13px] text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-secondary/40 transition bg-white w-56 lg:w-64"
+        />
+        {search && (
+          <button
+            onClick={() => onSearch?.("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
+      </div>
     </div>
   );
 }

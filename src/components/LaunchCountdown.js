@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const LAUNCH_DATE = new Date("2026-10-01T00:00:00Z");
 
@@ -8,6 +9,7 @@ function pad(n) {
 }
 
 export default function LaunchCountdown() {
+  const t = useTranslations("LaunchCountdown");
   const [time, setTime] = useState(null);
 
   useEffect(() => {
@@ -28,26 +30,26 @@ export default function LaunchCountdown() {
   if (!time) return null;
 
   const units = [
-    { label: "Jours", value: pad(time.days) },
-    { label: "Heures", value: pad(time.hours) },
-    { label: "Minutes", value: pad(time.mins) },
-    { label: "Secondes", value: pad(time.secs) },
+    { labelKey: "days", value: pad(time.days) },
+    { labelKey: "hours", value: pad(time.hours) },
+    { labelKey: "minutes", value: pad(time.mins) },
+    { labelKey: "seconds", value: pad(time.secs) },
   ];
 
   return (
     <div className="mt-10 flex flex-col items-center sm:items-start gap-3">
       <p className="text-white/60 text-[13px] font-medium tracking-widest uppercase">
-        Lancement du token $SNL dans
+        {t("label")}
       </p>
       <div className="flex items-center gap-3">
-        {units.map(({ label, value }, i) => (
-          <div key={label} className="flex items-center gap-3">
+        {units.map(({ labelKey, value }, i) => (
+          <div key={labelKey} className="flex items-center gap-3">
             <div className="flex flex-col items-center">
               <span className="font-black text-[28px] sm:text-[36px] leading-none text-white"
                 style={{ fontVariantNumeric: "tabular-nums" }}>
                 {value}
               </span>
-              <span className="text-white/40 text-[10px] uppercase tracking-wider mt-1">{label}</span>
+              <span className="text-white/40 text-[10px] uppercase tracking-wider mt-1">{t(labelKey)}</span>
             </div>
             {i < units.length - 1 && (
               <span className="text-white/40 text-[24px] font-bold leading-none mb-3">:</span>
@@ -56,7 +58,7 @@ export default function LaunchCountdown() {
         ))}
       </div>
       <p className="text-white/40 text-[12px] leading-relaxed">
-        Après ce délai, les points accumulés seront convertis en $SNL. Chaque point compte.
+        {t("description")}
       </p>
     </div>
   );

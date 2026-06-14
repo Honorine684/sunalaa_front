@@ -1,0 +1,256 @@
+{
+  "Navbar": {
+    "home": "Accueil",
+    "collect": "Collecter",
+    "formations": "Formations",
+    "bonus": "Bonus & Récompenses",
+    "leaderboard": "Classement",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "profile": "Mon profil",
+    "logout": "Déconnexion",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "logoutModal": {
+      "title": "Déconnexion",
+      "message": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "cancel": "Annuler",
+      "confirm": "Déconnecter"
+    }
+  },
+  "AnnouncementBanner": {
+    "text": "🌱 Pré-lancement SUNALAA — Les 5 000 premiers membres reçoivent un bonus exclusif de 500 points.",
+    "spots": "[Il reste {count} places]",
+    "cta": "Rejoindre maintenant →",
+    "close": "Fermer"
+  },
+  "LandingHero": {
+    "h1_1": "Rejoignez la",
+    "h1_2": "communauté",
+    "subtitle": "Accumulez des points SNL chaque jour, parrainez votre entourage et grimpez dans le classement. Préparez-vous dès maintenant pour le lancement du token communautaire SUNALAA.",
+    "cta_primary": "Commencer gratuitement",
+    "cta_secondary": "Comprendre le $SNL",
+    "stat_members": "Membres actifs",
+    "stat_activity": "Taux d'activité quotidien",
+    "stat_points": "Points SNL distribués",
+    "trust_free": "100% gratuit",
+    "trust_no_invest": "sans investissement",
+    "trust_community": "Communauté active"
+  },
+  "HowItWorks": {
+    "title": "Comment ça marche ?",
+    "step1_num": "01",
+    "step1_title": "Créez votre compte",
+    "step1_desc": "Rejoignez SUNALAA en quelques secondes. L'inscription est 100% gratuite, sans carte bancaire ni investissement requis. Renseignez simplement votre email, créez un mot de passe et vous êtes prêt à commencer votre aventure SNL.",
+    "step1_btn": "Lire plus",
+    "step2_num": "02",
+    "step2_title": "Collectez chaque jour",
+    "step2_desc": "Revenez chaque jour sur SUNALAA pour réclamer vos points SNL quotidiens. Plus vous êtes régulier, plus votre streak augmente et plus vos récompenses sont importantes. Complétez aussi des missions sur les réseaux sociaux pour booster votre solde.",
+    "step2_btn": "Lire plus",
+    "step3_num": "03",
+    "step3_title": "Invitez votre réseau",
+    "step3_desc": "Partagez votre lien de parrainage unique avec vos amis, votre famille et votre communauté. Gagnez un bonus sur chaque collecte de vos filleuls jusqu'à 3 niveaux de profondeur. Plus votre réseau est actif, plus vous gagnez de points SNL.",
+    "step3_btn": "Lire plus",
+    "discover_link": "Découvrir toute l'utilité du token"
+  },
+  "WhySunala": {
+    "title": "Pourquoi SUNALAA ?",
+    "subtitle": "Une plateforme conçue pour récompenser votre engagement et celui de votre communauté. Chaque action compte : progressez, partagez et préparez-vous pour le lancement du token SNL.",
+    "card1_title": "Collecte quotidienne",
+    "card1_desc": "Gagnez des points SNL chaque jour en quelques secondes",
+    "card2_title": "Progression valorisée",
+    "card2_desc": "Montez de niveau et débloquez des avantages exclusifs",
+    "card3_title": "Parrainage récompensé",
+    "card3_desc": "Invitez votre communauté et progressez ensemble",
+    "card4_title": "Transparent & sécurisé",
+    "card4_desc": "Aucun investissement requis, participation 100% gratuite"
+  },
+  "FounderSection": {
+    "badge": "Le projet derrière SUNALAA",
+    "title_1": "L'Afrique mérite sa",
+    "title_2": "place dans la blockchain",
+    "p1": "SUNALAA est né d'un constat simple : l'Afrique possède 60% des terres arables mondiales et pourtant ses agriculteurs n'ont accès ni aux financements ni aux marchés internationaux.",
+    "p2": "Notre mission : connecter l'agriculture africaine réelle à l'économie blockchain mondiale. Chaque parcelle virtuelle que tu développes est liée à une vraie terre africaine. Chaque token <token>$SNL</token> que tu accumules représente une valeur ancrée dans le réel.",
+    "founder_title": "Fondateur de SUNALAA",
+    "photo_placeholder": "Photo fondateur"
+  },
+  "LandingCTA": {
+    "title": "Prêt à commencer ?",
+    "subtitle": "Rejoignez des milliers de membres qui accumulent déjà leurs points SNL en vue du lancement du token communautaire",
+    "cta": "Créer mon compte gratuitement",
+    "secondary": "Tu veux comprendre pourquoi le $SNL a de la valeur ?"
+  },
+  "BonusHero": {
+    "title_1": "Gagnez jusqu'à",
+    "title_amount": "500 SNL",
+    "title_2": "de bonus",
+    "subtitle": "Connectez-vous chaque jour pour débloquer les bonus successifs.\nManquer un jour remet le compteur à zéro.",
+    "day": "Jour {n}",
+    "loading": "Chargement…",
+    "claimed": "Réclamé ✓",
+    "claim_btn": "Réclamer +{snl} SNL",
+    "claiming": "Réclamation…",
+    "claim_success": "+{bonus} SNL ajoutés — Nouveau solde : {balance} SNL"
+  },
+  "MissionsSection": {
+    "title": "Missions quotidiennes",
+    "subtitle": "Complétez des missions pour gagner des points SNL supplémentaires",
+    "loading": "Chargement des missions…",
+    "empty": "Aucune mission disponible pour le moment",
+    "points_label": "Points à gagner",
+    "points": "{n} SNL",
+    "complete_btn": "Effectuer",
+    "completed": "Terminé",
+    "verify_btn": "Vérifier"
+  },
+  "ParrainageSection": {
+    "title": "Parrainage SUNALAA",
+    "subtitle": "Gagner plus de points en parrainant",
+    "referral_link_label": "Votre lien de parrainage",
+    "custom_link": "Lien personnalisé",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "total_earned": "Total gagné",
+    "how_title": "Comment ça marche ?",
+    "step1_title": "Partagez votre lien",
+    "step1_desc": "Invitez vos amis, votre famille et votre communauté à rejoindre SUNALAA",
+    "step2_title": "Ils s'inscrivent",
+    "step2_desc": "Vos filleuls créent leur compte et commencent à collecter leurs points SNL",
+    "step3_title": "Vous gagnez ensemble",
+    "step3_desc": "Recevez un bonus sur leurs collectes quotidiennes et progressez en équipe",
+    "gains_title": "Vos gains par niveau",
+    "level1": "Niveau 1",
+    "level1_sub": "Vos invitations directes",
+    "level2": "Niveau 2",
+    "level2_sub": "Invitations de vos filleuls",
+    "level3": "Niveau 3",
+    "level3_sub": "Invitations de niveau 2",
+    "referrals": "{n} filleuls",
+    "daily_bonus": "{pct}% des collectes journalières",
+    "claim_btn": "+{snl} SNL",
+    "claimed": "Réclamé",
+    "info_1": "Chaque collecte d'un filleul vous crédite automatiquement un bonus en SNL.",
+    "info_2": "Réclamez vos bonus accumulés en cliquant sur le bouton de chaque niveau."
+  },
+  "Footer": {
+    "home": "Accueil",
+    "collect": "Collecter",
+    "earn_more": "Gagner plus",
+    "leaderboard": "Classement",
+    "copyright": "©2026 SUNAALA. Tous droits réservés"
+  },
+  "CollecteModal": {
+    "title_idle": "Collecte quotidienne",
+    "title_success": "Collecte réussie !",
+    "title_already": "Déjà collecté aujourd'hui",
+    "subtitle_idle": "Votre récompense du jour est prête à être réclamée",
+    "subtitle_success": "Vos points SNL ont été crédités sur votre solde",
+    "subtitle_error": "Une erreur est survenue",
+    "mining_active": "Minage en cours…",
+    "mining_done": "Minage terminé !",
+    "mining_sub_active": "Accumulez 100 SNL en 24h pour collecter",
+    "mining_sub_done": "Vous pouvez collecter vos 100 SNL",
+    "collect_btn": "Collecter maintenant",
+    "collecting": "Collecte en cours…",
+    "close": "Fermer",
+    "understood": "Compris",
+    "daily_collect": "Collecte quotidienne",
+    "base_reward": "Récompense de base",
+    "loyalty_bonus": "Bonus fidélité",
+    "loyalty_value": "selon votre série",
+    "new_balance": "Nouveau solde",
+    "footer_tip": "Revenez chaque jour pour maintenir votre série et augmenter vos bonus"
+  },
+  "Maintenance": {
+    "title": "Maintenance en cours",
+    "subtitle": "Nous améliorons SUNALAA pour vous. Nous revenons très bientôt.",
+    "retry": "Réessayer"
+  },
+  "Auth": {
+    "login_title": "Bon retour",
+    "login_subtitle": "Connectez-vous à votre compte SUNALAA",
+    "register_title": "Créez votre compte",
+    "register_subtitle": "Rejoignez des milliers de collecteurs SNL",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "username": "Nom d'utilisateur",
+    "referral_code": "Code de parrainage (optionnel)",
+    "login_btn": "Se connecter",
+    "register_btn": "Créer mon compte",
+    "forgot_password": "Mot de passe oublié ?",
+    "no_account": "Pas encore de compte ?",
+    "already_account": "Déjà un compte ?",
+    "sign_up": "S'inscrire",
+    "sign_in": "Se connecter",
+    "back_to_home": "Retour à l'accueil",
+    "or_continue_with": "ou continuer avec"
+  },
+  "Classement": {
+    "title": "Classement",
+    "subtitle": "Les meilleurs collecteurs SNL",
+    "rank": "Rang",
+    "member": "Membre",
+    "points": "Points",
+    "loading": "Chargement…"
+  },
+  "Formations": {
+    "title": "Formations & Masterclass",
+    "subtitle": "Formez-vous à la crypto et gagnez des SNL",
+    "loading": "Chargement des formations…",
+    "empty": "Aucune formation disponible pour le moment",
+    "free": "Gratuit",
+    "duration": "{n} min",
+    "start": "Commencer",
+    "continue": "Continuer"
+  },
+  "LaunchCountdown": {
+    "label": "Lancement du token $SNL dans",
+    "days": "Jours",
+    "hours": "Heures",
+    "minutes": "Minutes",
+    "seconds": "Secondes",
+    "description": "Après ce délai, les points accumulés seront convertis en $SNL. Chaque point compte."
+  },
+  "SNL": {
+    "nav_understand": "Comprendre le $SNL",
+    "nav_utility": "Utilité",
+    "nav_usage": "Usage",
+    "nav_value": "Valeur"
+  },
+  "Testimonials": {
+    "badge": "Témoignages",
+    "title": "Ce que disent nos premiers membres",
+    "stats": {
+      "members": "12 847+",
+      "membersLabel": "membres actifs",
+      "rating": "4.9/5",
+      "ratingLabel": "satisfaction moyenne",
+      "points": "2.4M+",
+      "pointsLabel": "points SNL distribués"
+    },
+    "cta": "À quoi sert vraiment le $SNL ?",
+    "items": [
+      {
+        "name": "Kofi A.",
+        "country": "Ghana 🇬🇭",
+        "initials": "KA",
+        "text": "J'ai rejoint SUNALA il y a 3 semaines. Je collecte mes points chaque matin en 30 secondes avec mon café. J'ai déjà accumulé plus de 4 500 points. Au lancement je convertis directement."
+      },
+      {
+        "name": "Aminata D.",
+        "country": "Sénégal 🇸🇳",
+        "initials": "AD",
+        "text": "J'ai parrainé 12 personnes dans mon quartier. Grâce au système de parrainage, mes gains ont triplé en deux semaines. C'est simple, gratuit et ça marche vraiment."
+      },
+      {
+        "name": "Moussa K.",
+        "country": "Côte d'Ivoire 🇨🇮",
+        "initials": "MK",
+        "text": "Au début j'étais sceptique. Mais quand j'ai vu que c'est 100% gratuit sans investissement requis, j'ai essayé. Maintenant je suis dans le top 500 du classement."
+      }
+    ]
+  }
+}

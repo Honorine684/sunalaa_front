@@ -5,7 +5,7 @@ import Image from "next/image";
 import Container from "./Container";
 import CollecteModal from "./CollecteModal";
 
-export default function HomeHero() {
+export default function HomeHero({ onCollected }) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -25,16 +25,15 @@ export default function HomeHero() {
 
         <Container className="relative z-10 text-center pt-16 pb-20">
           <h1 className="text-[32px] lg:text-[58px] font-bold text-white leading-[1.15] mb-8">
-            Bienvenue dans la
+            Welcome to the
             <br />
-            communauté&nbsp;&nbsp;les{" "}
-            <span className="text-secondary font-bold">SUNALAA</span>
+            <span className="text-secondary font-bold">SUNALAA</span> community
           </h1>
 
           <p className="text-[16px] mb-0 max-w-xl mx-auto" style={{ color: "#EDECED", lineHeight: "28px", letterSpacing: "0.01em" }}>
-            Chaque jour, votre engagement vous rapproche de plus de récompenses.
+            Every day, your engagement brings you closer to more rewards.
             <br />
-            Continuez à collecter, progresser et grandir avec la communauté.
+            Keep collecting, progressing and growing with the community.
           </p>
 
           <button
@@ -52,7 +51,7 @@ export default function HomeHero() {
         </Container>
       </section>
 
-      {showModal && <CollecteModal onClose={() => setShowModal(false)} />}
+      {showModal && <CollecteModal onClose={() => setShowModal(false)} onCollected={onCollected} />}
     </>
   );
 }

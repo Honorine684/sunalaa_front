@@ -1,121 +1,186 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { adminApi, getApiError } from "@/lib/api";
 
-const users = [
-  { id: 1, initials: "CR", name: "crypto_master",  email: "crypto@example.com",   points: "12,500", refs: 45,  status: "Actif",    date: "2025-12-30" },
-  { id: 2, initials: "MO", name: "moon_walker",    email: "moon@example.com",     points: "8,900",  refs: 23,  status: "Actif",    date: "2025-12-30" },
-  { id: 3, initials: "HO", name: "hodl_king",      email: "hodl@example.com",     points: "23,400", refs: 67,  status: "Actif",    date: "2025-12-29" },
-  { id: 4, initials: "DE", name: "degen_trader",   email: "degen@example.com",    points: "4,500",  refs: 12,  status: "Suspendu", date: "2025-12-25" },
-  { id: 5, initials: "SN", name: "snl_collector",  email: "snl@example.com",      points: "9,800",  refs: 34,  status: "Actif",    date: "2025-12-28" },
-  { id: 6, initials: "WH", name: "whale_player",   email: "whale@example.com",    points: "45,600", refs: 123, status: "Actif",    date: "2025-12-30" },
-  { id: 7, initials: "SC", name: "scam_account",   email: "scam@example.com",     points: "0",      refs: 0,   status: "Banni",    date: "2025-12-20" },
-  { id: 8, initials: "DI", name: "diamond_hands",  email: "diamond@example.com",  points: "34,200", refs: 56,  status: "Actif",    date: "2025-12-30" },
-];
+const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B"];
 
 const statusStyle = {
-  Actif:    { bg: "#ECFDF5", text: "#059669", border: "#D1FAE5" },
-  Suspendu: { bg: "#FFF7ED", text: "#D97706", border: "#FED7AA" },
-  Banni:    { bg: "#FFF1F2", text: "#E11D48", border: "#FFE4E6" },
+  active:    { bg: "#ECFDF5", text: "#059669", border: "#D1FAE5", label: "Actif" },
+  suspended: { bg: "#FFF7ED", text: "#D97706", border: "#FED7AA", label: "Suspendu" },
+  banned:    { bg: "#FFF1F2", text: "#E11D48", border: "#FFE4E6", label: "Banni" },
+  inactive:  { bg: "#F8FAFC", text: "#94A3B8", border: "#E2E8F0", label: "Inactif" },
 };
 
-function StatusBadge({ status }) {
-  const s = statusStyle[status] ?? statusStyle.Actif;
+function getStatusStyle(user) {
+  const s = (user?.status ?? (user?.isActive ? "active" : "inactive")).toLowerCase();
+  return statusStyle[s] ?? statusStyle.inactive;
+}
+
+function getInitials(user) {
+  const first = user?.firstName?.[0] ?? user?.first_name?.[0] ?? user?.name?.[0] ?? "?";
+  const last = user?.lastName?.[0] ?? user?.last_name?.[0] ?? "";
+  return (first + last).toUpperCase();
+}
+
+function getColor(user) {
+  const name = user?.firstName ?? user?.email ?? "A";
+  return COLORS[name.charCodeAt(0) % COLORS.length];
+}
+
+function fmt(n) { return Number(n ?? 0).toLocaleString("fr-FR"); }
+
+function Skeleton({ className }) {
+  return <div className={`animate-pulse bg-slate-200 rounded-lg ${className}`} />;
+}
+
+function StatusBadge({ user }) {
+  const s = getStatusStyle(user);
   return (
-    <span
-      className="inline-flex w-fit items-center px-3 py-1 rounded-full text-[12px] font-normal border whitespace-nowrap"
-      style={{ backgroundColor: s.bg, color: s.text, borderColor: s.border }}
-    >
-      {status}
+    <span className="inline-flex w-fit items-center px-3 py-1 rounded-full text-[12px] font-normal border whitespace-nowrap"
+      style={{ backgroundColor: s.bg, color: s.text, borderColor: s.border }}>
+      {s.label}
     </span>
   );
 }
 
-function ActionMenu({ userId }) {
+function ActionMenu({ user, onStatusChange }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    function onOutside(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
   }, []);
+
+  async function changeStatus(status) {
+    setOpen(false);
+    setLoading(true);
+    try {
+      await adminApi.updateUserStatus(user.id, status);
+      onStatusChange(user.id, status);
+    } catch (e) {
+      alert(e?.response?.data?.message ?? "Erreur lors du changement de statut");
+    } finally { setLoading(false); }
+  }
+
+  const currentStatus = (user?.status ?? (user?.isActive ? "active" : "inactive")).toLowerCase();
 
   return (
     <div ref={ref} className="relative flex justify-center">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100"
+        disabled={loading}
+        className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100 disabled:opacity-40"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
-          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-          <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
-        </svg>
+        {loading ? (
+          <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+          </svg>
+        ) : (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
+          </svg>
+        )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-8 z-50 bg-white rounded-xl border border-slate-100 shadow-lg py-1 w-36">
-          <button
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-slate-50 transition cursor-pointer"
-            style={{ color: "#0F172B" }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Modifier
-          </button>
-          <button
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-red-50 transition cursor-pointer"
-            style={{ color: "#E11D48" }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Supprimer
-          </button>
+        <div className="absolute right-0 top-8 z-50 bg-white rounded-xl border border-slate-100 shadow-lg py-1 w-40">
+          {currentStatus !== "active" && (
+            <button onClick={() => changeStatus("active")}
+              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-green-50 transition cursor-pointer"
+              style={{ color: "#059669" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Activer
+            </button>
+          )}
+          {currentStatus !== "suspended" && (
+            <button onClick={() => changeStatus("suspended")}
+              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-orange-50 transition cursor-pointer"
+              style={{ color: "#D97706" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M10 15V9M14 15V9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Suspendre
+            </button>
+          )}
+          {currentStatus !== "banned" && (
+            <button onClick={() => changeStatus("banned")}
+              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-red-50 transition cursor-pointer"
+              style={{ color: "#E11D48" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M4.93 4.93l14.14 14.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Bannir
+            </button>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-const COLS = ["UTILISATEUR", "EMAIL", "POINTS SNL", "PARRAINAGES", "STATUT", "DERNIÈRE ACTIVITÉ", "ACTIONS"];
+const COLS = ["UTILISATEUR", "EMAIL", "POINTS SNL", "PARRAINAGES", "STATUT", "INSCRIPTION", "ACTIONS"];
 
 export default function UsersManagement() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("Tous");
 
+  useEffect(() => {
+    adminApi.getUsers({ limit: 50, page: 1 })
+      .then((res) => {
+        const raw = res.data?.data ?? res.data;
+        const list = raw?.users ?? raw?.data ?? (Array.isArray(raw) ? raw : []);
+        setUsers(Array.isArray(list) ? list : []);
+      })
+      .catch((err) => setError(getApiError(err)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleStatusChange = useCallback((userId, newStatus) => {
+    setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, status: newStatus, isActive: newStatus === "active" } : u));
+  }, []);
+
   const filtered = users.filter((u) => {
-    const matchSearch =
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = filterStatus === "Tous" || u.status === filterStatus;
+    const name = [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ").toLowerCase();
+    const email = (u?.email ?? "").toLowerCase();
+    const matchSearch = !search || name.includes(search.toLowerCase()) || email.includes(search.toLowerCase());
+    const userStatus = (u?.status ?? (u?.isActive ? "active" : "inactive")).toLowerCase();
+    const matchStatus = filterStatus === "Tous" ||
+      (filterStatus === "Actif" && userStatus === "active") ||
+      (filterStatus === "Suspendu" && userStatus === "suspended") ||
+      (filterStatus === "Banni" && userStatus === "banned");
     return matchSearch && matchStatus;
   });
 
   const counts = {
     total: users.length,
-    actifs: users.filter((u) => u.status === "Actif").length,
-    suspendus: users.filter((u) => u.status === "Suspendu").length,
-    bannis: users.filter((u) => u.status === "Banni").length,
+    actifs: users.filter((u) => (u?.status ?? (u?.isActive ? "active" : "")).toLowerCase() === "active").length,
+    suspendus: users.filter((u) => (u?.status ?? "").toLowerCase() === "suspended").length,
+    bannis: users.filter((u) => (u?.status ?? "").toLowerCase() === "banned").length,
   };
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Page title */}
       <div>
         <h2 className="text-[20px] sm:text-[26px] font-bold mb-1" style={{ color: "#0F172B" }}>Gestion des utilisateurs</h2>
         <p className="text-[14px]" style={{ color: "#45556C" }}>Contrôler et modérer les comptes utilisateurs</p>
       </div>
 
-      {/* Search + filter + stats — même card */}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+
       <div className="bg-white rounded-2xl border border-slate-100">
         <div className="p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="relative flex-1">
@@ -123,28 +188,18 @@ export default function UsersManagement() {
               <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
               <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher par nom d'utilisateur ou email..."
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher par nom ou email..."
               className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-[14px] placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-secondary/30 transition"
-              style={{ color: "#45556C" }}
-            />
+              style={{ color: "#45556C" }} />
           </div>
           <div className="flex items-center gap-2 border border-slate-200 rounded-xl px-4 py-2.5 bg-white cursor-pointer hover:bg-slate-50 transition">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="#45556C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-transparent text-[14px] outline-none cursor-pointer"
-              style={{ color: "#45556C" }}
-            >
-              {["Tous", "Actif", "Suspendu", "Banni"].map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
+            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
+              className="bg-transparent text-[14px] outline-none cursor-pointer" style={{ color: "#45556C" }}>
+              {["Tous", "Actif", "Suspendu", "Banni"].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
         </div>
@@ -165,56 +220,70 @@ export default function UsersManagement() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-slate-100">
-      <div className="bg-white min-w-[700px]">
-        <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_1.2fr_0.5fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
-          {COLS.map((col) => (
-            <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>
-              {col}
-            </span>
-          ))}
+        <div className="bg-white min-w-175">
+          <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+            {COLS.map((col) => (
+              <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>{col}</span>
+            ))}
+          </div>
+
+          {loading ? (
+            [...Array(6)].map((_, i) => (
+              <div key={i} className="grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-4 items-center border-b border-slate-100 gap-2">
+                <Skeleton className="h-9 w-36" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-6 w-6 rounded-full" />
+              </div>
+            ))
+          ) : (
+            <>
+              {filtered.map((user, i) => {
+                const displayName = [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name]
+                  .filter(Boolean).join(" ") || user?.username || user?.email?.split("@")[0] || "—";
+                const points = user?.snlBalance ?? user?.points ?? user?.totalPoints ?? 0;
+                const refs = user?.referralCount ?? user?.directCount ?? user?.totalReferrals ?? 0;
+                const createdAt = user?.createdAt ?? user?.created_at;
+                return (
+                  <div
+                    key={user?.id ?? i}
+                    className={[
+                      "grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors",
+                      i < filtered.length - 1 ? "border-b border-slate-100" : "",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: getColor(user) }}>
+                        <span className="text-white text-[12px] font-bold">{getInitials(user)}</span>
+                      </div>
+                      <div>
+                        <p className="text-[14px] font-bold leading-none mb-0.5" style={{ color: "#0F172B" }}>{displayName}</p>
+                        <p className="text-[11px] font-mono select-all" style={{ color: "#94A3B8" }}>{user?.id ?? "—"}</p>
+                      </div>
+                    </div>
+                    <span className="text-[14px] truncate" style={{ color: "#45556C" }}>{user?.email ?? "—"}</span>
+                    <span className="text-[14px]" style={{ color: "#0F172B" }}>{fmt(points)}</span>
+                    <span className="text-[14px]" style={{ color: "#45556C" }}>{fmt(refs)}</span>
+                    <StatusBadge user={user} />
+                    <span className="text-[14px]" style={{ color: "#45556C" }}>
+                      {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}
+                    </span>
+                    <ActionMenu user={user} onStatusChange={handleStatusChange} />
+                  </div>
+                );
+              })}
+              {filtered.length === 0 && (
+                <div className="px-6 py-12 text-center text-[14px]" style={{ color: "#45556C" }}>
+                  Aucun utilisateur trouvé.
+                </div>
+              )}
+            </>
+          )}
         </div>
-
-        {filtered.map((user, i) => (
-          <div
-            key={user.id}
-            className={[
-              "grid grid-cols-[2fr_2fr_1fr_1fr_1fr_1.2fr_0.5fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
-              i < filtered.length - 1 ? "border-b border-slate-100" : "",
-            ].join(" ")}
-          >
-            {/* Utilisateur */}
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#3FAE8C" }}>
-                <span className="text-white text-[12px] font-bold">{user.initials}</span>
-              </div>
-              <div>
-                <p className="text-[14px] font-bold leading-none mb-0.5" style={{ color: "#0F172B" }}>{user.name}</p>
-                <p className="text-[11px]" style={{ color: "#62748E" }}>ID: {user.id}</p>
-              </div>
-            </div>
-            {/* Email */}
-            <span className="text-[14px]" style={{ color: "#45556C" }}>{user.email}</span>
-            {/* Points SNL */}
-            <span className="text-[14px] font-normal" style={{ color: "#0F172B" }}>{user.points}</span>
-            {/* Parrainages */}
-            <span className="text-[14px]" style={{ color: "#45556C" }}>{user.refs}</span>
-            {/* Statut */}
-            <StatusBadge status={user.status} />
-            {/* Date */}
-            <span className="text-[14px]" style={{ color: "#45556C" }}>{user.date}</span>
-            {/* Actions */}
-            <ActionMenu userId={user.id} />
-          </div>
-        ))}
-
-        {filtered.length === 0 && (
-          <div className="px-6 py-12 text-center text-[14px]" style={{ color: "#45556C" }}>
-            Aucun utilisateur trouvé.
-          </div>
-        )}
-      </div>
       </div>
     </div>
   );

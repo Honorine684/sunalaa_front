@@ -1,48 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
-
-const steps = [
-  {
-    num: "01",
-    title: "Créez votre compte",
-    desc: "Rejoignez SUNALAA en quelques secondes. L'inscription est 100% gratuite, sans carte bancaire ni investissement requis. Renseignez simplement votre email, créez un mot de passe et vous êtes prêt à commencer votre aventure SNL.",
-    btn: "Lire plus",
-    href: "/login",
-    img: "/images/image 11.png",
-  },
-  {
-    num: "02",
-    title: "Collectez chaque jour",
-    desc: "Revenez chaque jour sur SUNALAA pour réclamer vos points SNL quotidiens. Plus vous êtes régulier, plus votre streak augmente et plus vos récompenses sont importantes. Complétez aussi des missions sur les réseaux sociaux pour booster votre solde.",
-    btn: "Lire plus",
-    href: "/login",
-    img: "/images/image 12.png",
-  },
-  {
-    num: "03",
-    title: "Invitez votre réseau",
-    desc: "Partagez votre lien de parrainage unique avec vos amis, votre famille et votre communauté. Gagnez un bonus sur chaque collecte de vos filleuls jusqu'à 3 niveaux de profondeur. Plus votre réseau est actif, plus vous gagnez de points SNL.",
-    btn: "Lire plus",
-    href: "/login",
-    img: "/images/image 13.png",
-  },
-];
+import { useTranslations, useLocale } from "next-intl";
 
 function IllustrationStep1() {
   return (
     <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Form card */}
       <rect x="20" y="10" width="140" height="120" rx="12" fill="white" stroke="#E2E8F0" strokeWidth="1.5" />
-      {/* Field lines */}
       <rect x="36" y="32" width="108" height="10" rx="4" fill="#F1F5F9" />
       <rect x="36" y="52" width="108" height="10" rx="4" fill="#F1F5F9" />
       <rect x="36" y="72" width="80" height="10" rx="4" fill="#F1F5F9" />
-      {/* Submit button */}
       <rect x="36" y="96" width="108" height="18" rx="6" fill="#1A3A34" />
       <text x="90" y="109" textAnchor="middle" fill="white" fontSize="8" fontFamily="sans-serif" fontWeight="bold">
         S&apos;inscrire
       </text>
-      {/* Checkmark badge */}
       <circle cx="148" cy="32" r="14" fill="#2DD4BF" />
       <path d="M142 32l4 4 8-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -52,13 +22,11 @@ function IllustrationStep1() {
 function IllustrationStep2() {
   return (
     <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Coin */}
       <circle cx="90" cy="70" r="44" fill="#E5B858" fillOpacity="0.15" />
       <circle cx="90" cy="70" r="32" fill="#E5B858" />
       <text x="90" y="76" textAnchor="middle" fill="#1A3A34" fontSize="24" fontFamily="sans-serif" fontWeight="900">
         SNL
       </text>
-      {/* Rays */}
       {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
         const rad = (angle * Math.PI) / 180;
         const x1 = 90 + Math.cos(rad) * 38;
@@ -75,41 +43,70 @@ function IllustrationStep2() {
 
 const illustrations = [IllustrationStep1, IllustrationStep2, null];
 
-
 export default function HowItWorks() {
+  const t = useTranslations("HowItWorks");
+  const locale = useLocale();
+  const prefix = locale === "fr" ? "/fr" : "";
+
+  const steps = [
+    {
+      num: t("step1_num"),
+      title: t("step1_title"),
+      desc: t("step1_desc"),
+      btn: t("step1_btn"),
+      href: `${prefix}/login`,
+      img: "/images/VIS INSCRIPTION.jpg",
+    },
+    {
+      num: t("step2_num"),
+      title: t("step2_title"),
+      desc: t("step2_desc"),
+      btn: t("step2_btn"),
+      href: `${prefix}/login`,
+      img: "/images/VIS COLLECTION.jpg",
+    },
+    {
+      num: t("step3_num"),
+      title: t("step3_title"),
+      desc: t("step3_desc"),
+      btn: t("step3_btn"),
+      href: `${prefix}/login`,
+      img: "/images/VIS RESEAU.jpg",
+    },
+  ];
+
   return (
     <section className="bg-white pt-24 pb-10 lg:pt-32 lg:pb-12 relative overflow-hidden">
-      {/* S watermark — droite haut, raccord avec hero */}
-      <img
+      <Image
         src="/images/Group.png"
         alt="" aria-hidden="true"
+        width={280} height={420}
+        loading="lazy"
         className="absolute select-none pointer-events-none hidden lg:block"
-        style={{ width: 280, height: 420, opacity: 0.35, filter: "brightness(0) sepia(1) saturate(5) hue-rotate(110deg)", right: -80, top: -220 }}
+        style={{ opacity: 0.35, filter: "brightness(0) sepia(1) saturate(5) hue-rotate(110deg)", right: -80, top: -220 }}
       />
 
-      {/* S watermark — gauche, zone "Collectez chaque jour" */}
       <div className="absolute hidden lg:block pointer-events-none select-none overflow-hidden"
         style={{ width: 280, height: 500, left: 220, top: 570, zIndex: 20 }}>
-        <img src="/images/Group.png" alt="" aria-hidden="true"
-          style={{ width: 280, opacity: 0.35, filter: "brightness(0)" }} />
+        <Image src="/images/Group.png" alt="" aria-hidden="true"
+          width={280} height={280} loading="lazy"
+          style={{ opacity: 0.35, filter: "brightness(0)" }} />
       </div>
 
-{/* S watermark — droite, niveau "Collectez chaque jour" */}
       <div className="absolute hidden lg:block pointer-events-none select-none overflow-hidden"
         style={{ width: 280, height: 500, right: 180, top: 680 }}>
-        <img src="/images/Group.png" alt="" aria-hidden="true"
-          style={{ width: 280, opacity: 0.35, filter: "brightness(0)" }} />
+        <Image src="/images/Group.png" alt="" aria-hidden="true"
+          width={280} height={280} loading="lazy"
+          style={{ opacity: 0.35, filter: "brightness(0)" }} />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
-        {/* Section header */}
         <div className="text-center mb-20">
           <h2 className="font-black text-[24px] sm:text-[40px] leading-normal" style={{ color: "#0F172B" }}>
-            Comment ça marche&nbsp;?
+            {t("title")}
           </h2>
         </div>
 
-        {/* Steps */}
         <div className="flex flex-col gap-16 lg:gap-24">
           {steps.map((step, idx) => {
             const IllustrationComponent = illustrations[idx];
@@ -117,7 +114,6 @@ export default function HowItWorks() {
 
             return (
               <div key={step.num} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
-                {/* Text side */}
                 <div className={isEven ? "lg:order-last" : ""}>
                   {!step.img && (
                     <div
@@ -140,7 +136,6 @@ export default function HowItWorks() {
                   </Link>
                 </div>
 
-                {/* Illustration side */}
                 <div className={isEven ? "lg:order-first" : ""}>
                   {step.img ? (
                     <Image
@@ -148,6 +143,8 @@ export default function HowItWorks() {
                       alt={step.title}
                       width={520}
                       height={400}
+                      priority={idx === 0}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       style={{ objectFit: "contain", width: "100%", height: "auto" }}
                     />
                   ) : (
@@ -161,13 +158,12 @@ export default function HowItWorks() {
           })}
         </div>
 
-        {/* Lien token utilité */}
         <div className="flex justify-center mt-16">
           <Link
-            href="/snl/utilite"
+            href={`${prefix}/snl/utilite`}
             className="inline-flex items-center gap-2 font-semibold text-[14px] text-primary border-primary px-6 py-3 rounded-full transition-all border hover:bg-primary hover:text-white active:text-white group w-full sm:w-auto justify-center"
           >
-            Découvrir toute l&apos;utilité du token
+            {t("discover_link")}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="group-hover:translate-x-0.5 transition-transform">
               <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>

@@ -1,0 +1,256 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "collect": "Collect",
+    "formations": "Courses",
+    "bonus": "Bonus & Rewards",
+    "leaderboard": "Leaderboard",
+    "login": "Login",
+    "register": "Register",
+    "profile": "My Profile",
+    "logout": "Log out",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "logoutModal": {
+      "title": "Log out",
+      "message": "Are you sure you want to log out?",
+      "cancel": "Cancel",
+      "confirm": "Log out"
+    }
+  },
+  "AnnouncementBanner": {
+    "text": "🌱 Pre-launch SUNALAA — The first 5,000 members receive an exclusive bonus of 500 points.",
+    "spots": "[{count} spots remaining]",
+    "cta": "Join now →",
+    "close": "Close"
+  },
+  "LandingHero": {
+    "h1_1": "Join the",
+    "h1_2": "community",
+    "subtitle": "Accumulate SNL points every day, refer your network and climb the leaderboard. Get ready now for the launch of the SUNALAA community token.",
+    "cta_primary": "Start for free",
+    "cta_secondary": "Understand $SNL",
+    "stat_members": "Active members",
+    "stat_activity": "Daily activity rate",
+    "stat_points": "SNL points distributed",
+    "trust_free": "100% free",
+    "trust_no_invest": "no investment",
+    "trust_community": "Active community"
+  },
+  "HowItWorks": {
+    "title": "How does it work?",
+    "step1_num": "01",
+    "step1_title": "Create your account",
+    "step1_desc": "Join SUNALAA in seconds. Registration is 100% free, no credit card or investment required. Just enter your email, create a password and you're ready to start your SNL journey.",
+    "step1_btn": "Read more",
+    "step2_num": "02",
+    "step2_title": "Collect every day",
+    "step2_desc": "Come back every day to SUNALAA to claim your daily SNL points. The more consistent you are, the more your streak grows and the bigger your rewards. Complete social media missions to boost your balance.",
+    "step2_btn": "Read more",
+    "step3_num": "03",
+    "step3_title": "Invite your network",
+    "step3_desc": "Share your unique referral link with your friends, family and community. Earn a bonus on every collect made by your referrals up to 3 levels deep. The more active your network, the more SNL you earn.",
+    "step3_btn": "Read more",
+    "discover_link": "Discover the full utility of the token"
+  },
+  "WhySunala": {
+    "title": "Why SUNALAA?",
+    "subtitle": "A platform designed to reward your engagement and your community's. Every action counts: grow, share and prepare for the SNL token launch.",
+    "card1_title": "Daily collection",
+    "card1_desc": "Earn SNL points every day in seconds",
+    "card2_title": "Valued progression",
+    "card2_desc": "Level up and unlock exclusive benefits",
+    "card3_title": "Rewarded referrals",
+    "card3_desc": "Invite your community and grow together",
+    "card4_title": "Transparent & secure",
+    "card4_desc": "No investment required, 100% free participation"
+  },
+  "FounderSection": {
+    "badge": "The project behind SUNALAA",
+    "title_1": "Africa deserves its",
+    "title_2": "place in blockchain",
+    "p1": "SUNALAA was born from a simple observation: Africa holds 60% of the world's arable land, yet its farmers have no access to financing or international markets.",
+    "p2": "Our mission: connect real African agriculture to the global blockchain economy. Every virtual plot you develop is linked to a real African land. Every <token>$SNL</token> token you accumulate represents value rooted in reality.",
+    "founder_title": "Founder of SUNALAA",
+    "photo_placeholder": "Founder photo"
+  },
+  "LandingCTA": {
+    "title": "Ready to start?",
+    "subtitle": "Join thousands of members already accumulating their SNL points ahead of the community token launch",
+    "cta": "Create my account for free",
+    "secondary": "Want to understand why $SNL has value?"
+  },
+  "BonusHero": {
+    "title_1": "Earn up to",
+    "title_amount": "500 SNL",
+    "title_2": "in bonuses",
+    "subtitle": "Log in every day to unlock successive bonuses.\nMissing a day resets the counter to zero.",
+    "day": "Day {n}",
+    "loading": "Loading…",
+    "claimed": "Claimed ✓",
+    "claim_btn": "Claim +{snl} SNL",
+    "claiming": "Claiming…",
+    "claim_success": "+{bonus} SNL added — New balance: {balance} SNL"
+  },
+  "MissionsSection": {
+    "title": "Daily Missions",
+    "subtitle": "Complete missions to earn extra SNL points",
+    "loading": "Loading missions…",
+    "empty": "No missions available right now",
+    "points_label": "Points to earn",
+    "points": "{n} SNL",
+    "complete_btn": "Complete",
+    "completed": "Completed",
+    "verify_btn": "Verify"
+  },
+  "ParrainageSection": {
+    "title": "SUNALAA Referral",
+    "subtitle": "Earn more points by referring",
+    "referral_link_label": "Your referral link",
+    "custom_link": "Custom link",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "total_earned": "Total earned",
+    "how_title": "How does it work?",
+    "step1_title": "Share your link",
+    "step1_desc": "Invite your friends, family and community to join SUNALAA",
+    "step2_title": "They sign up",
+    "step2_desc": "Your referrals create their account and start collecting SNL points",
+    "step3_title": "You win together",
+    "step3_desc": "Receive a bonus on their daily collects and progress as a team",
+    "gains_title": "Your earnings by level",
+    "level1": "Level 1",
+    "level1_sub": "Your direct referrals",
+    "level2": "Level 2",
+    "level2_sub": "Referrals of your referrals",
+    "level3": "Level 3",
+    "level3_sub": "Level 2 referrals",
+    "referrals": "{n} referrals",
+    "daily_bonus": "{pct}% of daily collects",
+    "claim_btn": "+{snl} SNL",
+    "claimed": "Claimed",
+    "info_1": "Every collect by a referral automatically credits you a SNL bonus.",
+    "info_2": "Claim your accumulated bonuses by clicking the button at each level."
+  },
+  "Footer": {
+    "home": "Home",
+    "collect": "Collect",
+    "earn_more": "Earn more",
+    "leaderboard": "Leaderboard",
+    "copyright": "©2026 SUNALAA. All rights reserved"
+  },
+  "CollecteModal": {
+    "title_idle": "Daily Collection",
+    "title_success": "Collection successful!",
+    "title_already": "Already collected today",
+    "subtitle_idle": "Your daily reward is ready to be claimed",
+    "subtitle_success": "Your SNL points have been credited to your balance",
+    "subtitle_error": "An error occurred",
+    "mining_active": "Mining in progress…",
+    "mining_done": "Mining complete!",
+    "mining_sub_active": "Accumulate 100 SNL in 24h to collect",
+    "mining_sub_done": "You can collect your 100 SNL",
+    "collect_btn": "Collect now",
+    "collecting": "Collecting…",
+    "close": "Close",
+    "understood": "Got it",
+    "daily_collect": "Daily collection",
+    "base_reward": "Base reward",
+    "loyalty_bonus": "Loyalty bonus",
+    "loyalty_value": "based on your streak",
+    "new_balance": "New balance",
+    "footer_tip": "Come back every day to maintain your streak and increase your bonuses"
+  },
+  "Maintenance": {
+    "title": "Maintenance in progress",
+    "subtitle": "We're improving SUNALAA for you. We'll be back shortly.",
+    "retry": "Try again"
+  },
+  "Auth": {
+    "login_title": "Welcome back",
+    "login_subtitle": "Log in to your SUNALAA account",
+    "register_title": "Create your account",
+    "register_subtitle": "Join thousands of SNL collectors",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "username": "Username",
+    "referral_code": "Referral code (optional)",
+    "login_btn": "Log in",
+    "register_btn": "Create my account",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "already_account": "Already have an account?",
+    "sign_up": "Sign up",
+    "sign_in": "Sign in",
+    "back_to_home": "Back to home",
+    "or_continue_with": "or continue with"
+  },
+  "Classement": {
+    "title": "Leaderboard",
+    "subtitle": "The best SNL collectors",
+    "rank": "Rank",
+    "member": "Member",
+    "points": "Points",
+    "loading": "Loading…"
+  },
+  "Formations": {
+    "title": "Courses & Masterclasses",
+    "subtitle": "Train yourself in crypto and earn SNL",
+    "loading": "Loading courses…",
+    "empty": "No courses available yet",
+    "free": "Free",
+    "duration": "{n} min",
+    "start": "Start",
+    "continue": "Continue"
+  },
+  "LaunchCountdown": {
+    "label": "$SNL token launch in",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "description": "After this time, accumulated points will be converted to $SNL. Every point counts."
+  },
+  "SNL": {
+    "nav_understand": "Understand $SNL",
+    "nav_utility": "Utility",
+    "nav_usage": "Usage",
+    "nav_value": "Value"
+  },
+  "Testimonials": {
+    "badge": "Testimonials",
+    "title": "What our first members say",
+    "stats": {
+      "members": "12 847+",
+      "membersLabel": "active members",
+      "rating": "4.9/5",
+      "ratingLabel": "average satisfaction",
+      "points": "2.4M+",
+      "pointsLabel": "SNL points distributed"
+    },
+    "cta": "What is $SNL really for?",
+    "items": [
+      {
+        "name": "Kofi A.",
+        "country": "Ghana 🇬🇭",
+        "initials": "KA",
+        "text": "I joined SUNALAA 3 weeks ago. I collect my points every morning in 30 seconds with my coffee. I have already accumulated more than 4,500 points. At launch I will convert directly."
+      },
+      {
+        "name": "Aminata D.",
+        "country": "Senegal 🇸🇳",
+        "initials": "AD",
+        "text": "I referred 12 people in my neighbourhood. Thanks to the referral system, my earnings have tripled in two weeks. It is simple, free and it really works."
+      },
+      {
+        "name": "Moussa K.",
+        "country": "Côte d'Ivoire 🇨🇮",
+        "initials": "MK",
+        "text": "At first I was sceptical. But when I saw that it is 100% free with no investment required, I tried it. Now I am in the top 500 of the leaderboard."
+      }
+    ]
+  }
+}

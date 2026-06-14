@@ -1,10 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import Container from "./Container";
+import CollecteModal from "./CollecteModal";
+import { useDashboard } from "@/hooks/useDashboard";
+
+/* ── Skeleton ─────────────────────────────────────────────────────── */
+function Skeleton({ className = "" }) {
+  return <div className={`animate-pulse bg-slate-200 rounded-lg ${className}`} />;
+}
 
 /* ── Icon wrapper ── */
 function IconBox({ children, color = "#3FAE8C" }) {
   return (
-    <div className="flex items-center justify-center shrink-0" style={{ width: "57.65px", height: "57.65px", borderRadius: "16.81px", backgroundColor: color }}>
+    <div className="flex items-center justify-center shrink-0"
+      style={{ width: "57.65px", height: "57.65px", borderRadius: "16.81px", backgroundColor: color }}>
       {children}
     </div>
   );
@@ -19,102 +30,123 @@ function Card({ children, className = "" }) {
   );
 }
 
+/* ── Format numbers ── */
+function fmt(n) {
+  if (n == null) return "—";
+  return Number(n).toLocaleString("en-US");
+}
+
+const TX_COLORS = { credit: "#10B981", debit: "#EF4444", transfer: "#3B82F6" };
+
+function TxRow({ tx, last }) {
+  const isCredit = (tx.type ?? "").toLowerCase().includes("credit") ||
+    (tx.amount ?? 0) > 0 && !((tx.type ?? "").toLowerCase().includes("debit"));
+  const sign = isCredit ? "+" : "-";
+  const color = TX_COLORS[isCredit ? "credit" : "debit"];
+  const label = tx.description ?? tx.label ?? tx.type ?? "Transaction";
+  const date = tx.createdAt ?? tx.date ?? tx.timestamp;
+  return (
+    <div className={`flex items-center justify-between py-3 ${!last ? "border-b border-slate-100" : ""}`}>
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}20` }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            {isCredit
+              ? <path d="M12 5v14M5 12l7-7 7 7" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              : <path d="M12 19V5M5 12l7 7 7-7" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>}
+          </svg>
+        </div>
+        <div>
+          <p className="text-[13px] lg:text-[14px] font-medium text-slate-800 leading-none mb-0.5">{label}</p>
+          {date && <p className="text-[11px] text-slate-400">{new Date(date).toLocaleDateString("en-US")}</p>}
+        </div>
+      </div>
+      <span className="font-bold text-[14px] lg:text-[15px]" style={{ color }}>
+        {sign}{fmt(Math.abs(tx.amount ?? 0))} SNL
+      </span>
+    </div>
+  );
+}
+
 export default function HomeDashboard() {
+  const { data, network, transactions, balance, levelData, referralCode, rank, streak, loading, error } = useDashboard();
+  const [showModal, setShowModal] = useState(false);
+  const [localBalance, setLocalBalance] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  const totalPoints   = localBalance ?? balance ?? data?.snlBalance ?? data?.totalPoints ?? data?.points ?? 0;
+  const dailyPoints   = data?.dailyPoints ?? data?.todayPoints ?? data?.todayEarned ?? 0;
+  const levelName     = levelData?.name ?? data?.level?.name ?? data?.levelName ?? "—";
+  const levelProgress = Number(levelData?.progress ?? data?.level?.progress ?? 0);
+  const levelNext     = levelData?.next ?? data?.level?.next ?? null;
+  const referralCount = network?.totalReferrals ?? network?.directCount ?? network?.total ?? 0;
+
   return (
     <div className="relative bg-white overflow-hidden">
 
       {/* Concentric circles — left */}
-      <div className="absolute left-[10%] top-[180px] pointer-events-none select-none z-0">
+      <div className="absolute left-[10%] top-45 pointer-events-none select-none z-0">
         {[300, 220, 145, 70].map((size) => (
-          <div
-            key={size}
-            className="absolute rounded-full border border-secondary/20"
-            style={{ width: size, height: size, left: -size / 2, top: -size / 2 }}
-          />
+          <div key={size} className="absolute rounded-full border border-secondary/20"
+            style={{ width: size, height: size, left: -size / 2, top: -size / 2 }} />
         ))}
       </div>
 
       {/* Concentric circles — right */}
-      <div className="absolute right-[10%] top-[180px] pointer-events-none select-none z-0">
+      <div className="absolute right-[10%] top-45 pointer-events-none select-none z-0">
         {[300, 220, 145, 70].map((size) => (
-          <div
-            key={size}
-            className="absolute rounded-full border border-secondary/20"
-            style={{ width: size, height: size, right: -size / 2, top: -size / 2 }}
-          />
+          <div key={size} className="absolute rounded-full border border-secondary/20"
+            style={{ width: size, height: size, right: -size / 2, top: -size / 2 }} />
         ))}
       </div>
 
       <Container className="relative z-10 pt-16 pb-20">
 
-        {/* ── Actions top ── */}
-        <div className="flex justify-end mb-6">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 bg-primary text-white text-[14px] font-semibold px-5 py-2.5 rounded-full hover:brightness-110 transition"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Voir le site
-          </Link>
-        </div>
-
-        {/* ── Section title ── */}
+        {/* Section title */}
         <div className="text-center mb-10">
           <h2 className="font-bold text-primary mb-3 text-[28px] lg:text-[48px]" style={{ lineHeight: "1.1", letterSpacing: "0.35px" }}>
-            Gagnez des SNL
+            Earn SNL
           </h2>
           <p className="text-center mx-auto text-[14px] lg:text-[18px]" style={{ lineHeight: "28px", maxWidth: 672, color: "#0F172B" }}>
-            Complétez des missions simples sur les réseaux sociaux et boostez votre solde de points SNL en quelques clics.
+            Complete simple missions on social networks and boost your SNL point balance in just a few clicks.
           </p>
         </div>
 
+        {/* Erreur API */}
+        {error && (
+          <div className="mb-5 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[13px]">
+            Failed to load data: {error}
+          </div>
+        )}
+
         {/* ── Balance card ── */}
-        <div
-          className="bg-primary mb-6 flex flex-col"
-          style={{
-            borderRadius: 12,
-            border: "1.2px solid rgba(255,255,255,0.10)",
-            paddingTop: 30,
-            paddingRight: 30,
-            paddingBottom: 1.2,
-            paddingLeft: 30,
-            gap: 9.61,
-            minHeight: 142.92,
-          }}
-        >
-          {/* Top row: label + trend */}
+        <div className="bg-primary mb-6 flex flex-col"
+          style={{ borderRadius: 12, border: "1.2px solid rgba(255,255,255,0.10)", paddingTop: 30, paddingRight: 30, paddingBottom: 24, paddingLeft: 30, gap: 9.61, minHeight: 142.92 }}>
           <div className="flex items-center justify-between">
-            <p className="font-bold text-[13px] lg:text-[16.81px]" style={{ color: "#DBEAFE" }}>Solde total SNL</p>
-            <div className="flex items-center gap-2 font-normal text-[13px] lg:text-[16.81px]" style={{ color: "#5EE9B5", fontWeight: 400 }}>
+            <p className="font-bold text-[13px] lg:text-[16.81px]" style={{ color: "#DBEAFE" }}>Total SNL Balance</p>
+            <div className="flex items-center gap-2 font-normal text-[13px] lg:text-[16.81px]" style={{ color: "#5EE9B5" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M22 7l-9.5 9.5-5-5L1 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M16 7h6v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              +45 aujourd&apos;hui
+              {loading ? "…" : `+${fmt(dailyPoints)} today`}
             </div>
           </div>
-          {/* Amount row */}
           <div className="flex items-center gap-3">
-            <img
-              src="/images/Icon.png"
-              alt="SNL"
-              width={36}
-              height={36}
-              style={{ objectFit: "contain" }}
-            />
-            <p className="text-white text-[26px] lg:text-[38px] font-bold leading-none">
-              12,500 <span className="font-bold text-[16px] lg:text-[21.62px]" style={{ color: "#DBEAFE", fontWeight: 700 }}>SNL</span>
-            </p>
+            <img src="/images/Icon.png" alt="SNL" width={36} height={36} style={{ objectFit: "contain" }} />
+            {loading ? (
+              <Skeleton className="h-9 w-40 bg-white/20" />
+            ) : (
+              <p className="text-white text-[26px] lg:text-[38px] font-bold leading-none">
+                {fmt(totalPoints)} <span className="font-bold text-[16px] lg:text-[21.62px]" style={{ color: "#DBEAFE" }}>SNL</span>
+              </p>
+            )}
           </div>
         </div>
 
-        {/* ── 2-col: Niveau Silver + Parrainage ── */}
+        {/* ── 2-col: Niveau + Parrainage ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
 
-          {/* Niveau Silver card */}
+          {/* Niveau */}
           <Card>
             <div className="flex items-start gap-4 mb-5">
               <IconBox>
@@ -124,29 +156,32 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", letterSpacing: "-0.53px", color: "#0F172B" }}>Niveau Silver</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45558C" }}>Progression vers Gold</p>
+                {loading ? <Skeleton className="h-5 w-28 mb-1" /> : (
+                  <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>
+                    Level {levelName}
+                  </h3>
+                )}
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45558C" }}>
+                  {loading ? "" : levelNext ? `Progressing towards ${levelNext}` : levelName !== "—" ? "Maximum level reached 🏆" : "Loading…"}
+                </p>
               </div>
             </div>
-
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[13px] text-slate-500">Progression</span>
-              <span className="text-[13px] font-bold text-slate-700">65%</span>
+              <span className="text-[13px] text-slate-500">Progress</span>
+              <span className="text-[13px] font-bold text-slate-700">{loading ? "…" : `${levelProgress}%`}</span>
             </div>
             <div className="w-full h-2 bg-slate-100 rounded-full mb-2">
-              <div className="h-2 bg-secondary rounded-full" style={{ width: "65%" }} />
+              <div className="h-2 bg-secondary rounded-full transition-all" style={{ width: `${levelProgress}%` }} />
             </div>
-            <p className="text-[12px] mb-5" style={{ color: "#62748E" }}>Encore 35% pour atteindre Gold</p>
-
-            <Link
-              href="/profil"
-              className="block w-full text-center border border-slate-200 text-slate-700 text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:bg-slate-50 transition"
-            >
-              Voir mon profil
+            <p className="text-[12px] mb-5" style={{ color: "#62748E" }}>
+              {loading ? "" : levelNext ? `${100 - levelProgress}% more to reach ${levelNext}` : levelName !== "—" ? "You're at the top!" : ""}
+            </p>
+            <Link href="/profil" className="block w-full text-center border border-slate-200 text-slate-700 text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:bg-slate-50 transition">
+              View my profile
             </Link>
           </Card>
 
-          {/* Parrainage card */}
+          {/* Parrainage */}
           <Card>
             <div className="flex items-start gap-4 mb-5">
               <IconBox>
@@ -157,31 +192,58 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", letterSpacing: "-0.53px", color: "#0F172B" }}>Parrainage</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45558C" }}>Invitez et progressez ensemble</p>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Referral</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45558C" }}>Invite and grow together</p>
               </div>
             </div>
 
+            {/* Filleuls actifs */}
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[13px] lg:text-[14px] text-slate-500">Filleuls actifs</span>
-              <span className="text-[22px] lg:text-[28px] font-bold text-slate-900">23</span>
+              <span className="text-[13px] lg:text-[14px] text-slate-500">Active referrals</span>
+              {loading ? <Skeleton className="h-8 w-16" /> : (
+                <span className="text-[22px] lg:text-[28px] font-bold text-slate-900">{fmt(referralCount)}</span>
+              )}
             </div>
 
-            {/* Info banner */}
-            <div className="rounded-xl px-4 py-3 mb-4" style={{ backgroundColor: "#DDD6FF" }}>
-              <p className="text-[12px] lg:text-[13px] font-bold text-[#6B3FA0] mb-0.5">
-                💡 Le saviez-vous ?
-              </p>
-              <p className="text-[11px] lg:text-[12px]" style={{ color: "#3FAE8C" }}>
-                Chaque filleul actif augmente vos gains quotidiens
-              </p>
+            {/* Lien de parrainage */}
+            <div className="rounded-xl px-3 py-3 mb-4 flex items-center gap-2" style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0" }}>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] mb-0.5" style={{ color: "#94A3B8" }}>Your referral link</p>
+                {loading || !referralCode ? (
+                  <Skeleton className="h-4 w-40" />
+                ) : (
+                  <p className="text-[12px] font-medium truncate" style={{ color: "#0F172B" }}>
+                    sunalaa.com/ref/{referralCode}
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  const code = referralCode ?? "";
+                  navigator.clipboard.writeText(`https://sunalaa.com/ref/${code}`).catch(() => {});
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                disabled={!referralCode}
+                className="shrink-0 flex items-center gap-1.5 text-white text-[12px] font-normal px-3 py-2 rounded-lg transition cursor-pointer disabled:opacity-40"
+                style={{ backgroundColor: copied ? "#10B981" : "#1a1a1a" }}
+              >
+                {copied ? (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <rect x="9" y="9" width="13" height="13" rx="2" stroke="white" strokeWidth="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="white" strokeWidth="2"/>
+                  </svg>
+                )}
+                {copied ? "Copied!" : "Copy"}
+              </button>
             </div>
 
-            <Link
-              href="/bonus"
-              className="block w-full text-center bg-secondary text-white text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition"
-            >
-              Inviter mes contacts
+            <Link href="/parrainage" className="block w-full text-center bg-secondary text-white text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:brightness-90 transition">
+              Invite my contacts
             </Link>
           </Card>
         </div>
@@ -195,29 +257,29 @@ export default function HomeDashboard() {
               </svg>
             </IconBox>
             <div>
-              <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", letterSpacing: "-0.53px", color: "#0F172B" }}>Collecte quotidienne</h3>
-              <p className="text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45556C" }}>Votre collecte du jour est prête !</p>
+              <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Daily collection</h3>
+              <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your daily collection is ready!</p>
             </div>
           </div>
-
-          <Link
-            href="/collecter"
-            className="flex items-center justify-center w-full bg-primary text-white hover:brightness-110 transition mb-4 text-[15px] lg:text-[21.62px]"
-            style={{ height: "72.06px", borderRadius: "16.81px", gap: "9.61px", boxShadow: "0 4.8px 7.21px -4.8px rgba(0,0,0,0.4)", lineHeight: "33.63px", letterSpacing: "-0.53px", fontWeight: 400 }}
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center justify-center w-full bg-primary text-white hover:brightness-110 transition mb-4 text-[15px] lg:text-[21.62px] cursor-pointer"
+            style={{ height: "72.06px", borderRadius: "16.81px", gap: "9.61px", boxShadow: "0 4.8px 7.21px -4.8px rgba(0,0,0,0.4)", fontWeight: 400, border: "none" }}
           >
             <svg width="21.63" height="24.03" viewBox="0 0 24 24" fill="none">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Collecter mes points SNL
+            Collect my SNL points
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M12 5l7 7-7 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </Link>
-
-          <div className="flex items-center justify-center gap-2 text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45556C" }}>
+          </button>
+          <div className="flex items-center justify-center gap-2 text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>
             <span className="w-4 h-4 rounded-full bg-gold/40 inline-block" />
-            Série de <span className="font-bold mx-1" style={{ color: "#45556C" }}>12 jours</span>
-            •&nbsp;Continuez pour débloquer des bonus !
+            <span className="font-bold mx-1" style={{ color: "#45556C" }}>
+              {loading ? "…" : `${streak}-day`}
+            </span>{" "}
+            streak •&nbsp;Keep going to unlock bonuses!
           </div>
         </Card>
 
@@ -233,33 +295,64 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", letterSpacing: "-0.53px", color: "#0F172B" }}>Classement</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45556C" }}>Votre position dans la communauté</p>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Leaderboard</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your position in the community</p>
               </div>
             </div>
-            <Link href="/classement" className="flex items-center gap-1 hover:opacity-70 transition whitespace-nowrap text-[12px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#0F172B" }}>
-              Voir le top 100
+            <Link href="/classement" className="flex items-center gap-1 hover:opacity-70 transition whitespace-nowrap text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#0F172B" }}>
+              View top 100
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </Link>
           </div>
-
-          {/* Rank card */}
           <div className="rounded-xl px-6 py-5 flex items-center justify-between mb-4" style={{ backgroundColor: "#1F4E4626" }}>
             <div>
-              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#64748B" }}>Votre classement actuel</p>
-              <p className="font-bold leading-none text-[26px] lg:text-[36px]" style={{ color: "#1F4E46" }}>#156</p>
+              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#64748B" }}>Your current rank</p>
+              {loading ? <Skeleton className="h-9 w-20" /> : (
+                <p className="font-bold leading-none text-[26px] lg:text-[36px]" style={{ color: "#1F4E46" }}>
+                  {rank != null && !isNaN(rank) ? `#${fmt(rank)}` : "—"}
+                </p>
+              )}
             </div>
             <div className="text-right">
-              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#94A3B8" }}>Objectif</p>
-              <p className="font-bold text-[17px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", letterSpacing: "-0.53px", color: "#000000" }}>Top 100</p>
+              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#94A3B8" }}>Goal</p>
+              <p className="font-bold text-[17px] lg:text-[21.62px]" style={{ color: "#000000" }}>Top 100</p>
             </div>
           </div>
-
-          <p className="text-center text-[12px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400, color: "#45556C" }}>
-            Collectez régulièrement et invitez votre réseau pour grimper dans le classement
+          <p className="text-center text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>
+            Collect regularly and invite your network to climb the leaderboard
           </p>
+        </Card>
+
+        {/* ── Transactions récentes ── */}
+        <Card className="mb-5">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-start gap-4">
+              <IconBox color="#1F4E46">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </IconBox>
+              <div>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Recent transactions</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your latest SNL movements</p>
+              </div>
+            </div>
+          </div>
+          {loading ? (
+            <div className="flex flex-col gap-3">
+              {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+            </div>
+          ) : transactions.length === 0 ? (
+            <p className="text-center text-slate-400 text-sm py-6">No transactions yet.</p>
+          ) : (
+            <div>
+              {transactions.map((tx, i) => (
+                <TxRow key={tx.id ?? i} tx={tx} last={i === transactions.length - 1} />
+              ))}
+            </div>
+          )}
         </Card>
 
         {/* ── Conseil du jour ── */}
@@ -272,14 +365,13 @@ export default function HomeDashboard() {
             </svg>
           </div>
           <div>
-            <h3 className="text-white font-bold mb-2 text-[15px] lg:text-[19.22px]" style={{ lineHeight: "28.82px", letterSpacing: "-0.38px" }}>Conseil du jour</h3>
-            <p className="text-white mb-4 text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", letterSpacing: "-0.18px", fontWeight: 400 }}>
-              La régularité est la clé ! Revenez chaque jour pour maintenir votre série et maximiser vos gains. Plus votre série
-              est longue, plus vous débloquez de bonus.
+            <h3 className="text-white font-bold mb-2 text-[15px] lg:text-[19.22px]" style={{ lineHeight: "28.82px" }}>Tip of the day</h3>
+            <p className="text-white mb-4 text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", fontWeight: 400 }}>
+              Consistency is key! Come back every day to maintain your streak and maximize your earnings. The longer your streak, the more bonuses you unlock.
             </p>
             <div className="flex flex-wrap gap-2">
-              {["Collecte quotidienne", "Parrainage actif", "Progression continue"].map((tag) => (
-                <span key={tag} className="bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] lg:text-[14.41px]" style={{ lineHeight: "19.22px", letterSpacing: "0px", fontWeight: 400 }}>
+              {["Daily collection", "Active referral", "Continuous progress"].map((tag) => (
+                <span key={tag} className="bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] lg:text-[14.41px]" style={{ fontWeight: 400 }}>
                   {tag}
                 </span>
               ))}
@@ -288,6 +380,13 @@ export default function HomeDashboard() {
         </div>
 
       </Container>
+
+      {showModal && (
+        <CollecteModal
+          onClose={() => setShowModal(false)}
+          onCollected={(newBalance) => setLocalBalance(Number(newBalance))}
+        />
+      )}
     </div>
   );
 }

@@ -20,16 +20,15 @@ export default function FormationsHero() {
       {/* Content */}
       <Container className="relative z-10 text-center pt-16 pb-20">
         <h1 className="text-[32px] lg:text-[64px] font-bold text-white mb-6" style={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, lineHeight: "100%", letterSpacing: "0%" }}>
-          Formations &amp; Masterclass sur
+          Courses &amp; Masterclass on
           <br />
-          les{" "}
-          <span className="text-secondary font-bold">Cryptomonnaies</span>
+          <span className="text-secondary font-bold">Cryptocurrencies</span>
         </h1>
 
         <p className="text-[16px] mb-10 max-w-xl mx-auto" style={{ fontFamily: "Rubik, sans-serif", fontWeight: 400, lineHeight: "28px", letterSpacing: "1%", color: "#EDECED" }}>
-          Accumulez des points SNL grâce à votre activité quotidienne et préparez
+          Accumulate SNL points through your daily activity and prepare
           <br />
-          l&apos;arrivée du token communautaire
+          for the arrival of the community token
         </p>
 
         <Link
@@ -37,7 +36,7 @@ export default function FormationsHero() {
           className="inline-flex items-center bg-secondary text-white hover:brightness-110 transition"
           style={{ height: 44, paddingTop: 10, paddingBottom: 10, paddingLeft: 20, paddingRight: 14, gap: 14, borderRadius: 32, fontSize: 15, fontWeight: 500, lineHeight: "150%" }}
         >
-          Commencer une formation
+          Start a course
           <span className="w-7 h-7 bg-white rounded-full flex items-center justify-center shrink-0">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
               <path d="M9 18l6-6-6-6" stroke="#1F4E46" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
