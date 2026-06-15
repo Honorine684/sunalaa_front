@@ -305,6 +305,7 @@ export function parseFieldErrors(error) {
   // Format structuré : errors: [{ field, message }]
   if (Array.isArray(data.errors) && data.errors.length > 0) {
     const FIELD_MAP = {
+      username: "username",
       firstname: "firstName",
       lastname: "lastName",
       email: "email",

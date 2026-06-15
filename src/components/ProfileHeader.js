@@ -9,11 +9,11 @@ const AVATAR_COLORS = ["#8B5CF6", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#
 function getInitials(profile) {
   const first = profile?.firstName?.[0] ?? profile?.first_name?.[0] ?? "";
   const last = profile?.lastName?.[0] ?? profile?.last_name?.[0] ?? "";
-  return (first + last).toUpperCase() || "?";
+  return (first + last).toUpperCase() || profile?.username?.[0]?.toUpperCase() || "?";
 }
 
 function getAvatarColor(profile) {
-  const name = (profile?.firstName ?? profile?.first_name ?? "A");
+  const name = profile?.firstName ?? profile?.first_name ?? profile?.username ?? "A";
   return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
 }
 
@@ -29,7 +29,7 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
   const initials = getInitials(profile);
   const avatarColor = getAvatarColor(profile);
   const fullName = [profile?.firstName ?? profile?.first_name, profile?.lastName ?? profile?.last_name]
-    .filter(Boolean).join(" ") || "—";
+    .filter(Boolean).join(" ") || profile?.username || "—";
   const handle = profile?.referralCode ?? profile?.referral_code ?? profile?.username ?? "";
   const levelName = profile?.level?.name ?? profile?.rank ?? "Bronze";
   const snlBalance = Number(profile?.snlBalance ?? profile?.points ?? profile?.totalPoints ?? 0);

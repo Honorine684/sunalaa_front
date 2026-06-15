@@ -14,8 +14,13 @@ import "react-international-phone/style.css";
 function validate(fields) {
   const errors = {};
 
-  if (!fields.firstName.trim()) errors.firstName = "First name is required";
-  if (!fields.lastName.trim()) errors.lastName = "Last name is required";
+  if (!fields.username.trim()) {
+    errors.username = "Username is required";
+  } else if (fields.username.trim().length < 3) {
+    errors.username = "Minimum 3 characters";
+  } else if (!/^[a-zA-Z0-9_]+$/.test(fields.username.trim())) {
+    errors.username = "Letters, numbers and _ only";
+  }
 
   if (!fields.email.trim()) {
     errors.email = "Email is required";
@@ -93,8 +98,7 @@ function RegisterInner() {
   }
 
   const [fields, setFields] = useState({
-    firstName: "",
-    lastName: "",
+    username: "",
     email: "",
     phone: "",
     password: "",
@@ -126,8 +130,7 @@ function RegisterInner() {
     setApiError("");
     try {
       await register({
-        firstName: fields.firstName.trim(),
-        lastName: fields.lastName.trim(),
+        username: fields.username.trim(),
         email: fields.email.trim(),
         phone: fields.phone,
         password: fields.password,
@@ -194,11 +197,19 @@ function RegisterInner() {
 
           <form className="flex flex-col gap-4.5" onSubmit={handleSubmit} noValidate>
 
-            {/* Prénom / Nom */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="First name" name="firstName" placeholder="John" value={fields.firstName} onChange={handleChange} error={errors.firstName} autoComplete="given-name" />
-              <Field label="Last name" name="lastName" placeholder="Doe" value={fields.lastName} onChange={handleChange} error={errors.lastName} autoComplete="family-name" />
-            </div>
+            {/* Pseudo */}
+            <Field
+              label="Username"
+              name="username"
+              placeholder="ex: sunalaa_user"
+              value={fields.username}
+              onChange={handleChange}
+              error={errors.username}
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+            />
 
             {/* Email / Téléphone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

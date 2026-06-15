@@ -35,7 +35,8 @@ export default function Navbar() {
     window.location.href = prefix + "/";
   }
 
-  const initials = [user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase() || "?";
+  const initials = ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
+    || user?.username?.[0]?.toUpperCase() || "?";
 
   return (
     <>
@@ -86,7 +87,7 @@ export default function Navbar() {
                       {initials}
                     </div>
                     <span className="hidden lg:inline text-[15px] font-semibold">
-                      {user?.firstName ?? t("profile")}
+                      {user?.username ?? user?.firstName ?? t("profile")}
                     </span>
                   </Link>
                   <button
