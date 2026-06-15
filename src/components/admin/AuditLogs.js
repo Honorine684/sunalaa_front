@@ -123,7 +123,7 @@ export default function AuditLogs() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-[22px] font-bold" style={{ color: "#1F4E46" }}>Journaux d&apos;audit</h2>
-        <p className="text-[13px] text-slate-400 mt-0.5">{total.toLocaleString("fr-FR")} entrée{total !== 1 ? "s" : ""} — lecture seule</p>
+        <p className="text-[13px] text-slate-400 mt-0.5">{total.toLocaleString("fr-FR")} entrée{total !== 1 ? "s" : ""}, lecture seule</p>
       </div>
 
       {/* Filters */}
@@ -214,7 +214,7 @@ export default function AuditLogs() {
         </div>
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
-            <p className="text-[13px] text-slate-400">Page {page} / {totalPages} — {total.toLocaleString("fr-FR")} entrées</p>
+            <p className="text-[13px] text-slate-400">Page {page} / {totalPages} · {total.toLocaleString("fr-FR")} entrées</p>
             <div className="flex gap-2">
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
                 className="px-3 py-1.5 border border-slate-200 rounded-lg text-[13px] hover:bg-slate-50 transition disabled:opacity-40 cursor-pointer disabled:cursor-default">← Précédent</button>

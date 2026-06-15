@@ -82,7 +82,7 @@ function MiningDisplay({ nextCollect, onReady, t }) {
       <p className="text-[11px] text-center" style={{ color: "rgba(255,255,255,0.35)" }}>
         {isReady
           ? t("mining_sub_done")
-          : `${t("mining_sub_active")} — ${pad(rh)}h ${pad(rm)}m ${pad(rs)}s`}
+          : `${t("mining_sub_active")} · ${pad(rh)}h ${pad(rm)}m ${pad(rs)}s`}
       </p>
     </div>
   );

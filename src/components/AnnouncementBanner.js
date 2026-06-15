@@ -41,7 +41,7 @@ export default function AnnouncementBanner() {
     >
       <span className="text-[13px] sm:text-[14px] font-semibold text-[#1A3A34] leading-snug">
         {t("text", { maxMembers: fmtNum(stats.maxMembers), points: fmtNum(stats.bonusPoints) })}{" "}
-        <span className="font-bold">{t("spots", { count: fmtNum(stats.spotsRemaining) })}</span>{" "}—{" "}
+        <span className="font-bold">{t("spots", { count: fmtNum(stats.spotsRemaining) })}</span>{" "}
         <Link href={`${prefix}/register`} className="underline underline-offset-2 hover:opacity-80 transition whitespace-nowrap">
           {t("cta")}
         </Link>

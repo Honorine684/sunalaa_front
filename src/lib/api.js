@@ -319,7 +319,7 @@ export function parseFieldErrors(error) {
       fieldErrors.firstName = "First name is required";
     } else if (m.includes("lastname") || m.includes("last name")) {
       fieldErrors.lastName = "Last name is required";
-    } else if (msg !== "Validation failed" && msg !== "Bad Request") {
+    } else if (msg && msg !== "Bad Request") {
       general.push(msg);
     }
   });

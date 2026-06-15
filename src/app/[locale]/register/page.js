@@ -49,7 +49,7 @@ function validate(fields) {
 }
 
 /* ─── Field ──────────────────────────────────────────────────────── */
-function Field({ label, type = "text", name, placeholder, value, onChange, error, autoComplete, children }) {
+function Field({ label, type = "text", name, placeholder, value, onChange, error, autoComplete, autoCapitalize, autoCorrect, spellCheck, children }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{label}</label>
@@ -61,6 +61,9 @@ function Field({ label, type = "text", name, placeholder, value, onChange, error
           onChange={onChange}
           placeholder={placeholder}
           autoComplete={autoComplete || name}
+          autoCapitalize={autoCapitalize}
+          autoCorrect={autoCorrect}
+          spellCheck={spellCheck}
           className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
           style={{ height: 42, borderRadius: 10, border: `1px solid ${error ? "#f87171" : "#BCBEC0"}`, padding: "12px 16px" }}
         />
@@ -187,7 +190,7 @@ function RegisterInner() {
 
             {/* Email / Téléphone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Email" type="email" name="email" placeholder="john@example.com" value={fields.email} onChange={handleChange} error={errors.email} autoComplete="email" />
+              <Field label="Email" type="email" name="email" placeholder="john@example.com" value={fields.email} onChange={handleChange} error={errors.email} autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
               {/* Phone */}
               <div className="flex flex-col gap-1.5">
                 <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Phone</label>
@@ -293,6 +296,10 @@ function RegisterInner() {
                 value={fields.referralCode}
                 onChange={handleChange}
                 placeholder="Enter your referral code"
+                autoCapitalize="characters"
+                autoCorrect="off"
+                spellCheck={false}
+                autoComplete="off"
                 className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.referralCode ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                 style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.referralCode ? "#f87171" : refFromUrl ? "#3FAE8C" : "#BCBEC0"}`, padding: "12px 16px" }}
               />

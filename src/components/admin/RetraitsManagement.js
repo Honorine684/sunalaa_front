@@ -77,8 +77,8 @@ export default function RetraitsManagement() {
       setWithdrawals((prev) => prev.map((w) => w.id === id ? { ...w, status: newStatus } : w));
       showSuccess(
         action === "process"  ? "Retrait marqué en cours." :
-        action === "complete" ? "Retrait complété — solde mis à jour !" :
-        "Retrait rejeté — solde remboursé."
+        action === "complete" ? "Retrait complété, solde mis à jour !" :
+        "Retrait rejeté, solde remboursé."
       );
     } catch (e) {
       setError(getApiError(e));

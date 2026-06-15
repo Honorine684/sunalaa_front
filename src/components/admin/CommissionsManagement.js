@@ -67,7 +67,7 @@ export default function CommissionsManagement() {
     try {
       await commissionsApi.adminApprove(id);
       setCommissions((prev) => prev.map((c) => c.id === id ? { ...c, status: "APPROVED" } : c));
-      showSuccess("Commission approuvée — wallet crédité !");
+      showSuccess("Commission approuvée, wallet crédité !");
     } catch (e) {
       setError(getApiError(e));
     } finally { setActionLoading(null); }

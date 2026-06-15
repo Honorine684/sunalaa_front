@@ -132,7 +132,7 @@ function MissionCard({ mission, onStart, onComplete }) {
           style={{ backgroundColor: "#FEF2F2", color: "#EF4444", borderColor: "#FECACA" }}
         >
           {loading && <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#EF4444" strokeWidth="3" strokeDasharray="40 20"/></svg>}
-          {loading ? "…" : "Rejected — Retry"}
+          {loading ? "…" : "Rejected, retry"}
         </button>
       ) : pending ? (
         <button
