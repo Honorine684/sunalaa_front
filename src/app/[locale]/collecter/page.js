@@ -10,9 +10,9 @@ export const metadata = {
   alternates: { canonical: "https://sunalaa.com/collecter" },
   openGraph: {
     url: "https://sunalaa.com/collecter",
-    title: "Daily Collection | SUNALAA",
+    title: "Daily Collection | SUNALA",
     description:
-      "100 SNL to collect per day. Keep your daily streak and boost your bonuses on SUNALAA.",
+      "100 SNL to collect per day. Keep your daily streak and boost your bonuses on SUNALA.",
   },
 };
 

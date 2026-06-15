@@ -5,7 +5,9 @@ import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { getApiError } from "@/lib/api";
+import { parseFieldErrors } from "@/lib/api";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 /* ─── Validation ─────────────────────────────────────────────────── */
 function validate(fields) {
@@ -20,10 +22,9 @@ function validate(fields) {
     errors.email = "Invalid email format";
   }
 
-  if (!fields.phone.trim()) {
-    errors.phone = "Phone number is required";
-  } else if (!/^\+?[\d\s\-()]{8,15}$/.test(fields.phone)) {
-    errors.phone = "Invalid number (e.g. +1 234 567 8900)";
+  const digitsOnly = (fields.phone || "").replace(/\D/g, "");
+  if (digitsOnly.length < 8) {
+    errors.phone = "Valid phone number is required";
   }
 
   if (!fields.password) {
@@ -83,7 +84,7 @@ function RegisterInner() {
     phone: "",
     password: "",
     confirmPassword: "",
-    referralCode: refFromUrl,
+    referralCode: refFromUrl || "SUNALAA",
     gender: "",
     agreed: false,
   });
@@ -113,15 +114,16 @@ function RegisterInner() {
         firstName: fields.firstName.trim(),
         lastName: fields.lastName.trim(),
         email: fields.email.trim(),
-        phone: fields.phone.trim(),
+        phone: fields.phone,
         password: fields.password,
         referralCode: fields.referralCode.trim(),
         ...(fields.gender && { gender: fields.gender }),
       });
       setSuccess(true);
     } catch (err) {
-      console.error("Register error:", err?.response?.status, JSON.stringify(err?.response?.data));
-      setApiError(getApiError(err));
+      const { fieldErrors, apiError: msg } = parseFieldErrors(err);
+      if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
+      if (msg) setApiError(msg);
     } finally {
       setLoading(false);
     }
@@ -186,7 +188,36 @@ function RegisterInner() {
             {/* Email / Téléphone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Email" type="email" name="email" placeholder="john@example.com" value={fields.email} onChange={handleChange} error={errors.email} autoComplete="email" />
-              <Field label="Phone" type="tel" name="phone" placeholder="+1 234 567 8900" value={fields.phone} onChange={handleChange} error={errors.phone} autoComplete="tel" />
+              {/* Phone */}
+              <div className="flex flex-col gap-1.5">
+                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Phone</label>
+                <div
+                  style={{
+                    "--react-international-phone-height": "42px",
+                    "--react-international-phone-border-radius": "10px",
+                    "--react-international-phone-border-color": errors.phone ? "#f87171" : "#BCBEC0",
+                    "--react-international-phone-background-color": "#ffffff",
+                    "--react-international-phone-text-color": "#374151",
+                    "--react-international-phone-placeholder-color": "#BCBEC0",
+                    "--react-international-phone-font-size": "14px",
+                    "--react-international-phone-country-selector-background-color": "#ffffff",
+                    "--react-international-phone-country-selector-background-color-hover": "#f9fafb",
+                  }}
+                >
+                  <PhoneInput
+                    defaultCountry="sn"
+                    value={fields.phone}
+                    onChange={(phone) => {
+                      setFields((prev) => ({ ...prev, phone }));
+                      if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
+                      setApiError("");
+                    }}
+                    style={{ width: "100%" }}
+                    inputStyle={{ width: "100%", fontSize: 14 }}
+                  />
+                </div>
+                {errors.phone && <p className="text-red-400 text-[12px] mt-0.5">{errors.phone}</p>}
+              </div>
             </div>
 
             {/* Mot de passe / Confirmation */}
@@ -278,11 +309,11 @@ function RegisterInner() {
 
             {/* Info parrainage */}
             {!refFromUrl && (
-              <div className="bg-[#FFF8E6] border border-gold/40 rounded-lg px-4 py-3">
-                <p className="text-primary text-[13px] font-semibold mb-1">Required:</p>
-                <p className="text-gray-700 text-[12px] leading-relaxed">
+              <div className="rounded-lg px-4 py-3" style={{ backgroundColor: "rgba(230,184,76,0.18)", border: "1px solid rgba(230,184,76,0.55)" }}>
+                <p className="text-[13px] font-bold mb-1" style={{ color: "#E6B84C" }}>⚠ Required code</p>
+                <p className="text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>
                   Every registration requires a referral code.<br />
-                  Ask the person who invited you for their code.
+                  → Default active code <strong style={{ color: "#E6B84C" }}>SUNALAA</strong>. You can replace it if you have another code.
                 </p>
               </div>
             )}

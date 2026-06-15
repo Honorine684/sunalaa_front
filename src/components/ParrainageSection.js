@@ -35,7 +35,7 @@ export default function ParrainageSection() {
   const [pending, setPending]   = useState(null);
   const [claiming, setClaiming] = useState({});
 
-  const referralCode = user?.referralCode ?? user?.referral_code ?? "SUNALAA";
+  const referralCode = user?.referralCode ?? user?.referral_code ?? "SUNALA";
   const referralLink = `https://sunalaa.com/ref/${referralCode}`;
 
   const steps = [

@@ -1,35 +1,19 @@
 "use client";
 import { useState } from "react";
-
-const faqs = [
-  {
-    q: "Est-ce que je peux perdre de l'argent avec SUNALA ?",
-    a: "En phase de pré-lancement : non. L'accumulation de points est entièrement gratuite. Tu n'investis pas d'argent — juste du temps. Après le lancement, comme toute cryptomonnaie, la valeur du $SNL peut fluctuer. Mais comme les points sont gratuits, tu ne risques rien avant le lancement.",
-  },
-  {
-    q: "Quelle est la différence entre les points et les $SNL ?",
-    a: "Les points sont des unités de crédit que tu accumules en phase pré-lancement. Au lancement officiel du token en Q2 2026, ils se convertissent automatiquement en $SNL réels au taux fixe de 1 000 points = 1 $SNL. Avant le lancement, les points n'ont pas de valeur monétaire — ils représentent ta future allocation.",
-  },
-  {
-    q: "Pourquoi le $SNL vaut-il plus qu'un simple memecoin ?",
-    a: "Contrairement aux memecoins sans utilité, le $SNL est adossé à des actifs agricoles réels en Afrique. Il sert de monnaie unique dans l'écosystème SUNALA, est brûlé lors des upgrades (réduisant l'offre), et est gouverné par la communauté via le DAO. Sa supply est plafonnée à 1 milliard et diminue structurellement avec le temps.",
-  },
-  {
-    q: "Quand est-ce que je peux vendre mes $SNL ?",
-    a: "Tes $SNL seront disponibles à la vente dès le listing sur les DEX, prévu en Q3 2026. Avant ça, tu accumules des points pré-lancement qui se convertissent en $SNL réels au lancement officiel du token en Q2 2026. Tu peux alors garder, vendre ou réinvestir dans l'écosystème.",
-  },
-  {
-    q: "Comment le $SNL est-il sécurisé ?",
-    a: "Le $SNL est déployé sur BNB Chain, une blockchain publique et vérifiable. Tous les contrats sont audités et les transactions sont transparentes et traçables. La supply totale est inscrite dans le code du contrat et ne peut pas être modifiée — pas même par l'équipe SUNALA.",
-  },
-  {
-    q: "Pourquoi commencer maintenant et pas après le lancement ?",
-    a: "Les premiers membres accumulent des points pendant la plus longue période avant le lancement. Plus tu commences tôt, plus tu accumules de points — et plus tu reçois de $SNL au lancement. Après le lancement, il faudra acheter des $SNL avec de l'argent réel. Aujourd'hui, c'est 100% gratuit.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function SnlFaqAccordion({ light = false }) {
+  const t = useTranslations("SNLFaq");
   const [open, setOpen] = useState(0);
+
+  const faqs = [
+    { q: t("q1"), a: t("a1") },
+    { q: t("q2"), a: t("a2") },
+    { q: t("q3"), a: t("a3") },
+    { q: t("q4"), a: t("a4") },
+    { q: t("q5"), a: t("a5") },
+    { q: t("q6"), a: t("a6") },
+  ];
 
   const cardBg = light ? "#F8FAFC" : "#0d1f1a";
   const cardBorder = light ? "1px solid rgba(31,78,70,0.08)" : "1px solid rgba(255,255,255,0.07)";

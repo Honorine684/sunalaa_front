@@ -205,7 +205,7 @@ export default function NotificationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h2 className="text-[20px] sm:text-[26px] font-bold mb-1" style={{ color: "#0F172B" }}>Notifications globales</h2>
-          <p className="text-[14px]" style={{ color: "#45556C" }}>Communiquer avec la communauté SUNALAA</p>
+          <p className="text-[14px]" style={{ color: "#45556C" }}>Communiquer avec la communauté SUNALA</p>
         </div>
         <button
           onClick={() => setShowModal(true)}

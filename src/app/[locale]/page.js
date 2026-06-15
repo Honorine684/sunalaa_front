@@ -14,24 +14,24 @@ const WelcomePopup     = dynamic(() => import("@/components/WelcomePopup"));
 export const metadata = {
   title: "Collectez des points SNL chaque jour — Rejoignez la communauté",
   description:
-    "SUNALAA vous permet de collecter 100 points SNL par jour, de parrainer vos proches et de gagner des bonus à chaque collecte. Rejoignez des milliers de membres actifs.",
+    "SUNALA vous permet de collecter 100 points SNL par jour, de parrainer vos proches et de gagner des bonus à chaque collecte. Rejoignez des milliers de membres actifs.",
   alternates: { canonical: "https://sunalaa.com" },
   openGraph: {
     url: "https://sunalaa.com",
-    title: "SUNALAA — Collectez des points SNL chaque jour",
+    title: "SUNALA — Collectez des points SNL chaque jour",
     description:
-      "Collectez 100 SNL par jour, parrainez vos proches et progressez ensemble. Rejoignez la communauté SUNALAA.",
+      "Collectez 100 SNL par jour, parrainez vos proches et progressez ensemble. Rejoignez la communauté SUNALA.",
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "SUNALAA",
+  name: "SUNALA",
   url: "https://sunalaa.com",
   logo: "https://sunalaa.com/images/sunala_LOGO.png",
   description:
-    "SUNALAA est une plateforme qui permet de collecter des points SNL quotidiennement, de parrainer ses proches et de progresser ensemble dans un réseau de récompenses.",
+    "SUNALA est une plateforme qui permet de collecter des points SNL quotidiennement, de parrainer ses proches et de progresser ensemble dans un réseau de récompenses.",
   sameAs: [],
   contactPoint: {
     "@type": "ContactPoint",

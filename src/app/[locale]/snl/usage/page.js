@@ -1,21 +1,30 @@
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import SnlNavbar from "@/components/SnlNavbar";
+import { getTranslations } from "next-intl/server";
 
-export const metadata = {
-  title: "À quoi sert le $SNL ?",
-  description:
-    "Découvrez tous les usages concrets du token SNL sur SUNALAA : paiements, accès aux formations, récompenses de parrainage et bien plus.",
-  alternates: { canonical: "https://sunalaa.com/snl/usage" },
-  openGraph: {
-    url: "https://sunalaa.com/snl/usage",
-    title: "Usages du $SNL | SUNALAA",
-    description:
-      "À quoi sert le SNL ? Paiements, formations, parrainage — tous les cas d'usage du token SUNALAA.",
-  },
-};
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "SNLUsage" });
+  return {
+    title: t("meta_title"),
+    description: t("meta_desc"),
+    alternates: { canonical: "https://sunalaa.com/snl/usage" },
+    openGraph: {
+      url: "https://sunalaa.com/snl/usage",
+      title: t("og_title"),
+      description: t("og_desc"),
+    },
+  };
+}
 
-export default function UsagePage() {
+const b = (chunks) => <strong style={{ color: "#1F4E46" }}>{chunks}</strong>;
+
+export default async function UsagePage({ params }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "SNLUsage" });
+  const prefix = locale === "fr" ? "/fr" : "";
+
   return (
     <div className="bg-white min-h-screen">
       <SnlNavbar />
@@ -31,13 +40,13 @@ export default function UsagePage() {
         <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
           <span className="inline-block text-[11px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6"
             style={{ backgroundColor: "rgba(63,174,140,0.10)", color: "#3FAE8C" }}>
-            Scénarios réels
+            {t("hero_badge")}
           </span>
           <h1 className="font-black text-[34px] sm:text-[52px] leading-tight mb-6" style={{ color: "#0F172B" }}>
-            Voilà à quoi ressemble<br /><span style={{ color: "#3FAE8C" }}>SUNALA</span> en pratique
+            {t("hero_h1_1")}<br /><span style={{ color: "#3FAE8C" }}>SUNALA</span> {t("hero_h1_2")}
           </h1>
           <p className="text-[15px] sm:text-[17px] leading-relaxed" style={{ color: "#45556C" }}>
-            Des cas concrets de membres qui accumulent des $SNL — et ce qu&apos;ils en font.
+            {t("hero_subtitle")}
           </p>
         </div>
       </section>
@@ -53,23 +62,23 @@ export default function UsagePage() {
 
         <div className="max-w-3xl mx-auto px-6 relative z-10 flex flex-col gap-10">
 
-          {/* Scénario 1 — Amadou */}
+          {/* Scénario 1 */}
           <div className="rounded-3xl p-7 sm:p-9 relative overflow-hidden"
             style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(31,78,70,0.08)" }}>
             <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: "#3FAE8C" }} />
             <h2 className="font-black text-[20px] sm:text-[26px] leading-tight mb-4" style={{ color: "#0F172B" }}>
-              Amadou se connecte chaque matin depuis son téléphone au Bénin
+              {t("s1_title")}
             </h2>
             <p className="text-[14px] leading-relaxed mb-7" style={{ color: "#45556C" }}>
-              Amadou passe 30 secondes sur SUNALA chaque matin pour réclamer ses points. Il a aussi invité <strong style={{ color: "#1F4E46" }}>5 partenaires actifs</strong> dans son réseau. En 6 mois de régularité, il accumule près de <strong style={{ color: "#1F4E46" }}>21 000 points</strong>. Au lancement, il reçoit <strong style={{ color: "#1F4E46" }}>21 $SNL</strong> sans avoir dépensé un franc. Il les conserve ou les vend selon le prix du marché.
+              {t.rich("s1_p", { b })}
             </p>
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
-              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#3FAE8C" }}>Résultat après 6 mois</p>
+              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#3FAE8C" }}>{t("s1_result_label")}</p>
               {[
-                { label: "Connexions quotidiennes", value: "9 000 pts" },
-                { label: "Streaks & bonus", value: "2 500 pts" },
-                { label: "Missions accomplies", value: "3 000 pts" },
-                { label: "5 partenaires actifs", value: "6 250 pts" },
+                { label: t("s1_row1"), value: "9 000 pts" },
+                { label: t("s1_row2"), value: "2 500 pts" },
+                { label: t("s1_row3"), value: "3 000 pts" },
+                { label: t("s1_row4"), value: "6 250 pts" },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center py-2.5"
                   style={{ borderBottom: "1px solid rgba(31,78,70,0.06)" }}>
@@ -78,30 +87,30 @@ export default function UsagePage() {
                 </div>
               ))}
               <div className="flex justify-between items-center pt-3">
-                <span className="text-[14px] font-bold" style={{ color: "#0F172B" }}>TOTAL</span>
+                <span className="text-[14px] font-bold" style={{ color: "#0F172B" }}>{t("s1_total")}</span>
                 <span className="text-[15px] font-black" style={{ color: "#1F4E46" }}>~21 $SNL</span>
               </div>
             </div>
           </div>
 
-          {/* Scénario 2 — Marie */}
+          {/* Scénario 2 */}
           <div className="rounded-3xl p-7 sm:p-9 relative overflow-hidden"
             style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(31,78,70,0.08)" }}>
             <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: "#E6B84C" }} />
             <h2 className="font-black text-[20px] sm:text-[26px] leading-tight mb-4" style={{ color: "#0F172B" }}>
-              Marie s&apos;inscrit aujourd&apos;hui parmi les premiers 1 000 membres
+              {t("s2_title")}
             </h2>
             <p className="text-[14px] leading-relaxed mb-7" style={{ color: "#45556C" }}>
-              Marie s&apos;inscrit en ce moment, quand la communauté est encore petite. Elle accumule des points pendant 12 mois avant le lancement. Au lancement du token, elle a <strong style={{ color: "#1F4E46" }}>45 000 points</strong> soit <strong style={{ color: "#1F4E46" }}>45 $SNL</strong>. Le prix du $SNL au listing est de <strong style={{ color: "#1F4E46" }}>$0.10</strong> — ses 45 $SNL valent $4.50. Si le prix monte à $1 (objectif réaliste selon la roadmap), ses 45 $SNL valent <strong style={{ color: "#1F4E46" }}>$45</strong>. Un investissement en temps, pas en argent.
+              {t.rich("s2_p", { b })}
             </p>
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
-              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#E6B84C" }}>Projection early adopter</p>
+              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#E6B84C" }}>{t("s2_result_label")}</p>
               {[
-                { label: "Points après 12 mois", value: "45 000 pts" },
-                { label: "$SNL au lancement", value: "45 $SNL" },
-                { label: "Valeur à $0.10 / $SNL", value: "$4.50" },
-                { label: "Valeur à $0.50 / $SNL", value: "$22.50" },
-                { label: "Valeur à $1.00 / $SNL", value: "$45.00" },
+                { label: t("s2_row1"), value: "45 000 pts" },
+                { label: t("s2_row2"), value: "45 $SNL" },
+                { label: t("s2_row3"), value: "$4.50" },
+                { label: t("s2_row4"), value: "$22.50" },
+                { label: t("s2_row5"), value: "$45.00" },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center py-2.5"
                   style={{ borderBottom: "1px solid rgba(31,78,70,0.06)" }}>
@@ -112,27 +121,27 @@ export default function UsagePage() {
             </div>
           </div>
 
-          {/* Scénario 3 — Kofi */}
+          {/* Scénario 3 */}
           <div className="rounded-3xl p-7 sm:p-9 relative overflow-hidden"
             style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(31,78,70,0.08)" }}>
             <span className="text-[10px] font-bold tracking-widest uppercase block mb-2" style={{ color: "#1F4E46" }}>
-              L&apos;agriculteur africain
+              {t("s3_tag")}
             </span>
             <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: "#1F4E46" }} />
             <h2 className="font-black text-[20px] sm:text-[26px] leading-tight mb-4" style={{ color: "#0F172B" }}>
-              Kofi possède une ferme avicole au Ghana et la tokenise sur SUNALA
+              {t("s3_title")}
             </h2>
             <p className="text-[14px] leading-relaxed mb-7" style={{ color: "#45556C" }}>
-              Kofi s&apos;inscrit sur SUNALA en tant que partenaire agricole. Sa ferme de <strong style={{ color: "#1F4E46" }}>500 poulets</strong> est tokenisée — sa valeur est représentée en $SNL. Des investisseurs du monde entier peuvent désormais acheter des parts de sa ferme avec des $SNL. Kofi reçoit un financement immédiat. Les investisseurs reçoivent une part des bénéfices à chaque cycle de vente.
+              {t.rich("s3_p", { b })}
             </p>
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
-              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#1F4E46" }}>Tokenisation d&apos;une ferme avicole</p>
+              <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#1F4E46" }}>{t("s3_result_label")}</p>
               {[
-                { label: "Valeur ferme tokenisée", value: "5 000 $SNL" },
-                { label: "Financement reçu par Kofi", value: "Immédiat" },
-                { label: "Investisseurs participants", value: "Monde entier" },
-                { label: "Distribution bénéfices", value: "Automatique" },
-                { label: "Traçabilité", value: "100% blockchain" },
+                { label: t("s3_row1"), value: "5 000 $SNL" },
+                { label: t("s3_row2"), value: t("s3_val2") },
+                { label: t("s3_row3"), value: t("s3_val3") },
+                { label: t("s3_row4"), value: t("s3_val4") },
+                { label: t("s3_row5"), value: t("s3_val5") },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center py-2.5"
                   style={{ borderBottom: "1px solid rgba(31,78,70,0.06)" }}>
@@ -147,11 +156,11 @@ export default function UsagePage() {
 
         <div className="flex justify-center mt-14">
           <Link
-            href="/snl/valeur"
+            href={`${prefix}/snl/valeur`}
             className="inline-flex items-center gap-2 font-bold text-[14px] text-white px-8 py-4 rounded-full hover:brightness-90 transition"
             style={{ backgroundColor: "#3FAE8C" }}
           >
-            Comprendre pourquoi le $SNL a de la valeur
+            {t("cta_btn")}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>

@@ -6,13 +6,13 @@ import FormationsContent from "@/components/FormationsContent";
 export const metadata = {
   title: "Courses & Masterclass on Crypto",
   description:
-    "Access exclusive SUNALAA courses on crypto, trading and finance. Learn and earn SNL points as you train.",
+    "Access exclusive SUNALA courses on crypto, trading and finance. Learn and earn SNL points as you train.",
   alternates: { canonical: "https://sunalaa.com/formations" },
   openGraph: {
     url: "https://sunalaa.com/formations",
-    title: "Crypto Courses | SUNALAA",
+    title: "Crypto Courses | SUNALA",
     description:
-      "Courses and masterclasses on crypto, trading and blockchain. Learn and earn SNL on SUNALAA.",
+      "Courses and masterclasses on crypto, trading and blockchain. Learn and earn SNL on SUNALA.",
   },
 };
 

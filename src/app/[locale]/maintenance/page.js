@@ -9,7 +9,7 @@ export default function MaintenancePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#0d2e2a] px-6 text-center">
       <div className="mb-8">
-        <Image src="/images/logo Sunaala.png" alt="SUNALAA" width={120} height={120} className="mx-auto" />
+        <Image src="/images/logo Sunaala.png" alt="SUNALA" width={120} height={120} className="mx-auto" />
       </div>
 
       <div className="mb-6">
@@ -21,7 +21,7 @@ export default function MaintenancePage() {
           Maintenance en cours
         </h1>
         <p className="text-white/60 text-[16px] max-w-md mx-auto leading-relaxed">
-          La plateforme SUNALAA est temporairement indisponible pour une mise à jour.
+          La plateforme SUNALA est temporairement indisponible pour une mise à jour.
           Nous serons de retour très bientôt.
         </p>
       </div>

@@ -242,6 +242,7 @@ export const adminApi = {
   getUsers: (params) => api.get("/admin/users", { params }),
   getUser: (id) => api.get(`/admin/users/${id}`),
   updateUserStatus: (id, status) => api.put(`/admin/users/${id}/status`, { status }),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
   getKycRequests: (params) => api.get("/admin/kyc", { params }),
   reviewKyc: (id, data) => api.put(`/admin/kyc/${id}/review`, data),
   getSettings: () => api.get("/admin/settings"),
@@ -268,12 +269,69 @@ export const adminApi = {
   getUserTree: (userId) => api.get(`/network/${userId}/tree`),
 };
 
+// ── Public settings ───────────────────────────────────────────────
+export const settingsApi = {
+  get: (key) => api.get(`/settings/${key}`),
+  getPreLaunchStats: () => api.get("/settings/pre-launch-stats"),
+};
+
 // ── Error helper ──────────────────────────────────────────────────
 export function getApiError(error) {
-  return (
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.message ||
-    "Une erreur est survenue"
-  );
+  const data = error?.response?.data;
+  if (!data) return error?.message || "An error occurred";
+  if (Array.isArray(data.message)) return data.message.join(". ");
+  return data.message || data.error || error?.message || "An error occurred";
+}
+
+// Maps NestJS error response to { fieldErrors, apiError }
+export function parseFieldErrors(error) {
+  const data = error?.response?.data;
+  if (!data) return { apiError: error?.message || "An error occurred" };
+
+  const messages = Array.isArray(data.message)
+    ? data.message
+    : [data.message].filter(Boolean);
+
+  if (Array.isArray(data.errors)) {
+    data.errors.forEach((e) => { if (e?.message) messages.push(e.message); });
+  }
+
+  const fieldErrors = {};
+  const general = [];
+
+  messages.forEach((msg) => {
+    if (!msg) return;
+    const m = msg.toLowerCase();
+
+    if (m.includes("referral")) {
+      fieldErrors.referralCode = "This referral code is invalid or does not exist";
+    } else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) {
+      fieldErrors.email = "This email address is already registered";
+    } else if (m.includes("email") && m.includes("invalid")) {
+      fieldErrors.email = "Invalid email address";
+    } else if (m.includes("phone")) {
+      fieldErrors.phone = "Invalid phone number";
+    } else if (m.includes("password") && m.includes("match")) {
+      fieldErrors.confirmPassword = "Passwords do not match";
+    } else if (m.includes("password")) {
+      fieldErrors.password = "Password does not meet the requirements";
+    } else if (m.includes("firstname") || m.includes("first name")) {
+      fieldErrors.firstName = "First name is required";
+    } else if (m.includes("lastname") || m.includes("last name")) {
+      fieldErrors.lastName = "Last name is required";
+    } else if (msg !== "Validation failed" && msg !== "Bad Request") {
+      general.push(msg);
+    }
+  });
+
+  const hasFieldErrors = Object.keys(fieldErrors).length > 0;
+
+  return {
+    fieldErrors: hasFieldErrors ? fieldErrors : null,
+    apiError: general.length > 0
+      ? general.join(". ")
+      : !hasFieldErrors
+        ? "Registration failed. Please check your information and try again."
+        : null,
+  };
 }

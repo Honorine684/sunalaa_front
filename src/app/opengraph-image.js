@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "SUNALAA — Collectez des points SNL chaque jour";
+export const alt = "SUNALA — Collectez des points SNL chaque jour";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -70,7 +70,7 @@ export default function OgImage() {
           </div>
 
           <div style={{ fontSize: 80, fontWeight: 900, color: "#ffffff", letterSpacing: -2, display: "flex" }}>
-            SUNALAA
+            SUNALA
           </div>
 
           <div style={{ fontSize: 26, color: "rgba(255,255,255,0.80)", textAlign: "center", display: "flex" }}>

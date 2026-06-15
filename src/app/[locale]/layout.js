@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/context/AuthContext";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
+import PwaRegister from "@/components/PwaRegister";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,8 +24,11 @@ export default async function LocaleLayout({ children, params }) {
       <body className={`${inter.className} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <AnnouncementBanner />
+            <ErrorBoundary>
+              <AnnouncementBanner />
+            </ErrorBoundary>
             {children}
+            <PwaRegister />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

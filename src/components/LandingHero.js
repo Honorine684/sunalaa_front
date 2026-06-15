@@ -22,7 +22,7 @@ export default function LandingHero() {
           <div className="relative z-10 text-center lg:text-left">
             <h1 className="font-black text-[32px] sm:text-[44px] lg:text-[64px] text-white leading-none mb-6">
               {t("h1_1")}<br />{t("h1_2")}<br />
-              <span style={{ color: "#3FAE8C" }}>SUNALAA</span>
+              <span style={{ color: "#3FAE8C" }}>SUNALA</span>
             </h1>
             <p className="text-[16px] mb-10 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,0.70)" }}>
               {t("subtitle")}
@@ -51,7 +51,7 @@ export default function LandingHero() {
           </div>
 
           <div className="relative hidden lg:block mt-6">
-            <Image src="/images/Group 164.png" alt="SUNALAA coin" width={500} height={500}
+            <Image src="/images/Group 164.png" alt="SUNALA coin" width={500} height={500}
               priority sizes="(max-width: 1024px) 0px, 50vw"
               style={{ objectFit: "contain", width: "100%", height: "auto" }} />
 

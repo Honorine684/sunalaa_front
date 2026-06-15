@@ -86,7 +86,7 @@ export default function CourseDetailPage() {
   const skills      = product?.skills ?? product?.objectives ?? [];
   const lessons     = product?.lessons ?? product?.modules ?? [];
   const contentUrl  = product?.contentUrl ?? product?.videoUrl ?? product?.pdfUrl ?? product?.zoomLink ?? null;
-  const instructor  = product?.instructor ?? { name: "Équipe SUNALAA", role: "Experts Blockchain" };
+  const instructor  = product?.instructor ?? { name: "Équipe SUNALA", role: "Experts Blockchain" };
   const locked      = product?.status !== "ACTIVE";
 
   const done     = lessons.filter((l) => l.done).length;
@@ -413,7 +413,7 @@ export default function CourseDetailPage() {
                   {(instructor?.name ?? "S")[0]}
                 </div>
                 <div>
-                  <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>{instructor?.name ?? "Équipe SUNALAA"}</p>
+                  <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>{instructor?.name ?? "Équipe SUNALA"}</p>
                   <p className="text-[12px]" style={{ color: "#94A3B8" }}>{instructor?.role ?? "Experts Blockchain"}</p>
                 </div>
               </div>

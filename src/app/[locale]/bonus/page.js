@@ -11,9 +11,9 @@ export const metadata = {
   alternates: { canonical: "https://sunalaa.com/bonus" },
   openGraph: {
     url: "https://sunalaa.com/bonus",
-    title: "Bonus & Récompenses | SUNALAA",
+    title: "Bonus & Récompenses | SUNALA",
     description:
-      "Missions quotidiennes, parrainage 3 niveaux, bonus SNL à réclamer. Maximisez vos gains sur SUNALAA.",
+      "Missions quotidiennes, parrainage 3 niveaux, bonus SNL à réclamer. Maximisez vos gains sur SUNALA.",
   },
 };
 

@@ -1,22 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { settingsApi } from "@/lib/api";
+
+const FALLBACK = { bonusPoints: 500, spotsRemaining: 5000, maxMembers: 5000 };
+
+// Formatage simple sans Intl.NumberFormat pour compatibilité maximale
+function fmtNum(n) {
+  return String(Math.max(0, Math.floor(n))).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
 
 export default function AnnouncementBanner() {
   const t = useTranslations("AnnouncementBanner");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
   const [visible, setVisible] = useState(true);
+  const [stats, setStats] = useState(FALLBACK);
+
+  useEffect(() => {
+    settingsApi.getPreLaunchStats()
+      .then((res) => {
+        const d = res?.data?.data ?? res?.data ?? {};
+        setStats({
+          bonusPoints: Number(d.bonusPoints) || FALLBACK.bonusPoints,
+          spotsRemaining: Number(d.spotsRemaining) || FALLBACK.spotsRemaining,
+          maxMembers: Number(d.maxMembers) || FALLBACK.maxMembers,
+        });
+      })
+      .catch(() => {});
+  }, []);
+
   if (!visible) return null;
 
   return (
-    <div className="relative z-50 w-full flex items-center justify-center gap-3 px-4 py-2.5 text-center"
-      style={{ backgroundColor: "#E6B84C" }}>
+    <div
+      className="relative z-50 w-full flex items-center justify-center gap-3 px-4 py-2.5 text-center"
+      style={{ backgroundColor: "#E6B84C" }}
+    >
       <span className="text-[13px] sm:text-[14px] font-semibold text-[#1A3A34] leading-snug">
-        {t("text")}{" "}
-        <span className="font-bold">{t("spots", { count: 3247 })}</span>{" "}—{" "}
+        {t("text", { maxMembers: fmtNum(stats.maxMembers), points: fmtNum(stats.bonusPoints) })}{" "}
+        <span className="font-bold">{t("spots", { count: fmtNum(stats.spotsRemaining) })}</span>{" "}—{" "}
         <Link href={`${prefix}/register`} className="underline underline-offset-2 hover:opacity-80 transition whitespace-nowrap">
           {t("cta")}
         </Link>

@@ -27,7 +27,7 @@ export default function HomeHero({ onCollected }) {
           <h1 className="text-[32px] lg:text-[58px] font-bold text-white leading-[1.15] mb-8">
             Welcome to the
             <br />
-            <span className="text-secondary font-bold">SUNALAA</span> community
+            <span className="text-secondary font-bold">SUNALA</span> community
           </h1>
 
           <p className="text-[16px] mb-0 max-w-xl mx-auto" style={{ color: "#EDECED", lineHeight: "28px", letterSpacing: "0.01em" }}>

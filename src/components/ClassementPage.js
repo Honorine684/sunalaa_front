@@ -193,7 +193,7 @@ export default function ClassementPage() {
         <div className="relative z-10 py-24 pb-40 text-center px-4">
           <h1 className="font-black text-4xl text-white mb-4">Classement Global</h1>
           <p className="text-lg mb-10 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.60)" }}>
-            Découvrez les meilleurs collecteurs de la communauté SUNALAA
+            Découvrez les meilleurs collecteurs de la communauté SUNALA
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">

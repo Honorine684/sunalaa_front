@@ -7,13 +7,13 @@ import Footer from "@/components/Footer";
 export const metadata = {
   title: "SNL Collectors Leaderboard",
   description:
-    "Discover the ranking of the top SNL point collectors on SUNALAA. Progress, climb the leaderboard and compete with the community.",
+    "Discover the ranking of the top SNL point collectors on SUNALA. Progress, climb the leaderboard and compete with the community.",
   alternates: { canonical: "https://sunalaa.com/classement" },
   openGraph: {
     url: "https://sunalaa.com/classement",
-    title: "SNL Leaderboard | SUNALAA",
+    title: "SNL Leaderboard | SUNALA",
     description:
-      "Top SNL point collectors. Who is dominating the SUNALAA leaderboard this week?",
+      "Top SNL point collectors. Who is dominating the SUNALA leaderboard this week?",
   },
 };
 

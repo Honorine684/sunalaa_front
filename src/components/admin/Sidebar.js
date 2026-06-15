@@ -161,7 +161,7 @@ export default function Sidebar({ active = "overview", mobileOpen = false, onClo
       {/* Header */}
       <div className="px-6 pt-7 pb-6 flex items-start justify-between">
         <div>
-          <p className="text-white text-[20px] font-bold tracking-wide leading-none mb-1">SUNALAA</p>
+          <p className="text-white text-[20px] font-bold tracking-wide leading-none mb-1">SUNALA</p>
           <p className="text-[12px] font-normal tracking-widest" style={{ color: "#90A1B9" }}>Administration</p>
         </div>
         {/* Close button — mobile only */}

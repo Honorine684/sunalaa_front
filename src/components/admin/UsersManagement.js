@@ -12,6 +12,32 @@ const statusStyle = {
   inactive:  { bg: "#F8FAFC", text: "#94A3B8", border: "#E2E8F0", label: "Inactif" },
 };
 
+const PHONE_FLAGS = [
+  { prefix: "+221", flag: "🇸🇳" }, { prefix: "+225", flag: "🇨🇮" },
+  { prefix: "+223", flag: "🇲🇱" }, { prefix: "+226", flag: "🇧🇫" },
+  { prefix: "+224", flag: "🇬🇳" }, { prefix: "+228", flag: "🇹🇬" },
+  { prefix: "+229", flag: "🇧🇯" }, { prefix: "+227", flag: "🇳🇪" },
+  { prefix: "+237", flag: "🇨🇲" }, { prefix: "+242", flag: "🇨🇬" },
+  { prefix: "+243", flag: "🇨🇩" }, { prefix: "+261", flag: "🇲🇬" },
+  { prefix: "+212", flag: "🇲🇦" }, { prefix: "+213", flag: "🇩🇿" },
+  { prefix: "+216", flag: "🇹🇳" }, { prefix: "+234", flag: "🇳🇬" },
+  { prefix: "+233", flag: "🇬🇭" }, { prefix: "+254", flag: "🇰🇪" },
+  { prefix: "+255", flag: "🇹🇿" }, { prefix: "+251", flag: "🇪🇹" },
+  { prefix: "+509", flag: "🇭🇹" }, { prefix: "+352", flag: "🇱🇺" },
+  { prefix: "+351", flag: "🇵🇹" }, { prefix: "+27",  flag: "🇿🇦" },
+  { prefix: "+20",  flag: "🇪🇬" }, { prefix: "+33",  flag: "🇫🇷" },
+  { prefix: "+32",  flag: "🇧🇪" }, { prefix: "+41",  flag: "🇨🇭" },
+  { prefix: "+44",  flag: "🇬🇧" }, { prefix: "+49",  flag: "🇩🇪" },
+  { prefix: "+34",  flag: "🇪🇸" }, { prefix: "+39",  flag: "🇮🇹" },
+  { prefix: "+55",  flag: "🇧🇷" }, { prefix: "+1",   flag: "🇺🇸" },
+].sort((a, b) => b.prefix.length - a.prefix.length);
+
+function getPhoneDisplay(phone) {
+  if (!phone) return "—";
+  const match = PHONE_FLAGS.find((c) => phone.startsWith(c.prefix));
+  return match ? `${match.flag} ${phone}` : phone;
+}
+
 function getStatusStyle(user) {
   const s = (user?.status ?? (user?.isActive ? "active" : "inactive")).toLowerCase();
   return statusStyle[s] ?? statusStyle.inactive;
@@ -44,13 +70,14 @@ function StatusBadge({ user }) {
   );
 }
 
-function ActionMenu({ user, onStatusChange }) {
+function ActionMenu({ user, onStatusChange, onDelete }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
-    function onOutside(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+    function onOutside(e) { if (ref.current && !ref.current.contains(e.target)) { setOpen(false); setConfirmDelete(false); } }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
@@ -66,12 +93,23 @@ function ActionMenu({ user, onStatusChange }) {
     } finally { setLoading(false); }
   }
 
+  async function handleDelete() {
+    setLoading(true);
+    try {
+      await adminApi.deleteUser(user.id);
+      onDelete(user.id);
+      setOpen(false);
+    } catch (e) {
+      alert(e?.response?.data?.message ?? "Erreur lors de la suppression");
+    } finally { setLoading(false); setConfirmDelete(false); }
+  }
+
   const currentStatus = (user?.status ?? (user?.isActive ? "active" : "inactive")).toLowerCase();
 
   return (
     <div ref={ref} className="relative flex justify-center">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => { setOpen((v) => !v); setConfirmDelete(false); }}
         disabled={loading}
         className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100 disabled:opacity-40"
       >
@@ -90,7 +128,7 @@ function ActionMenu({ user, onStatusChange }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-8 z-50 bg-white rounded-xl border border-slate-100 shadow-lg py-1 w-40">
+        <div className="absolute right-0 top-8 z-50 bg-white rounded-xl border border-slate-100 shadow-lg py-1 w-44">
           {currentStatus !== "active" && (
             <button onClick={() => changeStatus("active")}
               className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-green-50 transition cursor-pointer"
@@ -123,13 +161,43 @@ function ActionMenu({ user, onStatusChange }) {
               Bannir
             </button>
           )}
+
+          <div className="border-t border-slate-100 my-1" />
+
+          {!confirmDelete ? (
+            <button onClick={() => setConfirmDelete(true)}
+              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-red-50 transition cursor-pointer"
+              style={{ color: "#EF4444" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Supprimer
+            </button>
+          ) : (
+            <div className="px-4 py-3">
+              <p className="text-[12px] font-semibold mb-2" style={{ color: "#EF4444" }}>Confirmer la suppression ?</p>
+              <div className="flex gap-2">
+                <button onClick={handleDelete}
+                  className="flex-1 py-1.5 rounded-lg text-white text-[12px] font-semibold transition hover:brightness-110 cursor-pointer"
+                  style={{ backgroundColor: "#EF4444" }}>
+                  Oui
+                </button>
+                <button onClick={() => setConfirmDelete(false)}
+                  className="flex-1 py-1.5 rounded-lg text-[12px] font-semibold bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
+                  style={{ color: "#45556C" }}>
+                  Non
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-const COLS = ["UTILISATEUR", "EMAIL", "POINTS SNL", "PARRAINAGES", "STATUT", "INSCRIPTION", "ACTIONS"];
+const COLS = ["UTILISATEUR", "EMAIL", "TÉLÉPHONE", "POINTS SNL", "PARRAINAGES", "STATUT", "INSCRIPTION", "ACTIONS"];
+const GRID = "grid-cols-[2fr_1.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_0.5fr]";
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -153,10 +221,15 @@ export default function UsersManagement() {
     setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, status: newStatus, isActive: newStatus === "active" } : u));
   }, []);
 
+  const handleDelete = useCallback((userId) => {
+    setUsers((prev) => prev.filter((u) => u.id !== userId));
+  }, []);
+
   const filtered = users.filter((u) => {
     const name = [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ").toLowerCase();
     const email = (u?.email ?? "").toLowerCase();
-    const matchSearch = !search || name.includes(search.toLowerCase()) || email.includes(search.toLowerCase());
+    const phone = (u?.phone ?? "").toLowerCase();
+    const matchSearch = !search || name.includes(search.toLowerCase()) || email.includes(search.toLowerCase()) || phone.includes(search.toLowerCase());
     const userStatus = (u?.status ?? (u?.isActive ? "active" : "inactive")).toLowerCase();
     const matchStatus = filterStatus === "Tous" ||
       (filterStatus === "Actif" && userStatus === "active") ||
@@ -189,7 +262,7 @@ export default function UsersManagement() {
               <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher par nom ou email..."
+              placeholder="Rechercher par nom, email ou téléphone..."
               className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-[14px] placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-secondary/30 transition"
               style={{ color: "#45556C" }} />
           </div>
@@ -221,8 +294,8 @@ export default function UsersManagement() {
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-100">
-        <div className="bg-white min-w-175">
-          <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+        <div className="bg-white min-w-200">
+          <div className={`grid ${GRID} px-6 py-3 border-b border-slate-100 rounded-t-xl`} style={{ backgroundColor: "#E2E8F0" }}>
             {COLS.map((col) => (
               <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>{col}</span>
             ))}
@@ -230,9 +303,10 @@ export default function UsersManagement() {
 
           {loading ? (
             [...Array(6)].map((_, i) => (
-              <div key={i} className="grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-4 items-center border-b border-slate-100 gap-2">
+              <div key={i} className={`grid ${GRID} px-6 py-4 items-center border-b border-slate-100 gap-2`}>
                 <Skeleton className="h-9 w-36" />
-                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-36" />
+                <Skeleton className="h-4 w-28" />
                 <Skeleton className="h-4 w-16" />
                 <Skeleton className="h-4 w-10" />
                 <Skeleton className="h-6 w-20 rounded-full" />
@@ -248,11 +322,12 @@ export default function UsersManagement() {
                 const points = user?.snlBalance ?? user?.points ?? user?.totalPoints ?? 0;
                 const refs = user?.referralCount ?? user?.directCount ?? user?.totalReferrals ?? 0;
                 const createdAt = user?.createdAt ?? user?.created_at;
+                const phone = user?.phone ?? user?.phoneNumber ?? null;
                 return (
                   <div
                     key={user?.id ?? i}
                     className={[
-                      "grid grid-cols-[2fr_2fr_1fr_1fr_1.2fr_1.2fr_0.5fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors",
+                      `grid ${GRID} px-6 py-4 items-center hover:bg-slate-50 transition-colors`,
                       i < filtered.length - 1 ? "border-b border-slate-100" : "",
                     ].join(" ")}
                   >
@@ -265,14 +340,15 @@ export default function UsersManagement() {
                         <p className="text-[11px] font-mono select-all" style={{ color: "#94A3B8" }}>{user?.id ?? "—"}</p>
                       </div>
                     </div>
-                    <span className="text-[14px] truncate" style={{ color: "#45556C" }}>{user?.email ?? "—"}</span>
+                    <span className="text-[13px] truncate" style={{ color: "#45556C" }}>{user?.email ?? "—"}</span>
+                    <span className="text-[13px]" style={{ color: "#45556C" }}>{getPhoneDisplay(phone)}</span>
                     <span className="text-[14px]" style={{ color: "#0F172B" }}>{fmt(points)}</span>
                     <span className="text-[14px]" style={{ color: "#45556C" }}>{fmt(refs)}</span>
                     <StatusBadge user={user} />
                     <span className="text-[14px]" style={{ color: "#45556C" }}>
                       {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}
                     </span>
-                    <ActionMenu user={user} onStatusChange={handleStatusChange} />
+                    <ActionMenu user={user} onStatusChange={handleStatusChange} onDelete={handleDelete} />
                   </div>
                 );
               })}
