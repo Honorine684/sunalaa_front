@@ -124,8 +124,8 @@ export default function MissionsSection() {
                 <path d="M9 12l2 2 4-4M12 3a9 9 0 100 18A9 9 0 0012 3z" stroke="#3FAE8C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <p className="font-semibold text-[18px]" style={{ color: "#0F172B" }}>Aucune mission disponible</p>
-            <p className="text-[14px] max-w-xs" style={{ color: "#45556C" }}>Revenez bientôt, de nouvelles missions seront publiées prochainement.</p>
+            <p className="font-semibold text-[18px]" style={{ color: "#0F172B" }}>{t("empty")}</p>
+            <p className="text-[14px] max-w-xs" style={{ color: "#45556C" }}>{t("empty_sub")}</p>
           </div>
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
