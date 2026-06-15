@@ -153,7 +153,7 @@ export default function RetraitsManagement() {
                     <td className="px-5 py-3.5">
                       <div>
                         <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                          {[user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
+                          {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
                         </p>
                         {user.email && <p className="text-[11px] text-slate-400 truncate max-w-[140px]">{user.email}</p>}
                       </div>

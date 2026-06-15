@@ -78,7 +78,7 @@ export default function CommissionsSummary() {
             </div>
             {commissions.map((c, i) => {
               const date = c.createdAt ?? c.date ?? c.timestamp;
-              const from = c.from?.firstName ?? c.referredUser?.firstName ?? c.userName ?? "—";
+              const from = c.from?.username ?? c.referredUser?.username ?? c.from?.firstName ?? c.referredUser?.firstName ?? c.userName ?? "—";
               const amount = c.amount ?? c.snlAmount ?? 0;
               const level = c.level ?? c.networkLevel ?? null;
               return (

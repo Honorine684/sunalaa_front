@@ -12,14 +12,15 @@ function resolve(node) {
 
 function getInitials(node) {
   const u = resolve(node);
-  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.username?.[0] ?? u?.name?.[0] ?? "?";
+  if (u?.username) return u.username[0].toUpperCase();
+  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.name?.[0] ?? "?";
   const last = u?.lastName?.[0] ?? u?.last_name?.[0] ?? "";
   return (first + last).toUpperCase();
 }
 
 function getColor(node) {
   const u = resolve(node);
-  const name = u?.firstName ?? u?.first_name ?? u?.username ?? u?.name ?? "A";
+  const name = u?.username ?? u?.firstName ?? u?.first_name ?? u?.name ?? "A";
   return COLORS[name.charCodeAt(0) % COLORS.length];
 }
 
@@ -29,11 +30,9 @@ function fmt(n) {
 
 function getUserName(node) {
   const u = resolve(node);
-  return (
-    [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name]
-      .filter(Boolean).join(" ") ||
-    u?.name || u?.username || u?.email || "—"
-  );
+  return u?.username
+    || [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ")
+    || u?.name || u?.email || "—";
 }
 
 function isUserActive(user) {

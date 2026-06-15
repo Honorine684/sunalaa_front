@@ -68,7 +68,7 @@ function DetailModal({ log, onClose }) {
             <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-[11px] text-slate-400 mb-1">Utilisateur</p>
               <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                {[log.user.firstName, log.user.lastName].filter(Boolean).join(" ") || log.user.email || log.userId || "—"}
+                {log.user.username || [log.user.firstName, log.user.lastName].filter(Boolean).join(" ") || log.user.email || log.userId || "—"}
               </p>
               {log.user.email && <p className="text-[11px] text-slate-400">{log.user.email}</p>}
             </div>
@@ -181,7 +181,7 @@ export default function AuditLogs() {
                     <td className="px-5 py-3.5">
                       <div>
                         <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                          {[user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || log.userId || "—"}
+                          {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || log.userId || "—"}
                         </p>
                         {user.email && <p className="text-[11px] text-slate-400">{user.email}</p>}
                       </div>

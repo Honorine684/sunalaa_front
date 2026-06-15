@@ -301,7 +301,7 @@ function ReviewsSection() {
           </div>
 
           {reviews.map((r, i) => {
-            const userName = [r.user?.firstName, r.user?.lastName].filter(Boolean).join(" ") || r.user?.email || "—";
+            const userName = r.user?.username || [r.user?.firstName, r.user?.lastName].filter(Boolean).join(" ") || r.user?.email || "—";
             const isActioning = actioning === r.id + "approve" || actioning === r.id + "reject";
             return (
               <div

@@ -111,12 +111,12 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
                 <span className="text-white text-[13px] font-bold">
-                  {(user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
+                  {(user.username?.[0] ?? user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
                 </span>
               </div>
               <div>
                 <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>
-                  {[user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
+                  {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
                 </p>
                 <p className="text-[12px] text-slate-400">{user.email ?? "—"}</p>
               </div>
@@ -342,7 +342,7 @@ export default function CommandesManagement() {
                     <td className="px-5 py-3.5">
                       <div>
                         <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                          {[user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
+                          {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
                         </p>
                         {user.email && (
                           <p className="text-[11px] text-slate-400 truncate max-w-[140px]">{user.email}</p>

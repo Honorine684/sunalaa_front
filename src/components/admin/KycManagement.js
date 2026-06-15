@@ -141,12 +141,12 @@ function ReviewModal({ request, onClose, onReview }) {
           <div className="flex items-center gap-3 bg-slate-50 rounded-xl p-4">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
               <span className="text-white text-[13px] font-bold">
-                {(user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
+                {(user.username?.[0] ?? user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
               </span>
             </div>
             <div>
               <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>
-                {[user.firstName, user.lastName].filter(Boolean).join(" ") || "—"}
+                {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || "—"}
               </p>
               <p className="text-[12px] text-slate-400">{user.email ?? "—"}</p>
             </div>
@@ -297,7 +297,7 @@ export default function KycManagement() {
                     <td className="px-5 py-3.5">
                       <div>
                         <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                          {[user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
+                          {user.username || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email || "—"}
                         </p>
                         {user.email && <p className="text-[11px] text-slate-400">{user.email}</p>}
                       </div>

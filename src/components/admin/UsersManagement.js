@@ -44,13 +44,14 @@ function getStatusStyle(user) {
 }
 
 function getInitials(user) {
+  if (user?.username) return user.username[0].toUpperCase();
   const first = user?.firstName?.[0] ?? user?.first_name?.[0] ?? user?.name?.[0] ?? "?";
   const last = user?.lastName?.[0] ?? user?.last_name?.[0] ?? "";
   return (first + last).toUpperCase();
 }
 
 function getColor(user) {
-  const name = user?.firstName ?? user?.email ?? "A";
+  const name = user?.username ?? user?.firstName ?? user?.email ?? "A";
   return COLORS[name.charCodeAt(0) % COLORS.length];
 }
 
@@ -226,7 +227,7 @@ export default function UsersManagement() {
   }, []);
 
   const filtered = users.filter((u) => {
-    const name = [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ").toLowerCase();
+    const name = (u?.username ?? [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ")).toLowerCase();
     const email = (u?.email ?? "").toLowerCase();
     const phone = (u?.phone ?? "").toLowerCase();
     const matchSearch = !search || name.includes(search.toLowerCase()) || email.includes(search.toLowerCase()) || phone.includes(search.toLowerCase());
@@ -317,8 +318,9 @@ export default function UsersManagement() {
           ) : (
             <>
               {filtered.map((user, i) => {
-                const displayName = [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name]
-                  .filter(Boolean).join(" ") || user?.username || user?.email?.split("@")[0] || "—";
+                const displayName = user?.username
+                  || [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name].filter(Boolean).join(" ")
+                  || user?.email?.split("@")[0] || "—";
                 const points = user?.snlBalance ?? user?.points ?? user?.totalPoints ?? 0;
                 const refs = user?.referralCount ?? user?.directCount ?? user?.totalReferrals ?? 0;
                 const createdAt = user?.createdAt ?? user?.created_at;

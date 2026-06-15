@@ -6,14 +6,16 @@ import { leaderboardApi, usersApi } from "@/lib/api";
 
 /* ── Helpers ──────────────────────────────────────────────────────── */
 function getInitials(u) {
-  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.username?.[0] ?? u?.name?.[0] ?? "?";
+  if (u?.username) return u.username[0].toUpperCase();
+  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.name?.[0] ?? "?";
   const last  = u?.lastName?.[0]  ?? u?.last_name?.[0]  ?? "";
   return (first + last).toUpperCase();
 }
 
 function getDisplayName(u) {
-  const full = [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ");
-  return full || u?.username || u?.name || u?.email || "—";
+  return u?.username
+    || [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ")
+    || u?.name || u?.email || "—";
 }
 
 function getPoints(u) {

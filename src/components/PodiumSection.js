@@ -17,8 +17,9 @@ function fmt(n) {
 }
 
 function getDisplayName(u) {
-  const full = [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ");
-  return full || u?.username || u?.name || "—";
+  return u?.username
+    || [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ")
+    || u?.name || "—";
 }
 
 function getPoints(u) {

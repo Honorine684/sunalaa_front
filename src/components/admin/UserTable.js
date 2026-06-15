@@ -7,13 +7,14 @@ import { adminApi, getApiError } from "@/lib/api";
 const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B", "#EF4444"];
 
 function getInitials(user) {
+  if (user?.username) return user.username[0].toUpperCase();
   const first = user?.firstName?.[0] ?? user?.first_name?.[0] ?? user?.name?.[0] ?? "?";
   const last = user?.lastName?.[0] ?? user?.last_name?.[0] ?? "";
   return (first + last).toUpperCase();
 }
 
 function getColor(user) {
-  const name = user?.firstName ?? user?.first_name ?? user?.email ?? "A";
+  const name = user?.username ?? user?.firstName ?? user?.first_name ?? user?.email ?? "A";
   return COLORS[name.charCodeAt(0) % COLORS.length];
 }
 

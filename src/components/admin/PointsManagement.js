@@ -286,8 +286,8 @@ export default function PointsManagement() {
               filtered.map((row, i) => {
                 const amount = row?.amount ?? 0;
                 const isCredit = row?.type === "credit";
-                const name = [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ") || "—";
-                const initials = name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "?";
+                const name = row?.user?.username || [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ") || "—";
+                const initials = name[0]?.toUpperCase() || "?";
                 const createdAt = row?.createdAt ?? row?.date;
                 return (
                   <div key={row?.id ?? i}
@@ -321,7 +321,7 @@ export default function PointsManagement() {
                       {row?.justification ?? row?.reason ?? "—"}
                     </span>
                     <span className="text-[14px]" style={{ color: "#45556C" }}>
-                      {[row?.adminUser?.firstName, row?.adminUser?.lastName].filter(Boolean).join(" ") || "Admin"}
+                      {row?.adminUser?.username || [row?.adminUser?.firstName, row?.adminUser?.lastName].filter(Boolean).join(" ") || "Admin"}
                     </span>
                   </div>
                 );
