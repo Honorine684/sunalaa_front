@@ -283,46 +283,71 @@ export function getApiError(error) {
   return data.message || data.error || error?.message || "An error occurred";
 }
 
-// Maps NestJS error response to { fieldErrors, apiError }
+// Maps NestJS { errors: [{field, message}] } response to { fieldErrors, apiError }
 export function parseFieldErrors(error) {
   const data = error?.response?.data;
   if (!data) return { apiError: error?.message || "An error occurred" };
 
-  const messages = Array.isArray(data.message)
-    ? data.message
-    : [data.message].filter(Boolean);
-
-  if (Array.isArray(data.errors)) {
-    data.errors.forEach((e) => { if (e?.message) messages.push(e.message); });
-  }
-
   const fieldErrors = {};
   const general = [];
 
-  messages.forEach((msg) => {
-    if (!msg) return;
-    const m = msg.toLowerCase();
+  // Format structuré : errors: [{ field, message }]
+  if (Array.isArray(data.errors) && data.errors.length > 0) {
+    const FIELD_MAP = {
+      firstname: "firstName",
+      lastname: "lastName",
+      email: "email",
+      phone: "phone",
+      password: "password",
+      confirmpassword: "confirmPassword",
+      referralcode: "referralCode",
+      gender: "gender",
+    };
 
-    if (m.includes("referral")) {
-      fieldErrors.referralCode = "This referral code is invalid or does not exist";
-    } else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) {
-      fieldErrors.email = "This email address is already registered";
-    } else if (m.includes("email") && m.includes("invalid")) {
-      fieldErrors.email = "Invalid email address";
-    } else if (m.includes("phone")) {
-      fieldErrors.phone = "Invalid phone number";
-    } else if (m.includes("password") && m.includes("match")) {
-      fieldErrors.confirmPassword = "Passwords do not match";
-    } else if (m.includes("password")) {
-      fieldErrors.password = "Password does not meet the requirements";
-    } else if (m.includes("firstname") || m.includes("first name")) {
-      fieldErrors.firstName = "First name is required";
-    } else if (m.includes("lastname") || m.includes("last name")) {
-      fieldErrors.lastName = "Last name is required";
-    } else if (msg && msg !== "Bad Request") {
-      general.push(msg);
-    }
-  });
+    data.errors.forEach(({ field, message }) => {
+      if (!field || !message) return;
+      const key = FIELD_MAP[field.toLowerCase()] ?? field;
+      const m = message.toLowerCase();
+
+      // Messages lisibles pour l'utilisateur
+      if (key === "referralCode" || m.includes("referral")) {
+        fieldErrors.referralCode = "This referral code is invalid or does not exist";
+      } else if (key === "email" && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) {
+        fieldErrors.email = "This email address is already registered";
+      } else if (key === "email") {
+        fieldErrors.email = "Please enter a valid email address";
+      } else if (key === "phone") {
+        fieldErrors.phone = "Please enter a valid phone number with country code";
+      } else if (key === "password" && m.includes("match")) {
+        fieldErrors.confirmPassword = "Passwords do not match";
+      } else if (key === "password") {
+        fieldErrors.password = "Password must be at least 8 characters with uppercase, lowercase and a number";
+      } else if (key === "firstName") {
+        fieldErrors.firstName = "First name is required";
+      } else if (key === "lastName") {
+        fieldErrors.lastName = "Last name is required";
+      } else {
+        fieldErrors[key] = message;
+      }
+    });
+  } else {
+    // Fallback : message string ou tableau (ancien format)
+    const messages = Array.isArray(data.message)
+      ? data.message
+      : [data.message].filter(Boolean);
+
+    messages.forEach((msg) => {
+      if (!msg || msg === "Validation failed" || msg === "Bad Request") return;
+      const m = msg.toLowerCase();
+      if (m.includes("referral")) fieldErrors.referralCode = "This referral code is invalid or does not exist";
+      else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already"))) fieldErrors.email = "This email address is already registered";
+      else if (m.includes("email")) fieldErrors.email = "Please enter a valid email address";
+      else if (m.includes("phone")) fieldErrors.phone = "Please enter a valid phone number with country code";
+      else if (m.includes("password") && m.includes("match")) fieldErrors.confirmPassword = "Passwords do not match";
+      else if (m.includes("password")) fieldErrors.password = "Password must be at least 8 characters";
+      else general.push(msg);
+    });
+  }
 
   const hasFieldErrors = Object.keys(fieldErrors).length > 0;
 
@@ -331,7 +356,7 @@ export function parseFieldErrors(error) {
     apiError: general.length > 0
       ? general.join(". ")
       : !hasFieldErrors
-        ? "Registration failed. Please check your information and try again."
+        ? "Please check your information and try again."
         : null,
   };
 }
