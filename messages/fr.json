@@ -443,11 +443,14 @@
   "WelcomePopup": {
     "badge": "Bonus de bienvenue",
     "title": "Tes {points} SNL t'attendent !",
-    "body1": "Tu as reçu un bonus de bienvenue en rejoignant SUNALAA. Collecte tes points maintenant pour commencer à miner.",
+    "body1_guest": "SUNALAA distribue des points SNL gratuitement avant le lancement officiel du token. Inscris-toi maintenant et reçois un bonus de bienvenue.",
+    "body1_auth": "Ton bonus de bienvenue est prêt. Récupère tes points maintenant et commence à miner.",
     "body2_before": "Tu as",
     "body2_points": "{points} SNL",
-    "body2_after": " prêts à être collectés.",
-    "cta": "Collecter mes {points} SNL",
-    "dismiss": "Je collecterai plus tard"
+    "body2_after": " prêts à être récupérés.",
+    "cta": "Récupérer mes {points} SNL",
+    "cta_guest": "S'inscrire et obtenir {points} SNL",
+    "claiming": "Récupération…",
+    "dismiss": "Plus tard"
   }
 }

@@ -153,6 +153,7 @@ export const usersApi = {
   transferPoints:       (data) => api.post("/users/me/points/transfer", data),
   getReferralPending:  () => api.get("/users/me/referral/pending"),
   claimReferral:       (level) => api.post("/users/me/referral/claim", null, { params: level != null ? { level } : {} }),
+  claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
   uploadKycDocument: (formData) => api.post("/users/me/kyc/documents", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   }),

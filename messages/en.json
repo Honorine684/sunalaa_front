@@ -443,11 +443,14 @@
   "WelcomePopup": {
     "badge": "Welcome bonus",
     "title": "Your {points} SNL are waiting!",
-    "body1": "You received a welcome bonus when you joined SUNALAA. Collect your points now to start mining.",
+    "body1_guest": "SUNALAA distributes SNL points for free before the official token launch. Sign up now and receive a welcome bonus.",
+    "body1_auth": "Your welcome bonus is ready. Claim your points now and start mining.",
     "body2_before": "You have",
     "body2_points": "{points} SNL",
     "body2_after": " ready to collect.",
-    "cta": "Collect my {points} SNL",
-    "dismiss": "I'll collect later"
+    "cta": "Claim my {points} SNL",
+    "cta_guest": "Sign up and get {points} SNL",
+    "claiming": "Claiming…",
+    "dismiss": "Later"
   }
 }
