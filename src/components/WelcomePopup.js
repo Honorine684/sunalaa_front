@@ -1,10 +1,19 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { settingsApi } from "@/lib/api";
 
 const FALLBACK_POINTS = 200;
+const REPEAT_DELAY = 30_000;
+const INITIAL_DELAY = 5_000;
+
+function hasCollectedToday() {
+  try {
+    const nc = localStorage.getItem("snl_next_collect");
+    return !!(nc && new Date(nc).getTime() > Date.now());
+  } catch { return false; }
+}
 
 export default function WelcomePopup() {
   const t = useTranslations("WelcomePopup");
@@ -13,6 +22,7 @@ export default function WelcomePopup() {
 
   const [visible, setVisible] = useState(false);
   const [points, setPoints] = useState(FALLBACK_POINTS);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     settingsApi.getPreLaunchStats()
@@ -25,16 +35,20 @@ export default function WelcomePopup() {
   }, []);
 
   useEffect(() => {
-    const seen = localStorage.getItem("sunala_welcome_seen");
-    if (!seen) {
-      const timer = setTimeout(() => setVisible(true), 5000);
-      return () => clearTimeout(timer);
-    }
+    timerRef.current = setTimeout(() => {
+      if (!hasCollectedToday()) setVisible(true);
+    }, INITIAL_DELAY);
+    return () => clearTimeout(timerRef.current);
   }, []);
 
   function close() {
-    localStorage.setItem("sunala_welcome_seen", "1");
     setVisible(false);
+    clearTimeout(timerRef.current);
+    if (!hasCollectedToday()) {
+      timerRef.current = setTimeout(() => {
+        if (!hasCollectedToday()) setVisible(true);
+      }, REPEAT_DELAY);
+    }
   }
 
   if (!visible) return null;
