@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { getApiError } from "@/lib/api";
@@ -26,6 +26,7 @@ function validate(fields, t) {
 
 /* ─── Input ──────────────────────────────────────────────────────── */
 function Input({ label, type = "text", placeholder, name, value, onChange, error, children }) {
+  const isEmail = type === "email";
   return (
     <div className="flex flex-col gap-1.5">
       <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{label}</label>
@@ -36,7 +37,10 @@ function Input({ label, type = "text", placeholder, name, value, onChange, error
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          autoComplete={name}
+          autoComplete={isEmail ? "email" : "current-password"}
+          autoCapitalize={isEmail ? "none" : undefined}
+          autoCorrect={isEmail ? "off" : undefined}
+          spellCheck={isEmail ? false : undefined}
           className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
           style={{ height: 42, borderRadius: 10, border: `1px solid ${error ? "#f87171" : "#BCBEC0"}`, padding: "12px 16px" }}
         />
@@ -48,7 +52,7 @@ function Input({ label, type = "text", placeholder, name, value, onChange, error
 }
 
 /* ─── Page ───────────────────────────────────────────────────────── */
-export default function LoginPage() {
+function LoginInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -275,5 +279,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginInner />
+    </Suspense>
   );
 }

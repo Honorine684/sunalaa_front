@@ -2,6 +2,16 @@ import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/proxy";
 
+function lsGet(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, val); } catch {}
+}
+function lsRemove(key) {
+  try { localStorage.removeItem(key); } catch {}
+}
+
 const api = axios.create({
   baseURL: BASE_URL,
   timeout: 15000,
@@ -11,7 +21,7 @@ const api = axios.create({
 // ── Attach JWT + locale to every request ─────────────────────────
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("snl_access_token");
+    const token = lsGet("snl_access_token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
     const lang = window.location.pathname.startsWith("/fr") ? "fr" : "en";
     config.headers["Accept-Language"] = lang;
@@ -52,7 +62,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = localStorage.getItem("snl_refresh_token");
+        const refreshToken = lsGet("snl_refresh_token");
         if (!refreshToken) throw new Error("No refresh token");
 
         const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
@@ -64,8 +74,8 @@ api.interceptors.response.use(
         if (!newToken) throw new Error("Failed to extract access token from refresh response");
 
         const newRefreshToken = data?.data?.refreshToken ?? data?.refreshToken;
-        localStorage.setItem("snl_access_token", newToken);
-        if (newRefreshToken) localStorage.setItem("snl_refresh_token", newRefreshToken);
+        lsSet("snl_access_token", newToken);
+        if (newRefreshToken) lsSet("snl_refresh_token", newRefreshToken);
 
         api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
         processQueue(null, newToken);
@@ -73,9 +83,9 @@ api.interceptors.response.use(
         return api(original);
       } catch (err) {
         processQueue(err, null);
-        localStorage.removeItem("snl_access_token");
-        localStorage.removeItem("snl_refresh_token");
-        localStorage.removeItem("snl_user");
+        lsRemove("snl_access_token");
+        lsRemove("snl_refresh_token");
+        lsRemove("snl_user");
         if (typeof window !== "undefined") {
           document.cookie = "snl_access_token=; path=/; max-age=0";
           document.cookie = "snl_user_role=; path=/; max-age=0";
@@ -121,7 +131,7 @@ export const usersApi = {
   getProfile: () => api.get("/users/me/profile"),
   updateProfile: (data) => api.put("/users/me/profile", data),
   uploadAvatar: (formData) => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : "";
+    const token = typeof window !== "undefined" ? lsGet("snl_access_token") : "";
     return axios.post("/api/upload-avatar", formData, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });

@@ -93,6 +93,7 @@ function RegisterInner() {
   });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
+  const [rawError, setRawError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -112,6 +113,7 @@ function RegisterInner() {
 
     setLoading(true);
     setApiError("");
+    setRawError(null);
     try {
       await register({
         firstName: fields.firstName.trim(),
@@ -124,7 +126,10 @@ function RegisterInner() {
       });
       setSuccess(true);
     } catch (err) {
-      console.error("[Register] status:", err?.response?.status, "data:", JSON.stringify(err?.response?.data));
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+      console.error("[Register] status:", status, "data:", JSON.stringify(data));
+      setRawError({ status: status ?? "network", message: err?.message, data });
       const { fieldErrors, apiError: msg } = parseFieldErrors(err);
       if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
       if (msg) setApiError(msg);
@@ -178,6 +183,34 @@ function RegisterInner() {
           {apiError && (
             <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-[13px]">
               {apiError}
+            </div>
+          )}
+
+          {rawError && (
+            <div className="mb-4 rounded-xl border border-orange-400/40 bg-orange-500/10 overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-2 border-b border-orange-400/20">
+                <span className="text-[11px] font-bold text-orange-300 uppercase tracking-wider">Debug — réponse backend</span>
+                <span className="ml-auto text-[11px] font-mono font-bold" style={{ color: rawError.status >= 500 ? "#f87171" : rawError.status >= 400 ? "#fb923c" : "#4ade80" }}>
+                  HTTP {rawError.status}
+                </span>
+              </div>
+              <div className="px-4 py-3 flex flex-col gap-1">
+                {rawError.data?.message && (
+                  <p className="text-[12px] text-orange-200"><span className="text-orange-400 font-semibold">message:</span> {String(rawError.data.message)}</p>
+                )}
+                {Array.isArray(rawError.data?.errors) && rawError.data.errors.length > 0 && (
+                  <div className="mt-1 flex flex-col gap-0.5">
+                    {rawError.data.errors.map((e, i) => (
+                      <p key={i} className="text-[12px] font-mono text-orange-200">
+                        <span className="text-orange-400">{e.field}:</span> {e.message}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {!rawError.data && rawError.message && (
+                  <p className="text-[12px] text-orange-200"><span className="text-orange-400 font-semibold">erreur réseau:</span> {rawError.message}</p>
+                )}
+              </div>
             </div>
           )}
 

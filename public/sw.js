@@ -7,7 +7,7 @@ const STATIC_PREFIXES = [
 
 const STATIC_EXT = /\.(png|jpg|jpeg|svg|ico|webp|woff2?|ttf)$/;
 
-self.addEventListener("install", (e) => {
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
@@ -24,13 +24,18 @@ self.addEventListener("fetch", (e) => {
   const { request } = e;
   const url = new URL(request.url);
 
-  // Ne jamais intercepter : non-GET, API, admin, auth
+  // Ne jamais intercepter : non-GET, API, admin, auth, pages dynamiques
   if (
     request.method !== "GET" ||
     url.pathname.startsWith("/api/") ||
     url.pathname.startsWith("/admin") ||
     url.pathname.startsWith("/profil") ||
-    url.pathname.startsWith("/fr/profil")
+    url.pathname.startsWith("/fr/profil") ||
+    url.pathname.includes("/login") ||
+    url.pathname.includes("/register") ||
+    url.pathname.includes("/verify-email") ||
+    url.pathname.includes("/forgot-password") ||
+    url.pathname.includes("/reset-password")
   ) {
     return;
   }
