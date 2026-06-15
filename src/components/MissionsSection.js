@@ -60,6 +60,7 @@ const PLATFORM_ICONS = {
 export default function MissionsSection() {
   const t = useTranslations("MissionsSection");
   const [missions, setMissions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     missionsApi.getPublic()
@@ -67,7 +68,8 @@ export default function MissionsSection() {
         const raw = res.data?.data ?? res.data;
         setMissions(Array.isArray(raw) ? raw.slice(0, 6) : []);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -99,6 +101,33 @@ export default function MissionsSection() {
           {t("points_label")}
         </p>
 
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="animate-pulse rounded-xl border border-slate-100 p-4" style={{ minHeight: 170 }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-slate-200 shrink-0" />
+                  <div className="flex-1 flex flex-col gap-2 pt-1">
+                    <div className="h-4 bg-slate-200 rounded w-3/4" />
+                    <div className="h-3 bg-slate-100 rounded w-full" />
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
+                  </div>
+                </div>
+                <div className="h-10 bg-slate-200 rounded-xl mt-4" />
+              </div>
+            ))}
+          </div>
+        ) : missions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(63,174,140,0.12)" }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4M12 3a9 9 0 100 18A9 9 0 0012 3z" stroke="#3FAE8C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <p className="font-semibold text-[18px]" style={{ color: "#0F172B" }}>Aucune mission disponible</p>
+            <p className="text-[14px] max-w-xs" style={{ color: "#45556C" }}>Revenez bientôt, de nouvelles missions seront publiées prochainement.</p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {missions.map((mission) => {
             const key    = mission.platform?.toLowerCase();
@@ -143,6 +172,7 @@ export default function MissionsSection() {
             );
           })}
         </div>
+        )}
       </Container>
     </section>
   );

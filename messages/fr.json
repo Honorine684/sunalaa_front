@@ -432,6 +432,13 @@
     "s3_val5": "100% blockchain",
     "cta_btn": "Comprendre pourquoi le $SNL a de la valeur"
   },
+  "ProfilPage": {
+    "tab_profil": "Profil",
+    "tab_reseau": "Réseau",
+    "tab_snl": "SNL",
+    "tab_adresses": "Adresses & Commandes",
+    "tab_securite": "Sécurité"
+  },
   "WelcomePopup": {
     "badge": "Offre de bienvenue",
     "title": "Tu arrives au bon moment.",

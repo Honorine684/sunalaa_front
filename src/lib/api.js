@@ -317,7 +317,7 @@ export function parseFieldErrors(error) {
     };
 
     data.errors.forEach(({ field, message }) => {
-      if (!field || !message) return;
+      if (!field || !message || typeof field !== "string" || typeof message !== "string") return;
       const key = FIELD_MAP[field.toLowerCase()] ?? field;
       const m = message.toLowerCase();
 
@@ -349,7 +349,7 @@ export function parseFieldErrors(error) {
       : [data.message].filter(Boolean);
 
     messages.forEach((msg) => {
-      if (!msg || msg === "Validation failed" || msg === "Bad Request") return;
+      if (!msg || typeof msg !== "string" || msg === "Validation failed" || msg === "Bad Request") return;
       const m = msg.toLowerCase();
       if (m.includes("referral")) fieldErrors.referralCode = "This referral code is invalid or does not exist";
       else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already"))) fieldErrors.email = "This email address is already registered";

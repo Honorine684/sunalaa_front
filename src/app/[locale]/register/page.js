@@ -123,27 +123,37 @@ function RegisterInner() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const errs = validate(fields);
-    if (Object.keys(errs).length) { setErrors(errs); return; }
-
-    setLoading(true);
-    setApiError("");
     try {
-      await register({
-        username: fields.username.trim(),
-        email: fields.email.trim(),
-        phone: fields.phone,
-        password: fields.password,
-        referralCode: fields.referralCode.trim(),
-        ...(fields.gender && { gender: fields.gender }),
-      });
-      setSuccess(true);
-    } catch (err) {
-      const { fieldErrors, apiError: msg } = parseFieldErrors(err);
-      if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
-      if (msg) setApiError(msg);
-    } finally {
+      const errs = validate(fields);
+      if (Object.keys(errs).length) { setErrors(errs); return; }
+
+      setLoading(true);
+      setApiError("");
+      try {
+        await register({
+          username: fields.username.trim(),
+          email: fields.email.trim(),
+          phone: fields.phone,
+          password: fields.password,
+          referralCode: fields.referralCode.trim(),
+          ...(fields.gender && { gender: fields.gender }),
+        });
+        setSuccess(true);
+      } catch (err) {
+        try {
+          const { fieldErrors, apiError: msg } = parseFieldErrors(err);
+          if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
+          if (msg) setApiError(msg);
+          else if (!fieldErrors) setApiError("Please check your information and try again.");
+        } catch {
+          setApiError("An error occurred. Please try again.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    } catch {
       setLoading(false);
+      setApiError("An unexpected error occurred. Please try again.");
     }
   }
 
@@ -412,7 +422,7 @@ function RegisterInner() {
 
 export default function RegisterPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <RegisterInner />
     </Suspense>
   );

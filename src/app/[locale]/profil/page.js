@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
@@ -40,17 +41,18 @@ function ProfileSkeleton() {
   );
 }
 
-const TABS = [
-  { id: "profil",   label: "Profil" },
-  { id: "reseau",   label: "Réseau" },
-  { id: "snl",      label: "SNL" },
-  { id: "adresses", label: "Adresses & Commandes" },
-  { id: "securite", label: "Sécurité" },
-];
-
 export default function ProfilPage() {
+  const t = useTranslations("ProfilPage");
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
+
+  const TABS = [
+    { id: "profil",   label: t("tab_profil") },
+    { id: "reseau",   label: t("tab_reseau") },
+    { id: "snl",      label: t("tab_snl") },
+    { id: "adresses", label: t("tab_adresses") },
+    { id: "securite", label: t("tab_securite") },
+  ];
 
   return (
     <>

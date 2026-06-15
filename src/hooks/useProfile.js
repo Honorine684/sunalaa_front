@@ -11,7 +11,14 @@ function normalizeProfile(raw) {
   const avatar = imgRaw
     ? imgRaw.startsWith("http") ? imgRaw : `${API_BASE}${imgRaw}`
     : null;
-  return { ...raw, avatar };
+  let username = raw.username ?? null;
+  if (!username) {
+    try {
+      const stored = localStorage.getItem("snl_user");
+      if (stored) username = JSON.parse(stored)?.username ?? null;
+    } catch {}
+  }
+  return { ...raw, avatar, ...(username ? { username } : {}) };
 }
 
 export function useProfile() {
