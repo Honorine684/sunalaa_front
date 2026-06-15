@@ -124,6 +124,7 @@ function RegisterInner() {
       });
       setSuccess(true);
     } catch (err) {
+      console.error("[Register] status:", err?.response?.status, "data:", JSON.stringify(err?.response?.data));
       const { fieldErrors, apiError: msg } = parseFieldErrors(err);
       if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
       if (msg) setApiError(msg);
