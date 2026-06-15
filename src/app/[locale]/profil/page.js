@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
@@ -25,40 +26,31 @@ function ProfileSkeleton() {
   return (
     <div className="bg-[#F8FAFC] py-8">
       <Container>
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-3 flex flex-col gap-5">
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col gap-4">
-              <SkeletonBlock className="h-5 w-24" />
-              {[...Array(4)].map((_, i) => <SkeletonBlock key={i} className="h-4 w-full" />)}
+        <div className="flex flex-col gap-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col gap-3">
+              <SkeletonBlock className="h-5 w-48" />
+              <SkeletonBlock className="h-4 w-full" />
+              <SkeletonBlock className="h-2.5 w-full rounded-full" />
             </div>
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col gap-3">
-              <SkeletonBlock className="h-5 w-32" />
-              {[...Array(5)].map((_, i) => <SkeletonBlock key={i} className="h-14 w-full" />)}
-            </div>
-          </div>
-          <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col gap-3">
-                <SkeletonBlock className="h-5 w-48" />
-                <SkeletonBlock className="h-4 w-full" />
-                <SkeletonBlock className="h-2.5 w-full rounded-full" />
-              </div>
-            ))}
-          </div>
-          <div className="col-span-12 lg:col-span-3">
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col gap-4">
-              <SkeletonBlock className="h-5 w-28" />
-              {[...Array(4)].map((_, i) => <SkeletonBlock key={i} className="h-12 w-full" />)}
-            </div>
-          </div>
+          ))}
         </div>
       </Container>
     </div>
   );
 }
 
+const TABS = [
+  { id: "profil",   label: "Profil" },
+  { id: "reseau",   label: "Réseau" },
+  { id: "snl",      label: "SNL" },
+  { id: "adresses", label: "Adresses & Commandes" },
+  { id: "securite", label: "Sécurité" },
+];
+
 export default function ProfilPage() {
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
+  const [activeTab, setActiveTab] = useState("profil");
 
   return (
     <>
@@ -73,56 +65,70 @@ export default function ProfilPage() {
         </div>
       )}
 
+      {/* Tab bar */}
+      <div className="bg-white border-b border-slate-200">
+        <Container>
+          <div className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-5 py-4 text-[14px] font-semibold whitespace-nowrap border-b-2 transition-colors cursor-pointer shrink-0 ${
+                  activeTab === tab.id
+                    ? "border-[#1F4E46] text-[#1F4E46]"
+                    : "border-transparent text-slate-400 hover:text-slate-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </Container>
+      </div>
+
       {loading ? (
         <ProfileSkeleton />
       ) : (
-        <div className="bg-[#F8FAFC] py-8">
+        <div className="bg-[#F8FAFC] py-8 min-h-[60vh]">
           <Container>
-            <div className="grid grid-cols-12 gap-6">
 
-              {/* Left col */}
-              <div className="col-span-12 lg:col-span-3 flex flex-col gap-5">
-                <ProfileAbout profile={profile} onUpdate={updateProfile} />
-                <ProfileLevels profile={profile} />
+            {activeTab === "profil" && (
+              <div className="grid grid-cols-12 gap-6">
+                <div className="col-span-12 lg:col-span-4 flex flex-col gap-5">
+                  <ProfileAbout profile={profile} onUpdate={updateProfile} />
+                  <ProfileLevels profile={profile} />
+                </div>
+                <div className="col-span-12 lg:col-span-8">
+                  <ProfileMissions onMissionComplete={updateBalance} />
+                </div>
               </div>
+            )}
 
-              {/* Center col */}
-              <div className="col-span-12 lg:col-span-6">
-                <ProfileMissions onMissionComplete={updateBalance} />
+            {activeTab === "reseau" && (
+              <ProfileNetwork />
+            )}
+
+            {activeTab === "snl" && (
+              <div className="grid grid-cols-12 gap-6">
+                <ProfileTransfer onTransferComplete={updateBalance} />
               </div>
+            )}
 
-              {/* Right col */}
-              <div className="col-span-12 lg:col-span-3">
-                <ProfileNetwork />
-              </div>
-
-              {/* Full width — Sécurité */}
-              <div className="col-span-12">
-                <ProfileSecurity user={profile} />
-              </div>
-
-              {/* Full width — Adresses */}
-              <div className="col-span-12">
+            {activeTab === "adresses" && (
+              <div className="flex flex-col gap-6">
                 <ProfileAddresses />
-              </div>
-
-              {/* Transfert SNL — full width */}
-              <ProfileTransfer onTransferComplete={updateBalance} />
-
-              {/* Commandes */}
-              <div className="col-span-12">
                 <ProfileCommandes />
               </div>
+            )}
 
-              {/* KYC + Login history */}
-              <div className="col-span-12 lg:col-span-6">
+            {activeTab === "securite" && (
+              <div className="flex flex-col gap-6">
+                <ProfileSecurity user={profile} />
                 <ProfileKyc />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
                 <ProfileLoginHistory />
               </div>
+            )}
 
-            </div>
           </Container>
         </div>
       )}
