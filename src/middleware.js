@@ -29,7 +29,7 @@ function stripLocale(pathname) {
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api")) {
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api") || pathname.startsWith("/auth/callback")) {
     if (pathname.startsWith("/admin")) {
       const rawToken = request.cookies.get("snl_access_token")?.value;
       const token = rawToken && rawToken !== "null" && rawToken !== "undefined" ? rawToken : null;

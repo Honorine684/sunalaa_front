@@ -123,6 +123,7 @@ export const authApi = {
   enable2FA: (code) => api.post("/auth/2fa/enable", { code }),
   disable2FA: (code) => api.post("/auth/2fa/disable", { code }),
   verify2FA: (data) => api.post("/auth/2fa/verify", data),
+  exchangeOAuth: (code) => api.post("/auth/oauth/exchange", { code }),
 };
 
 // ── Users ─────────────────────────────────────────────────────────

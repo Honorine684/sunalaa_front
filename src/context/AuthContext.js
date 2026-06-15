@@ -74,6 +74,20 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  const loginWithOAuth = useCallback(async ({ accessToken, refreshToken }) => {
+    const isProduction = typeof window !== "undefined" && window.location.hostname !== "localhost";
+    const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
+    lsSet("snl_access_token", accessToken);
+    lsSet("snl_refresh_token", refreshToken);
+    document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
+    const { data } = await authApi.getMe();
+    const user = data?.data ?? data;
+    lsSet("snl_user", JSON.stringify(user));
+    document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
+    setUser(user);
+    return user;
+  }, []);
+
   const refreshUser = useCallback(async () => {
     try {
       const { data } = await authApi.getMe();
@@ -84,7 +98,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, verifyAndLogin, register, logout, refreshUser, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, loading, login, verifyAndLogin, register, logout, refreshUser, loginWithOAuth, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

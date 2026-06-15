@@ -75,6 +75,12 @@ function LoginInner() {
     setApiError("");
   }
 
+  function handleGoogleLogin() {
+    try { sessionStorage.setItem("snl_oauth_locale", locale); } catch {}
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1";
+    window.location.href = `${apiBase}/auth/google`;
+  }
+
   function redirect(data) {
     const role = (data?.data?.user?.role ?? data?.user?.role ?? data?.role ?? "user").toLowerCase();
     const redirectParam = searchParams.get("redirect");
@@ -258,7 +264,7 @@ function LoginInner() {
                 <div className="flex-1 h-px bg-white/20" />
               </div>
 
-              <button type="button" aria-label="Google"
+              <button type="button" aria-label="Google" onClick={handleGoogleLogin}
                 className="w-full flex items-center justify-center py-3 bg-white rounded-xl border border-gray-200 hover:bg-gray-50 transition cursor-pointer">
                 <svg width="20" height="20" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
