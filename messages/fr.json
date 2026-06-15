@@ -440,13 +440,13 @@
     "tab_securite": "Sécurité"
   },
   "WelcomePopup": {
-    "badge": "Offre de bienvenue",
-    "title": "Tu arrives au bon moment.",
-    "body1": "SUNALA distribue des points SNL gratuitement avant le lancement officiel du token. Ces points deviendront de vrais $SNL. 1 000 points = 1 $SNL.",
-    "body2_before": "Inscris-toi maintenant et reçois",
-    "body2_points": "{points} points de bienvenue",
-    "body2_after": ".",
-    "cta": "Je veux mes {points} points, Gratuit",
-    "dismiss": "Non merci, continuer sans bonus"
+    "badge": "Bonus de bienvenue",
+    "title": "Tes {points} SNL t'attendent !",
+    "body1": "Tu as reçu un bonus de bienvenue en rejoignant SUNALAA. Collecte tes points maintenant pour commencer à miner.",
+    "body2_before": "Tu as",
+    "body2_points": "{points} SNL",
+    "body2_after": " prêts à être collectés.",
+    "cta": "Collecter mes {points} SNL",
+    "dismiss": "Je collecterai plus tard"
   }
 }

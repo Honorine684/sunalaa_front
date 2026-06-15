@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { authApi } from "@/lib/api";
 
+const SESSION_DURATION_MS = 86400 * 1000; // 24h
+
 function lsGet(key) {
   try { return localStorage.getItem(key); } catch { return null; }
 }
@@ -13,18 +15,31 @@ function lsRemove(key) {
   try { localStorage.removeItem(key); } catch {}
 }
 
+function clearSession() {
+  lsRemove("snl_access_token");
+  lsRemove("snl_refresh_token");
+  lsRemove("snl_user");
+  lsRemove("snl_login_time");
+  document.cookie = "snl_access_token=; path=/; max-age=0";
+  document.cookie = "snl_user_role=; path=/; max-age=0";
+}
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore session on mount
+  // Restore session on mount — expire after 24h
   useEffect(() => {
     const stored = lsGet("snl_user");
     const token = lsGet("snl_access_token");
-    if (stored && token) {
+    const loginTime = parseInt(lsGet("snl_login_time") ?? "0", 10);
+    const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
+    if (stored && token && !expired) {
       try { setUser(JSON.parse(stored)); } catch {}
+    } else if (stored || token) {
+      clearSession();
     }
     setLoading(false);
   }, []);
@@ -37,6 +52,7 @@ export function AuthProvider({ children }) {
     lsSet("snl_access_token", d.accessToken);
     lsSet("snl_refresh_token", d.refreshToken);
     lsSet("snl_user", JSON.stringify(d.user));
+    lsSet("snl_login_time", String(Date.now()));
     document.cookie = `snl_access_token=${d.accessToken}; ${cookieOpts}`;
     document.cookie = `snl_user_role=${(d.user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
     setUser(d.user);
@@ -66,11 +82,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     try { await authApi.logout(); } catch {}
-    lsRemove("snl_access_token");
-    lsRemove("snl_refresh_token");
-    lsRemove("snl_user");
-    document.cookie = "snl_access_token=; path=/; max-age=0";
-    document.cookie = "snl_user_role=; path=/; max-age=0";
+    clearSession();
     setUser(null);
   }, []);
 
@@ -79,6 +91,7 @@ export function AuthProvider({ children }) {
     const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
     lsSet("snl_access_token", accessToken);
     lsSet("snl_refresh_token", refreshToken);
+    lsSet("snl_login_time", String(Date.now()));
     document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
     const { data } = await authApi.getMe();
     const user = data?.data ?? data;

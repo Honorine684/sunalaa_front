@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { settingsApi } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const FALLBACK_POINTS = 200;
 const REPEAT_DELAY = 30_000;
@@ -19,6 +20,7 @@ export default function WelcomePopup() {
   const t = useTranslations("WelcomePopup");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
+  const { isAuthenticated } = useAuth();
 
   const [visible, setVisible] = useState(false);
   const [points, setPoints] = useState(FALLBACK_POINTS);
@@ -35,11 +37,12 @@ export default function WelcomePopup() {
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     timerRef.current = setTimeout(() => {
       if (!hasCollectedToday()) setVisible(true);
     }, INITIAL_DELAY);
     return () => clearTimeout(timerRef.current);
-  }, []);
+  }, [isAuthenticated]);
 
   function close() {
     setVisible(false);
@@ -93,7 +96,7 @@ export default function WelcomePopup() {
           </p>
 
           <Link
-            href={`${prefix}/register`}
+            href={`${prefix}/collecter`}
             onClick={close}
             className="flex items-center justify-between w-full rounded-full font-bold text-[15px] text-white px-6 py-4 hover:brightness-110 transition"
             style={{ backgroundColor: "#3FAE8C" }}
