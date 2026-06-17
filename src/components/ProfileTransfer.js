@@ -1,7 +1,28 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { usersApi, getApiError } from "@/lib/api";
+
+const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B", "#EF4444", "#1F4E46"];
+
+function getColor(username) {
+  if (!username) return COLORS[0];
+  return COLORS[username.charCodeAt(0) % COLORS.length];
+}
+
+function getInitials(user) {
+  if (user?.username) return user.username[0].toUpperCase();
+  const first = user?.firstName?.[0] ?? user?.first_name?.[0] ?? "";
+  const last  = user?.lastName?.[0]  ?? user?.last_name?.[0]  ?? "";
+  return (first + last).toUpperCase() || "?";
+}
+
+function getDisplayName(user) {
+  if (!user) return "";
+  if (user.username) return user.username;
+  const full = [user.firstName ?? user.first_name, user.lastName ?? user.last_name].filter(Boolean).join(" ");
+  return full || user.email || "—";
+}
 
 function fmtDate(s) {
   if (!s) return "—";
@@ -12,13 +33,193 @@ function fmt(n) {
   return Number(n ?? 0).toLocaleString("en-US");
 }
 
+/* ─── Avatar ─────────────────────────────────────────────────────── */
+function Avatar({ user, size = 36 }) {
+  const color = getColor(user?.username);
+  return (
+    <div
+      className="rounded-full flex items-center justify-center shrink-0 font-bold text-white"
+      style={{ width: size, height: size, backgroundColor: color, fontSize: size * 0.38 }}
+    >
+      {getInitials(user)}
+    </div>
+  );
+}
+
+/* ─── RecipientSearch ────────────────────────────────────────────── */
+function RecipientSearch({ selected, onSelect, onClear, error, onErrorClear }) {
+  const [query, setQuery]       = useState("");
+  const [results, setResults]   = useState([]);
+  const [searching, setSearching] = useState(false);
+  const [open, setOpen]         = useState(false);
+  const [noResult, setNoResult] = useState(false);
+  const timer  = useRef(null);
+  const wrapRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function onOutside(e) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, []);
+
+  function handleInput(e) {
+    const val = e.target.value;
+    setQuery(val);
+    onErrorClear();
+    setNoResult(false);
+    setResults([]);
+    if (timer.current) clearTimeout(timer.current);
+
+    if (val.trim().length < 2) { setOpen(false); setSearching(false); return; }
+
+    setSearching(true);
+    setOpen(true);
+    timer.current = setTimeout(async () => {
+      try {
+        const res = await usersApi.searchByUsername(val.trim());
+        const raw = res.data?.data ?? res.data;
+        const list = Array.isArray(raw) ? raw : (raw?.users ?? raw?.results ?? []);
+        setResults(list);
+        setNoResult(list.length === 0);
+      } catch {
+        setResults([]);
+        setNoResult(true);
+      } finally {
+        setSearching(false);
+      }
+    }, 500);
+  }
+
+  function pick(user) {
+    onSelect(user);
+    setQuery("");
+    setOpen(false);
+    setResults([]);
+  }
+
+  // If already selected → show confirmation card
+  if (selected) {
+    return (
+      <div
+        className="flex items-center gap-3 px-4 py-3 rounded-xl border"
+        style={{ borderColor: "#3FAE8C", backgroundColor: "rgba(63,174,140,0.06)" }}
+      >
+        <Avatar user={selected} size={38} />
+        <div className="flex-1 min-w-0">
+          <p className="text-[14px] font-bold truncate" style={{ color: "#0F172B" }}>
+            @{getDisplayName(selected)}
+          </p>
+          {selected.email && (
+            <p className="text-[11px] text-slate-400 truncate">{selected.email}</p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onClear}
+          className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100"
+          title="Change recipient"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <div className="relative">
+        <svg
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+          width="15" height="15" viewBox="0 0 24 24" fill="none"
+        >
+          <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+        <input
+          type="text"
+          value={query}
+          onChange={handleInput}
+          onFocus={() => results.length > 0 && setOpen(true)}
+          placeholder="Search by username…"
+          autoComplete="off"
+          autoCapitalize="none"
+          spellCheck={false}
+          className={`w-full border rounded-xl pl-10 pr-10 py-3 text-[14px] outline-none focus:border-primary transition ${error ? "border-red-300 bg-red-50/30" : "border-slate-200"}`}
+        />
+        {searching && (
+          <svg className="absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+          </svg>
+        )}
+        {query && !searching && (
+          <button
+            type="button"
+            onClick={() => { setQuery(""); setResults([]); setOpen(false); setNoResult(false); }}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden">
+          {results.length > 0 ? (
+            <ul className="py-1 max-h-52 overflow-y-auto">
+              {results.map((u) => (
+                <li key={u.id ?? u.username}>
+                  <button
+                    type="button"
+                    onClick={() => pick(u)}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition cursor-pointer text-left"
+                  >
+                    <Avatar user={u} size={34} />
+                    <div className="min-w-0">
+                      <p className="text-[13px] font-semibold truncate" style={{ color: "#0F172B" }}>
+                        @{u.username ?? getDisplayName(u)}
+                      </p>
+                      {(u.firstName || u.lastName) && (
+                        <p className="text-[11px] text-slate-400 truncate">
+                          {[u.firstName, u.lastName].filter(Boolean).join(" ")}
+                        </p>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : noResult ? (
+            <div className="px-4 py-4 text-center text-[13px] text-slate-400">
+              No user found for <strong>"{query}"</strong>
+            </div>
+          ) : (
+            <div className="px-4 py-4 text-center text-[13px] text-slate-400">
+              Searching…
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Main component ─────────────────────────────────────────────── */
 export default function ProfileTransfer({ onTransferComplete }) {
-  const [recipient, setRecipient] = useState("");
-  const [amount, setAmount]       = useState("");
-  const [note, setNote]           = useState("");
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState("");
-  const [success, setSuccess]     = useState(null);
+  const [recipientUser, setRecipientUser] = useState(null);
+  const [amount, setAmount]   = useState("");
+  const [note, setNote]       = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+  const [success, setSuccess] = useState(null);
 
   const [history, setHistory]         = useState([]);
   const [histLoading, setHistLoading] = useState(true);
@@ -44,17 +245,17 @@ export default function ProfileTransfer({ onTransferComplete }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!recipient.trim() || !amount) return;
+    if (!recipientUser || !amount) return;
     setLoading(true); setError(""); setSuccess(null);
     try {
-      const res  = await usersApi.transferPoints({
-        recipient: recipient.trim(),
+      const res = await usersApi.transferPoints({
+        recipient: recipientUser.username ?? recipientUser.id,
         amount:    Number(amount),
         ...(note.trim() ? { note: note.trim() } : {}),
       });
       const data = res.data?.data ?? res.data;
-      setSuccess(data);
-      setRecipient(""); setAmount(""); setNote("");
+      setSuccess({ ...data, recipientUser });
+      setRecipientUser(null); setAmount(""); setNote("");
       fetchHistory();
       if (onTransferComplete && data?.newBalance != null) onTransferComplete(data.newBalance);
     } catch (err) {
@@ -94,7 +295,7 @@ export default function ProfileTransfer({ onTransferComplete }) {
                 </svg>
                 <div>
                   <p className="text-[13px] font-semibold text-green-700">
-                    Transfer sent to {success.recipient?.username ?? success.recipient?.firstName ?? "the user"} !
+                    Transfer sent to @{getDisplayName(success.recipientUser)} !
                   </p>
                   <p className="text-[12px] text-green-600">New balance: {fmt(success.newBalance)} SNL</p>
                 </div>
@@ -102,19 +303,22 @@ export default function ProfileTransfer({ onTransferComplete }) {
             )}
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+              {/* Recipient search */}
               <div>
                 <label className="text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">
                   Recipient
                 </label>
-                <input
-                  value={recipient}
-                  onChange={(e) => { setRecipient(e.target.value); setError(""); setSuccess(null); }}
-                  placeholder="Username or email"
-                  required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-[14px] outline-none focus:border-primary transition"
+                <RecipientSearch
+                  selected={recipientUser}
+                  onSelect={(u) => { setRecipientUser(u); setError(""); setSuccess(null); }}
+                  onClear={() => { setRecipientUser(null); setError(""); setSuccess(null); }}
+                  error={!!error && !recipientUser}
+                  onErrorClear={() => setError("")}
                 />
               </div>
 
+              {/* Amount */}
               <div>
                 <label className="text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">
                   Amount (SNL)
@@ -134,6 +338,7 @@ export default function ProfileTransfer({ onTransferComplete }) {
                 </div>
               </div>
 
+              {/* Note */}
               <div>
                 <label className="text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">
                   Note <span className="font-normal normal-case text-slate-400">(optional)</span>
@@ -153,7 +358,7 @@ export default function ProfileTransfer({ onTransferComplete }) {
 
               <button
                 type="submit"
-                disabled={loading || !recipient.trim() || !amount}
+                disabled={loading || !recipientUser || !amount}
                 className="w-full py-3 rounded-xl text-white font-semibold text-[14px] transition hover:brightness-110 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "#1F4E46" }}
               >
@@ -170,7 +375,7 @@ export default function ProfileTransfer({ onTransferComplete }) {
               <div className="flex flex-col gap-3">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="animate-pulse flex items-center gap-3">
-                    <div className="w-9 h-9 bg-slate-100 rounded-xl shrink-0" />
+                    <div className="w-9 h-9 bg-slate-100 rounded-full shrink-0" />
                     <div className="flex-1 flex flex-col gap-1.5">
                       <div className="h-3.5 bg-slate-100 rounded w-3/4" />
                       <div className="h-3 bg-slate-100 rounded w-1/2" />
@@ -193,7 +398,7 @@ export default function ProfileTransfer({ onTransferComplete }) {
                   return (
                     <div key={t.id ?? i} className="flex items-center gap-3">
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                        className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                         style={{ backgroundColor: isSent ? "#FEE2E2" : "#D1FAE5" }}
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">

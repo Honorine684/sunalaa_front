@@ -45,14 +45,23 @@ export default function OAuthCallbackPage() {
 
         lsSet("snl_user", JSON.stringify(user));
         document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
+        lsSet("snl_login_time", String(Date.now()));
 
         const locale = ssGet("snl_oauth_locale") ?? "en";
         ssRemove("snl_oauth_locale");
 
         const prefix = locale === "fr" ? "/fr" : "";
         const role = (user?.role ?? "user").toLowerCase();
-        const target = role.includes("admin") ? "/admin" : `${prefix}/profil`;
 
+        // Nouveau user OAuth → doit choisir son username
+        const isNewUser = tokenData.isNewUser === true || tokenData.newUser === true || user?.isUsernameSet === false;
+        if (isNewUser && !role.includes("admin")) {
+          try { sessionStorage.setItem("snl_needs_username_setup", "1"); } catch {}
+          window.location.replace(`${prefix}/setup-username`);
+          return;
+        }
+
+        const target = role.includes("admin") ? "/admin" : `${prefix}/profil`;
         window.location.replace(target);
       } catch {
         setStatus("error");

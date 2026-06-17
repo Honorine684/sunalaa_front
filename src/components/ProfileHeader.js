@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Container from "./Container";
 import { getApiError } from "@/lib/api";
 
@@ -26,6 +26,29 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [lightbox, setLightbox] = useState(false);
+
+  useEffect(() => {
+    if (lightbox) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+    } else {
+      const scrollY = parseInt(document.body.style.top || "0", 10);
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, -scrollY);
+    }
+    return () => {
+      const scrollY = parseInt(document.body.style.top || "0", 10);
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, -scrollY);
+    };
+  }, [lightbox]);
 
   const initials = getInitials(profile);
   const avatarColor = getAvatarColor(profile);
@@ -65,8 +88,9 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
           {/* Avatar */}
           <div className="relative shrink-0">
             <div
-              className="w-45 h-45 -mt-31.25 ml-8 rounded-full flex items-center justify-center overflow-hidden"
+              className={`w-45 h-45 -mt-31.25 ml-8 rounded-full flex items-center justify-center overflow-hidden ${profile?.avatar ? "cursor-zoom-in" : ""}`}
               style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)", backgroundColor: profile?.avatar ? undefined : avatarColor }}
+              onClick={() => profile?.avatar && setLightbox(true)}
             >
               {profile?.avatar ? (
                 <img src={profile.avatar} alt={username || fullName} className="w-full h-full object-cover" />
@@ -104,7 +128,7 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
             )}
           </div>
 
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} data-avatar-upload />
 
           {/* Name + handle */}
           <div className="-mb-4.5">
@@ -142,6 +166,29 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
           </div>
         </div>
       </Container>
+
+      {lightbox && profile?.avatar && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4"
+          onClick={() => setLightbox(false)}
+        >
+          <button
+            onClick={() => setLightbox(false)}
+            className="absolute top-4 right-4 text-white/70 hover:text-white transition cursor-pointer"
+            aria-label="Close"
+          >
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <img
+            src={profile.avatar}
+            alt={username || fullName}
+            className="max-w-full max-h-[85vh] rounded-2xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { getApiError } from "@/lib/api";
+import { getApiError, authApi } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 
 /* ─── Validation ─────────────────────────────────────────────────── */
@@ -67,6 +67,9 @@ function LoginInner() {
   const [showPass, setShowPass] = useState(false);
   const [twoFaStep, setTwoFaStep] = useState(null);
   const [otpCode, setOtpCode] = useState("");
+  const [emailUnverified, setEmailUnverified] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendStatus, setResendStatus] = useState(null); // null | "sent" | "error"
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -103,9 +106,28 @@ function LoginInner() {
       }
       redirect(data);
     } catch (err) {
-      setApiError(getApiError(err));
+      const msg = (err?.response?.data?.message ?? err?.message ?? "").toLowerCase();
+      const notVerified = msg.includes("verif") || msg.includes("confirm") || msg.includes("not verified") || msg.includes("activate") || msg.includes("activated");
+      if (notVerified) {
+        setEmailUnverified(true);
+      } else {
+        setApiError(getApiError(err));
+      }
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleResend() {
+    setResendLoading(true);
+    setResendStatus(null);
+    try {
+      await authApi.resendVerification(fields.email.trim());
+      setResendStatus("sent");
+    } catch {
+      setResendStatus("error");
+    } finally {
+      setResendLoading(false);
     }
   }
 
@@ -189,11 +211,75 @@ function LoginInner() {
             <>
               <h1 className="text-white mb-5" style={{ fontSize: 28, fontWeight: 700 }}>{t("login_title")}</h1>
 
-              {apiError && (
+              {emailUnverified ? (
+                <div className="mb-5 rounded-2xl overflow-hidden border border-amber-400/30" style={{ backgroundColor: "rgba(230,184,76,0.08)" }}>
+                  <div className="h-1 w-full" style={{ backgroundColor: "#E6B84C" }} />
+                  <div className="px-5 py-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(230,184,76,0.15)" }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#E6B84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <polyline points="22,6 12,13 2,6" stroke="#E6B84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <p className="text-[14px] font-semibold" style={{ color: "#E6B84C" }}>
+                        {locale === "fr" ? "Email non vérifié" : "Email not verified"}
+                      </p>
+                    </div>
+                    <p className="text-[13px] mb-4 leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      {locale === "fr"
+                        ? "Vérifiez votre boîte mail et cliquez sur le lien de confirmation avant de vous connecter."
+                        : "Check your inbox and click the confirmation link before logging in."}
+                    </p>
+
+                    {resendStatus === "sent" ? (
+                      <div className="flex items-center gap-2 py-2.5 px-3 rounded-xl mb-3" style={{ backgroundColor: "rgba(63,174,140,0.15)" }}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                          <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="text-[13px] font-medium" style={{ color: "#3FAE8C" }}>
+                          {locale === "fr" ? "Email envoyé ! Vérifiez votre boîte." : "Email sent! Check your inbox."}
+                        </span>
+                      </div>
+                    ) : resendStatus === "error" ? (
+                      <p className="text-[13px] mb-3" style={{ color: "#F87171" }}>
+                        {locale === "fr" ? "Erreur lors de l'envoi. Réessayez." : "Failed to send. Please try again."}
+                      </p>
+                    ) : null}
+
+                    {resendStatus !== "sent" && (
+                      <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={resendLoading}
+                        className="w-full py-2.5 rounded-xl text-[13px] font-semibold transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2 mb-3"
+                        style={{ backgroundColor: "#E6B84C", color: "#1F4E46" }}
+                      >
+                        {resendLoading && (
+                          <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                          </svg>
+                        )}
+                        {locale === "fr" ? "Renvoyer l'email de vérification" : "Resend verification email"}
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => { setEmailUnverified(false); setResendStatus(null); }}
+                      className="text-[12px] text-center w-full cursor-pointer hover:underline"
+                      style={{ color: "rgba(255,255,255,0.4)" }}
+                    >
+                      {locale === "fr" ? "Utiliser une autre adresse" : "Use a different email"}
+                    </button>
+                  </div>
+                </div>
+              ) : apiError ? (
                 <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-[13px]">
                   {apiError}
                 </div>
-              )}
+              ) : null}
 
               <form className="flex flex-col gap-4.5" onSubmit={handleSubmit} noValidate>
                 <Input

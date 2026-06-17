@@ -16,7 +16,7 @@ function AuthImage({ url, label }) {
     const fullUrl = url.startsWith("http") ? url : `${API_BASE.replace("/api/v1", "")}${url}`;
     const token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : null;
     fetch(fullUrl, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
-      .then((r) => r.blob())
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.blob(); })
       .then((blob) => {
         const obj = URL.createObjectURL(blob);
         objRef.current = obj;

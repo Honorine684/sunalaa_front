@@ -110,11 +110,13 @@ export const healthApi = {
 
 // ── Auth ──────────────────────────────────────────────────────────
 export const authApi = {
+  getVapidPublicKey: () => api.get("/auth/vapid-public-key"),
   register: (data) => api.post("/auth/register", data),
   login: (data) => api.post("/auth/login", data),
   logout: () => api.post("/auth/logout"),
   refresh: (refreshToken) => api.post("/auth/refresh", { refreshToken }),
   verifyEmail: (token) => api.post("/auth/verify-email", { token }),
+  resendVerification: (email) => api.post("/auth/resend-verification", { email }),
   forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
   resetPassword: (data) => api.post("/auth/reset-password", data),
   changePassword: (data) => api.post("/auth/change-password", data),
@@ -124,6 +126,7 @@ export const authApi = {
   disable2FA: (code) => api.post("/auth/2fa/disable", { code }),
   verify2FA: (data) => api.post("/auth/2fa/verify", data),
   exchangeOAuth: (code) => api.post("/auth/oauth/exchange", { code }),
+  checkUsername: (username) => api.get("/auth/check-username", { params: { username } }),
 };
 
 // ── Users ─────────────────────────────────────────────────────────
@@ -154,6 +157,10 @@ export const usersApi = {
   getReferralPending:  () => api.get("/users/me/referral/pending"),
   claimReferral:       (level) => api.post("/users/me/referral/claim", undefined, { params: level != null ? { level } : {} }),
   claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
+  setUsername: (username) => api.put("/users/me/username", { username }),
+  searchByUsername: (username) => api.get("/users/search", { params: { username } }),
+  subscribePush: (subscription) => api.post("/users/me/push-subscription", subscription),
+  unsubscribePush: (endpoint) => api.delete("/users/me/push-subscription", { data: { endpoint } }),
   uploadKycDocument: (formData) => api.post("/users/me/kyc/documents", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   }),
@@ -325,6 +332,10 @@ export function parseFieldErrors(error) {
       // Messages lisibles pour l'utilisateur
       if (key === "referralCode" || m.includes("referral")) {
         fieldErrors.referralCode = "This referral code is invalid or does not exist";
+      } else if (key === "username" && (m.includes("taken") || m.includes("exist") || m.includes("already"))) {
+        fieldErrors.username = "This username is already taken";
+      } else if (key === "username") {
+        fieldErrors.username = message;
       } else if (key === "email" && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) {
         fieldErrors.email = "This email address is already registered";
       } else if (key === "email") {
@@ -353,6 +364,7 @@ export function parseFieldErrors(error) {
       if (!msg || typeof msg !== "string" || msg === "Validation failed" || msg === "Bad Request") return;
       const m = msg.toLowerCase();
       if (m.includes("referral")) fieldErrors.referralCode = "This referral code is invalid or does not exist";
+      else if (m.includes("username") && (m.includes("taken") || m.includes("exist") || m.includes("already"))) fieldErrors.username = "This username is already taken";
       else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already"))) fieldErrors.email = "This email address is already registered";
       else if (m.includes("email")) fieldErrors.email = "Please enter a valid email address";
       else if (m.includes("phone")) fieldErrors.phone = "Please enter a valid phone number with country code";

@@ -1,7 +1,8 @@
 export default function manifest() {
   return {
-    name: "SUNALA — Points SNL",
-    short_name: "SUNALA",
+    id: "/",
+    name: "SUNALAA — Points SNL",
+    short_name: "SUNALAA",
     description:
       "Collectez des points SNL chaque jour, parrainez vos proches et progressez ensemble.",
     start_url: "/",
@@ -13,27 +14,33 @@ export default function manifest() {
     icons: [
       {
         src: "/icon.png",
-        sizes: "192x192",
+        sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
         src: "/icon.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "maskable",
       },
       {
         src: "/apple-icon.png",
-        sizes: "512x512",
+        sizes: "180x180",
         type: "image/png",
         purpose: "any",
-      },
-      {
-        src: "/apple-icon.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "maskable",
       },
     ],
   };

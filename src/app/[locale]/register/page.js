@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
-import { parseFieldErrors } from "@/lib/api";
+import { parseFieldErrors, authApi } from "@/lib/api";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
@@ -113,12 +113,65 @@ function RegisterInner() {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState(null); // null | "checking" | "available" | "taken"
+  const [suggestions, setSuggestions] = useState([]);
+  const usernameTimer = useRef(null);
+
+  function generateSuggestions(base) {
+    const clean = base.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+    if (clean.length < 2) return [];
+    const r = () => String(Math.floor(Math.random() * 90) + 10);
+    const year = new Date().getFullYear();
+    return [
+      `${clean}${r()}`,
+      `${clean}_${r()}`,
+      `${clean}${year}`,
+      `${clean}_snl`,
+    ].filter((s) => s.length >= 3 && s.length <= 30);
+  }
+
+  async function checkUsername(val) {
+    try {
+      await authApi.checkUsername(val);
+      setUsernameStatus("available");
+      setSuggestions([]);
+    } catch (err) {
+      const status = err?.response?.status;
+      if (status === 409 || status === 400 || status === 422) {
+        setUsernameStatus("taken");
+        setSuggestions(generateSuggestions(val));
+      } else {
+        setUsernameStatus(null);
+      }
+    }
+  }
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setFields((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
     setApiError("");
+  }
+
+  function handleUsernameChange(e) {
+    handleChange(e);
+    const val = e.target.value.trim();
+    setUsernameStatus(null);
+    setSuggestions([]);
+    if (usernameTimer.current) clearTimeout(usernameTimer.current);
+    if (val.length < 3 || !/^[a-zA-Z0-9_]+$/.test(val)) return;
+    setUsernameStatus("checking");
+    usernameTimer.current = setTimeout(() => checkUsername(val), 600);
+  }
+
+  function pickSuggestion(username) {
+    setFields((prev) => ({ ...prev, username }));
+    setErrors((prev) => ({ ...prev, username: "" }));
+    setSuggestions([]);
+    setApiError("");
+    if (usernameTimer.current) clearTimeout(usernameTimer.current);
+    setUsernameStatus("checking");
+    usernameTimer.current = setTimeout(() => checkUsername(username), 300);
   }
 
   async function handleSubmit(e) {
@@ -142,7 +195,13 @@ function RegisterInner() {
       } catch (err) {
         try {
           const { fieldErrors, apiError: msg } = parseFieldErrors(err);
-          if (fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
+          if (fieldErrors) {
+            setErrors((prev) => ({ ...prev, ...fieldErrors }));
+            if (fieldErrors.username?.includes("taken")) {
+              setUsernameStatus("taken");
+              setSuggestions(generateSuggestions(fields.username));
+            }
+          }
           if (msg) setApiError(msg);
           else if (!fieldErrors) setApiError("Please check your information and try again.");
         } catch {
@@ -207,19 +266,84 @@ function RegisterInner() {
 
           <form className="flex flex-col gap-4.5" onSubmit={handleSubmit} noValidate>
 
-            {/* Pseudo */}
-            <Field
-              label="Username"
-              name="username"
-              placeholder="ex: sunalaa_user"
-              value={fields.username}
-              onChange={handleChange}
-              error={errors.username}
-              autoComplete="username"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-            />
+            {/* Username — check live + suggestions */}
+            <div className="flex flex-col gap-1.5">
+              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Username</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="username"
+                  value={fields.username}
+                  onChange={handleUsernameChange}
+                  placeholder="ex: sunalaa_user"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${
+                    errors.username || usernameStatus === "taken"
+                      ? "ring-2 ring-red-400"
+                      : usernameStatus === "available"
+                      ? "ring-2 ring-secondary/50"
+                      : "focus:ring-secondary/50"
+                  }`}
+                  style={{
+                    height: 42, borderRadius: 10,
+                    border: `1px solid ${errors.username || usernameStatus === "taken" ? "#f87171" : usernameStatus === "available" ? "#3FAE8C" : "#BCBEC0"}`,
+                    padding: "12px 40px 12px 16px",
+                  }}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  {usernameStatus === "checking" && (
+                    <svg className="animate-spin w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                    </svg>
+                  )}
+                  {usernameStatus === "available" && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                  {usernameStatus === "taken" && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M18 6L6 18M6 6l12 12" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  )}
+                </div>
+              </div>
+
+              {(errors.username || usernameStatus === "taken") && (
+                <p className="text-red-400 text-[12px] mt-0.5">
+                  {errors.username || "This username is already taken"}
+                </p>
+              )}
+              {usernameStatus === "available" && !errors.username && (
+                <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Username available
+                </p>
+              )}
+              {usernameStatus === "taken" && suggestions.length > 0 && (
+                <div className="flex flex-col gap-1.5 mt-0.5">
+                  <p className="text-white/50 text-[12px]">Try one of these:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {suggestions.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => pickSuggestion(s)}
+                        className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/10 hover:bg-secondary/30 text-white border border-white/20 hover:border-secondary/60 transition cursor-pointer"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Email / Téléphone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

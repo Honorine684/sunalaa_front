@@ -5,6 +5,7 @@ import "@/app/globals.css";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
+  preload: false,
 });
 
 export const metadata = {
@@ -14,12 +15,10 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </body>
-    </html>
+    <div className={`${inter.className} antialiased`}>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </div>
   );
 }

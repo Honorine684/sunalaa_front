@@ -197,8 +197,26 @@ function ActionMenu({ user, onStatusChange, onDelete }) {
   );
 }
 
-const COLS = ["UTILISATEUR", "EMAIL", "TÉLÉPHONE", "POINTS SNL", "PARRAINAGES", "STATUT", "INSCRIPTION", "ACTIONS"];
-const GRID = "grid-cols-[2fr_1.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_0.5fr]";
+const KYC_INFO = {
+  APPROVED: { label: "Vérifié",    bg: "#D1FAE5", color: "#065F46" },
+  PENDING:  { label: "En attente", bg: "#FEF9C3", color: "#854D0E" },
+  REJECTED: { label: "Rejeté",     bg: "#FEE2E2", color: "#7F1D1D" },
+};
+
+function KycBadge({ user }) {
+  const status = user?.kycStatus ?? user?.kyc?.status ?? (user?.isKycVerified || user?.kycVerified ? "APPROVED" : null);
+  if (!status) return <span className="text-[12px]" style={{ color: "#94A3B8" }}>—</span>;
+  const info = KYC_INFO[status] ?? { label: status, bg: "#F1F5F9", color: "#475569" };
+  return (
+    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold w-fit"
+      style={{ backgroundColor: info.bg, color: info.color }}>
+      {info.label}
+    </span>
+  );
+}
+
+const COLS = ["UTILISATEUR", "EMAIL", "TÉLÉPHONE", "POINTS SNL", "PARRAINAGES", "KYC", "STATUT", "INSCRIPTION", "ACTIONS"];
+const GRID = "grid-cols-[2fr_1.5fr_1.5fr_1fr_1fr_1fr_1.2fr_1.2fr_0.5fr]";
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -310,6 +328,7 @@ export default function UsersManagement() {
                 <Skeleton className="h-4 w-28" />
                 <Skeleton className="h-4 w-16" />
                 <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-5 w-18 rounded-full" />
                 <Skeleton className="h-6 w-20 rounded-full" />
                 <Skeleton className="h-4 w-24" />
                 <Skeleton className="h-6 w-6 rounded-full" />
@@ -346,6 +365,7 @@ export default function UsersManagement() {
                     <span className="text-[13px]" style={{ color: "#45556C" }}>{getPhoneDisplay(phone)}</span>
                     <span className="text-[14px]" style={{ color: "#0F172B" }}>{fmt(points)}</span>
                     <span className="text-[14px]" style={{ color: "#45556C" }}>{fmt(refs)}</span>
+                    <KycBadge user={user} />
                     <StatusBadge user={user} />
                     <span className="text-[14px]" style={{ color: "#45556C" }}>
                       {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}

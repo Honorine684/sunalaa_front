@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { authApi, getApiError } from "@/lib/api";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 /* ── Change Password ── */
 function EyeIcon({ visible }) {
@@ -297,6 +298,67 @@ function TwoFactorSection({ user }) {
   );
 }
 
+/* ── Push Notifications ── */
+function PushNotifSection() {
+  const { supported, permission, subscribed, loading, subscribe, unsubscribe } = usePushNotifications();
+  const [feedback, setFeedback] = useState(null); // "granted" | "denied" | "error"
+
+  async function handleToggle() {
+    if (subscribed) {
+      await unsubscribe();
+      setFeedback(null);
+    } else {
+      const result = await subscribe();
+      if (result.ok) setFeedback("granted");
+      else if (result.reason === "denied") setFeedback("denied");
+      else setFeedback("error");
+    }
+  }
+
+  if (!supported) return null;
+
+  return (
+    <div className="pt-4 border-t border-slate-100">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-[16px] font-bold" style={{ color: "#0F172B" }}>Push notifications</p>
+          <p className="text-[12px] mt-0.5" style={{ color: "#45556C" }}>
+            {permission === "denied"
+              ? "Blocked by your browser — enable in browser settings"
+              : subscribed
+              ? <span className="font-semibold" style={{ color: "#059669" }}>Enabled</span>
+              : <span style={{ color: "#94A3B8" }}>Disabled</span>
+            }
+          </p>
+          {feedback === "denied" && (
+            <p className="text-[11px] mt-1" style={{ color: "#F59E0B" }}>
+              Go to your browser settings → Notifications → Allow sunalaa.com
+            </p>
+          )}
+          {feedback === "granted" && (
+            <p className="text-[11px] mt-1" style={{ color: "#059669" }}>Notifications successfully enabled ✓</p>
+          )}
+        </div>
+
+        {permission !== "denied" && (
+          <button
+            onClick={handleToggle}
+            disabled={loading}
+            className="relative shrink-0 w-12 h-6 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50"
+            style={{ backgroundColor: subscribed ? "#3FAE8C" : "#E2E8F0" }}
+            aria-label="Toggle push notifications"
+          >
+            <span
+              className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
+              style={{ transform: subscribed ? "translateX(24px)" : "translateX(0)" }}
+            />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ── Main ── */
 export default function ProfileSecurity({ user }) {
   return (
@@ -310,8 +372,9 @@ export default function ProfileSecurity({ user }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <ChangePasswordForm />
-        <div className="md:border-l md:border-slate-100 md:pl-8">
+        <div className="md:border-l md:border-slate-100 md:pl-8 flex flex-col gap-0">
           <TwoFactorSection user={user} />
+          <PushNotifSection />
         </div>
       </div>
     </div>

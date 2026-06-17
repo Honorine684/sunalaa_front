@@ -4,17 +4,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { settingsApi } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const FALLBACK = { bonusPoints: 500, spotsRemaining: 5000, maxMembers: 5000 };
 
-// Formatage simple sans Intl.NumberFormat pour compatibilité maximale
 function fmtNum(n) {
-  return String(Math.max(0, Math.floor(n))).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return String(Math.max(0, Math.floor(n))).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export default function AnnouncementBanner() {
   const t = useTranslations("AnnouncementBanner");
   const locale = useLocale();
+  const { isAuthenticated } = useAuth();
   const prefix = locale === "fr" ? "/fr" : "";
   const [visible, setVisible] = useState(true);
   const [stats, setStats] = useState(FALLBACK);
@@ -32,7 +33,7 @@ export default function AnnouncementBanner() {
       .catch(() => {});
   }, []);
 
-  if (!visible) return null;
+  if (!visible || isAuthenticated) return null;
 
   return (
     <div

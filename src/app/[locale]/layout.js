@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/context/AuthContext";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import PwaRegister from "@/components/PwaRegister";
+import PushNotifPrompt from "@/components/PushNotifPrompt";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
@@ -31,6 +32,7 @@ export default async function LocaleLayout({ children, params }) {
             </ErrorBoundary>
             {children}
             <PwaRegister />
+            <PushNotifPrompt />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

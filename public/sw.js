@@ -1,4 +1,4 @@
-const CACHE = "sunala-v1";
+const CACHE = "sunalaa-v2";
 
 const STATIC_PREFIXES = [
   "/_next/static/",
@@ -24,7 +24,6 @@ self.addEventListener("fetch", (e) => {
   const { request } = e;
   const url = new URL(request.url);
 
-  // Ne jamais intercepter : non-GET, API, admin, auth, pages dynamiques
   if (
     request.method !== "GET" ||
     url.pathname.startsWith("/api/") ||
@@ -45,7 +44,6 @@ self.addEventListener("fetch", (e) => {
     STATIC_EXT.test(url.pathname);
 
   if (isStatic) {
-    // Cache-first pour les assets statiques
     e.respondWith(
       caches.match(request).then(
         (cached) =>
@@ -58,9 +56,40 @@ self.addEventListener("fetch", (e) => {
       )
     );
   } else {
-    // Network-first pour les pages
     e.respondWith(
       fetch(request).catch(() => caches.match(request))
     );
   }
+});
+
+/* ─── Push notifications ─────────────────────────────────────────── */
+self.addEventListener("push", (e) => {
+  if (!e.data) return;
+  let payload;
+  try { payload = e.data.json(); } catch { return; }
+
+  const { title = "SUNALAA", body = "", icon = "/icon-192.png", badge = "/icon-192.png", url = "/", tag = "sunalaa" } = payload;
+
+  e.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon,
+      badge,
+      tag,
+      data: { url },
+      requireInteraction: false,
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const target = e.notification.data?.url || "/";
+  e.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      const existing = clientList.find((c) => c.url.includes(self.location.origin) && "focus" in c);
+      if (existing) return existing.focus().then((c) => c.navigate(target));
+      return clients.openWindow(target);
+    })
+  );
 });
