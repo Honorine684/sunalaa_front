@@ -106,8 +106,9 @@ function LoginInner() {
       }
       redirect(data);
     } catch (err) {
-      const msg = (err?.response?.data?.message ?? err?.message ?? "").toLowerCase();
-      const notVerified = msg.includes("verif") || msg.includes("confirm") || msg.includes("not verified") || msg.includes("activate") || msg.includes("activated");
+      const raw = err?.response?.data?.message ?? err?.message ?? "";
+      const msg = (Array.isArray(raw) ? raw.join(" ") : raw).toLowerCase();
+      const notVerified = msg.includes("verif") || msg.includes("confirm") || msg.includes("not verified") || msg.includes("activat") || msg.includes("email");
       if (notVerified) {
         setEmailUnverified(true);
       } else {
