@@ -108,7 +108,15 @@ function LoginInner() {
     } catch (err) {
       const raw = err?.response?.data?.message ?? err?.message ?? "";
       const msg = (Array.isArray(raw) ? raw.join(" ") : raw).toLowerCase();
-      const notVerified = msg.includes("verif") || msg.includes("confirm") || msg.includes("not verified") || msg.includes("activat") || msg.includes("email");
+      const status = err?.response?.status;
+      const notVerified =
+        msg.includes("verif") ||
+        msg.includes("confirm") ||
+        msg.includes("not verified") ||
+        msg.includes("activat") ||
+        msg.includes("no refresh token") ||
+        msg.includes("refresh token") ||
+        status === 403;
       if (notVerified) {
         setEmailUnverified(true);
       } else {
