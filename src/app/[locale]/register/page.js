@@ -251,18 +251,11 @@ function RegisterInner() {
               </ol>
             </div>
 
-            <p className="text-white/40 text-[12px] mb-5">
+            <p className="text-white/40 text-[12px]">
               {locale === "fr"
                 ? "Vous ne pourrez pas vous connecter tant que votre email n'est pas vérifié."
                 : "You won't be able to log in until your email is verified."}
             </p>
-
-            <Link
-              href={`${locale === "fr" ? "/fr" : ""}/login`}
-              className="inline-flex items-center justify-center w-full text-white/50 text-[13px] hover:text-white transition underline underline-offset-2"
-            >
-              {locale === "fr" ? "J'ai vérifié mon email → Se connecter" : "I've verified my email → Log in"}
-            </Link>
           </div>
         </div>
       </div>
