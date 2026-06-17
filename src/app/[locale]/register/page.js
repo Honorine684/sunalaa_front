@@ -222,18 +222,46 @@ function RegisterInner() {
         <div className="w-full max-w-lg flex flex-col items-center gap-6 text-center">
           <Link href="/"><Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority /></Link>
           <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-4xl px-8 py-10">
-            <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-4">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+
+            {/* Icône enveloppe */}
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: "rgba(230,184,76,0.15)", border: "2px solid rgba(230,184,76,0.35)" }}>
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#E6B84C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                <polyline points="22,6 12,13 2,6" stroke="#E6B84C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h2 className="text-white font-bold text-[22px] mb-3">Account created!</h2>
-            <p className="text-white/70 text-[14px] leading-relaxed mb-6">
-              A verification email has been sent to <strong className="text-white">{fields.email}</strong>.<br />
-              Check your inbox to activate your account.
+
+            <h2 className="text-white font-bold text-[22px] mb-2">
+              {locale === "fr" ? "Vérifiez votre boîte mail !" : "Check your inbox!"}
+            </h2>
+            <p className="text-white/60 text-[13px] mb-4">
+              {locale === "fr" ? "Nous avons envoyé un lien à" : "We sent a verification link to"}
             </p>
-            <Link href="/login" className="inline-flex items-center justify-center w-full bg-secondary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-90 transition">
-              Go to login
+            <p className="text-white font-semibold text-[15px] mb-6 break-all">{fields.email}</p>
+
+            {/* Bloc d'instruction */}
+            <div className="rounded-2xl px-5 py-4 mb-6 text-left" style={{ backgroundColor: "rgba(230,184,76,0.10)", border: "1px solid rgba(230,184,76,0.30)" }}>
+              <p className="text-[13px] font-bold mb-2" style={{ color: "#E6B84C" }}>
+                {locale === "fr" ? "⚠ Étape obligatoire avant de vous connecter" : "⚠ Required step before logging in"}
+              </p>
+              <ol className="flex flex-col gap-1.5 text-[13px] leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <li>1. {locale === "fr" ? "Ouvrez votre boîte mail" : "Open your email inbox"}</li>
+                <li>2. {locale === "fr" ? "Cliquez sur le lien de vérification" : "Click the verification link"}</li>
+                <li>3. {locale === "fr" ? "Revenez vous connecter" : "Come back and log in"}</li>
+              </ol>
+            </div>
+
+            <p className="text-white/40 text-[12px] mb-5">
+              {locale === "fr"
+                ? "Vous ne pourrez pas vous connecter tant que votre email n'est pas vérifié."
+                : "You won't be able to log in until your email is verified."}
+            </p>
+
+            <Link
+              href={`${locale === "fr" ? "/fr" : ""}/login`}
+              className="inline-flex items-center justify-center w-full text-white/50 text-[13px] hover:text-white transition underline underline-offset-2"
+            >
+              {locale === "fr" ? "J'ai vérifié mon email → Se connecter" : "I've verified my email → Log in"}
             </Link>
           </div>
         </div>
