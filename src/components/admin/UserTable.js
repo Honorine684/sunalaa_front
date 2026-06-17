@@ -84,8 +84,9 @@ export default function UserTable() {
               const isActive = user?.isActive === true || statusStr === "active";
               const points = user?.points ?? user?.totalPoints ?? user?.snlBalance ?? 0;
               const createdAt = user?.createdAt ?? user?.created_at ?? user?.joinedAt;
-              const displayName = [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name]
-                .filter(Boolean).join(" ") || user?.username || user?.email?.split("@")[0] || "—";
+              const displayName = user?.username
+                || [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name].filter(Boolean).join(" ")
+                || user?.email?.split("@")[0] || "—";
               return (
                 <div
                   key={user?.id ?? i}

@@ -31,7 +31,11 @@ function ChangePasswordForm() {
     if (!fields.currentPassword) e.currentPassword = "Required";
     if (!fields.newPassword) e.newPassword = "Required";
     else if (fields.newPassword.length < 8) e.newPassword = "Minimum 8 characters";
-    if (fields.newPassword && fields.newPassword === fields.currentPassword) e.newPassword = "Must be different from the old one";
+    else if (!/[A-Z]/.test(fields.newPassword)) e.newPassword = "Must contain at least one uppercase letter";
+    else if (!/[a-z]/.test(fields.newPassword)) e.newPassword = "Must contain at least one lowercase letter";
+    else if (!/[0-9]/.test(fields.newPassword)) e.newPassword = "Must contain at least one number";
+    else if (!/[@$!%*?&]/.test(fields.newPassword)) e.newPassword = "Must contain at least one special character: @ $ ! % * ? &";
+    if (!e.newPassword && fields.newPassword === fields.currentPassword) e.newPassword = "Must be different from the old one";
     if (!fields.confirm) e.confirm = "Required";
     else if (fields.confirm !== fields.newPassword) e.confirm = "Passwords do not match";
     return e;

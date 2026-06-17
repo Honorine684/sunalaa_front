@@ -155,7 +155,7 @@ export default function PointsManagement() {
   }
 
   const filtered = history.filter((h) => {
-    const name = (h?.user?.firstName ?? h?.userName ?? h?.name ?? "").toLowerCase();
+    const name = (h?.user?.username ?? h?.user?.firstName ?? h?.userName ?? h?.name ?? "").toLowerCase();
     const just = (h?.justification ?? h?.reason ?? "").toLowerCase();
     return !search || name.includes(search.toLowerCase()) || just.includes(search.toLowerCase());
   });

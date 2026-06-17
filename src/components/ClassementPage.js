@@ -12,10 +12,21 @@ function getInitials(u) {
   return (first + last).toUpperCase();
 }
 
+function clean(v) {
+  if (!v) return "";
+  const s = String(v).trim();
+  if (/^(null|undefined)(\s*(null|undefined))*$/i.test(s)) return "";
+  return s;
+}
+
 function getDisplayName(u) {
-  return u?.username
-    || [u?.firstName ?? u?.first_name, u?.lastName ?? u?.last_name].filter(Boolean).join(" ")
-    || u?.name || u?.email || "—";
+  const username = clean(u?.username ?? u?.pseudo ?? u?.displayName ?? u?.display_name ?? u?.handle);
+  if (username) return username;
+  const first = clean(u?.firstName ?? u?.first_name);
+  const last  = clean(u?.lastName  ?? u?.last_name);
+  const full  = [first, last].filter(Boolean).join(" ");
+  if (full) return full;
+  return clean(u?.name ?? u?.email) || "—";
 }
 
 function getPoints(u) {

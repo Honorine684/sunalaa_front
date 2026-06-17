@@ -100,6 +100,7 @@
     "empty_sub": "Check back soon, new missions will be published shortly.",
     "points_label": "Points to earn",
     "points": "{n} SNL",
+    "start_btn": "Start",
     "complete_btn": "Complete",
     "completed": "Completed",
     "verify_btn": "Verify"
@@ -129,7 +130,8 @@
     "referrals": "{n} referrals",
     "daily_bonus": "{pct}% of daily collects",
     "claim_btn": "+{snl} SNL",
-    "claimed": "Claimed",
+    "claimed": "Up to date",
+    "no_referrals": "No referrals",
     "info_1": "Every collect by a referral automatically credits you a SNL bonus.",
     "info_2": "Claim your accumulated bonuses by clicking the button at each level."
   },
@@ -440,6 +442,19 @@
     "tab_adresses": "Addresses & Orders",
     "tab_securite": "Security"
   },
+  "ForgotPassword": {
+    "title": "Forgot password?",
+    "subtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "label_email": "Email",
+    "submit": "Send link",
+    "submitting": "Sending...",
+    "server_error": "Server error. Please try again.",
+    "email_required": "Email is required",
+    "email_invalid": "Invalid email format",
+    "sent_title": "Email sent!",
+    "sent_body": "If an account exists with <strong>{email}</strong>, you'll receive a reset link shortly.",
+    "back_to_login": "Back to login"
+  },
   "WelcomePopup": {
     "badge": "Welcome bonus",
     "title": "Your {points} SNL are waiting!",
@@ -449,7 +464,7 @@
     "body2_points": "{points} SNL",
     "body2_after": " ready to collect.",
     "cta": "Claim my {points} SNL",
-    "cta_guest": "Sign up and get {points} SNL",
+    "cta_guest": "Get {points} SNL",
     "claiming": "Claiming…",
     "dismiss": "Later"
   }

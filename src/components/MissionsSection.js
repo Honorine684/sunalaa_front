@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Container from "./Container";
 import { missionsApi } from "@/lib/api";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/context/AuthContext";
 
 const PLATFORM_COLORS = {
   telegram:  "#1A3C34",
@@ -59,18 +60,54 @@ const PLATFORM_ICONS = {
 
 export default function MissionsSection() {
   const t = useTranslations("MissionsSection");
+  const { isAuthenticated } = useAuth();
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingId, setLoadingId] = useState(null);
 
   useEffect(() => {
-    missionsApi.getPublic()
+    if (!isAuthenticated) { setMissions([]); setLoading(false); return; }
+    let cancelled = false;
+    setLoading(true);
+    missionsApi.getMyMissions()
       .then((res) => {
+        if (cancelled) return;
         const raw = res.data?.data ?? res.data;
-        setMissions(Array.isArray(raw) ? raw.slice(0, 6) : []);
+        setMissions(Array.isArray(raw) ? raw : []);
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+      .catch(() => { if (!cancelled) setMissions([]); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [isAuthenticated]);
+
+  async function handleStart(mission) {
+    if (mission.actionUrl) window.open(mission.actionUrl, "_blank", "noopener");
+    setLoadingId(mission.id);
+    try {
+      await missionsApi.start(mission.id);
+      setMissions((prev) =>
+        prev.map((m) => m.id === mission.id ? { ...m, userStatus: "PENDING" } : m)
+      );
+    } catch {
+      // status will refresh on next page load
+    } finally {
+      setLoadingId(null);
+    }
+  }
+
+  async function handleComplete(id) {
+    setLoadingId(id);
+    try {
+      await missionsApi.complete(id);
+      setMissions((prev) =>
+        prev.map((m) => m.id === id ? { ...m, userStatus: "COMPLETED" } : m)
+      );
+    } catch {
+      // status will refresh on next page load
+    } finally {
+      setLoadingId(null);
+    }
+  }
 
   return (
     <section className="bg-white py-16 relative overflow-hidden">
@@ -130,14 +167,25 @@ export default function MissionsSection() {
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {missions.map((mission) => {
-            const key    = mission.platform?.toLowerCase();
-            const iconBg = PLATFORM_COLORS[key] ?? "#1A3C34";
-            const icon   = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
+            const key      = mission.platform?.toLowerCase();
+            const iconBg   = PLATFORM_COLORS[key] ?? "#1A3C34";
+            const icon     = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
+            const status   = mission.userStatus ?? (mission.completed === true ? "COMPLETED" : null);
+            const claimed  = status === "COMPLETED";
+            const pending  = status === "PENDING";
+            const inReview = status === "UNDER_REVIEW";
+            const rejected = status === "REJECTED";
+            const busy     = loadingId === mission.id;
+            const Spinner  = () => (
+              <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="40 20"/>
+              </svg>
+            );
             return (
               <div
                 key={mission.id}
                 className="flex flex-col justify-between bg-white hover:scale-[1.01] transition-transform duration-200"
-                style={{ minHeight: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12 }}
+                style={{ minHeight: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12, opacity: claimed ? 0.7 : 1 }}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex items-center justify-center shrink-0" style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: iconBg }}>
@@ -148,7 +196,7 @@ export default function MissionsSection() {
                       <p className="text-[14px] sm:text-[20px]" style={{ fontWeight: 600, lineHeight: "22px", color: "#0F172B" }}>
                         {mission.title}
                       </p>
-                      <div className="relative w-6 h-6 sm:w-8 sm:h-8 shrink-0">
+                      <div className={`relative w-6 h-6 sm:w-8 sm:h-8 shrink-0 ${claimed ? "opacity-40" : ""}`}>
                         <Image src="/images/4.png" alt="coins" fill className="object-contain" />
                       </div>
                     </div>
@@ -156,18 +204,63 @@ export default function MissionsSection() {
                       <p className="text-[12px] sm:text-[16px]" style={{ fontWeight: 400, lineHeight: "22.75px", color: "#45556C" }}>
                         {mission.description}
                       </p>
-                      <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: "#0A3706" }}>
+                      <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: claimed ? "#CBD5E1" : "#0A3706" }}>
                         {mission.reward} SNL
                       </span>
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => mission.actionUrl && window.open(mission.actionUrl, "_blank", "noopener")}
-                  className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer"
-                >
-                  {t("complete_btn")}
-                </button>
+
+                {/* Auth users: 5-state button; guests: simple link */}
+                {isAuthenticated ? (
+                  claimed ? (
+                    <button disabled className="w-full py-3 rounded-xl text-white text-[14px] font-normal cursor-default" style={{ backgroundColor: "#E6B84C" }}>
+                      Claimed ✓
+                    </button>
+                  ) : inReview ? (
+                    <button disabled className="w-full py-3 rounded-xl text-[14px] font-normal cursor-default flex items-center justify-center gap-2" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
+                      <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3B82F6" strokeWidth="3" strokeDasharray="40 20"/></svg>
+                      Validation in progress…
+                    </button>
+                  ) : rejected ? (
+                    <button
+                      onClick={() => handleStart(mission)}
+                      disabled={busy}
+                      className="w-full py-3 rounded-xl text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2 border"
+                      style={{ backgroundColor: "#FEF2F2", color: "#EF4444", borderColor: "#FECACA" }}
+                    >
+                      {busy && <Spinner />}
+                      {busy ? "…" : "Rejected, retry"}
+                    </button>
+                  ) : pending ? (
+                    <button
+                      onClick={() => handleComplete(mission.id)}
+                      disabled={busy}
+                      className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                      style={{ backgroundColor: "#E17100" }}
+                    >
+                      {busy && <Spinner />}
+                      {busy ? "Verifying…" : "Verify and claim"}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleStart(mission)}
+                      disabled={busy}
+                      className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                      style={{ backgroundColor: "#344054" }}
+                    >
+                      {busy && <Spinner />}
+                      {busy ? "Starting…" : t("start_btn")}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    onClick={() => mission.actionUrl && window.open(mission.actionUrl, "_blank", "noopener")}
+                    className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer"
+                  >
+                    {t("complete_btn")}
+                  </button>
+                )}
               </div>
             );
           })}

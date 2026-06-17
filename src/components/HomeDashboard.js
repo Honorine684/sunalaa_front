@@ -73,6 +73,18 @@ export default function HomeDashboard() {
   const [localBalance, setLocalBalance] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  async function handleShare() {
+    const link = `https://sunalaa.com/register?ref=${referralCode ?? ""}`;
+    const text = "Join me on SUNALAA and earn free SNL points every day!";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try { await navigator.share({ title: "SUNALAA", text, url: link }); } catch {}
+    } else {
+      navigator.clipboard.writeText(link).catch(() => {});
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
   const totalPoints   = localBalance ?? balance ?? data?.snlBalance ?? data?.totalPoints ?? data?.points ?? 0;
   const dailyPoints   = data?.dailyPoints ?? data?.todayPoints ?? data?.todayEarned ?? 0;
   const levelName     = levelData?.name ?? data?.level?.name ?? data?.levelName ?? "—";
@@ -213,14 +225,14 @@ export default function HomeDashboard() {
                   <Skeleton className="h-4 w-40" />
                 ) : (
                   <p className="text-[12px] font-medium truncate" style={{ color: "#0F172B" }}>
-                    sunalaa.com/ref/{referralCode}
+                    sunalaa.com/register?ref={referralCode}
                   </p>
                 )}
               </div>
               <button
                 onClick={() => {
                   const code = referralCode ?? "";
-                  navigator.clipboard.writeText(`https://sunalaa.com/ref/${code}`).catch(() => {});
+                  navigator.clipboard.writeText(`https://sunalaa.com/register?ref=${code}`).catch(() => {});
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
@@ -242,9 +254,20 @@ export default function HomeDashboard() {
               </button>
             </div>
 
-            <Link href="/parrainage" className="block w-full text-center bg-secondary text-white text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:brightness-90 transition">
-              Invite my contacts
-            </Link>
+            <button
+              onClick={handleShare}
+              disabled={!referralCode}
+              className="w-full flex items-center justify-center gap-2 bg-secondary text-white text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:brightness-90 transition cursor-pointer disabled:opacity-40"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <circle cx="18" cy="5" r="3" stroke="white" strokeWidth="2"/>
+                <circle cx="6" cy="12" r="3" stroke="white" strokeWidth="2"/>
+                <circle cx="18" cy="19" r="3" stroke="white" strokeWidth="2"/>
+                <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Share my link
+            </button>
+
           </Card>
         </div>
 

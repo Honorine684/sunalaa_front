@@ -1,3 +1,10 @@
+function toFlag(code) {
+  if (!code || code.length !== 2) return "";
+  return code.toUpperCase().split("").map((c) =>
+    String.fromCodePoint(c.charCodeAt(0) - 65 + 0x1f1e6)
+  ).join("");
+}
+
 const medalImages = {
   1: "/images/Medals.png",
   2: "/images/Silver.png",
@@ -63,6 +70,11 @@ export default function LeaderboardRow({ rank, username, subtitle, country, scor
             <p className={`${textColor} font-normal text-[12px] lg:text-[14px] tracking-wide truncate`}>
               {username}
             </p>
+            {country && (
+              <span className="shrink-0 text-[14px] sm:hidden" title={country}>
+                {toFlag(country)}
+              </span>
+            )}
             {isMe && (
               <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0" style={{ backgroundColor: "#2DD4BF", color: "#1A3A34" }}>
                 You
@@ -75,7 +87,10 @@ export default function LeaderboardRow({ rank, username, subtitle, country, scor
 
       {/* Country */}
       <div className="w-32 hidden sm:block">
-        <p className={`${countryColor} text-[13px] font-normal tracking-widest`}>{country}</p>
+        <p className={`${countryColor} text-[13px] font-normal flex items-center gap-1.5`}>
+          {country && <span className="text-[16px]">{toFlag(country)}</span>}
+          {country}
+        </p>
       </div>
 
       {/* Score */}

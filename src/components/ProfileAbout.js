@@ -5,20 +5,20 @@ import { getApiError } from "@/lib/api";
 
 function validate(fields) {
   const errors = {};
-  if (!fields.firstName?.trim()) {
-    errors.firstName = "First name is required";
-  } else if (fields.firstName.trim().length < 2) {
-    errors.firstName = "Minimum 2 characters";
-  } else if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(fields.firstName.trim())) {
-    errors.firstName = "Letters only";
+  if (fields.firstName?.trim()) {
+    if (fields.firstName.trim().length < 2) {
+      errors.firstName = "Minimum 2 characters";
+    } else if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(fields.firstName.trim())) {
+      errors.firstName = "Letters only";
+    }
   }
 
-  if (!fields.lastName?.trim()) {
-    errors.lastName = "Last name is required";
-  } else if (fields.lastName.trim().length < 2) {
-    errors.lastName = "Minimum 2 characters";
-  } else if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(fields.lastName.trim())) {
-    errors.lastName = "Letters only";
+  if (fields.lastName?.trim()) {
+    if (fields.lastName.trim().length < 2) {
+      errors.lastName = "Minimum 2 characters";
+    } else if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(fields.lastName.trim())) {
+      errors.lastName = "Letters only";
+    }
   }
 
   if (fields.phone) {

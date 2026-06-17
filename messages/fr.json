@@ -100,6 +100,7 @@
     "empty_sub": "Revenez bientôt, de nouvelles missions seront publiées prochainement.",
     "points_label": "Points à gagner",
     "points": "{n} SNL",
+    "start_btn": "Démarrer",
     "complete_btn": "Effectuer",
     "completed": "Terminé",
     "verify_btn": "Vérifier"
@@ -129,7 +130,8 @@
     "referrals": "{n} filleuls",
     "daily_bonus": "{pct}% des collectes journalières",
     "claim_btn": "+{snl} SNL",
-    "claimed": "Réclamé",
+    "claimed": "À jour",
+    "no_referrals": "Aucun filleul",
     "info_1": "Chaque collecte d'un filleul vous crédite automatiquement un bonus en SNL.",
     "info_2": "Réclamez vos bonus accumulés en cliquant sur le bouton de chaque niveau."
   },
@@ -440,6 +442,19 @@
     "tab_adresses": "Adresses & Commandes",
     "tab_securite": "Sécurité"
   },
+  "ForgotPassword": {
+    "title": "Mot de passe oublié ?",
+    "subtitle": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "label_email": "Email",
+    "submit": "Envoyer le lien",
+    "submitting": "Envoi en cours...",
+    "server_error": "Erreur serveur. Veuillez réessayer.",
+    "email_required": "L'email est requis",
+    "email_invalid": "Format d'email invalide",
+    "sent_title": "Email envoyé !",
+    "sent_body": "Si un compte existe avec <strong>{email}</strong>, vous recevrez un lien de réinitialisation sous peu.",
+    "back_to_login": "Retour à la connexion"
+  },
   "WelcomePopup": {
     "badge": "Bonus de bienvenue",
     "title": "Tes {points} SNL t'attendent !",
@@ -449,7 +464,7 @@
     "body2_points": "{points} SNL",
     "body2_after": " prêts à être récupérés.",
     "cta": "Récupérer mes {points} SNL",
-    "cta_guest": "S'inscrire et obtenir {points} SNL",
+    "cta_guest": "Obtenir {points} SNL",
     "claiming": "Récupération…",
     "dismiss": "Plus tard"
   }

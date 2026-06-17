@@ -35,8 +35,9 @@ export default function Navbar() {
     window.location.href = prefix + "/";
   }
 
-  const initials = ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
-    || user?.username?.[0]?.toUpperCase() || "?";
+  const initials = user?.username?.[0]?.toUpperCase()
+    || ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
+    || "?";
 
   return (
     <>

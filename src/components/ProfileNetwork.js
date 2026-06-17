@@ -13,14 +13,14 @@ function resolve(node) {
 function getInitials(node) {
   const u = resolve(node);
   if (u?.username) return u.username[0].toUpperCase();
-  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.name?.[0] ?? "?";
+  const first = u?.firstName?.[0] ?? u?.first_name?.[0] ?? u?.name?.[0] ?? u?.email?.[0] ?? "?";
   const last = u?.lastName?.[0] ?? u?.last_name?.[0] ?? "";
   return (first + last).toUpperCase();
 }
 
 function getColor(node) {
   const u = resolve(node);
-  const name = u?.username ?? u?.firstName ?? u?.first_name ?? u?.name ?? "A";
+  const name = u?.username ?? u?.firstName ?? u?.first_name ?? u?.name ?? u?.email ?? "A";
   return COLORS[name.charCodeAt(0) % COLORS.length];
 }
 

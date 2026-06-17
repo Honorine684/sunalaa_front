@@ -3,20 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { authApi } from "@/lib/api";
 
-function validate(email) {
-  if (!email.trim()) return "L'email est requis";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Format d'email invalide";
-  return "";
-}
-
 export default function ForgotPasswordPage() {
+  const t = useTranslations("ForgotPassword");
+  const locale = useLocale();
+  const prefix = locale === "fr" ? "/fr" : "";
+
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+
+  function validate(val) {
+    if (!val.trim()) return t("email_required");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return t("email_invalid");
+    return "";
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -29,10 +34,8 @@ export default function ForgotPasswordPage() {
       await authApi.forgotPassword(email.trim());
       setSent(true);
     } catch (err) {
-      // API retourne 200 systématiquement pour éviter l'énumération d'emails
-      // On affiche le succès dans tous les cas sauf erreur réseau
       if (err?.response?.status >= 500) {
-        setApiError("Erreur serveur. Veuillez réessayer.");
+        setApiError(t("server_error"));
       } else {
         setSent(true);
       }
@@ -45,7 +48,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-primary flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-160 flex flex-col items-center gap-6">
 
-        <Link href="/">
+        <Link href={`${prefix}/`}>
           <Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority />
         </Link>
 
@@ -64,10 +67,10 @@ export default function ForgotPasswordPage() {
               </div>
 
               <h1 className="text-center mb-2" style={{ fontSize: 38, fontWeight: 700, color: "#FFFFFF" }}>
-                Mot de passe oublié ?
+                {t("title")}
               </h1>
               <p className="text-center mb-8" style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: "150%" }}>
-                Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                {t("subtitle")}
               </p>
 
               {apiError && (
@@ -78,7 +81,7 @@ export default function ForgotPasswordPage() {
 
               <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
                 <div className="flex flex-col gap-1.5">
-                  <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Email</label>
+                  <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("label_email")}</label>
                   <input
                     type="email"
                     name="email"
@@ -103,7 +106,7 @@ export default function ForgotPasswordPage() {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                     </svg>
                   )}
-                  {loading ? "Envoi en cours..." : "Envoyer le lien"}
+                  {loading ? t("submitting") : t("submit")}
                 </button>
               </form>
             </>
@@ -117,20 +120,23 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
               <h1 className="text-center mb-2" style={{ fontSize: 38, fontWeight: 700, color: "#FFFFFF" }}>
-                Email envoyé !
+                {t("sent_title")}
               </h1>
               <p className="text-center mt-3" style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: "150%" }}>
-                Si un compte existe avec <strong className="text-white">{email}</strong>, vous recevrez un lien de réinitialisation sous peu.
+                {t.rich("sent_body", {
+                  email,
+                  strong: (chunks) => <strong className="text-white">{chunks}</strong>,
+                })}
               </p>
             </>
           )}
 
           <p className="text-center mt-8" style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
-            <Link href="/login" className="text-white font-semibold hover:text-secondary transition-colors flex items-center justify-center gap-1.5">
+            <Link href={`${prefix}/login`} className="text-white font-semibold hover:text-secondary transition-colors flex items-center justify-center gap-1.5">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              Retour à la connexion
+              {t("back_to_login")}
             </Link>
           </p>
         </div>

@@ -34,9 +34,10 @@ export default function ParrainageSection() {
   const [earnings, setEarnings] = useState(null);
   const [pending, setPending]   = useState(null);
   const [claiming, setClaiming] = useState({});
+  const [claimError, setClaimError] = useState("");
 
   const referralCode = user?.referralCode ?? user?.referral_code ?? "SUNALA";
-  const referralLink = `https://sunalaa.com/ref/${referralCode}`;
+  const referralLink = `https://sunalaa.com/register?ref=${referralCode}`;
 
   const steps = [
     { num: "1", title: t("step1_title"), desc: t("step1_desc") },
@@ -61,21 +62,33 @@ export default function ParrainageSection() {
   }, []);
 
   async function handleClaim(levelNum) {
+    setClaimError("");
     setClaiming((prev) => ({ ...prev, [levelNum]: true }));
     try {
       await usersApi.claimReferral(levelNum);
       fetchPendingAndEarnings();
-    } catch {
-      // silencieux
+    } catch (err) {
+      const msg = err?.response?.data?.message ?? "Claim failed. Please try again.";
+      setClaimError(msg);
     } finally {
       setClaiming((prev) => ({ ...prev, [levelNum]: false }));
     }
   }
 
   function getPendingForLevel(levelNum) {
-    if (!pending?.levels) return 0;
-    const entry = pending.levels.find((l) => l.level === levelNum);
-    return entry?.pending ?? 0;
+    if (!pending) return 0;
+    if (Array.isArray(pending.levels)) {
+      const entry = pending.levels.find((l) => l.level === levelNum || l.levelNum === levelNum);
+      if (entry) return entry.pending ?? entry.pendingSnl ?? entry.amount ?? entry.snl ?? 0;
+    }
+    const key = `level${levelNum}`;
+    if (pending[key] != null) {
+      return typeof pending[key] === "object"
+        ? (pending[key].pending ?? pending[key].pendingSnl ?? pending[key].amount ?? 0)
+        : Number(pending[key]);
+    }
+    if (levelNum === 1 && pending.totalPending != null) return Number(pending.totalPending);
+    return 0;
   }
 
   function handleCopy() {
@@ -193,15 +206,19 @@ export default function ParrainageSection() {
                     ) : (
                       <button
                         disabled
-                        className="bg-[#344054] text-white shrink-0 flex items-center justify-center text-[12px] lg:text-[14px] opacity-60 cursor-not-allowed"
-                        style={{ width: 90, height: 36, fontWeight: 500, borderRadius: 8 }}
+                        className="text-white shrink-0 flex items-center justify-center text-[12px] lg:text-[14px] opacity-60 cursor-not-allowed"
+                        style={{ width: 90, height: 36, fontWeight: 500, borderRadius: 8, backgroundColor: level.count > 0 ? "#344054" : "#94A3B8" }}
                       >
-                        {t("claimed")}
+                        {level.count > 0 ? t("claimed") : t("no_referrals")}
                       </button>
                     )}
                   </div>
                 </div>
               ))}
+
+              {claimError && (
+                <p className="text-red-500 text-[13px] px-1">{claimError}</p>
+              )}
 
               <div className="bg-primary rounded-2xl px-5 py-4 flex gap-3 items-start">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5">

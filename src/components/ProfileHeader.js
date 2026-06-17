@@ -7,13 +7,14 @@ import { getApiError } from "@/lib/api";
 const AVATAR_COLORS = ["#8B5CF6", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#EC4899"];
 
 function getInitials(profile) {
+  if (profile?.username) return profile.username[0].toUpperCase();
   const first = profile?.firstName?.[0] ?? profile?.first_name?.[0] ?? "";
   const last = profile?.lastName?.[0] ?? profile?.last_name?.[0] ?? "";
-  return (first + last).toUpperCase() || profile?.username?.[0]?.toUpperCase() || "?";
+  return (first + last).toUpperCase() || "?";
 }
 
 function getAvatarColor(profile) {
-  const name = profile?.firstName ?? profile?.first_name ?? profile?.username ?? "A";
+  const name = profile?.username ?? profile?.firstName ?? profile?.first_name ?? "A";
   return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
 }
 
@@ -28,9 +29,10 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
 
   const initials = getInitials(profile);
   const avatarColor = getAvatarColor(profile);
+  const username = profile?.username ?? "";
   const fullName = [profile?.firstName ?? profile?.first_name, profile?.lastName ?? profile?.last_name]
-    .filter(Boolean).join(" ") || profile?.username || "—";
-  const handle = profile?.referralCode ?? profile?.referral_code ?? profile?.username ?? "";
+    .filter(Boolean).join(" ");
+  const handle = profile?.referralCode ?? profile?.referral_code ?? "";
   const levelName = profile?.level?.name ?? profile?.rank ?? "Bronze";
   const snlBalance = Number(profile?.snlBalance ?? profile?.points ?? profile?.totalPoints ?? 0);
 
@@ -67,7 +69,7 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
               style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)", backgroundColor: profile?.avatar ? undefined : avatarColor }}
             >
               {profile?.avatar ? (
-                <img src={profile.avatar} alt={fullName} className="w-full h-full object-cover" />
+                <img src={profile.avatar} alt={username || fullName} className="w-full h-full object-cover" />
               ) : (
                 <span className="text-white text-[48px] font-bold select-none">
                   {loading ? "" : initials}
@@ -107,8 +109,13 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
           {/* Name + handle */}
           <div className="-mb-4.5">
             <h1 className="text-[22px] lg:text-[30px]" style={{ fontWeight: 700, lineHeight: "100%", color: "#0F172B" }}>
-              {fullName}
+              {username || "—"}
             </h1>
+            {fullName && (
+              <p className="mt-1 text-[14px]" style={{ fontWeight: 400, lineHeight: "100%", color: "#64748B" }}>
+                {fullName}
+              </p>
+            )}
             {handle && (
               <p className="mt-2 text-[14px]" style={{ fontWeight: 400, lineHeight: "100%", color: "#94A3B8" }}>
                 Code: {handle}

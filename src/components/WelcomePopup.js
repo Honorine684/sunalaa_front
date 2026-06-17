@@ -2,13 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { settingsApi, usersApi } from "@/lib/api";
+import { usersApi } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 
-const FALLBACK_POINTS = 200;
-const REPEAT_DELAY    = 30_000;
-const INITIAL_DELAY   = 5_000;
-const LS_KEY          = "snl_welcome_claimed";
+const WELCOME_POINTS = 200;
+const REPEAT_DELAY   = 30_000;
+const INITIAL_DELAY  = 5_000;
+const LS_KEY         = "snl_welcome_claimed";
 
 function isClaimed() {
   try { return localStorage.getItem(LS_KEY) === "true"; } catch { return false; }
@@ -24,22 +24,11 @@ export default function WelcomePopup() {
   const { isAuthenticated } = useAuth();
 
   const [visible,  setVisible]  = useState(false);
-  const [points,   setPoints]   = useState(FALLBACK_POINTS);
   const [claiming, setClaiming] = useState(false);
   const [claimed,  setClaimed]  = useState(false);
   const timerRef = useRef(null);
 
-  useEffect(() => {
-    settingsApi.getPreLaunchStats()
-      .then((res) => {
-        const d   = res?.data?.data ?? res?.data ?? {};
-        const val = Number(d.bonusPoints ?? FALLBACK_POINTS);
-        if (val > 0) setPoints(val);
-      })
-      .catch(() => {});
-  }, []);
-
-  // For authenticated users: check if bonus already claimed
+  // Vérifier si le bonus welcome a déjà été réclamé (users connectés)
   useEffect(() => {
     if (!isAuthenticated) return;
     if (isClaimed()) { setClaimed(true); return; }
@@ -55,7 +44,7 @@ export default function WelcomePopup() {
       .catch(() => {});
   }, [isAuthenticated]);
 
-  // Schedule popup display
+  // Planifier l'affichage
   useEffect(() => {
     if (claimed) return;
 
@@ -79,7 +68,7 @@ export default function WelcomePopup() {
     try {
       await usersApi.claimWelcomeBonus();
     } catch {
-      // already claimed or backend error — close anyway
+      // déjà réclamé ou erreur backend — on ferme quand même
     } finally {
       markClaimed();
       setClaimed(true);
@@ -120,14 +109,14 @@ export default function WelcomePopup() {
           </span>
 
           <h2 className="text-white font-black text-[26px] leading-tight mb-3">
-            {t("title", { points })}
+            {t("title", { points: WELCOME_POINTS })}
           </h2>
           <p className="text-white/70 text-[14px] leading-relaxed mb-2">
             {isAuthenticated ? t("body1_auth") : t("body1_guest")}
           </p>
           <p className="text-white/70 text-[14px] leading-relaxed mb-6">
             {t("body2_before")}{" "}
-            <strong style={{ color: "#E6B84C" }}>{t("body2_points", { points })}</strong>
+            <strong style={{ color: "#E6B84C" }}>{t("body2_points", { points: WELCOME_POINTS })}</strong>
             {t("body2_after")}
           </p>
 
@@ -138,7 +127,7 @@ export default function WelcomePopup() {
               className="flex items-center justify-between w-full rounded-full font-bold text-[15px] text-white px-6 py-4 hover:brightness-110 transition disabled:opacity-70 cursor-pointer"
               style={{ backgroundColor: "#3FAE8C" }}
             >
-              {claiming ? t("claiming") : t("cta", { points })}
+              {claiming ? t("claiming") : t("cta", { points: WELCOME_POINTS })}
               {!claiming && (
                 <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center shrink-0">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -154,7 +143,7 @@ export default function WelcomePopup() {
               className="flex items-center justify-between w-full rounded-full font-bold text-[15px] text-white px-6 py-4 hover:brightness-110 transition"
               style={{ backgroundColor: "#3FAE8C" }}
             >
-              {t("cta_guest", { points })}
+              {t("cta_guest", { points: WELCOME_POINTS })}
               <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center shrink-0">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
