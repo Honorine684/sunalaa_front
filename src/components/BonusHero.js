@@ -49,7 +49,7 @@ export default function BonusHero() {
   const todayClaimed  = streak?.todayClaimed ?? false;
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a]" style={{ minHeight: 720 }}>
+    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-120 lg:min-h-180">
       <div className="absolute inset-0">
         <Image src="/images/image 2.png" alt="" fill className="object-cover opacity-30" priority />
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />

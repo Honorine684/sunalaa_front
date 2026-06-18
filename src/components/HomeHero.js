@@ -10,7 +10,7 @@ export default function HomeHero({ onCollected }) {
 
   return (
     <>
-      <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a]" style={{ minHeight: 640 }}>
+      <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-105 lg:min-h-160">
         {/* Background */}
         <div className="absolute inset-0">
           <Image

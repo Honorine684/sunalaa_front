@@ -24,7 +24,7 @@ export default function ProfileHero() {
 
   return (
     <section
-      className="relative h-[330px] overflow-hidden"
+      className="relative h-50 lg:h-82.5 overflow-hidden"
       style={{ background: "linear-gradient(160deg, #162E28 0%, #1A3A34 45%, #1F4E46 100%)" }}
     >
       <style>{`

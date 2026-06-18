@@ -14,7 +14,7 @@ export default function Hero() {
       ? "/admin"
       : "/collecter";
   return (
-    <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
+    <section className="relative min-h-96 lg:min-h-150 flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
       {/* Background coin */}
       <div className="absolute inset-0">
         <Image

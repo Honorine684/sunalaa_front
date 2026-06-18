@@ -442,7 +442,8 @@
     "tab_collecter": "Collecter",
     "tab_recompenses": "Récompenses",
     "tab_adresses": "Adresses & Commandes",
-    "tab_securite": "Sécurité"
+    "tab_securite": "Sécurité",
+    "logout": "Déconnexion"
   },
   "ForgotPassword": {
     "title": "Mot de passe oublié ?",

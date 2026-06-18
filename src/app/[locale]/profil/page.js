@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import ProfileHero from "@/components/ProfileHero";
 import ProfileHeader from "@/components/ProfileHeader";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useAuth } from "@/context/AuthContext";
 import ProfileAbout from "@/components/ProfileAbout";
 import ProfileLevels from "@/components/ProfileLevels";
 import ProfileNetwork from "@/components/ProfileNetwork";
@@ -43,8 +45,17 @@ function ProfileSkeleton() {
 
 export default function ProfilPage() {
   const t = useTranslations("ProfilPage");
+  const locale = useLocale();
+  const { logout } = useAuth();
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
+
+  const prefix = locale === "fr" ? "/fr" : "";
+
+  async function handleMobileLogout() {
+    await logout();
+    window.location.href = prefix + "/";
+  }
 
   const TABS = [
     { id: "profil",   label: t("tab_profil") },
@@ -67,6 +78,20 @@ export default function ProfilPage() {
         </div>
       )}
 
+      {/* Mobile only: lang switcher + logout */}
+      <div className="lg:hidden bg-white border-b border-slate-100 px-4 py-2.5 flex items-center justify-between">
+        <LanguageSwitcher />
+        <button
+          onClick={handleMobileLogout}
+          className="flex items-center gap-2 text-[13px] font-semibold text-red-500 hover:text-red-600 transition cursor-pointer"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {t("logout")}
+        </button>
+      </div>
+
       {/* Tab bar */}
       <div className="bg-white border-b border-slate-200">
         <Container>
@@ -77,7 +102,7 @@ export default function ProfilPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-4 text-[14px] font-semibold whitespace-nowrap border-b-2 transition-colors cursor-pointer shrink-0 ${
                   activeTab === tab.id
-                    ? "border-[#1F4E46] text-[#1F4E46]"
+                    ? "border-primary text-primary"
                     : "border-transparent text-slate-400 hover:text-slate-600"
                 }`}
               >

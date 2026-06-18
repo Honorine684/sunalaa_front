@@ -442,7 +442,8 @@
     "tab_collecter": "Collect",
     "tab_recompenses": "Rewards",
     "tab_adresses": "Addresses & Orders",
-    "tab_securite": "Security"
+    "tab_securite": "Security",
+    "logout": "Log out"
   },
   "ForgotPassword": {
     "title": "Forgot password?",
