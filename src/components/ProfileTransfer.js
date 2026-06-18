@@ -212,6 +212,104 @@ function RecipientSearch({ selected, onSelect, onClear, error, onErrorClear }) {
   );
 }
 
+/* ─── Token Countdown ────────────────────────────────────────────── */
+function useCountdown() {
+  const exchangeDate = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2026-10-18");
+  const launchDate   = new Date(process.env.NEXT_PUBLIC_SNL_LAUNCH_DATE   || "2026-06-18");
+
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const total     = exchangeDate - launchDate;
+  const elapsed   = Math.max(0, now - launchDate);
+  const remaining = Math.max(0, exchangeDate - now);
+  const progress  = Math.min(100, (elapsed / total) * 100);
+
+  const days    = Math.floor(remaining / 86400000);
+  const hours   = Math.floor((remaining % 86400000) / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+
+  return { days, hours, minutes, seconds, progress, done: remaining === 0, exchangeDate };
+}
+
+function TokenCountdown() {
+  const { days, hours, minutes, seconds, progress, done, exchangeDate } = useCountdown();
+
+  const dateStr = exchangeDate.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+
+  return (
+    <div className="mx-6 mt-5 mb-1 rounded-2xl overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3A34 0%, #1F4E46 100%)" }}>
+      <div className="px-5 py-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "rgba(230,184,76,0.15)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#E6B84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-[13px] font-bold text-white">Token Exchange</p>
+              <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.45)" }}>{dateStr}</p>
+            </div>
+          </div>
+          {done ? (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold" style={{ backgroundColor: "rgba(63,174,140,0.2)", color: "#3FAE8C" }}>
+              Live
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold" style={{ backgroundColor: "rgba(230,184,76,0.15)", color: "#E6B84C" }}>
+              Upcoming
+            </span>
+          )}
+        </div>
+
+        {done ? (
+          <p className="text-[13px] font-semibold text-center py-1" style={{ color: "#3FAE8C" }}>
+            🎉 Token exchange is now live!
+          </p>
+        ) : (
+          <>
+            {/* Countdown */}
+            <div className="grid grid-cols-4 gap-2 mb-3">
+              {[
+                { value: days,    label: "Days" },
+                { value: hours,   label: "Hours" },
+                { value: minutes, label: "Min" },
+                { value: seconds, label: "Sec" },
+              ].map(({ value, label }) => (
+                <div key={label} className="flex flex-col items-center py-2 px-1 rounded-xl" style={{ backgroundColor: "rgba(255,255,255,0.07)" }}>
+                  <span className="text-[22px] font-bold tabular-nums leading-none text-white">
+                    {String(value).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>{label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.4)" }}>Progress</span>
+                <span className="text-[11px] font-semibold" style={{ color: "#E6B84C" }}>{progress.toFixed(1)}%</span>
+              </div>
+              <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.1)" }}>
+                <div
+                  className="h-full rounded-full transition-all duration-1000"
+                  style={{ width: `${progress}%`, background: "linear-gradient(90deg, #3FAE8C, #E6B84C)" }}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main component ─────────────────────────────────────────────── */
 export default function ProfileTransfer({ onTransferComplete }) {
   const [recipientUser, setRecipientUser] = useState(null);
@@ -280,6 +378,8 @@ export default function ProfileTransfer({ onTransferComplete }) {
             <p className="text-[12px] text-slate-400">Send SNL points to another member</p>
           </div>
         </div>
+
+        <TokenCountdown />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
 

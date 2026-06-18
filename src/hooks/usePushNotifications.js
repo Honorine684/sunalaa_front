@@ -48,8 +48,14 @@ export function usePushNotifications() {
 
       // 2. Get VAPID public key
       const keyRes = await authApi.getVapidPublicKey();
-      const vapidKey = keyRes.data?.publicKey ?? keyRes.data?.data?.publicKey;
-      if (!vapidKey) throw new Error("No VAPID key");
+      const d = keyRes.data?.data ?? keyRes.data ?? {};
+      const vapidKey =
+        d.publicKey ?? d.vapidPublicKey ?? d.vapid_public_key ??
+        d.key ?? d.vapidKey ?? d.public_key ?? null;
+      if (!vapidKey) {
+        console.error("VAPID key not found in response:", keyRes.data);
+        throw new Error("No VAPID key");
+      }
 
       // 3. Subscribe via pushManager
       const reg = await navigator.serviceWorker.ready;
