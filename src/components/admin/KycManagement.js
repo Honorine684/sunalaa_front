@@ -118,7 +118,7 @@ function ReviewModal({ request, onClose, onReview }) {
     }
     setLoading(true); setError("");
     try {
-      await adminApi.reviewKyc(request.id, { status, reason: reason.trim() || undefined });
+      await adminApi.reviewKyc(request.id, { status, note: reason.trim() || undefined });
       onReview(request.id, status);
       onClose();
     } catch (err) {
