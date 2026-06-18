@@ -49,25 +49,25 @@ export default function BonusHero() {
   const todayClaimed  = streak?.todayClaimed ?? false;
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-120 lg:min-h-180">
+    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] lg:min-h-180">
       <div className="absolute inset-0">
         <Image src="/images/image 2.png" alt="" fill className="object-cover opacity-30" priority />
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />
       </div>
 
-      <Container className="relative z-10 pt-16 pb-20 text-center">
-        <h1 className="text-white text-[32px] lg:text-[64px] font-bold leading-none mb-4" style={{ fontFamily: "Rubik, sans-serif" }}>
+      <Container className="relative z-10 pt-8 pb-10 lg:pt-16 lg:pb-20 text-center">
+        <h1 className="text-white text-[22px] lg:text-[64px] font-bold leading-none mb-3 lg:mb-4" style={{ fontFamily: "Rubik, sans-serif" }}>
           {t("title_1")}{" "}
           <span style={{ color: "#3FAE8C" }}>{t("title_amount")}</span>
           <br />
           {t("title_2")}
         </h1>
 
-        <p className="text-[15px] mb-12 whitespace-pre-line" style={{ color: "rgba(255,255,255,0.60)" }}>
+        <p className="text-[13px] lg:text-[15px] mb-6 lg:mb-12 whitespace-pre-line" style={{ color: "rgba(255,255,255,0.60)" }}>
           {t("subtitle")}
         </p>
 
-        <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
+        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-3 lg:gap-4">
           {STREAK_DAYS.map(({ day, snl }) => {
             const isClaimed  = day < currentDay;
             const isToday    = day === currentDay && !todayClaimed;
@@ -75,10 +75,10 @@ export default function BonusHero() {
             const isLocked   = day > currentDay;
 
             return (
-              <div key={day} className="flex flex-col items-center gap-2">
+              <div key={day} className="flex flex-col items-center gap-1.5 sm:gap-2">
                 <div
                   className={[
-                    "flex flex-col items-center justify-center gap-2 w-25 py-5 rounded-2xl transition-all duration-200 border-2",
+                    "flex flex-col items-center justify-center gap-1.5 sm:gap-2 w-11 sm:w-20 lg:w-25 py-3 sm:py-4 lg:py-5 rounded-xl sm:rounded-2xl transition-all duration-200 border-2",
                     isToday    ? "bg-gold border-gold shadow-[0_4px_20px_rgba(230,184,76,0.4)]" : "",
                     isClaimed  ? "border-secondary bg-[#0d1f1c]" : "",
                     isWaiting  ? "border-secondary/40 bg-[#0d1f1c] opacity-70" : "",
@@ -86,21 +86,21 @@ export default function BonusHero() {
                   ].join(" ")}
                 >
                   {isClaimed ? (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-secondary">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <div className="flex items-center justify-center w-6 h-6 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-secondary">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" viewBox="0 0 24 24" fill="none">
                         <path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   ) : (
-                    <div className={`relative ${isToday ? "w-14 h-14" : "w-12 h-12"}`}>
+                    <div className={`relative ${isToday ? "w-7 h-7 sm:w-11 sm:h-11 lg:w-14 lg:h-14" : "w-6 h-6 sm:w-9 sm:h-9 lg:w-12 lg:h-12"}`}>
                       <Image src="/images/4.png" alt="coins" fill className="object-contain" />
                     </div>
                   )}
-                  <span className="text-[22px] font-bold leading-none text-white">
+                  <span className="text-[13px] sm:text-[18px] lg:text-[22px] font-bold leading-none text-white">
                     {snl}
                   </span>
                 </div>
-                <span className="text-white text-[14px] font-normal leading-[150%]">{t("day", { n: day })}</span>
+                <span className="text-white text-[10px] sm:text-[13px] lg:text-[14px] font-normal leading-[150%]">{t("day", { n: day })}</span>
               </div>
             );
           })}
