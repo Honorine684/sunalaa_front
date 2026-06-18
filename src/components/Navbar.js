@@ -73,9 +73,7 @@ export default function Navbar() {
             {/* Auth + LanguageSwitcher */}
             <div className="flex items-center gap-1.5 lg:gap-3 shrink-0">
 
-              <div className="hidden lg:flex">
-                <LanguageSwitcher />
-              </div>
+              <LanguageSwitcher />
 
               {isAuthenticated ? (
                 <>
@@ -91,11 +89,16 @@ export default function Navbar() {
                       {user?.username ?? user?.firstName ?? t("profile")}
                     </span>
                   </Link>
+                  {/* Logout — icône sur mobile, bouton texte sur desktop */}
                   <button
                     onClick={() => setConfirmLogout(true)}
-                    className="hidden lg:block px-5 py-2.5 rounded-full text-white text-[14px] font-semibold transition-colors hover:bg-white/10 cursor-pointer border border-white/20"
+                    className="flex items-center justify-center w-8 h-8 lg:w-auto lg:h-auto lg:px-5 lg:py-2.5 rounded-full text-white transition-colors hover:bg-white/10 cursor-pointer lg:border lg:border-white/20 lg:text-[14px] lg:font-semibold"
+                    title={t("logout")}
                   >
-                    {t("logout")}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="lg:hidden">
+                      <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span className="hidden lg:inline">{t("logout")}</span>
                   </button>
                 </>
               ) : (

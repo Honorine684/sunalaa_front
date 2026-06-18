@@ -60,9 +60,15 @@ function clean(v) {
   return s;
 }
 
+function isValidDisplay(s) {
+  // Skip single-char non-alphanumeric strings like "_", "-", "." (placeholder values)
+  if (s.length <= 1 && !/[a-zA-Z0-9]/.test(s)) return false;
+  return true;
+}
+
 function getDisplayName(u) {
   const username = clean(u?.username ?? u?.pseudo ?? u?.displayName ?? u?.display_name ?? u?.handle);
-  if (username) return username;
+  if (username && isValidDisplay(username)) return username;
   const first = clean(u?.firstName ?? u?.first_name);
   const last  = clean(u?.lastName  ?? u?.last_name);
   const full  = [first, last].filter(Boolean).join(" ");
@@ -146,7 +152,7 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
                       key={u.id ?? i}
                       rank={rank}
                       username={isMe
-                        ? (clean(authUser?.username ?? authUser?.pseudo ?? authUser?.displayName ?? authUser?.display_name) || getDisplayName(u))
+                        ? (() => { const n = clean(authUser?.username ?? authUser?.pseudo ?? authUser?.displayName ?? authUser?.display_name); return (n && isValidDisplay(n)) ? n : getDisplayName(u); })()
                         : getDisplayName(u)
                       }
                       subtitle={u?.level?.name ?? u?.levelName ?? ""}

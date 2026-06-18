@@ -17,9 +17,6 @@ import ProfileLoginHistory from "@/components/ProfileLoginHistory";
 import ProfileCommandes from "@/components/ProfileCommandes";
 import ProfileTransfer from "@/components/ProfileTransfer";
 import ProfileTips from "@/components/ProfileTips";
-import HomeDashboard from "@/components/HomeDashboard";
-import MissionsSection from "@/components/MissionsSection";
-import ParrainageSection from "@/components/ParrainageSection";
 import { useProfile } from "@/hooks/useProfile";
 
 function SkeletonBlock({ className }) {
@@ -50,13 +47,11 @@ export default function ProfilPage() {
   const [activeTab, setActiveTab] = useState("profil");
 
   const TABS = [
-    { id: "profil",      label: t("tab_profil") },
-    { id: "reseau",      label: t("tab_reseau") },
-    { id: "snl",         label: t("tab_snl") },
-    { id: "collecter",   label: t("tab_collecter") },
-    { id: "recompenses", label: t("tab_recompenses") },
-    { id: "adresses",    label: t("tab_adresses") },
-    { id: "securite",    label: t("tab_securite") },
+    { id: "profil",   label: t("tab_profil") },
+    { id: "reseau",   label: t("tab_reseau") },
+    { id: "snl",      label: t("tab_snl") },
+    { id: "adresses", label: t("tab_adresses") },
+    { id: "securite", label: t("tab_securite") },
   ];
 
   return (
@@ -95,15 +90,6 @@ export default function ProfilPage() {
 
       {loading ? (
         <ProfileSkeleton />
-      ) : activeTab === "collecter" ? (
-        <div className="bg-[#F8FAFC] min-h-[60vh]">
-          <HomeDashboard />
-        </div>
-      ) : activeTab === "recompenses" ? (
-        <div className="bg-white min-h-[60vh]">
-          <MissionsSection />
-          <ParrainageSection />
-        </div>
       ) : (
         <div className="bg-[#F8FAFC] py-8 min-h-[60vh]">
           <Container>

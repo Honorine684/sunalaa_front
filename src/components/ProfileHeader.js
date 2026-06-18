@@ -88,7 +88,7 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
           {/* Avatar */}
           <div className="relative shrink-0">
             <div
-              className={`w-45 h-45 -mt-31.25 ml-8 rounded-full flex items-center justify-center overflow-hidden ${profile?.avatar ? "cursor-zoom-in" : ""}`}
+              className={`w-24 h-24 -mt-12 lg:w-45 lg:h-45 lg:-mt-31.25 ml-8 rounded-full flex items-center justify-center overflow-hidden ${profile?.avatar ? "cursor-zoom-in" : ""}`}
               style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)", backgroundColor: profile?.avatar ? undefined : avatarColor }}
               onClick={() => profile?.avatar && setLightbox(true)}
             >

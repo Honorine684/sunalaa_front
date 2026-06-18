@@ -13,14 +13,24 @@ export default function ForgotPasswordPage() {
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
   function validate(val) {
-    if (!val.trim()) return t("email_required");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return t("email_invalid");
+    const v = val.trim();
+    if (!v) return t("email_required");
+    if (!v.includes("@")) return locale === "fr" ? "Il manque le symbole @" : "Missing @ symbol";
+    const [local, domain] = v.split("@");
+    if (!local) return locale === "fr" ? "Entrez quelque chose avant le @" : "Enter something before @";
+    if (!domain || !domain.includes(".")) return locale === "fr" ? "Domaine invalide (ex: gmail.com)" : "Invalid domain (ex: gmail.com)";
+    if (domain.endsWith(".")) return locale === "fr" ? "Le domaine est incomplet" : "Domain is incomplete";
     return "";
+  }
+
+  function handleChange(e) {
+    const val = e.target.value;
+    setEmail(val);
+    if (error) setError(validate(val));
   }
 
   async function handleSubmit(e) {
@@ -29,14 +39,16 @@ export default function ForgotPasswordPage() {
     if (err) { setError(err); return; }
 
     setLoading(true);
-    setApiError("");
+    setError("");
     try {
       await authApi.forgotPassword(email.trim());
       setSent(true);
-    } catch (err) {
-      if (err?.response?.status >= 500) {
-        setApiError(t("server_error"));
+    } catch (apiErr) {
+      const status = apiErr?.response?.status;
+      if (status >= 500) {
+        setError(t("server_error"));
       } else {
+        // Sécurité : ne pas révéler si l'email existe ou non
         setSent(true);
       }
     } finally {
@@ -73,12 +85,6 @@ export default function ForgotPasswordPage() {
                 {t("subtitle")}
               </p>
 
-              {apiError && (
-                <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-[13px]">
-                  {apiError}
-                </div>
-              )}
-
               <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
                 <div className="flex flex-col gap-1.5">
                   <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("label_email")}</label>
@@ -86,7 +92,7 @@ export default function ForgotPasswordPage() {
                     type="email"
                     name="email"
                     value={email}
-                    onChange={(e) => { setEmail(e.target.value); setError(""); setApiError(""); }}
+                    onChange={handleChange}
                     placeholder="username@gmail.com"
                     autoComplete="email"
                     className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
