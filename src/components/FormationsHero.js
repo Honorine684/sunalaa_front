@@ -4,7 +4,7 @@ import Container from "./Container";
 
 export default function FormationsHero() {
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a]" style={{ minHeight: 720 }}>
+    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-120 lg:min-h-180">
       {/* Background — same as /collecter */}
       <div className="absolute inset-0">
         <Image
