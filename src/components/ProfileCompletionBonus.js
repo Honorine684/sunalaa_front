@@ -12,18 +12,38 @@ const REQUIRED_FIELDS = [
     en: "First & last name",
     fr: "Prénom et nom",
     check: (p) => !!(p?.firstName || p?.first_name) && !!(p?.lastName || p?.last_name || p?.surname),
+    tab: "profil",
   },
   {
     id: "phone",
     en: "Phone number",
     fr: "Numéro de téléphone",
     check: (p) => !!(p?.phone || p?.phoneNumber || p?.phone_number),
+    tab: "profil",
   },
   {
     id: "avatar",
     en: "Profile photo",
     fr: "Photo de profil",
     check: (p) => !!(p?.avatar || p?.profileImage || p?.profile_image),
+    tab: "avatar",
+  },
+  {
+    id: "address",
+    en: "Delivery address",
+    fr: "Adresse de livraison",
+    check: (p) => !!(p?.addresses?.length || p?.address),
+    tab: "adresses",
+  },
+  {
+    id: "kyc",
+    en: "Identity verified (KYC)",
+    fr: "Identité vérifiée (KYC)",
+    check: (p) => {
+      const status = p?.kycStatus ?? p?.kyc?.status ?? p?.kyc_status;
+      return status === "APPROVED" || status === "approved" || p?.isKycVerified || p?.kycVerified;
+    },
+    tab: "securite",
   },
 ];
 
@@ -82,8 +102,8 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
 
   function handleFieldClick(field) {
     if (field.done) return;
-    if (field.id === "avatar") { onUploadPhoto?.(); return; }
-    onNavigate?.("profil");
+    if (field.tab === "avatar") { onUploadPhoto?.(); return; }
+    onNavigate?.(field.tab);
   }
 
   async function handleClaim() {
