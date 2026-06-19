@@ -61,9 +61,8 @@ function clean(v) {
 }
 
 function isValidDisplay(s) {
-  // Skip single-char non-alphanumeric strings like "_", "-", "." (placeholder values)
-  if (s.length <= 1 && !/[a-zA-Z0-9]/.test(s)) return false;
-  return true;
+  // Reject strings with no alphanumeric chars at all (_, —, --, __, ..., etc.)
+  return /[a-zA-Z0-9]/.test(s);
 }
 
 function getDisplayName(u) {
@@ -73,7 +72,11 @@ function getDisplayName(u) {
   const last  = clean(u?.lastName  ?? u?.last_name);
   const full  = [first, last].filter(Boolean).join(" ");
   if (full) return full;
-  return clean(u?.name) || "—";
+  const name = clean(u?.name);
+  if (name && isValidDisplay(name)) return name;
+  const refCode = clean(u?.referralCode ?? u?.referral_code);
+  if (refCode && isValidDisplay(refCode)) return refCode;
+  return "Anonyme";
 }
 
 function fmt(n) {
