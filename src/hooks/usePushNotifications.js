@@ -21,9 +21,18 @@ function isSupported() {
   );
 }
 
+const LS_KEY = "snl_push_subscribed";
+
+function lsGetSub() {
+  try { return localStorage.getItem(LS_KEY) === "1"; } catch { return false; }
+}
+function lsSetSub(val) {
+  try { val ? localStorage.setItem(LS_KEY, "1") : localStorage.removeItem(LS_KEY); } catch {}
+}
+
 export function usePushNotifications() {
-  const [permission, setPermission]   = useState(null); // null | "default" | "granted" | "denied"
-  const [subscribed, setSubscribed]   = useState(false);
+  const [permission, setPermission]   = useState(null);
+  const [subscribed, setSubscribed]   = useState(lsGetSub); // instant from localStorage
   const [loading, setLoading]         = useState(false);
   const [supported, setSupported]     = useState(false);
 
@@ -31,8 +40,13 @@ export function usePushNotifications() {
     if (!isSupported()) return;
     setSupported(true);
     setPermission(Notification.permission);
+    // Verify the real browser subscription and sync with localStorage
     navigator.serviceWorker.ready.then((reg) => {
-      reg.pushManager.getSubscription().then((sub) => setSubscribed(!!sub));
+      reg.pushManager.getSubscription().then((sub) => {
+        const isSubscribed = !!sub;
+        setSubscribed(isSubscribed);
+        lsSetSub(isSubscribed);
+      });
     }).catch(() => {});
   }, []);
 
@@ -77,6 +91,7 @@ export function usePushNotifications() {
       });
 
       setSubscribed(true);
+      lsSetSub(true);
       return { ok: true };
     } catch (err) {
       console.error("Push subscribe error:", err);
@@ -97,6 +112,7 @@ export function usePushNotifications() {
         await sub.unsubscribe();
       }
       setSubscribed(false);
+      lsSetSub(false);
     } catch (err) {
       console.error("Push unsubscribe error:", err);
     } finally {
