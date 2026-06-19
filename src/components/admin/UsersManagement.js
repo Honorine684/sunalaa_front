@@ -266,7 +266,27 @@ function UserNetworkModal({ user, onClose }) {
     if (!user?.id) return;
     setLoading(true);
     adminApi.getUserTree(user.id)
-      .then((res) => setTree(res?.data?.data ?? res?.data ?? null))
+      .then((res) => {
+        const raw = res?.data?.data ?? res?.data ?? null;
+        // Backend may return an array of children instead of a root node
+        if (Array.isArray(raw)) {
+          setTree({ ...user, children: raw });
+        } else if (raw && !raw.children && !raw.downlines && !raw.referrals && !raw.directs) {
+          // Object exists but no recognised children field — check deeper keys
+          const childrenKey = Object.keys(raw).find(k =>
+            Array.isArray(raw[k]) && raw[k].length > 0 &&
+            ["children","downlines","referrals","directs","nodes","members","users","referees","tree"].includes(k)
+          );
+          if (childrenKey) {
+            setTree({ ...user, children: raw[childrenKey] });
+          } else {
+            // raw might itself be the root node with identity fields
+            setTree(raw?.id ? raw : { ...user, children: [] });
+          }
+        } else {
+          setTree(raw);
+        }
+      })
       .catch((e) => setError(getApiError(e)))
       .finally(() => setLoading(false));
   }, [user?.id]);
