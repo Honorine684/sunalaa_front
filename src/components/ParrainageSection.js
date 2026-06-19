@@ -56,6 +56,8 @@ export default function ParrainageSection() {
   }
 
   useEffect(() => {
+    if (!user) return;
+
     networkApi.getStats()
       .then((res) => setStats(res.data?.data ?? res.data))
       .catch(() => {});
@@ -74,7 +76,7 @@ export default function ParrainageSection() {
     });
 
     fetchPendingAndEarnings();
-  }, []);
+  }, [user]);
 
   async function handleClaim(levelNum) {
     setClaimError("");

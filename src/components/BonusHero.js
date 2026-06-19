@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Container from "./Container";
 import { usersApi, getApiError } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 
 const STREAK_DAYS = [
@@ -18,6 +19,7 @@ const STREAK_DAYS = [
 
 export default function BonusHero() {
   const t = useTranslations("BonusHero");
+  const { isAuthenticated } = useAuth();
   const [streak, setStreak]       = useState(null);
   const [loading, setLoading]     = useState(true);
   const [claiming, setClaiming]   = useState(false);
@@ -25,11 +27,12 @@ export default function BonusHero() {
   const [err, setErr]             = useState("");
 
   useEffect(() => {
+    if (!isAuthenticated) { setLoading(false); return; }
     usersApi.getStreak()
       .then((res) => setStreak(res.data?.data ?? res.data))
       .catch(() => setStreak(null))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isAuthenticated]);
 
   async function handleClaim() {
     setClaiming(true); setErr("");
