@@ -334,13 +334,13 @@ export default function UsersManagement() {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("Tous");
   const [viewUser, setViewUser] = useState(null);
+  const [deletedCount, setDeletedCount] = useState(0);
 
   useEffect(() => {
     adminApi.getUsers({ limit: 50, page: 1 })
       .then((res) => {
         const raw = res.data?.data ?? res.data;
         const list = raw?.users ?? raw?.data ?? (Array.isArray(raw) ? raw : []);
-        console.log("[Users] first item:", JSON.stringify(list[0], null, 2));
         setUsers(Array.isArray(list) ? list : []);
       })
       .catch((err) => setError(getApiError(err)))
@@ -353,6 +353,7 @@ export default function UsersManagement() {
 
   const handleDelete = useCallback((userId) => {
     setUsers((prev) => prev.filter((u) => u.id !== userId));
+    setDeletedCount((n) => n + 1);
   }, []);
 
   const filtered = users.filter((u) => {
@@ -413,8 +414,7 @@ export default function UsersManagement() {
           {[
             { label: "Total", value: counts.total, color: "#45556C" },
             { label: "Actifs", value: counts.actifs, color: "#059669" },
-            { label: "Suspendus", value: counts.suspendus, color: "#D97706" },
-            { label: "Bannis", value: counts.bannis, color: "#E11D48" },
+            { label: "Supprimés", value: deletedCount, color: "#E11D48" },
           ].map(({ label, value, color }) => (
             <span key={label} className="font-bold" style={{ color: "#45556C" }}>
               {label} :<span className="ml-1" style={{ color }}>{value}</span>
