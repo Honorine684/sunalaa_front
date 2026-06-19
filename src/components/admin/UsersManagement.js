@@ -267,7 +267,6 @@ function UserNetworkModal({ user, onClose }) {
     setLoading(true);
     adminApi.getUserTree(user.id)
       .then((res) => {
-        console.log("[UserNetworkModal] raw response:", JSON.stringify(res?.data, null, 2));
         const raw = res?.data?.data ?? res?.data ?? null;
         // Backend may return an array of children instead of a root node
         if (Array.isArray(raw)) {

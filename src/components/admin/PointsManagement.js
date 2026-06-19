@@ -137,7 +137,9 @@ export default function PointsManagement() {
     try {
       const res = await adminApi.getPointsHistory({ page: 1, limit: 50 });
       const raw = res.data?.data ?? res.data;
-      setHistory(Array.isArray(raw) ? raw : (raw?.data ?? []));
+      const list = Array.isArray(raw) ? raw : (raw?.data ?? []);
+      console.log("[PointsHistory] first item:", JSON.stringify(list[0], null, 2));
+      setHistory(list);
     } catch (err) {
       setError(getApiError(err));
     } finally {
