@@ -19,6 +19,7 @@ import ProfileLoginHistory from "@/components/ProfileLoginHistory";
 import ProfileCommandes from "@/components/ProfileCommandes";
 import ProfileTransfer from "@/components/ProfileTransfer";
 import ProfileTips from "@/components/ProfileTips";
+import ProfileCompletionBonus from "@/components/ProfileCompletionBonus";
 import { useProfile } from "@/hooks/useProfile";
 
 function SkeletonBlock({ className }) {
@@ -121,6 +122,11 @@ export default function ProfilPage() {
 
             {activeTab === "profil" && (
               <div className="flex flex-col gap-6">
+                <ProfileCompletionBonus
+                  profile={profile}
+                  onNavigate={setActiveTab}
+                  onUploadPhoto={() => document.querySelector("[data-avatar-upload]")?.click()}
+                />
                 <ProfileTips
                   profile={profile}
                   onNavigate={setActiveTab}

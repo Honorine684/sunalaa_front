@@ -158,6 +158,7 @@ export const usersApi = {
   getReferralPending:  () => api.get("/users/me/referral/pending"),
   claimReferral:       (level) => api.post("/users/me/referral/claim", undefined, { params: level != null ? { level } : {} }),
   claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
+  claimProfileBonus:   () => api.post("/users/me/profile-completion/claim"),
   setUsername: (username) => api.put("/users/me/username", { username }),
   searchByUsername: (username) => api.get("/users/search", { params: { username } }),
   subscribePush: (subscription) => api.post("/users/me/push-subscription", subscription),
