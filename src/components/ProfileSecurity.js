@@ -338,6 +338,11 @@ function PushNotifSection() {
           {feedback === "granted" && (
             <p className="text-[11px] mt-1" style={{ color: "#059669" }}>Notifications successfully enabled ✓</p>
           )}
+          {feedback === "error" && (
+            <p className="text-[11px] mt-1" style={{ color: "#EF4444" }}>
+              Server configuration issue — notifications unavailable for now
+            </p>
+          )}
         </div>
 
         {permission !== "denied" && (
