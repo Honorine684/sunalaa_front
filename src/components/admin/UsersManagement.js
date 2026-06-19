@@ -140,28 +140,6 @@ function ActionMenu({ user, onStatusChange, onDelete }) {
               Activer
             </button>
           )}
-          {currentStatus !== "suspended" && (
-            <button onClick={() => changeStatus("suspended")}
-              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-orange-50 transition cursor-pointer"
-              style={{ color: "#D97706" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <path d="M10 15V9M14 15V9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              Suspendre
-            </button>
-          )}
-          {currentStatus !== "banned" && (
-            <button onClick={() => changeStatus("banned")}
-              className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] hover:bg-red-50 transition cursor-pointer"
-              style={{ color: "#E11D48" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <path d="M4.93 4.93l14.14 14.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              Bannir
-            </button>
-          )}
 
           <div className="border-t border-slate-100 my-1" />
 
@@ -226,25 +204,39 @@ function UserNetworkModal({ user, onClose }) {
     Promise.all([
       adminApi.getUser(user.id).catch(() => null),
       adminApi.getUserTree(user.id).catch(() => null),
-    ]).then(([userRes, treeRes]) => {
+    ]).then(async ([userRes, treeRes]) => {
       const detail = userRes?.data?.data ?? userRes?.data ?? {};
       const tree   = treeRes?.data?.data  ?? treeRes?.data  ?? {};
-      setData({ detail, tree });
+
+      // If referredBy is a string (ID), fetch the parrain's details
+      const referredBy = detail?.referredBy ?? detail?.sponsor ?? detail?.referrer ?? detail?.referredByUser ?? null;
+      let parrainDetail = referredBy;
+      if (referredBy && typeof referredBy === "string") {
+        try {
+          const pRes = await adminApi.getUser(referredBy);
+          parrainDetail = pRes?.data?.data ?? pRes?.data ?? { id: referredBy };
+        } catch {
+          parrainDetail = { id: referredBy };
+        }
+      }
+
+      setData({ detail: { ...detail, _parrainDetail: parrainDetail }, tree });
     }).catch((e) => setError(getApiError(e)))
       .finally(() => setLoading(false));
   }, [user?.id]);
 
-  const parrain = data?.detail?.referredBy ?? data?.detail?.sponsor ?? data?.detail?.referrer ?? data?.detail?.referredByUser ?? null;
+  const parrain = data?.detail?._parrainDetail ?? null;
   const filleuls = (() => {
     const t = data?.tree;
     if (!t) return [];
-    const raw = t.directs ?? t.children ?? t.referrals ?? t.referees ?? t.downline ?? t.nodes ?? t.level1 ?? [];
+    const raw = t.directs ?? t.children ?? t.referrals ?? t.referees ?? t.downline ?? t.nodes ?? t.level1 ?? t.data ?? t.users ?? [];
     return Array.isArray(raw) ? raw : [];
   })();
 
   function displayName(u) {
     if (!u) return "—";
-    return u.username || [u.firstName ?? u.first_name, u.lastName ?? u.last_name].filter(Boolean).join(" ") || u.email || "—";
+    if (typeof u === "string") return u;
+    return u.username || [u.firstName ?? u.first_name, u.lastName ?? u.last_name].filter(Boolean).join(" ") || u.email || u.id || "—";
   }
 
   const userName = displayName(user);
@@ -284,11 +276,15 @@ function UserNetworkModal({ user, onClose }) {
                 {parrain ? (
                   <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
                     <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#1F4E46" }}>
-                      <span className="text-white text-[12px] font-bold">{displayName(parrain)[0]?.toUpperCase() ?? "?"}</span>
+                      <span className="text-white text-[12px] font-bold">
+                        {(displayName(parrain).replace("—", "") || "?")[0]?.toUpperCase()}
+                      </span>
                     </div>
                     <div>
                       <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>{displayName(parrain)}</p>
-                      <p className="text-[12px]" style={{ color: "#94A3B8" }}>{parrain.email ?? parrain.id ?? ""}</p>
+                      <p className="text-[12px] font-mono" style={{ color: "#94A3B8" }}>
+                        {typeof parrain === "string" ? parrain : (parrain?.email ?? parrain?.id ?? "")}
+                      </p>
                     </div>
                   </div>
                 ) : (
