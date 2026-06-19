@@ -287,11 +287,11 @@ export default function PointsManagement() {
                 const amount = row?.amount ?? 0;
                 const isCredit = row?.type === "credit";
                 const name = row?.user?.username
-                  || [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ")
-                  || row?.user?.email?.split("@")[0]
-                  || row?.user?.phone
+                  || row?.user?.lastName
+                  || row?.user?.firstName
+                  || row?.user?.email
                   || "—";
-                const initials = (name !== "—" ? name : (row?.user?.email ?? "?"))[0]?.toUpperCase() || "?";
+                const initials = name[0]?.toUpperCase() || "?";
                 const createdAt = row?.createdAt ?? row?.date;
                 return (
                   <div key={row?.id ?? i}
