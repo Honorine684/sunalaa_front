@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { authApi, getApiError } from "@/lib/api";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
@@ -300,22 +300,50 @@ function TwoFactorSection({ user }) {
 
 /* ── Push Notifications ── */
 function PushNotifSection() {
-  const { supported, permission, subscribed, loading, subscribe, unsubscribe } = usePushNotifications();
+  const { subscribe, unsubscribe } = usePushNotifications();
+  const [enabled, setEnabled]   = useState(false);
+  const [loading, setLoading]   = useState(true);
+  const [blocked, setBlocked]   = useState(false);
   const [feedback, setFeedback] = useState(null); // "granted" | "denied" | "error"
 
+  // Source de vérité : le navigateur lui-même
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      setLoading(false);
+      return;
+    }
+    setBlocked(Notification.permission === "denied");
+    navigator.serviceWorker.ready
+      .then((reg) => reg.pushManager.getSubscription())
+      .then((sub) => setEnabled(sub !== null))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (typeof window === "undefined" || !("PushManager" in window)) return null;
+
   async function handleToggle() {
-    if (subscribed) {
+    if (enabled) {
+      setLoading(true);
       await unsubscribe();
+      setEnabled(false);
       setFeedback(null);
+      setLoading(false);
     } else {
+      setLoading(true);
       const result = await subscribe();
-      if (result.ok) setFeedback("granted");
-      else if (result.reason === "denied") setFeedback("denied");
-      else setFeedback("error");
+      setLoading(false);
+      if (result.ok) {
+        setEnabled(true);
+        setFeedback("granted");
+      } else if (result.reason === "denied") {
+        setBlocked(true);
+        setFeedback("denied");
+      } else {
+        setFeedback("error");
+      }
     }
   }
-
-  if (!supported) return null;
 
   return (
     <div className="pt-4 border-t border-slate-100">
@@ -323,9 +351,9 @@ function PushNotifSection() {
         <div>
           <p className="text-[16px] font-bold" style={{ color: "#0F172B" }}>Push notifications</p>
           <p className="text-[12px] mt-0.5" style={{ color: "#45556C" }}>
-            {permission === "denied"
+            {blocked
               ? "Blocked by your browser — enable in browser settings"
-              : subscribed
+              : enabled
               ? <span className="font-semibold" style={{ color: "#059669" }}>Enabled</span>
               : <span style={{ color: "#94A3B8" }}>Disabled</span>
             }
@@ -345,17 +373,17 @@ function PushNotifSection() {
           )}
         </div>
 
-        {permission !== "denied" && (
+        {!blocked && (
           <button
             onClick={handleToggle}
             disabled={loading}
             className="relative shrink-0 w-12 h-6 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50"
-            style={{ backgroundColor: subscribed ? "#3FAE8C" : "#E2E8F0" }}
+            style={{ backgroundColor: enabled ? "#3FAE8C" : "#E2E8F0" }}
             aria-label="Toggle push notifications"
           >
             <span
               className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
-              style={{ transform: subscribed ? "translateX(24px)" : "translateX(0)" }}
+              style={{ transform: enabled ? "translateX(24px)" : "translateX(0)" }}
             />
           </button>
         )}
