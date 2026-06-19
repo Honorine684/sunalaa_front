@@ -52,13 +52,13 @@ export default function BonusHero() {
   const todayClaimed  = streak?.todayClaimed ?? false;
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] lg:min-h-180">
+    <section className="relative flex items-center justify-center bg-[#0d2e2a] lg:min-h-180">
       <div className="absolute inset-0">
         <Image src="/images/image 2.png" alt="" fill className="object-cover opacity-30" priority />
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />
       </div>
 
-      <Container className="relative z-10 pt-8 pb-10 lg:pt-16 lg:pb-20 text-center">
+      <Container className="relative z-10 pt-8 pb-16 lg:pt-16 lg:pb-24 text-center">
         <h1 className="text-white text-[22px] lg:text-[64px] font-bold leading-none mb-3 lg:mb-4" style={{ fontFamily: "Rubik, sans-serif" }}>
           {t("title_1")}{" "}
           <span style={{ color: "#3FAE8C" }}>{t("title_amount")}</span>
