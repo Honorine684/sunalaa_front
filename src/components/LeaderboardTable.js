@@ -111,6 +111,7 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
         const list = Array.isArray(raw) ? raw : [];
         const tot  = body?.meta?.total ?? body?.total ?? list.length;
 
+        console.log("[Leaderboard] first player raw:", list[0]);
         setTotal(tot);
         setPlayers((prev) => replace ? list : [...prev, ...list]);
         setHasMore((replace ? list.length : players.length + list.length) < tot);
