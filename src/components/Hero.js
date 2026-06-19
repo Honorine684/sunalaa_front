@@ -29,7 +29,7 @@ export default function Hero() {
 
       <Container className="relative z-10 text-center pt-36 pb-28">
         {/* Titre — font-normal pas en gras */}
-        <h1 className="text-[32px] lg:text-[58px] font-normal text-white leading-[1.15] mb-6">
+        <h1 className="text-[22px] lg:text-[58px] font-normal text-white leading-[1.15] mb-4 lg:mb-6">
           Fastest &amp; secure platform
           <br />
           to invest in{" "}

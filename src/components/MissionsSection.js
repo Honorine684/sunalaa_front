@@ -126,15 +126,15 @@ export default function MissionsSection() {
 
       <Container className="relative z-10">
         <div className="text-center mb-10">
-          <h2 className="font-bold mb-4" style={{ fontSize: 48, lineHeight: "48px", letterSpacing: "-0.33px", color: "#0F172B" }}>
+          <h2 className="font-bold mb-4 text-[26px] lg:text-[48px]" style={{ lineHeight: "1.1", letterSpacing: "-0.33px", color: "#0F172B" }}>
             {t("title")}
           </h2>
-          <p className="max-w-lg mx-auto text-center" style={{ fontSize: 18, fontWeight: 400, lineHeight: "29.25px", color: "#0F172B" }}>
+          <p className="max-w-lg mx-auto text-center text-[14px] lg:text-[18px]" style={{ fontWeight: 400, lineHeight: "1.6", color: "#0F172B" }}>
             {t("subtitle")}
           </p>
         </div>
 
-        <p className="mb-5" style={{ fontSize: 24, fontWeight: 600, lineHeight: "21.5px", letterSpacing: 0, color: "#0A3706" }}>
+        <p className="mb-5 text-[16px] lg:text-[24px]" style={{ fontWeight: 600, lineHeight: "1.4", letterSpacing: 0, color: "#0A3706" }}>
           {t("points_label")}
         </p>
 

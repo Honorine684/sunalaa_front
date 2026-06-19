@@ -19,7 +19,7 @@ export default function FormationsHero() {
 
       {/* Content */}
       <Container className="relative z-10 text-center pt-16 pb-20">
-        <h1 className="text-[32px] lg:text-[64px] font-bold text-white mb-6" style={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, lineHeight: "100%", letterSpacing: "0%" }}>
+        <h1 className="text-[22px] lg:text-[64px] font-bold text-white mb-4 lg:mb-6" style={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, lineHeight: "100%", letterSpacing: "0%" }}>
           Courses &amp; Masterclass on
           <br />
           <span className="text-secondary font-bold">Cryptocurrencies</span>

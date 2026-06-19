@@ -130,7 +130,7 @@ export default function BonusHero() {
           ) : todayClaimed ? (
             <button
               disabled
-              className="bg-secondary text-white font-bold text-[16px] px-16 py-5 rounded-4xl opacity-70 cursor-default"
+              className="bg-secondary text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-70 cursor-default"
             >
               {t("claimed")}
             </button>
@@ -138,7 +138,7 @@ export default function BonusHero() {
             <button
               onClick={handleClaim}
               disabled={claiming}
-              className="bg-gold text-white font-bold text-[16px] px-16 py-5 rounded-4xl hover:brightness-110 transition cursor-pointer shadow-lg disabled:opacity-60"
+              className="bg-gold text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full hover:brightness-110 transition cursor-pointer shadow-lg disabled:opacity-60"
             >
               {claiming ? t("claiming") : t("claim_btn", { snl: STREAK_DAYS[(currentDay - 1) % 7]?.snl ?? 10 })}
             </button>

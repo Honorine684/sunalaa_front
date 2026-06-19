@@ -29,11 +29,12 @@ function getLevelCount(stats, levelIndex) {
 export default function ParrainageSection() {
   const t = useTranslations("ParrainageSection");
   const { user } = useAuth();
-  const [copied, setCopied]     = useState(false);
-  const [stats, setStats]       = useState(null);
-  const [earnings, setEarnings] = useState(null);
-  const [pending, setPending]   = useState(null);
-  const [claiming, setClaiming] = useState({});
+  const [copied, setCopied]       = useState(false);
+  const [stats, setStats]         = useState(null);
+  const [levelCounts, setLevelCounts] = useState({ 1: null, 2: null, 3: null });
+  const [earnings, setEarnings]   = useState(null);
+  const [pending, setPending]     = useState(null);
+  const [claiming, setClaiming]   = useState({});
   const [claimError, setClaimError] = useState("");
 
   const referralCode = user?.referralCode ?? user?.referral_code ?? "SUNALA";
@@ -58,6 +59,20 @@ export default function ParrainageSection() {
     networkApi.getStats()
       .then((res) => setStats(res.data?.data ?? res.data))
       .catch(() => {});
+
+    // Fetch real counts per level via /network/level/:n
+    [1, 2, 3].forEach((lvl) => {
+      networkApi.getLevel(lvl, { limit: 1 })
+        .then((res) => {
+          const body = res.data?.data ?? res.data;
+          const total = body?.meta?.total ?? body?.total ?? body?.count ?? body?.pagination?.total ?? null;
+          const list  = body?.data ?? body?.items ?? body?.members ?? body?.users ?? body?.referrals ?? body;
+          const count = total != null ? Number(total) : (Array.isArray(list) ? list.length : 0);
+          setLevelCounts((prev) => ({ ...prev, [lvl]: count }));
+        })
+        .catch(() => {});
+    });
+
     fetchPendingAndEarnings();
   }, []);
 
@@ -99,7 +114,7 @@ export default function ParrainageSection() {
 
   const levels = LEVEL_CONFIG_BASE.map((cfg, i) => {
     const levelNum   = i + 1;
-    const count      = getLevelCount(stats, i);
+    const count      = levelCounts[levelNum] ?? getLevelCount(stats, i);
     const bonusPct   = stats?.levels?.[i]?.bonusPercentage ?? cfg.bonus;
     const pendingSnl = getPendingForLevel(levelNum);
     return { ...cfg, label: t(cfg.labelKey), sub: t(cfg.subKey), count, bonusPct, levelNum, pendingSnl };

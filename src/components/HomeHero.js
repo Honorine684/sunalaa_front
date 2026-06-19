@@ -24,7 +24,7 @@ export default function HomeHero({ onCollected }) {
         </div>
 
         <Container className="relative z-10 text-center pt-16 pb-20">
-          <h1 className="text-[32px] lg:text-[58px] font-bold text-white leading-[1.15] mb-8">
+          <h1 className="text-[22px] lg:text-[58px] font-bold text-white leading-[1.15] mb-6 lg:mb-8">
             Welcome to the
             <br />
             <span className="text-secondary font-bold">SUNALA</span> community

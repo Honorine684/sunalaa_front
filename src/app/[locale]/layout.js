@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import PwaRegister from "@/components/PwaRegister";
 import PushNotifPrompt from "@/components/PushNotifPrompt";
+import IOSInstallBanner from "@/components/IOSInstallBanner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
@@ -33,6 +34,7 @@ export default async function LocaleLayout({ children, params }) {
             {children}
             <PwaRegister />
             <PushNotifPrompt />
+            <IOSInstallBanner />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

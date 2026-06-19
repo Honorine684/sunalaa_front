@@ -215,8 +215,126 @@ function KycBadge({ user }) {
   );
 }
 
+function UserNetworkModal({ user, onClose }) {
+  const [data, setData]       = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState("");
+
+  useEffect(() => {
+    if (!user?.id) return;
+    setLoading(true);
+    Promise.all([
+      adminApi.getUser(user.id).catch(() => null),
+      adminApi.getUserTree(user.id).catch(() => null),
+    ]).then(([userRes, treeRes]) => {
+      const detail = userRes?.data?.data ?? userRes?.data ?? {};
+      const tree   = treeRes?.data?.data  ?? treeRes?.data  ?? {};
+      setData({ detail, tree });
+    }).catch((e) => setError(getApiError(e)))
+      .finally(() => setLoading(false));
+  }, [user?.id]);
+
+  const parrain = data?.detail?.referredBy ?? data?.detail?.sponsor ?? data?.detail?.referrer ?? data?.detail?.referredByUser ?? null;
+  const filleuls = (() => {
+    const t = data?.tree;
+    if (!t) return [];
+    const raw = t.directs ?? t.children ?? t.referrals ?? t.referees ?? t.downline ?? t.nodes ?? t.level1 ?? [];
+    return Array.isArray(raw) ? raw : [];
+  })();
+
+  function displayName(u) {
+    if (!u) return "—";
+    return u.username || [u.firstName ?? u.first_name, u.lastName ?? u.last_name].filter(Boolean).join(" ") || u.email || "—";
+  }
+
+  const userName = displayName(user);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div>
+            <p className="font-bold text-[16px]" style={{ color: "#0F172B" }}>Réseau de {userName}</p>
+            <p className="text-[12px] font-mono" style={{ color: "#94A3B8" }}>{user?.id}</p>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="overflow-y-auto flex-1 px-6 py-5 flex flex-col gap-5">
+          {loading ? (
+            <div className="flex items-center justify-center py-10">
+              <svg className="animate-spin w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+              </svg>
+            </div>
+          ) : error ? (
+            <p className="text-red-500 text-sm text-center py-6">{error}</p>
+          ) : (
+            <>
+              {/* Parrain */}
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-widest mb-2" style={{ color: "#94A3B8" }}>Parrain</p>
+                {parrain ? (
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#1F4E46" }}>
+                      <span className="text-white text-[12px] font-bold">{displayName(parrain)[0]?.toUpperCase() ?? "?"}</span>
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>{displayName(parrain)}</p>
+                      <p className="text-[12px]" style={{ color: "#94A3B8" }}>{parrain.email ?? parrain.id ?? ""}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-[13px] italic" style={{ color: "#94A3B8" }}>Aucun parrain — inscription directe</p>
+                )}
+              </div>
+
+              {/* Filleuls */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "#94A3B8" }}>Filleuls directs</p>
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: "#ECFDF5", color: "#059669" }}>
+                    {filleuls.length}
+                  </span>
+                </div>
+                {filleuls.length === 0 ? (
+                  <p className="text-[13px] italic" style={{ color: "#94A3B8" }}>Aucun filleul pour le moment</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {filleuls.map((f, i) => (
+                      <div key={f?.id ?? i} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-[11px] font-bold" style={{ backgroundColor: "#3FAE8C" }}>
+                          {displayName(f)[0]?.toUpperCase() ?? "?"}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] font-semibold truncate" style={{ color: "#0F172B" }}>{displayName(f)}</p>
+                          <p className="text-[11px] truncate" style={{ color: "#94A3B8" }}>{f?.email ?? f?.id ?? ""}</p>
+                        </div>
+                        <span className="text-[12px] font-semibold shrink-0" style={{ color: "#3FAE8C" }}>
+                          {Number(f?.snlBalance ?? f?.points ?? 0).toLocaleString("fr-FR")} SNL
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const COLS = ["UTILISATEUR", "EMAIL", "TÉLÉPHONE", "POINTS SNL", "PARRAINAGES", "KYC", "STATUT", "INSCRIPTION", "ACTIONS"];
-const GRID = "grid-cols-[2fr_1.5fr_1.5fr_1fr_1fr_1fr_1.2fr_1.2fr_0.5fr]";
+const GRID = "grid-cols-[2fr_1.5fr_1.5fr_1fr_1fr_1fr_1.2fr_1.2fr_1fr]";
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -224,6 +342,7 @@ export default function UsersManagement() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("Tous");
+  const [viewUser, setViewUser] = useState(null);
 
   useEffect(() => {
     adminApi.getUsers({ limit: 50, page: 1 })
@@ -370,7 +489,21 @@ export default function UsersManagement() {
                     <span className="text-[14px]" style={{ color: "#45556C" }}>
                       {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}
                     </span>
-                    <ActionMenu user={user} onStatusChange={handleStatusChange} onDelete={handleDelete} />
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setViewUser(user)}
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[12px] font-semibold transition cursor-pointer hover:brightness-110"
+                        style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}
+                        title="Voir le réseau"
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                        Voir
+                      </button>
+                      <ActionMenu user={user} onStatusChange={handleStatusChange} onDelete={handleDelete} />
+                    </div>
                   </div>
                 );
               })}
@@ -383,6 +516,8 @@ export default function UsersManagement() {
           )}
         </div>
       </div>
+
+      {viewUser && <UserNetworkModal user={viewUser} onClose={() => setViewUser(null)} />}
     </div>
   );
 }
