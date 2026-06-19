@@ -176,13 +176,14 @@ function ActionMenu({ user, onStatusChange, onDelete }) {
 }
 
 const KYC_INFO = {
-  APPROVED: { label: "Vérifié",    bg: "#D1FAE5", color: "#065F46" },
-  PENDING:  { label: "En attente", bg: "#FEF9C3", color: "#854D0E" },
-  REJECTED: { label: "Rejeté",     bg: "#FEE2E2", color: "#7F1D1D" },
+  APPROVED:      { label: "Vérifié",    bg: "#D1FAE5", color: "#065F46" },
+  PENDING:       { label: "En attente", bg: "#FEF9C3", color: "#854D0E" },
+  REJECTED:      { label: "Rejeté",     bg: "#FEE2E2", color: "#7F1D1D" },
+  NOT_SUBMITTED: { label: "Non soumis", bg: "#F1F5F9", color: "#64748B" },
 };
 
 function KycBadge({ user }) {
-  const status = user?.kycStatus ?? user?.kyc?.status ?? (user?.isKycVerified || user?.kycVerified ? "APPROVED" : null);
+  const status = user?.kycStatus ?? user?.kyc?.status ?? (user?.isKycVerified || user?.kycVerified ? "APPROVED" : "NOT_SUBMITTED");
   if (!status) return <span className="text-[12px]" style={{ color: "#94A3B8" }}>—</span>;
   const info = KYC_INFO[status] ?? { label: status, bg: "#F1F5F9", color: "#475569" };
   return (
@@ -450,7 +451,7 @@ export default function UsersManagement() {
                   || [user?.firstName ?? user?.first_name, user?.lastName ?? user?.last_name].filter(Boolean).join(" ")
                   || user?.email?.split("@")[0] || "—";
                 const points = user?.snlBalance ?? user?.points ?? user?.totalPoints ?? 0;
-                const refs = user?.referralCount ?? user?.directCount ?? user?.totalReferrals ?? 0;
+                const refs = user?.directCount ?? user?.referralCount ?? user?.totalReferrals ?? 0;
                 const createdAt = user?.createdAt ?? user?.created_at;
                 const phone = user?.phone ?? user?.phoneNumber ?? null;
                 return (
