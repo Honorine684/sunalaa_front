@@ -58,7 +58,12 @@ export function usePushNotifications() {
       }
 
       // 3. Subscribe via pushManager
+      // Clear any stale subscription first (mismatched VAPID key causes silent failure)
       const reg = await navigator.serviceWorker.ready;
+      const existing = await reg.pushManager.getSubscription();
+      if (existing) {
+        try { await existing.unsubscribe(); } catch {}
+      }
       const pushSub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidKey),
