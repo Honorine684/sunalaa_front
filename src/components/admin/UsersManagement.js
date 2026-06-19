@@ -193,63 +193,91 @@ function KycBadge({ user }) {
   );
 }
 
+const NODE_COLORS = ["#8B5CF6", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#EC4899"];
+
+function nodeColor(node) {
+  const name = node?.username ?? node?.firstName ?? node?.first_name ?? node?.email ?? "A";
+  return NODE_COLORS[name.charCodeAt(0) % NODE_COLORS.length];
+}
+
+function nodeInitials(node) {
+  if (node?.username) return node.username[0].toUpperCase();
+  const first = node?.firstName?.[0] ?? node?.first_name?.[0] ?? node?.name?.[0] ?? node?.email?.[0] ?? "?";
+  const last  = node?.lastName?.[0]  ?? node?.last_name?.[0]  ?? "";
+  return (first + last).toUpperCase();
+}
+
+function nodeName(node) {
+  if (!node) return "—";
+  return node.username
+    || [node.firstName ?? node.first_name, node.lastName ?? node.last_name].filter(Boolean).join(" ")
+    || node.name || node.email || "—";
+}
+
+function TreeNode({ node, depth = 0, rootName }) {
+  const children = node?.children ?? node?.downlines ?? node?.referrals ?? node?.directs ?? [];
+  const [open, setOpen] = useState(depth <= 1);
+  const isRoot = depth === 0;
+  const name     = isRoot ? (rootName || nodeName(node)) : nodeName(node);
+  const initials = isRoot ? (rootName?.[0]?.toUpperCase() ?? "M") : nodeInitials(node);
+  const color    = isRoot ? "#1F4E46" : nodeColor(node);
+
+  return (
+    <div className={depth > 0 ? "ml-5 border-l border-slate-100 pl-3" : ""}>
+      <div className="flex items-center gap-2 py-1.5">
+        {children.length > 0 ? (
+          <button onClick={() => setOpen(o => !o)}
+            className="shrink-0 w-4 h-4 flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-pointer">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              {open
+                ? <path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                : <path d="M3.5 2l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>}
+            </svg>
+          </button>
+        ) : (
+          <span className="w-4 shrink-0" />
+        )}
+        <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+          style={{ backgroundColor: color }}>
+          {initials}
+        </div>
+        <span className="text-[13px] truncate flex-1" style={{ color: isRoot ? "#1F4E46" : "#0F172B", fontWeight: isRoot ? 700 : 400 }}>
+          {name}
+        </span>
+        {children.length > 0 && (
+          <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "#F1F5F9", color: "#94A3B8" }}>
+            {children.length}
+          </span>
+        )}
+      </div>
+      {open && children.map((child, i) => (
+        <TreeNode key={child?.id ?? i} node={child} depth={depth + 1} />
+      ))}
+    </div>
+  );
+}
+
 function UserNetworkModal({ user, onClose }) {
-  const [data, setData]       = useState(null);
+  const [tree, setTree]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState("");
 
   useEffect(() => {
     if (!user?.id) return;
     setLoading(true);
-    Promise.all([
-      adminApi.getUser(user.id).catch(() => null),
-      adminApi.getUserTree(user.id).catch(() => null),
-    ]).then(async ([userRes, treeRes]) => {
-      const detail = userRes?.data?.data ?? userRes?.data ?? {};
-      const tree   = treeRes?.data?.data  ?? treeRes?.data  ?? {};
-
-      // If referredBy is a string (ID), fetch the parrain's details
-      const referredBy = detail?.referredBy ?? detail?.sponsor ?? detail?.referrer ?? detail?.referredByUser ?? null;
-      let parrainDetail = referredBy;
-      if (referredBy && typeof referredBy === "string") {
-        try {
-          const pRes = await adminApi.getUser(referredBy);
-          parrainDetail = pRes?.data?.data ?? pRes?.data ?? { id: referredBy };
-        } catch {
-          parrainDetail = { id: referredBy };
-        }
-      }
-
-      setData({ detail: { ...detail, _parrainDetail: parrainDetail }, tree });
-    }).catch((e) => setError(getApiError(e)))
+    adminApi.getUserTree(user.id)
+      .then((res) => setTree(res?.data?.data ?? res?.data ?? null))
+      .catch((e) => setError(getApiError(e)))
       .finally(() => setLoading(false));
   }, [user?.id]);
 
-  const parrain = data?.detail?._parrainDetail ?? null;
-  const filleuls = (() => {
-    const t = data?.tree;
-    if (!t) return [];
-    const raw = t.directs ?? t.children ?? t.referrals ?? t.referees ?? t.downline ?? t.nodes ?? t.level1 ?? t.data ?? t.users ?? [];
-    return Array.isArray(raw) ? raw : [];
-  })();
-
-  function displayName(u) {
-    if (!u) return "—";
-    if (typeof u === "string") return u;
-    return u.username || [u.firstName ?? u.first_name, u.lastName ?? u.last_name].filter(Boolean).join(" ") || u.email || u.id || "—";
-  }
-
-  const userName = displayName(user);
+  const userName = nodeName(user);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <div>
-            <p className="font-bold text-[16px]" style={{ color: "#0F172B" }}>Réseau de {userName}</p>
-            <p className="text-[12px] font-mono" style={{ color: "#94A3B8" }}>{user?.id}</p>
-          </div>
+          <p className="font-bold text-[16px]" style={{ color: "#0F172B" }}>Network tree — {userName}</p>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -257,71 +285,17 @@ function UserNetworkModal({ user, onClose }) {
           </button>
         </div>
 
-        {/* Body */}
-        <div className="overflow-y-auto flex-1 px-6 py-5 flex flex-col gap-5">
+        <div className="overflow-y-auto flex-1 px-6 py-5">
           {loading ? (
-            <div className="flex items-center justify-center py-10">
-              <svg className="animate-spin w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-              </svg>
+            <div className="flex flex-col gap-2">
+              {[...Array(5)].map((_, i) => <div key={i} className="h-8 rounded-lg bg-slate-100 animate-pulse" />)}
             </div>
           ) : error ? (
-            <p className="text-red-500 text-sm text-center py-6">{error}</p>
+            <p className="text-red-500 text-[13px] text-center py-6">{error}</p>
+          ) : tree ? (
+            <TreeNode node={tree} depth={0} rootName={userName} />
           ) : (
-            <>
-              {/* Parrain */}
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-widest mb-2" style={{ color: "#94A3B8" }}>Parrain</p>
-                {parrain ? (
-                  <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#1F4E46" }}>
-                      <span className="text-white text-[12px] font-bold">
-                        {(displayName(parrain).replace("—", "") || "?")[0]?.toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-[14px] font-semibold" style={{ color: "#0F172B" }}>{displayName(parrain)}</p>
-                      <p className="text-[12px] font-mono" style={{ color: "#94A3B8" }}>
-                        {typeof parrain === "string" ? parrain : (parrain?.email ?? parrain?.id ?? "")}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-[13px] italic" style={{ color: "#94A3B8" }}>Aucun parrain — inscription directe</p>
-                )}
-              </div>
-
-              {/* Filleuls */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "#94A3B8" }}>Filleuls directs</p>
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: "#ECFDF5", color: "#059669" }}>
-                    {filleuls.length}
-                  </span>
-                </div>
-                {filleuls.length === 0 ? (
-                  <p className="text-[13px] italic" style={{ color: "#94A3B8" }}>Aucun filleul pour le moment</p>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    {filleuls.map((f, i) => (
-                      <div key={f?.id ?? i} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-[11px] font-bold" style={{ backgroundColor: "#3FAE8C" }}>
-                          {displayName(f)[0]?.toUpperCase() ?? "?"}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-semibold truncate" style={{ color: "#0F172B" }}>{displayName(f)}</p>
-                          <p className="text-[11px] truncate" style={{ color: "#94A3B8" }}>{f?.email ?? f?.id ?? ""}</p>
-                        </div>
-                        <span className="text-[12px] font-semibold shrink-0" style={{ color: "#3FAE8C" }}>
-                          {Number(f?.snlBalance ?? f?.points ?? 0).toLocaleString("fr-FR")} SNL
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
+            <p className="text-slate-400 text-[13px] text-center py-6">Aucun réseau.</p>
           )}
         </div>
       </div>
