@@ -301,38 +301,32 @@ function TwoFactorSection({ user }) {
 /* ── Push Notifications ── */
 function PushNotifSection() {
   const { subscribe, unsubscribe } = usePushNotifications();
-  const [enabled, setEnabled]   = useState(false);
-  const [loading, setLoading]   = useState(true);
-  const [blocked, setBlocked]   = useState(false);
-  const [feedback, setFeedback] = useState(null); // "granted" | "denied" | "error"
+  const [supported, setSupported] = useState(false);
+  const [enabled, setEnabled]     = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [blocked, setBlocked]     = useState(false);
+  const [feedback, setFeedback]   = useState(null);
 
-  // Source de vérité : le navigateur lui-même
   useEffect(() => {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) {
-      setLoading(false);
-      return;
-    }
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) return;
+    setSupported(true);
     setBlocked(Notification.permission === "denied");
     navigator.serviceWorker.ready
       .then((reg) => reg.pushManager.getSubscription())
       .then((sub) => setEnabled(sub !== null))
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch(() => {});
   }, []);
 
-  if (typeof window === "undefined" || !("PushManager" in window)) return null;
+  if (!supported) return null;
 
   async function handleToggle() {
+    setLoading(true);
     if (enabled) {
-      setLoading(true);
       await unsubscribe();
       setEnabled(false);
       setFeedback(null);
-      setLoading(false);
     } else {
-      setLoading(true);
       const result = await subscribe();
-      setLoading(false);
       if (result.ok) {
         setEnabled(true);
         setFeedback("granted");
@@ -343,6 +337,7 @@ function PushNotifSection() {
         setFeedback("error");
       }
     }
+    setLoading(false);
   }
 
   return (
