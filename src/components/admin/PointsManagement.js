@@ -137,9 +137,7 @@ export default function PointsManagement() {
     try {
       const res = await adminApi.getPointsHistory({ page: 1, limit: 50 });
       const raw = res.data?.data ?? res.data;
-      const list = Array.isArray(raw) ? raw : (raw?.data ?? []);
-      console.log("[PointsHistory] first item:", JSON.stringify(list[0], null, 2));
-      setHistory(list);
+      setHistory(Array.isArray(raw) ? raw : (raw?.data ?? []));
     } catch (err) {
       setError(getApiError(err));
     } finally {
@@ -288,8 +286,12 @@ export default function PointsManagement() {
               filtered.map((row, i) => {
                 const amount = row?.amount ?? 0;
                 const isCredit = row?.type === "credit";
-                const name = row?.user?.username || [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ") || "—";
-                const initials = name[0]?.toUpperCase() || "?";
+                const name = row?.user?.username
+                  || [row?.user?.firstName, row?.user?.lastName].filter(Boolean).join(" ")
+                  || row?.user?.email?.split("@")[0]
+                  || row?.user?.phone
+                  || "—";
+                const initials = (name !== "—" ? name : (row?.user?.email ?? "?"))[0]?.toUpperCase() || "?";
                 const createdAt = row?.createdAt ?? row?.date;
                 return (
                   <div key={row?.id ?? i}
