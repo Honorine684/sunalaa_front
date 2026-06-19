@@ -66,15 +66,17 @@ function isValidDisplay(s) {
 }
 
 function getDisplayName(u) {
-  const username = clean(u?.username ?? u?.pseudo ?? u?.displayName ?? u?.display_name ?? u?.handle);
+  // Flatten nested user object (leaderboard API returns { rank, totalSnl, user: {...} })
+  const p = u?.user ?? u;
+  const username = clean(p?.username ?? p?.pseudo ?? p?.displayName ?? p?.display_name ?? p?.handle ?? p?.login ?? p?.nickname);
   if (username && isValidDisplay(username)) return username;
-  const first = clean(u?.firstName ?? u?.first_name);
-  const last  = clean(u?.lastName  ?? u?.last_name);
+  const first = clean(p?.firstName ?? p?.first_name);
+  const last  = clean(p?.lastName  ?? p?.last_name);
   const full  = [first, last].filter(Boolean).join(" ");
   if (full) return full;
-  const name = clean(u?.name);
+  const name = clean(p?.name);
   if (name && isValidDisplay(name)) return name;
-  const refCode = clean(u?.referralCode ?? u?.referral_code);
+  const refCode = clean(p?.referralCode ?? p?.referral_code);
   if (refCode && isValidDisplay(refCode)) return refCode;
   return "Anonyme";
 }
@@ -149,7 +151,8 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
               ? <p className="text-center text-gray-400 text-sm py-10">No results.</p>
               : players.map((u, i) => {
                   const rank  = u.rank ?? u.position ?? i + 1;
-                  const isMe  = Boolean(myId && (u.id ?? u.userId) === myId);
+                  const uid   = u.id ?? u.userId ?? u.user?.id ?? u.user?.userId;
+                  const isMe  = Boolean(myId && uid === myId);
                   return (
                     <LeaderboardRow
                       key={u.id ?? i}
