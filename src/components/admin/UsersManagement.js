@@ -340,6 +340,7 @@ export default function UsersManagement() {
       .then((res) => {
         const raw = res.data?.data ?? res.data;
         const list = raw?.users ?? raw?.data ?? (Array.isArray(raw) ? raw : []);
+        console.log("[Users] first item:", JSON.stringify(list[0], null, 2));
         setUsers(Array.isArray(list) ? list : []);
       })
       .catch((err) => setError(getApiError(err)))
