@@ -48,7 +48,7 @@ export default function ProfilPage() {
   const t = useTranslations("ProfilPage");
   const locale = useLocale();
   const { logout, user } = useAuth();
-  const isAdmin = user?.role?.toLowerCase() === "admin";
+  const isAdmin = user?.role?.toLowerCase().includes("admin");
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
 
@@ -96,11 +96,11 @@ export default function ProfilPage() {
 
       {/* Admin shortcut */}
       {isAdmin && (
-        <div className="bg-primary px-4 py-2.5 flex items-center justify-center gap-3">
-          <span className="text-[12px] text-white/60">Vous êtes connecté en tant qu'administrateur</span>
+        <div className="bg-primary px-4 py-3 flex items-center justify-center gap-3">
+          <span className="hidden sm:inline text-[12px] text-white/60">Connecté en tant qu'administrateur</span>
           <a
             href="/admin"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-primary bg-white hover:bg-white/90 transition-opacity cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[13px] font-semibold text-primary bg-white hover:bg-white/90 transition-opacity cursor-pointer"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

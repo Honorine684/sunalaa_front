@@ -77,7 +77,7 @@ export default function Navbar() {
 
               {isAuthenticated ? (
                 <>
-                  {user?.role?.toLowerCase() === "admin" && (
+                  {user?.role?.toLowerCase().includes("admin") && (
                     <Link
                       href="/admin"
                       className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors"
@@ -96,7 +96,7 @@ export default function Navbar() {
                   >
                     <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-secondary flex items-center justify-center text-white text-[9px] lg:text-[12px] font-bold shrink-0 overflow-hidden">
                       {user?.profileImage
-                        ? <Image src={user.profileImage} alt={initials} width={32} height={32} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        ? <img src={user.profileImage} alt={initials} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                         : initials}
                     </div>
                     <span className="hidden lg:inline text-[15px] font-semibold">
