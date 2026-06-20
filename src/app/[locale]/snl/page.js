@@ -10,11 +10,21 @@ export async function generateMetadata({ params }) {
   return {
     title: t("meta_title"),
     description: t("meta_desc"),
-    alternates: { canonical: "https://sunalaa.com/snl" },
+    alternates: {
+      canonical: "https://sunalaa.com/snl",
+      languages: { "x-default": "https://sunalaa.com/snl", en: "https://sunalaa.com/snl", fr: "https://sunalaa.com/fr/snl" },
+    },
     openGraph: {
       url: "https://sunalaa.com/snl",
       title: t("og_title"),
       description: t("og_desc"),
+      images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA SNL Token" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("og_title"),
+      description: t("og_desc"),
+      images: ["/images/sunala_LOGO.png"],
     },
   };
 }

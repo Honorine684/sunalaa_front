@@ -9,11 +9,21 @@ export async function generateMetadata({ params }) {
   return {
     title: t("meta_title"),
     description: t("meta_desc"),
-    alternates: { canonical: "https://sunalaa.com/snl/usage" },
+    alternates: {
+      canonical: "https://sunalaa.com/snl/usage",
+      languages: { "x-default": "https://sunalaa.com/snl/usage", en: "https://sunalaa.com/snl/usage", fr: "https://sunalaa.com/fr/snl/usage" },
+    },
     openGraph: {
       url: "https://sunalaa.com/snl/usage",
       title: t("og_title"),
       description: t("og_desc"),
+      images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA SNL" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("og_title"),
+      description: t("og_desc"),
+      images: ["/images/sunala_LOGO.png"],
     },
   };
 }

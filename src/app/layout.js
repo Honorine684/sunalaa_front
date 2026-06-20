@@ -1,5 +1,27 @@
 import "./globals.css";
 
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SUNALA",
+    url: "https://sunalaa.com",
+    logo: "https://sunalaa.com/images/sunala_LOGO.png",
+    sameAs: [],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "SUNALA",
+    url: "https://sunalaa.com",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: "https://sunalaa.com/formations?q={search_term_string}" },
+      "query-input": "required name=search_term_string",
+    },
+  },
+];
+
 export const metadata = {
   metadataBase: new URL("https://sunalaa.com"),
   title: {
@@ -26,6 +48,17 @@ export const metadata = {
     title: "SUNALA",
     statusBarStyle: "black-translucent",
   },
+  openGraph: {
+    type: "website",
+    siteName: "SUNALA",
+    locale: "fr_FR",
+    images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@sunalaa",
+    images: ["/images/sunala_LOGO.png"],
+  },
 };
 
 export const viewport = {
@@ -39,7 +72,13 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
