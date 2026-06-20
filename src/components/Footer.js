@@ -80,7 +80,7 @@ function FootCol({ title, links }) {
               {l.label}
               {l.soon && (
                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: "#E6B84C22", color: "#E6B84C", border: "1px solid #E6B84C44" }}>
-                  BIENTÔT
+                  {l.soon}
                 </span>
               )}
             </Link>
@@ -97,7 +97,9 @@ export default function Footer() {
 
   const t = useTranslations("Footer");
   const [email, setEmail]     = useState("");
-  const [subDone, setSubDone] = useState(false);
+  const [subDone, setSubDone] = useState(() => {
+    try { return localStorage.getItem("snl_newsletter_sub") === "1"; } catch { return false; }
+  });
 
   async function handleSubscribe(e) {
     e.preventDefault();
@@ -107,6 +109,7 @@ export default function Footer() {
     } catch {
       // silent — don't block the UX on network error
     }
+    try { localStorage.setItem("snl_newsletter_sub", "1"); } catch {}
     setSubDone(true);
   }
 
@@ -192,7 +195,7 @@ export default function Footer() {
           <FootCol title={t("section_project")} links={[
             { label: t("proj_about"),      href: "#" },
             { label: t("proj_vision"),     href: "#" },
-            { label: t("proj_whitepaper"), href: "#", soon: true },
+            { label: t("proj_whitepaper"), href: "#", soon: t("soon") },
             { label: t("proj_roadmap"),    href: "#" },
             { label: t("proj_token"),      href: `${prefix}/snl/valeur` },
             { label: t("proj_blog"),       href: "#" },

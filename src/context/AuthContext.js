@@ -41,15 +41,13 @@ export function AuthProvider({ children }) {
       // Refresh user data silently so stale localStorage fields (firstName, profileImage…) get updated
       authApi.getMe()
         .then(({ data }) => {
-          const fresh = data?.data ?? data;
-          console.log("[AuthContext] getMe() raw response:", JSON.stringify(data));
-          console.log("[AuthContext] fresh user:", JSON.stringify(fresh));
+          const fresh = data?.data?.data ?? data?.data ?? data;
           if (fresh?.id) {
             setUser(fresh);
             lsSet("snl_user", JSON.stringify(fresh));
           }
         })
-        .catch((err) => { console.log("[AuthContext] getMe() error:", err?.response?.status, err?.message); })
+        .catch(() => {})
         .finally(() => setLoading(false));
     } else {
       if (stored || token) clearSession();
@@ -107,7 +105,7 @@ export function AuthProvider({ children }) {
     lsSet("snl_login_time", String(Date.now()));
     document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
     const { data } = await authApi.getMe();
-    const user = data?.data ?? data;
+    const user = data?.data?.data ?? data?.data ?? data;
     lsSet("snl_user", JSON.stringify(user));
     document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
     setUser(user);
@@ -117,7 +115,7 @@ export function AuthProvider({ children }) {
   const refreshUser = useCallback(async () => {
     try {
       const { data } = await authApi.getMe();
-      const user = data?.data ?? data;
+      const user = data?.data?.data ?? data?.data ?? data;
       setUser(user);
       lsSet("snl_user", JSON.stringify(user));
     } catch {}

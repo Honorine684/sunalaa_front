@@ -35,11 +35,9 @@ export default function Navbar() {
     window.location.href = prefix + "/";
   }
 
-  console.log("[Navbar] user object:", JSON.stringify(user));
   const initials = user?.username?.[0]?.toUpperCase()
     || ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
     || "?";
-  console.log("[Navbar] initials computed:", initials, "| username:", user?.username, "| firstName:", user?.firstName, "| lastName:", user?.lastName, "| profileImage:", user?.profileImage);
 
   return (
     <>
@@ -79,6 +77,18 @@ export default function Navbar() {
 
               {isAuthenticated ? (
                 <>
+                  {user?.role?.toLowerCase() === "admin" && (
+                    <Link
+                      href="/admin"
+                      className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors"
+                      style={{ backgroundColor: "rgba(230,184,76,0.18)", color: "#E6B84C", border: "1px solid rgba(230,184,76,0.35)" }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Admin
+                    </Link>
+                  )}
                   <NotificationBell />
                   <Link
                     href={`${prefix}/profil`}

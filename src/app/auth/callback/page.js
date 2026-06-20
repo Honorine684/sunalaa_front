@@ -41,7 +41,7 @@ export default function OAuthCallbackPage() {
         document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
 
         const meRes = await authApi.getMe();
-        const user = meRes.data?.data ?? meRes.data;
+        const user = meRes.data?.data?.data ?? meRes.data?.data ?? meRes.data;
 
         lsSet("snl_user", JSON.stringify(user));
         document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
