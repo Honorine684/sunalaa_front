@@ -47,7 +47,8 @@ function ProfileSkeleton() {
 export default function ProfilPage() {
   const t = useTranslations("ProfilPage");
   const locale = useLocale();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const isAdmin = user?.role?.toLowerCase() === "admin";
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
 
@@ -92,6 +93,22 @@ export default function ProfilPage() {
           {t("logout")}
         </button>
       </div>
+
+      {/* Admin shortcut */}
+      {isAdmin && (
+        <div className="bg-primary px-4 py-2.5 flex items-center justify-center gap-3">
+          <span className="text-[12px] text-white/60">Vous êtes connecté en tant qu'administrateur</span>
+          <a
+            href="/admin"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-primary bg-white hover:bg-white/90 transition-opacity cursor-pointer"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Dashboard Admin
+          </a>
+        </div>
+      )}
 
       {/* Tab bar */}
       <div className="bg-white border-b border-slate-200">

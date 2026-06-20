@@ -227,7 +227,7 @@ function SendTab() {
     try {
       const res = await adminApi.sendNewsletter({ subject: subject.trim(), html: body.trim(), targetGroup: target });
       const d = res.data?.data ?? res.data;
-      setSuccess(d?.sentCount ?? "?");
+      setSuccess(d?.sentCount ?? d?.sent ?? d?.count ?? null);
       setSubject("");
       setBody("");
     } catch (err) {
@@ -294,7 +294,11 @@ function SendTab() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M20 6L9 17l-5-5" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p className="text-[13px] font-semibold text-green-700">Newsletter envoyée à {success} abonné{success > 1 ? "s" : ""} !</p>
+            <p className="text-[13px] font-semibold text-green-700">
+              {success != null
+                ? `Newsletter envoyée à ${success} abonné${success > 1 ? "s" : ""} !`
+                : "Newsletter envoyée avec succès !"}
+            </p>
           </div>
         )}
 

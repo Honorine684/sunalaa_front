@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore session on mount — expire after 24h
+  // Restore session on mount — expire after 24h, then refresh from API in background
   useEffect(() => {
     const stored = lsGet("snl_user");
     const token = lsGet("snl_access_token");
@@ -38,10 +38,21 @@ export function AuthProvider({ children }) {
     const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
     if (stored && token && !expired) {
       try { setUser(JSON.parse(stored)); } catch {}
-    } else if (stored || token) {
-      clearSession();
+      // Refresh user data silently so stale localStorage fields (firstName, profileImage…) get updated
+      authApi.getMe()
+        .then(({ data }) => {
+          const fresh = data?.data ?? data;
+          if (fresh?.id) {
+            setUser(fresh);
+            lsSet("snl_user", JSON.stringify(fresh));
+          }
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    } else {
+      if (stored || token) clearSession();
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const saveSession = useCallback((raw) => {
