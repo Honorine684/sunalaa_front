@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useLocale } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { notificationsApi } from "@/lib/api";
 
@@ -17,6 +19,8 @@ function timeAgo(dateStr) {
 
 export default function NotificationBell() {
   const { isAuthenticated } = useAuth();
+  const locale = useLocale();
+  const prefix = locale === "fr" ? "/fr" : "";
   const [open, setOpen] = useState(false);
   const [unread, setUnread] = useState(0);
   const [notifications, setNotifications] = useState([]);
@@ -57,8 +61,15 @@ export default function NotificationBell() {
         setOpen(false);
       }
     }
-    if (open) document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
+    function onScroll() { setOpen(false); }
+    if (open) {
+      document.addEventListener("mousedown", onClickOutside);
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [open]);
 
   async function handleMarkRead(id) {
@@ -118,7 +129,7 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-72 overflow-y-auto">
             {loading ? (
               <div className="flex justify-center py-8">
                 <svg className="animate-spin w-6 h-6 text-secondary" viewBox="0 0 24 24" fill="none">
@@ -139,7 +150,7 @@ export default function NotificationBell() {
                   >
                     <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${!isRead ? "bg-secondary" : "bg-transparent"}`} />
                     <div className="flex-1 min-w-0">
-                      <p className={`text-[13px] leading-snug ${!isRead ? "font-medium text-slate-800" : "text-slate-600"}`}>
+                      <p className={`text-[13px] leading-snug line-clamp-3 ${!isRead ? "font-medium text-slate-800" : "text-slate-600"}`}>
                         {n.title ?? n.message ?? n.content ?? "Nouvelle notification"}
                       </p>
                       {(n.body ?? n.description) && (
@@ -161,6 +172,17 @@ export default function NotificationBell() {
               })
             )}
           </div>
+          <Link
+            href={`${prefix}/notifications`}
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-center gap-1.5 w-full py-3 border-t border-slate-100 text-[13px] font-semibold hover:bg-slate-50 transition"
+            style={{ color: "#3FAE8C" }}
+          >
+            {locale === "fr" ? "Voir toutes les notifications" : "See all notifications"}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
         </div>
       )}
     </div>
