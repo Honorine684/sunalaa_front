@@ -30,8 +30,8 @@ export default function SetupUsernamePage() {
   const [usernameStatus, setUsernameStatus] = useState(null); // null | "checking" | "available" | "taken"
   const [suggestions, setSuggestions]       = useState([]);
 
-  const [refCode, setRefCode]               = useState("");
-  const [refStatus, setRefStatus]           = useState(null); // null | "checking" | "valid" | "invalid"
+  const [refCode, setRefCode]               = useState("SUNALAA");
+  const [refStatus, setRefStatus]           = useState("checking"); // null | "checking" | "valid" | "invalid"
   const [sponsor, setSponsor]               = useState(null); // { username, firstName }
 
   const [error, setError]     = useState("");
@@ -40,12 +40,16 @@ export default function SetupUsernamePage() {
   const usernameTimer = useRef(null);
   const refTimer      = useRef(null);
 
-  // Pre-fill referral code from sessionStorage if came from /ref/[code]
+  // Pre-fill: session code from /ref/[code] takes priority, otherwise default to SUNALAA
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem("snl_ref_code");
-      if (saved) setRefCode(saved);
-    } catch {}
+      const code = saved || "SUNALAA";
+      setRefCode(code);
+      checkReferral(code);
+    } catch {
+      checkReferral("SUNALAA");
+    }
   }, []);
 
   // ── Username check ────────────────────────────────────────────────
@@ -104,13 +108,11 @@ export default function SetupUsernamePage() {
     const val = e.target.value;
     setRefCode(val);
     setError("");
-    setRefStatus(null);
     setSponsor(null);
     if (refTimer.current) clearTimeout(refTimer.current);
-    const trimmed = val.trim();
-    if (!trimmed) return;
+    if (!val.trim()) { setRefStatus(null); return; }
     setRefStatus("checking");
-    refTimer.current = setTimeout(() => checkReferral(trimmed), 600);
+    refTimer.current = setTimeout(() => checkReferral(val.trim()), 600);
   }
 
   // ── Submit ────────────────────────────────────────────────────────
@@ -276,14 +278,6 @@ export default function SetupUsernamePage() {
                     <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   Sponsored by {sponsor.firstName ? `${sponsor.firstName} (@${sponsor.username})` : `@${sponsor.username}`}
-                </p>
-              )}
-              {refStatus === "valid" && !sponsor && (
-                <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Valid referral code
                 </p>
               )}
             </div>
