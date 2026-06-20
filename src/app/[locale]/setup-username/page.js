@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { authApi, usersApi } from "@/lib/api";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 function generateSuggestions(base) {
   const clean = base.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
@@ -26,13 +28,18 @@ export default function SetupUsernamePage() {
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
 
+  // Username
   const [username, setUsername]             = useState("");
-  const [usernameStatus, setUsernameStatus] = useState(null); // null | "checking" | "available" | "taken"
+  const [usernameStatus, setUsernameStatus] = useState(null);
   const [suggestions, setSuggestions]       = useState([]);
 
-  const [refCode, setRefCode]               = useState("SUNALAA");
-  const [refStatus, setRefStatus]           = useState("checking"); // null | "checking" | "valid" | "invalid"
-  const [sponsor, setSponsor]               = useState(null); // { username, firstName }
+  // Phone
+  const [phone, setPhone] = useState("");
+
+  // Referral
+  const [refCode, setRefCode]   = useState("SUNALAA");
+  const [refStatus, setRefStatus] = useState("checking");
+  const [sponsor, setSponsor]   = useState(null);
 
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,7 +47,6 @@ export default function SetupUsernamePage() {
   const usernameTimer = useRef(null);
   const refTimer      = useRef(null);
 
-  // Pre-fill: session code from /ref/[code] takes priority, otherwise default to SUNALAA
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem("snl_ref_code");
@@ -52,15 +58,15 @@ export default function SetupUsernamePage() {
     }
   }, []);
 
-  // ── Username check ────────────────────────────────────────────────
+  // ── Username ──────────────────────────────────────────────────────
   async function checkUsername(val) {
     try {
       await authApi.checkUsername(val);
       setUsernameStatus("available");
       setSuggestions([]);
     } catch (err) {
-      const status = err?.response?.status;
-      if (status === 409 || status === 400 || status === 422) {
+      const s = err?.response?.status;
+      if (s === 409 || s === 400 || s === 422) {
         setUsernameStatus("taken");
         setSuggestions(generateSuggestions(val));
       } else {
@@ -91,7 +97,7 @@ export default function SetupUsernamePage() {
     usernameTimer.current = setTimeout(() => checkUsername(s), 300);
   }
 
-  // ── Referral code check ───────────────────────────────────────────
+  // ── Referral ──────────────────────────────────────────────────────
   async function checkReferral(code) {
     try {
       const { data } = await authApi.checkReferral(code);
@@ -120,19 +126,21 @@ export default function SetupUsernamePage() {
     e.preventDefault();
     const trimmedUsername = username.trim();
     const trimmedRef      = refCode.trim();
+    const digitsOnly      = phone.replace(/\D/g, "");
 
-    if (!trimmedUsername) { setError("Please enter a username"); return; }
-    if (trimmedUsername.length < 3) { setError("Minimum 3 characters"); return; }
+    if (!trimmedUsername)                       { setError("Please enter a username"); return; }
+    if (trimmedUsername.length < 3)             { setError("Minimum 3 characters"); return; }
     if (!/^[a-zA-Z0-9_]+$/.test(trimmedUsername)) { setError("Letters, numbers and _ only"); return; }
-    if (usernameStatus === "taken") { setError("This username is already taken — pick another"); return; }
-    if (!trimmedRef) { setError("A referral code is required to join SUNALA"); return; }
-    if (refStatus === "invalid") { setError("This referral code is invalid"); return; }
-    if (refStatus === "checking") { setError("Please wait while we verify the referral code"); return; }
+    if (usernameStatus === "taken")             { setError("This username is already taken"); return; }
+    if (digitsOnly.length < 8)                 { setError("Please enter a valid phone number"); return; }
+    if (!trimmedRef)                            { setError("A referral code is required"); return; }
+    if (refStatus === "invalid")               { setError("This referral code is invalid"); return; }
+    if (refStatus === "checking")              { setError("Please wait while we verify the referral code"); return; }
 
     setLoading(true);
     setError("");
     try {
-      await usersApi.setUsername(trimmedUsername, trimmedRef);
+      await usersApi.setUsername(trimmedUsername, phone, trimmedRef);
       await refreshUser();
       try {
         sessionStorage.removeItem("snl_needs_username_setup");
@@ -141,19 +149,18 @@ export default function SetupUsernamePage() {
       router.replace(`${prefix}/profil`);
     } catch (err) {
       const msg = err?.response?.data?.message;
-      if (typeof msg === "string") {
-        if (msg.toLowerCase().includes("taken") || msg.toLowerCase().includes("exist")) {
-          setUsernameStatus("taken");
-          setSuggestions(generateSuggestions(trimmedUsername));
-          setError("This username is already taken");
-        } else if (msg.toLowerCase().includes("referral") || msg.toLowerCase().includes("code")) {
-          setRefStatus("invalid");
-          setError("This referral code is invalid");
-        } else {
-          setError(msg);
-        }
+      const str = typeof msg === "string" ? msg.toLowerCase() : "";
+      if (str.includes("taken") || str.includes("username")) {
+        setUsernameStatus("taken");
+        setSuggestions(generateSuggestions(trimmedUsername));
+        setError("This username is already taken");
+      } else if (str.includes("referral") || str.includes("code")) {
+        setRefStatus("invalid");
+        setError("This referral code is invalid");
+      } else if (str.includes("phone")) {
+        setError("Please enter a valid phone number");
       } else {
-        setError(Array.isArray(msg) ? msg.join(". ") : "An error occurred. Please try again.");
+        setError(Array.isArray(msg) ? msg.join(". ") : (msg || "An error occurred. Please try again."));
       }
     } finally {
       setLoading(false);
@@ -163,6 +170,7 @@ export default function SetupUsernamePage() {
   const canSubmit =
     !loading &&
     usernameStatus === "available" &&
+    phone.replace(/\D/g, "").length >= 8 &&
     refStatus === "valid";
 
   return (
@@ -173,7 +181,6 @@ export default function SetupUsernamePage() {
 
         <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-4xl px-6 py-8">
 
-          {/* Header */}
           <div className="flex flex-col items-center text-center gap-2 mb-7">
             <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center mb-1">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
@@ -183,8 +190,7 @@ export default function SetupUsernamePage() {
             </div>
             <h1 className="text-white font-bold text-[22px]">Finalize your account</h1>
             <p className="text-white/60 text-[13px] leading-relaxed">
-              Choose your username and enter your sponsor's referral code.<br />
-              <span style={{ color: "#E6B84C" }}>Both are required to join SUNALA.</span>
+              A few details to complete your SUNALA profile.
             </p>
           </div>
 
@@ -216,7 +222,7 @@ export default function SetupUsernamePage() {
               </div>
 
               {usernameStatus === "taken" && (
-                <p className="text-red-400 text-[12px] mt-0.5">This username is already taken</p>
+                <p className="text-red-400 text-[12px]">This username is already taken</p>
               )}
               {usernameStatus === "available" && (
                 <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
@@ -226,9 +232,8 @@ export default function SetupUsernamePage() {
                   Available — sunalaa.com/ref/{username.trim()}
                 </p>
               )}
-
               {usernameStatus === "taken" && suggestions.length > 0 && (
-                <div className="flex flex-col gap-1.5 mt-0.5">
+                <div className="flex flex-col gap-1.5">
                   <p className="text-white/50 text-[12px]">Try one of these:</p>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((s) => (
@@ -240,6 +245,30 @@ export default function SetupUsernamePage() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* ── Phone ── */}
+            <div className="flex flex-col gap-1.5">
+              <label style={{ fontSize: 14, fontWeight: 500, color: "#FFFFFF" }}>Phone number</label>
+              <div style={{
+                "--react-international-phone-height": "44px",
+                "--react-international-phone-border-radius": "10px",
+                "--react-international-phone-border-color": "#BCBEC0",
+                "--react-international-phone-background-color": "#ffffff",
+                "--react-international-phone-text-color": "#374151",
+                "--react-international-phone-placeholder-color": "#BCBEC0",
+                "--react-international-phone-font-size": "14px",
+                "--react-international-phone-country-selector-background-color": "#ffffff",
+                "--react-international-phone-country-selector-background-color-hover": "#f9fafb",
+              }}>
+                <PhoneInput
+                  defaultCountry="sn"
+                  value={phone}
+                  onChange={(val) => setPhone(val)}
+                  style={{ width: "100%" }}
+                  inputStyle={{ width: "100%", fontSize: 14 }}
+                />
+              </div>
             </div>
 
             {/* ── Referral code ── */}
@@ -270,7 +299,7 @@ export default function SetupUsernamePage() {
               </div>
 
               {refStatus === "invalid" && (
-                <p className="text-red-400 text-[12px] mt-0.5">This referral code is invalid or does not exist</p>
+                <p className="text-red-400 text-[12px]">This referral code is invalid or does not exist</p>
               )}
               {refStatus === "valid" && sponsor && (
                 <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
@@ -318,11 +347,11 @@ function StatusIcon({ status }) {
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
         </svg>
       )}
-      {status === "valid" || status === "available" ? (
+      {(status === "valid" || status === "available") && (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-      ) : null}
+      )}
       {(status === "taken" || status === "invalid") && (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M18 6L6 18M6 6l12 12" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>

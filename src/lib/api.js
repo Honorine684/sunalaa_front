@@ -160,7 +160,7 @@ export const usersApi = {
   claimReferral:       (level) => api.post("/users/me/referral/claim", undefined, { params: level != null ? { level } : {} }),
   claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
   claimProfileBonus:   () => api.post("/users/me/profile-completion/claim"),
-  setUsername: (username, referralCode) => api.put("/users/me/username", referralCode ? { username, referralCode } : { username }),
+  setUsername: (username, phone, referralCode) => api.put("/users/me/username", { username, ...(phone && { phone }), ...(referralCode && { referralCode }) }),
   searchByUsername: (username) => api.get("/users/search", { params: { username } }),
   subscribePush: (subscription) => api.post("/users/me/push-subscription", subscription),
   unsubscribePush: (endpoint) => api.delete("/users/me/push-subscription", { data: { endpoint } }),
