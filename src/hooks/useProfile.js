@@ -47,7 +47,30 @@ export function useProfile() {
     );
     try {
       const res = await usersApi.updateProfile(payload);
-      setProfile(normalizeProfile(res.data?.data ?? res.data));
+      const updated = normalizeProfile(res.data?.data ?? res.data);
+      setProfile(updated);
+
+      // Auto-claim profile completion bonus if not yet claimed
+      if (
+        updated &&
+        !updated.profileBonusClaimed &&
+        !updated.profileCompletionBonusClaimed &&
+        !updated.profile_bonus_claimed
+      ) {
+        try {
+          const claimRes = await usersApi.claimProfileBonus();
+          const claimData = claimRes.data?.data ?? claimRes.data;
+          const newBalance = claimData?.newBalance ?? claimData?.balance ?? null;
+          setProfile((prev) => ({
+            ...prev,
+            profileBonusClaimed: true,
+            ...(newBalance != null ? { snlBalance: Number(newBalance) } : {}),
+          }));
+        } catch {
+          // 400 = profil incomplet ou déjà réclamé — on ignore
+        }
+      }
+
       return res.data;
     } catch (err) {
       throw err;
