@@ -21,7 +21,7 @@ function generateSuggestions(base) {
 }
 
 export default function SetupUsernamePage() {
-  const { user, refreshUser } = useAuth();
+  const { refreshUser } = useAuth();
   const router = useRouter();
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
@@ -29,18 +29,26 @@ export default function SetupUsernamePage() {
   const [username, setUsername]             = useState("");
   const [usernameStatus, setUsernameStatus] = useState(null); // null | "checking" | "available" | "taken"
   const [suggestions, setSuggestions]       = useState([]);
-  const [error, setError]                   = useState("");
-  const [loading, setLoading]               = useState(false);
-  const [fromOAuth, setFromOAuth]           = useState(false);
-  const usernameTimer = useRef(null);
 
+  const [refCode, setRefCode]               = useState("");
+  const [refStatus, setRefStatus]           = useState(null); // null | "checking" | "valid" | "invalid"
+  const [sponsor, setSponsor]               = useState(null); // { username, firstName }
+
+  const [error, setError]     = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const usernameTimer = useRef(null);
+  const refTimer      = useRef(null);
+
+  // Pre-fill referral code from sessionStorage if came from /ref/[code]
   useEffect(() => {
     try {
-      const flag = sessionStorage.getItem("snl_needs_username_setup");
-      setFromOAuth(flag === "1");
+      const saved = sessionStorage.getItem("snl_ref_code");
+      if (saved) setRefCode(saved);
     } catch {}
   }, []);
 
+  // ── Username check ────────────────────────────────────────────────
   async function checkUsername(val) {
     try {
       await authApi.checkUsername(val);
@@ -57,7 +65,7 @@ export default function SetupUsernamePage() {
     }
   }
 
-  function handleChange(e) {
+  function handleUsernameChange(e) {
     const val = e.target.value;
     setUsername(val);
     setError("");
@@ -79,42 +87,81 @@ export default function SetupUsernamePage() {
     usernameTimer.current = setTimeout(() => checkUsername(s), 300);
   }
 
+  // ── Referral code check ───────────────────────────────────────────
+  async function checkReferral(code) {
+    try {
+      const { data } = await authApi.checkReferral(code);
+      const sp = data?.sponsor ?? data?.data?.sponsor ?? null;
+      setSponsor(sp);
+      setRefStatus("valid");
+    } catch {
+      setSponsor(null);
+      setRefStatus("invalid");
+    }
+  }
+
+  function handleRefChange(e) {
+    const val = e.target.value;
+    setRefCode(val);
+    setError("");
+    setRefStatus(null);
+    setSponsor(null);
+    if (refTimer.current) clearTimeout(refTimer.current);
+    const trimmed = val.trim();
+    if (!trimmed) return;
+    setRefStatus("checking");
+    refTimer.current = setTimeout(() => checkReferral(trimmed), 600);
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────
   async function handleSubmit(e) {
     e.preventDefault();
-    const trimmed = username.trim();
+    const trimmedUsername = username.trim();
+    const trimmedRef      = refCode.trim();
 
-    if (!trimmed) { setError("Please enter a username"); return; }
-    if (trimmed.length < 3) { setError("Minimum 3 characters"); return; }
-    if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) { setError("Letters, numbers and _ only"); return; }
+    if (!trimmedUsername) { setError("Please enter a username"); return; }
+    if (trimmedUsername.length < 3) { setError("Minimum 3 characters"); return; }
+    if (!/^[a-zA-Z0-9_]+$/.test(trimmedUsername)) { setError("Letters, numbers and _ only"); return; }
     if (usernameStatus === "taken") { setError("This username is already taken — pick another"); return; }
+    if (!trimmedRef) { setError("A referral code is required to join SUNALA"); return; }
+    if (refStatus === "invalid") { setError("This referral code is invalid"); return; }
+    if (refStatus === "checking") { setError("Please wait while we verify the referral code"); return; }
 
     setLoading(true);
     setError("");
     try {
-      await usersApi.setUsername(trimmed);
+      await usersApi.setUsername(trimmedUsername, trimmedRef);
       await refreshUser();
-      try { sessionStorage.removeItem("snl_needs_username_setup"); } catch {}
+      try {
+        sessionStorage.removeItem("snl_needs_username_setup");
+        sessionStorage.removeItem("snl_ref_code");
+      } catch {}
       router.replace(`${prefix}/profil`);
     } catch (err) {
       const msg = err?.response?.data?.message;
-      if (typeof msg === "string" && (msg.toLowerCase().includes("taken") || msg.toLowerCase().includes("exist"))) {
-        setUsernameStatus("taken");
-        setSuggestions(generateSuggestions(trimmed));
-        setError("This username is already taken");
+      if (typeof msg === "string") {
+        if (msg.toLowerCase().includes("taken") || msg.toLowerCase().includes("exist")) {
+          setUsernameStatus("taken");
+          setSuggestions(generateSuggestions(trimmedUsername));
+          setError("This username is already taken");
+        } else if (msg.toLowerCase().includes("referral") || msg.toLowerCase().includes("code")) {
+          setRefStatus("invalid");
+          setError("This referral code is invalid");
+        } else {
+          setError(msg);
+        }
       } else {
-        setError(Array.isArray(msg) ? msg.join(". ") : (msg || "An error occurred. Please try again."));
+        setError(Array.isArray(msg) ? msg.join(". ") : "An error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
     }
   }
 
-  function handleSkip() {
-    try { sessionStorage.removeItem("snl_needs_username_setup"); } catch {}
-    router.replace(`${prefix}/profil`);
-  }
-
-  const currentAutoUsername = user?.username ?? "";
+  const canSubmit =
+    !loading &&
+    usernameStatus === "available" &&
+    refStatus === "valid";
 
   return (
     <div className="min-h-screen bg-primary flex items-center justify-center px-4 py-10">
@@ -132,94 +179,59 @@ export default function SetupUsernamePage() {
                 <circle cx="12" cy="7" r="4" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h1 className="text-white font-bold text-[22px]">Choose your username</h1>
+            <h1 className="text-white font-bold text-[22px]">Finalize your account</h1>
             <p className="text-white/60 text-[13px] leading-relaxed">
-              Your username is permanent and used in your referral link.<br />
-              <span style={{ color: "#E6B84C" }}>Choose wisely — it cannot be changed later.</span>
+              Choose your username and enter your sponsor's referral code.<br />
+              <span style={{ color: "#E6B84C" }}>Both are required to join SUNALA.</span>
             </p>
           </div>
 
-          {/* Auto-generated preview */}
-          {currentAutoUsername && (
-            <div className="mb-5 px-4 py-3 rounded-xl" style={{ backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)" }}>
-              <p className="text-[12px] text-white/40 mb-0.5">Auto-generated username</p>
-              <p className="text-white font-mono text-[14px]">{currentAutoUsername}</p>
-              <p className="text-[11px] text-white/30 mt-0.5">Your referral link: sunalaa.com/ref/{currentAutoUsername}</p>
-            </div>
-          )}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-            {/* Username input */}
+            {/* ── Username ── */}
             <div className="flex flex-col gap-1.5">
-              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>New username</label>
+              <label style={{ fontSize: 14, fontWeight: 500, color: "#FFFFFF" }}>Username</label>
               <div className="relative">
                 <input
                   type="text"
                   value={username}
-                  onChange={handleChange}
+                  onChange={handleUsernameChange}
                   placeholder="ex: hono_snl"
                   autoComplete="off"
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
                   className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${
-                    error || usernameStatus === "taken"
-                      ? "ring-2 ring-red-400"
-                      : usernameStatus === "available"
-                      ? "ring-2 ring-secondary/50"
-                      : "focus:ring-secondary/50"
+                    usernameStatus === "taken" ? "ring-2 ring-red-400" : usernameStatus === "available" ? "ring-2 ring-secondary/50" : "focus:ring-secondary/50"
                   }`}
                   style={{
                     height: 44, borderRadius: 10,
-                    border: `1px solid ${error || usernameStatus === "taken" ? "#f87171" : usernameStatus === "available" ? "#3FAE8C" : "#BCBEC0"}`,
+                    border: `1px solid ${usernameStatus === "taken" ? "#f87171" : usernameStatus === "available" ? "#3FAE8C" : "#BCBEC0"}`,
                     padding: "12px 40px 12px 16px",
                   }}
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  {usernameStatus === "checking" && (
-                    <svg className="animate-spin w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                    </svg>
-                  )}
-                  {usernameStatus === "available" && (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                  {usernameStatus === "taken" && (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M18 6L6 18M6 6l12 12" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  )}
-                </div>
+                <StatusIcon status={usernameStatus} />
               </div>
 
-              {(error || usernameStatus === "taken") && (
-                <p className="text-red-400 text-[12px] mt-0.5">{error || "This username is already taken"}</p>
+              {usernameStatus === "taken" && (
+                <p className="text-red-400 text-[12px] mt-0.5">This username is already taken</p>
               )}
-              {usernameStatus === "available" && !error && (
+              {usernameStatus === "available" && (
                 <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Username available — your link: sunalaa.com/ref/{username.trim()}
+                  Available — sunalaa.com/ref/{username.trim()}
                 </p>
               )}
 
-              {/* Suggestions */}
               {usernameStatus === "taken" && suggestions.length > 0 && (
                 <div className="flex flex-col gap-1.5 mt-0.5">
                   <p className="text-white/50 text-[12px]">Try one of these:</p>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => pickSuggestion(s)}
-                        className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/10 hover:bg-secondary/30 text-white border border-white/20 hover:border-secondary/60 transition cursor-pointer"
-                      >
+                      <button key={s} type="button" onClick={() => pickSuggestion(s)}
+                        className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/10 hover:bg-secondary/30 text-white border border-white/20 hover:border-secondary/60 transition cursor-pointer">
                         {s}
                       </button>
                     ))}
@@ -228,21 +240,64 @@ export default function SetupUsernamePage() {
               )}
             </div>
 
-            {/* Referral link preview */}
-            {username.trim().length >= 3 && /^[a-zA-Z0-9_]+$/.test(username.trim()) && usernameStatus !== "taken" && (
-              <div className="px-4 py-3 rounded-xl" style={{ backgroundColor: "rgba(63,174,140,0.12)", border: "1px solid rgba(63,174,140,0.3)" }}>
-                <p className="text-[11px] text-white/40 mb-0.5">Your referral link will be</p>
-                <p className="text-[13px] font-semibold" style={{ color: "#3FAE8C" }}>
-                  sunalaa.com/ref/{username.trim()}
-                </p>
+            {/* ── Referral code ── */}
+            <div className="flex flex-col gap-1.5">
+              <label style={{ fontSize: 14, fontWeight: 500, color: "#FFFFFF" }}>
+                Referral code <span style={{ color: "#E6B84C", fontSize: 12 }}>* required</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={refCode}
+                  onChange={handleRefChange}
+                  placeholder="ex: hono_snl"
+                  autoComplete="off"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${
+                    refStatus === "invalid" ? "ring-2 ring-red-400" : refStatus === "valid" ? "ring-2 ring-secondary/50" : "focus:ring-secondary/50"
+                  }`}
+                  style={{
+                    height: 44, borderRadius: 10,
+                    border: `1px solid ${refStatus === "invalid" ? "#f87171" : refStatus === "valid" ? "#3FAE8C" : "#BCBEC0"}`,
+                    padding: "12px 40px 12px 16px",
+                  }}
+                />
+                <StatusIcon status={refStatus} />
               </div>
+
+              {refStatus === "invalid" && (
+                <p className="text-red-400 text-[12px] mt-0.5">This referral code is invalid or does not exist</p>
+              )}
+              {refStatus === "valid" && sponsor && (
+                <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Sponsored by {sponsor.firstName ? `${sponsor.firstName} (@${sponsor.username})` : `@${sponsor.username}`}
+                </p>
+              )}
+              {refStatus === "valid" && !sponsor && (
+                <p className="text-[12px] flex items-center gap-1" style={{ color: "#3FAE8C" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Valid referral code
+                </p>
+              )}
+            </div>
+
+            {/* Global error */}
+            {error && (
+              <p className="text-red-400 text-[13px] text-center -mt-1">{error}</p>
             )}
 
-            {/* Buttons */}
+            {/* Submit */}
             <button
               type="submit"
-              disabled={loading || usernameStatus === "checking" || usernameStatus === "taken"}
-              className="w-full bg-secondary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-90 transition mt-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              disabled={!canSubmit}
+              className="w-full bg-secondary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-90 transition mt-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading && (
                 <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -250,21 +305,35 @@ export default function SetupUsernamePage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                 </svg>
               )}
-              {loading ? "Saving..." : "Confirm username"}
+              {loading ? "Saving..." : "Join SUNALA"}
             </button>
 
-            {fromOAuth && (
-              <button
-                type="button"
-                onClick={handleSkip}
-                className="w-full text-white/40 hover:text-white/70 text-[13px] transition cursor-pointer py-1"
-              >
-                Skip for now — keep auto-generated username
-              </button>
-            )}
           </form>
         </div>
       </div>
+    </div>
+  );
+}
+
+function StatusIcon({ status }) {
+  return (
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+      {status === "checking" && (
+        <svg className="animate-spin w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+        </svg>
+      )}
+      {status === "valid" || status === "available" ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ) : null}
+      {(status === "taken" || status === "invalid") && (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="#f87171" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      )}
     </div>
   );
 }

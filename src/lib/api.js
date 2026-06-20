@@ -128,6 +128,7 @@ export const authApi = {
   verify2FA: (data) => api.post("/auth/2fa/verify", data),
   exchangeOAuth: (code) => api.post("/auth/oauth/exchange", { code }),
   checkUsername: (username) => api.get("/auth/check-username", { params: { username } }),
+  checkReferral: (code) => api.get("/auth/check-referral", { params: { code } }),
 };
 
 // ── Users ─────────────────────────────────────────────────────────
@@ -159,7 +160,7 @@ export const usersApi = {
   claimReferral:       (level) => api.post("/users/me/referral/claim", undefined, { params: level != null ? { level } : {} }),
   claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
   claimProfileBonus:   () => api.post("/users/me/profile-completion/claim"),
-  setUsername: (username) => api.put("/users/me/username", { username }),
+  setUsername: (username, referralCode) => api.put("/users/me/username", referralCode ? { username, referralCode } : { username }),
   searchByUsername: (username) => api.get("/users/search", { params: { username } }),
   subscribePush: (subscription) => api.post("/users/me/push-subscription", subscription),
   unsubscribePush: (endpoint) => api.delete("/users/me/push-subscription", { data: { endpoint } }),
