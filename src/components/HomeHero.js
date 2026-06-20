@@ -6,7 +6,7 @@ import Container from "./Container";
 import { usersApi, getApiError } from "@/lib/api";
 import { useTranslations } from "next-intl";
 
-const CIRCLE_R = 56;
+const CIRCLE_R = 46;
 const CIRCLE_C = 2 * Math.PI * CIRCLE_R;
 
 function pad(n) { return String(Math.floor(n)).padStart(2, "0"); }
@@ -52,14 +52,14 @@ function MiningRing({ nextCollect, onReady }) {
       </div>
 
       {/* Circle */}
-      <div className="relative flex items-center justify-center" style={{ width: 140, height: 140 }}>
-        <svg width="140" height="140" viewBox="0 0 140 140" style={{ transform: "rotate(-90deg)" }}>
-          <circle cx="70" cy="70" r={CIRCLE_R} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="8" />
+      <div className="relative flex items-center justify-center" style={{ width: 112, height: 112 }}>
+        <svg width="112" height="112" viewBox="0 0 112 112" style={{ transform: "rotate(-90deg)" }}>
+          <circle cx="56" cy="56" r={CIRCLE_R} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="7" />
           <circle
-            cx="70" cy="70" r={CIRCLE_R}
+            cx="56" cy="56" r={CIRCLE_R}
             fill="none"
             stroke={arcColor}
-            strokeWidth="8"
+            strokeWidth="7"
             strokeLinecap="round"
             strokeDasharray={CIRCLE_C}
             strokeDashoffset={offset}
@@ -67,12 +67,12 @@ function MiningRing({ nextCollect, onReady }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-          <span className="font-black tabular-nums leading-none text-[24px]" style={{ color: arcColor }}>
+          <span className="font-black tabular-nums leading-none text-[20px]" style={{ color: arcColor }}>
             {Math.min(100, mined).toFixed(2)}
           </span>
-          <span className="font-bold text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>SNL</span>
+          <span className="font-bold text-[10px]" style={{ color: "rgba(255,255,255,0.5)" }}>SNL</span>
           {!isReady && (
-            <span className="tabular-nums text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <span className="tabular-nums text-[9px] mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
               {pad(rh)}:{pad(rm)}:{pad(rs)}
             </span>
           )}
@@ -147,7 +147,7 @@ export default function HomeHero({ onCollected }) {
   const handleReady = useCallback(() => setState("idle"), []);
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-screen lg:min-h-[90vh]">
+    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
       {/* Background */}
       <div className="absolute inset-0">
         <Image
@@ -160,28 +160,28 @@ export default function HomeHero({ onCollected }) {
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(31,78,70,0.65)" }} />
       </div>
 
-      <Container className="relative z-10 flex flex-col items-center text-center pt-24 pb-16 gap-5 sm:gap-6">
+      <Container className="relative z-10 flex flex-col items-center text-center pt-10 pb-10 gap-4">
 
         {/* Title */}
-        <h1 className="text-[24px] sm:text-[36px] lg:text-[52px] font-bold text-white leading-[1.15]">
+        <h1 className="text-[22px] sm:text-[32px] lg:text-[46px] font-bold text-white leading-[1.15]">
           Welcome to the<br />
           <span className="text-secondary">SUNALA</span> community
         </h1>
 
         {/* Paragraph — tight under title */}
-        <p className="text-[14px] sm:text-[16px] max-w-md mx-auto leading-[1.6]" style={{ color: "rgba(255,255,255,0.65)" }}>
+        <p className="text-[13px] sm:text-[15px] max-w-sm mx-auto leading-[1.6]" style={{ color: "rgba(255,255,255,0.65)" }}>
           Every day, your engagement brings you closer to more rewards.
           Keep collecting, progressing and growing with the community.
         </p>
 
         {/* Collect widget — inline */}
         <div
-          className="w-full max-w-sm mx-auto flex flex-col items-center gap-4 mt-2"
+          className="w-full max-w-xs mx-auto flex flex-col items-center gap-3"
           style={{
             backgroundColor: "rgba(255,255,255,0.07)",
             border: "1px solid rgba(255,255,255,0.10)",
-            borderRadius: 24,
-            padding: "28px 24px",
+            borderRadius: 20,
+            padding: "20px 20px",
           }}
         >
           {/* Checking */}

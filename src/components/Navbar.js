@@ -82,8 +82,10 @@ export default function Navbar() {
                     href={`${prefix}/profil`}
                     className="flex items-center gap-1.5 lg:gap-2 px-1.5 lg:px-4 py-1 lg:py-2 rounded-full text-white hover:bg-white/10 transition-colors"
                   >
-                    <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-secondary flex items-center justify-center text-white text-[9px] lg:text-[12px] font-bold shrink-0">
-                      {initials}
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-secondary flex items-center justify-center text-white text-[9px] lg:text-[12px] font-bold shrink-0 overflow-hidden">
+                      {user?.profileImage
+                        ? <Image src={user.profileImage} alt={initials} width={32} height={32} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        : initials}
                     </div>
                     <span className="hidden lg:inline text-[15px] font-semibold">
                       {user?.username ?? user?.firstName ?? t("profile")}

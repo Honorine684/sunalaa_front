@@ -289,9 +289,18 @@ export const adminApi = {
   updateLevel:  (id, data) => api.put(`/admin/levels/${id}`, data),
   deleteLevel:  (id)     => api.delete(`/admin/levels/${id}`),
   getUserTree: (userId) => api.get(`/network/${userId}/tree`),
+  getNewsletterSubscribers: (params) => api.get("/admin/newsletter/subscribers", { params }),
+  deleteNewsletterSubscriber: (id) => api.delete(`/admin/newsletter/subscribers/${id}`),
+  sendNewsletter: (data) => api.post("/admin/newsletter/send", data),
+  getNewsletterCampaigns: (params) => api.get("/admin/newsletter/campaigns", { params }),
 };
 
 // ── Public settings ───────────────────────────────────────────────
+export const newsletterApi = {
+  subscribe: (email) => api.post("/newsletter/subscribe", { email }),
+  unsubscribe: (email) => api.post("/newsletter/unsubscribe", { email }),
+};
+
 export const settingsApi = {
   get: (key) => api.get(`/settings/${key}`),
   getPreLaunchStats: () => api.get("/settings/pre-launch-stats"),
