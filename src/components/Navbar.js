@@ -35,9 +35,11 @@ export default function Navbar() {
     window.location.href = prefix + "/";
   }
 
+  console.log("[Navbar] user object:", JSON.stringify(user));
   const initials = user?.username?.[0]?.toUpperCase()
     || ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
     || "?";
+  console.log("[Navbar] initials computed:", initials, "| username:", user?.username, "| firstName:", user?.firstName, "| lastName:", user?.lastName, "| profileImage:", user?.profileImage);
 
   return (
     <>

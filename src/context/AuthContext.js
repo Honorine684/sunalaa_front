@@ -42,12 +42,14 @@ export function AuthProvider({ children }) {
       authApi.getMe()
         .then(({ data }) => {
           const fresh = data?.data ?? data;
+          console.log("[AuthContext] getMe() raw response:", JSON.stringify(data));
+          console.log("[AuthContext] fresh user:", JSON.stringify(fresh));
           if (fresh?.id) {
             setUser(fresh);
             lsSet("snl_user", JSON.stringify(fresh));
           }
         })
-        .catch(() => {})
+        .catch((err) => { console.log("[AuthContext] getMe() error:", err?.response?.status, err?.message); })
         .finally(() => setLoading(false));
     } else {
       if (stored || token) clearSession();
