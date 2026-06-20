@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getApiError } from "@/lib/api";
 
 function validate(fields) {
@@ -33,8 +33,12 @@ function validate(fields) {
   return errors;
 }
 
-export default function ProfileAbout({ profile, onUpdate }) {
+export default function ProfileAbout({ profile, onUpdate, autoEdit = false }) {
   const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    if (autoEdit) openEdit();
+  }, [autoEdit]);
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiError, setApiError] = useState("");
@@ -77,6 +81,7 @@ export default function ProfileAbout({ profile, onUpdate }) {
   const GENDER_LABELS = { MALE: "Male", FEMALE: "Female", OTHER: "Other", male: "Male", female: "Female", other: "Other" };
   const rawGender = profile?.gender ?? null;
   const gender = rawGender ? (GENDER_LABELS[rawGender] ?? rawGender) : null;
+  const fullName = [profile?.firstName ?? profile?.first_name, profile?.lastName ?? profile?.last_name].filter(Boolean).join(" ") || null;
   const email = profile?.email ?? null;
   const phone = profile?.phone ?? profile?.phoneNumber ?? null;
   const address = profile?.address
@@ -84,6 +89,7 @@ export default function ProfileAbout({ profile, onUpdate }) {
     : [profile?.city, profile?.country].filter(Boolean).join(", ") || null;
 
   const info = [
+    fullName && { icon: <PersonIcon />, value: fullName },
     gender && { icon: <PersonIcon />, value: gender },
     address && { icon: <LocationIcon />, value: address },
     email && { icon: <EmailIcon />, value: email },

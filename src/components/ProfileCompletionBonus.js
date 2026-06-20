@@ -32,7 +32,17 @@ const REQUIRED_FIELDS = [
     id: "address",
     en: "Delivery address",
     fr: "Adresse de livraison",
-    check: (p) => !!(p?.addresses?.length || p?.address),
+    check: (p) => {
+      if (Array.isArray(p?.addresses) && p.addresses.length > 0) {
+        const a = p.addresses[0];
+        return !!(a?.street || a?.address || a?.city || a?.line1 || a?.addressLine1);
+      }
+      if (p?.address && typeof p.address === "object") {
+        return !!(p.address.street || p.address.city || p.address.line1 || p.address.addressLine1);
+      }
+      if (typeof p?.address === "string") return p.address.trim().length > 0;
+      return false;
+    },
     tab: "adresses",
   },
   {
@@ -82,8 +92,8 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
           </div>
           <p className="text-white text-[13px] font-semibold">
             {locale === "fr"
-              ? "Bonus profil complet réclamé — 200 SNL crédités !"
-              : "Profile completion bonus claimed — 200 SNL credited!"}
+              ? "Bonus profil complet réclamé — 1000 SNL crédités !"
+              : "Profile completion bonus claimed — 1000 SNL credited!"}
           </p>
         </div>
       </div>
@@ -147,7 +157,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
                 <p className="text-[14px] font-bold" style={{ color: "#0F172B" }}>
                   {locale === "fr" ? "Complétez votre profil" : "Complete your profile"}
                   {" "}
-                  <span className="font-extrabold" style={{ color: "#E6B84C" }}>+ 200 SNL</span>
+                  <span className="font-extrabold" style={{ color: "#E6B84C" }}>+ 1000 SNL</span>
                 </p>
                 <p className="text-[12px]" style={{ color: "#64748B" }}>
                   {completedCount}/{fields.length} {locale === "fr" ? "champs remplis" : "fields completed"}
@@ -234,7 +244,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
             {claiming
               ? (locale === "fr" ? "Réclamation..." : "Claiming...")
               : allDone
-                ? (locale === "fr" ? "Réclamer mes 200 SNL" : "Claim my 200 SNL")
+                ? (locale === "fr" ? "Réclamer mes 1000 SNL" : "Claim my 1000 SNL")
                 : (locale === "fr"
                     ? `Plus que ${fields.length - completedCount} champ${fields.length - completedCount > 1 ? "s" : ""}`
                     : `${fields.length - completedCount} field${fields.length - completedCount > 1 ? "s" : ""} remaining`)

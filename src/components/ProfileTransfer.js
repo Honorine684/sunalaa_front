@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useLocale } from "next-intl";
 import { usersApi, getApiError } from "@/lib/api";
 
 const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B", "#EF4444", "#1F4E46"];
@@ -312,6 +313,7 @@ function TokenCountdown() {
 
 /* ─── Main component ─────────────────────────────────────────────── */
 export default function ProfileTransfer({ onTransferComplete }) {
+  const locale = useLocale();
   const [recipientUser, setRecipientUser] = useState(null);
   const [amount, setAmount]   = useState("");
   const [note, setNote]       = useState("");
@@ -378,8 +380,6 @@ export default function ProfileTransfer({ onTransferComplete }) {
             <p className="text-[12px] text-slate-400">Send SNL points to another member</p>
           </div>
         </div>
-
-        <TokenCountdown />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
 
@@ -528,6 +528,23 @@ export default function ProfileTransfer({ onTransferComplete }) {
           </div>
 
         </div>
+      </div>
+
+      {/* Token conversion countdown */}
+      <div className="mt-4 rounded-2xl overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3A34 0%, #1F4E46 100%)" }}>
+        <div className="px-5 pt-5 pb-2 text-center">
+          <p className="text-[13px] font-semibold text-white mb-0.5">
+            {locale === "fr"
+              ? "Conversion des points SNL en token SUNALA"
+              : "SNL points conversion to SUNALA token"}
+          </p>
+          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.45)" }}>
+            {locale === "fr"
+              ? "À la fin du compte à rebours, vos points SNL seront convertis en tokens SUNALA réels."
+              : "When the countdown ends, your SNL points will be converted into real SUNALA tokens."}
+          </p>
+        </div>
+        <TokenCountdown />
       </div>
     </div>
   );

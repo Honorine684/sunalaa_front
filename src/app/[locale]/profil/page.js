@@ -51,6 +51,15 @@ export default function ProfilPage() {
   const isAdmin = user?.role?.toLowerCase().includes("admin");
   const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
+  const [editAbout, setEditAbout] = useState(false);
+
+  function navigateTo(tab) {
+    setActiveTab(tab);
+    if (tab === "profil") {
+      setEditAbout(true);
+      setTimeout(() => setEditAbout(false), 200);
+    }
+  }
 
   const prefix = locale === "fr" ? "/fr" : "";
 
@@ -141,17 +150,17 @@ export default function ProfilPage() {
               <div className="flex flex-col gap-6">
                 <ProfileCompletionBonus
                   profile={profile}
-                  onNavigate={setActiveTab}
+                  onNavigate={navigateTo}
                   onUploadPhoto={() => document.querySelector("[data-avatar-upload]")?.click()}
                 />
                 <ProfileTips
                   profile={profile}
-                  onNavigate={setActiveTab}
+                  onNavigate={navigateTo}
                   onUploadPhoto={() => document.querySelector("[data-avatar-upload]")?.click()}
                 />
                 <div className="grid grid-cols-12 gap-6">
                   <div className="col-span-12 lg:col-span-4 flex flex-col gap-5">
-                    <ProfileAbout profile={profile} onUpdate={updateProfile} />
+                    <ProfileAbout profile={profile} onUpdate={updateProfile} autoEdit={editAbout} />
                     <ProfileLevels profile={profile} />
                   </div>
                 </div>
