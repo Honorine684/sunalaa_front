@@ -4,35 +4,6 @@ import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { usersApi } from "@/lib/api";
 
-function useHasAddress() {
-  const [hasAddress, setHasAddress] = useState(false);
-  useEffect(() => {
-    usersApi.getAddresses()
-      .then((res) => {
-        const outer = res.data?.data ?? res.data;
-        let found = false;
-        if (Array.isArray(outer)) {
-          found = outer.length > 0;
-        } else if (outer && typeof outer === "object") {
-          const nested =
-            outer.data      != null ? outer.data      :
-            outer.addresses != null ? outer.addresses :
-            outer.items     != null ? outer.items     :
-            outer.results   != null ? outer.results   : null;
-          if (Array.isArray(nested)) {
-            found = nested.length > 0;
-          } else {
-            const count = outer.total ?? outer.count ?? 0;
-            found = Number(count) > 0;
-          }
-        }
-        setHasAddress(found);
-      })
-      .catch(() => {});
-  }, []);
-  return hasAddress;
-}
-
 const LS_KEY = "snl_welcome_bonus_claimed";
 
 const REQUIRED_FIELDS = [
@@ -61,17 +32,7 @@ const REQUIRED_FIELDS = [
     id: "address",
     en: "Delivery address",
     fr: "Adresse de livraison",
-    check: (p) => {
-      if (Array.isArray(p?.addresses) && p.addresses.length > 0) {
-        const a = p.addresses[0];
-        return !!(a?.street || a?.address || a?.city || a?.line1 || a?.addressLine1);
-      }
-      if (p?.address && typeof p.address === "object") {
-        return !!(p.address.street || p.address.city || p.address.line1 || p.address.addressLine1);
-      }
-      if (typeof p?.address === "string") return p.address.trim().length > 0;
-      return false;
-    },
+    check: (p) => !!p?.hasAddress,
     tab: "adresses",
   },
   {
@@ -97,7 +58,6 @@ function isClaimed(profile) {
 
 export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPhoto }) {
   const locale = useLocale();
-  const hasAddress = useHasAddress();
   const [claimed, setClaimed]   = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [success, setSuccess]   = useState(false);
@@ -132,7 +92,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
 
   const fields = REQUIRED_FIELDS.map((f) => ({
     ...f,
-    done: f.id === "address" ? hasAddress : f.check(profile),
+    done: f.check(profile),
     label: locale === "fr" ? f.fr : f.en,
   }));
 
