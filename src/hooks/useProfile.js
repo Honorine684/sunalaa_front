@@ -89,5 +89,13 @@ export function useProfile() {
     setProfile((prev) => prev ? { ...prev, snlBalance: Number(newBalance) } : prev);
   }
 
-  return { profile, loading, error, updateProfile, uploadAvatar, updateBalance };
+  async function refreshProfile() {
+    try {
+      const res = await usersApi.getProfile();
+      const updated = normalizeProfile(res.data?.data ?? res.data);
+      setProfile((prev) => ({ ...prev, ...updated }));
+    } catch {}
+  }
+
+  return { profile, loading, error, updateProfile, uploadAvatar, updateBalance, refreshProfile };
 }

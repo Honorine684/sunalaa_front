@@ -90,7 +90,7 @@ function AddressForm({ initial, onSave, onCancel, saving }) {
   );
 }
 
-export default function ProfileAddresses() {
+export default function ProfileAddresses({ onAddressChange }) {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -127,6 +127,7 @@ export default function ProfileAddresses() {
       const created = res.data?.data ?? res.data;
       setAddresses((p) => [...p, created]);
       setMode(null);
+      onAddressChange?.();
     } catch (err) {
       setError(getApiError(err));
     } finally {
@@ -154,6 +155,7 @@ export default function ProfileAddresses() {
     try {
       await usersApi.deleteAddress(id);
       setAddresses((p) => p.filter((a) => a.id !== id));
+      onAddressChange?.();
     } catch (err) {
       setError(getApiError(err));
     } finally {

@@ -49,7 +49,7 @@ export default function ProfilPage() {
   const locale = useLocale();
   const { logout, user } = useAuth();
   const isAdmin = user?.role?.toLowerCase().includes("admin");
-  const { profile, loading, error, updateProfile, uploadAvatar, updateBalance } = useProfile();
+  const { profile, loading, error, updateProfile, uploadAvatar, updateBalance, refreshProfile } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
   const [editAbout, setEditAbout] = useState(false);
 
@@ -179,7 +179,7 @@ export default function ProfilPage() {
 
             {activeTab === "adresses" && (
               <div className="flex flex-col gap-6">
-                <ProfileAddresses />
+                <ProfileAddresses onAddressChange={refreshProfile} />
                 <ProfileCommandes />
               </div>
             )}
