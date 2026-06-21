@@ -46,6 +46,51 @@ function MediaDisplay({ url }) {
   );
 }
 
+const MSG_LIMIT = 150;
+
+function NotifDetailModal({ notif, onClose, locale }) {
+  const body = notif.body ?? notif.description ?? notif.message ?? notif.content ?? null;
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(15,23,43,0.5)" }}
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+          <h3 className="text-[16px] font-bold leading-snug pr-4" style={{ color: "#0F172B" }}>{notif.title ?? body}</h3>
+          <button onClick={onClose} className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full hover:bg-slate-100 transition cursor-pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="#45556C" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div className="px-6 py-5 overflow-y-auto flex flex-col gap-4">
+          <MediaDisplay url={notif.imageUrl} />
+          {notif.title && body && (
+            <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{body}</p>
+          )}
+          <p className="text-[12px]" style={{ color: "#94A3B8" }}>
+            {timeAgo(notif.createdAt ?? notif.date, locale)}
+          </p>
+        </div>
+        <div className="px-6 py-4 border-t border-slate-100 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-xl border text-[14px] font-semibold hover:bg-slate-50 transition cursor-pointer"
+            style={{ borderColor: "#E2E8F0", color: "#45556C" }}
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function timeAgo(dateStr, locale) {
   if (!dateStr) return "";
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -70,6 +115,7 @@ export default function NotificationsPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [unread, setUnread] = useState(0);
+  const [selectedNotif, setSelectedNotif] = useState(null);
 
   const prefix = locale === "fr" ? "/fr" : "";
 
@@ -221,13 +267,26 @@ export default function NotificationsPage() {
                             const body  = n.body ?? n.description ?? n.message ?? n.content ?? null;
                             const displayTitle = title ?? body ?? (locale === "fr" ? "Nouvelle notification" : "New notification");
                             const displayBody  = title ? body : null;
+                            const bodyTruncated = displayBody && displayBody.length > MSG_LIMIT;
                             return (
                               <>
                                 <p className={`text-[14px] leading-snug ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-600"}`}>
                                   {displayTitle}
                                 </p>
                                 {displayBody && (
-                                  <p className="text-[13px] text-slate-500 mt-1 leading-relaxed">{displayBody}</p>
+                                  <p className="text-[13px] text-slate-500 mt-1 leading-relaxed">
+                                    {bodyTruncated ? `${displayBody.slice(0, MSG_LIMIT)}… ` : displayBody}
+                                    {bodyTruncated && (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => { e.stopPropagation(); setSelectedNotif(n); }}
+                                        className="font-semibold hover:underline cursor-pointer"
+                                        style={{ color: "#3FAE8C" }}
+                                      >
+                                        {locale === "fr" ? "Voir plus" : "See more"}
+                                      </button>
+                                    )}
+                                  </p>
                                 )}
                               </>
                             );
@@ -300,6 +359,13 @@ export default function NotificationsPage() {
         </div>
       </div>
       <Footer />
+      {selectedNotif && (
+        <NotifDetailModal
+          notif={selectedNotif}
+          locale={locale}
+          onClose={() => setSelectedNotif(null)}
+        />
+      )}
     </>
   );
 }
