@@ -11,6 +11,41 @@ import { notificationsApi } from "@/lib/api";
 
 const PAGE_SIZE = 20;
 
+function getMediaType(url) {
+  if (!url) return null;
+  const lower = url.toLowerCase().split("?")[0];
+  if (/\.(mp4|webm|ogg|mov|avi|mkv)$/.test(lower)) return "video";
+  if (/\.pdf$/.test(lower)) return "pdf";
+  return "image";
+}
+
+function MediaDisplay({ url }) {
+  if (!url) return null;
+  const type = getMediaType(url);
+  if (type === "video") return (
+    <video src={url} controls className="mt-2 w-full max-h-48 rounded-xl border border-slate-100 bg-black" />
+  );
+  if (type === "pdf") return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => e.stopPropagation()}
+      className="inline-flex items-center gap-1.5 mt-2 text-[12px] font-semibold hover:underline"
+      style={{ color: "#EF4444" }}
+    >
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M14 2v6h6M9 13h6M9 17h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      Ouvrir le PDF
+    </a>
+  );
+  return (
+    <img src={url} alt="" className="mt-2 w-full max-h-48 object-cover rounded-xl border border-slate-100" />
+  );
+}
+
 function timeAgo(dateStr, locale) {
   if (!dateStr) return "";
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -197,13 +232,7 @@ export default function NotificationsPage() {
                               </>
                             );
                           })()}
-                          {n.imageUrl && (
-                            <img
-                              src={n.imageUrl}
-                              alt=""
-                              className="mt-2 w-full max-h-48 object-cover rounded-xl border border-slate-100"
-                            />
-                          )}
+                          <MediaDisplay url={n.imageUrl} />
                           {n.link && (
                             <a
                               href={n.link}

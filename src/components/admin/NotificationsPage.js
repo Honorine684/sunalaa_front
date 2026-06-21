@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { adminApi, getApiError } from "@/lib/api";
 
 const COLS = ["NOTIFICATION", "DESTINATAIRES", "ENVOYÉS", "STATUT", "DATE & HEURE"];
@@ -26,19 +26,96 @@ function EnvoyéBadge() {
   );
 }
 
+/* ── Media type helpers ── */
+function getMediaTypeFromFile(file) {
+  if (!file) return null;
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("video/")) return "video";
+  if (file.type === "application/pdf") return "pdf";
+  return "file";
+}
+
+function getMediaTypeFromUrl(url) {
+  if (!url) return null;
+  const lower = url.toLowerCase().split("?")[0];
+  if (/\.(mp4|webm|ogg|mov|avi|mkv)$/.test(lower)) return "video";
+  if (/\.pdf$/.test(lower)) return "pdf";
+  return "image";
+}
+
 /* ── Broadcast modal ── */
 function BroadcastModal({ onClose, onSent }) {
-  const [title, setTitle]       = useState("");
-  const [message, setMessage]   = useState("");
-  const [target, setTarget]     = useState("all");
-  const [link, setLink]         = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState("");
+  const [title, setTitle]     = useState("");
+  const [message, setMessage] = useState("");
+  const [target, setTarget]   = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+
+  const [mediaFile, setMediaFile]       = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaType, setMediaType]       = useState(null);
+  const [mediaUrl, setMediaUrl]         = useState(null);
+  const [uploading, setUploading]       = useState(false);
+  const [uploadError, setUploadError]   = useState("");
+  const [dragOver, setDragOver]         = useState(false);
+  const fileInputRef = useRef(null);
+
+  async function handleFileSelect(file) {
+    if (!file) return;
+    if (file.size > 50 * 1024 * 1024) {
+      setUploadError("Fichier trop lourd (max 50 Mo).");
+      return;
+    }
+    const type = getMediaTypeFromFile(file);
+    const preview = URL.createObjectURL(file);
+    setMediaFile(file);
+    setMediaPreview(preview);
+    setMediaType(type);
+    setMediaUrl(null);
+    setUploadError("");
+    setUploading(true);
+    try {
+      const token = typeof localStorage !== "undefined" ? localStorage.getItem("snl_access_token") : null;
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload-media", {
+        method: "POST",
+        headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      const url = data?.data?.url ?? data?.url ?? data?.data?.imageUrl ?? null;
+      if (!url) throw new Error("URL non retournée par le serveur.");
+      setMediaUrl(url);
+    } catch (e) {
+      setUploadError(e.message || "Erreur lors de l'upload.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function clearMedia() {
+    if (mediaPreview) URL.revokeObjectURL(mediaPreview);
+    setMediaFile(null);
+    setMediaPreview(null);
+    setMediaType(null);
+    setMediaUrl(null);
+    setUploading(false);
+    setUploadError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
   async function handleSend() {
     if (!title.trim() || !message.trim()) {
       setError("Le titre et le message sont requis.");
+      return;
+    }
+    if (uploading) {
+      setError("Veuillez attendre la fin de l'upload.");
+      return;
+    }
+    if (mediaFile && !mediaUrl) {
+      setError("L'upload a échoué. Retirez le fichier ou réessayez.");
       return;
     }
     setLoading(true);
@@ -48,8 +125,7 @@ function BroadcastModal({ onClose, onSent }) {
         title:       title.trim(),
         message:     message.trim(),
         targetGroup: target,
-        ...(link.trim()     && { link:     link.trim() }),
-        ...(imageUrl.trim() && { imageUrl: imageUrl.trim() }),
+        ...(mediaUrl ? { imageUrl: mediaUrl } : {}),
       };
       const res = await adminApi.broadcastNotification(payload);
       onSent({
@@ -59,8 +135,7 @@ function BroadcastModal({ onClose, onSent }) {
         targetGroup:    target,
         recipientCount: res.data?.data?.recipientCount ?? null,
         createdAt:      new Date().toISOString(),
-        link:           link.trim() || null,
-        imageUrl:       imageUrl.trim() || null,
+        imageUrl:       mediaUrl || null,
       });
       onClose();
     } catch (err) {
@@ -132,56 +207,95 @@ function BroadcastModal({ onClose, onSent }) {
             </select>
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-slate-100 pt-2">
-            <p className="text-[11px] font-bold uppercase tracking-wider mb-3" style={{ color: "#94A3B8" }}>Optionnel</p>
+          {/* Média */}
+          <div className="flex flex-col gap-1.5 border-t border-slate-100 pt-4">
+            <label className="text-[13px] font-semibold flex items-center gap-1.5" style={{ color: "#0F172B" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#3FAE8C" strokeWidth="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5" fill="#3FAE8C"/>
+                <path d="M21 15l-5-5L5 21" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Média <span className="font-normal text-slate-400 text-[12px]">(optionnel)</span>
+            </label>
 
-            {/* Link */}
-            <div className="flex flex-col gap-1.5 mb-3">
-              <label className="text-[13px] font-semibold flex items-center gap-1.5" style={{ color: "#0F172B" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            {!mediaFile ? (
+              <div
+                onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFileSelect(e.dataTransfer.files?.[0]); }}
+                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors"
+                style={{ borderColor: dragOver ? "#3FAE8C" : "#E2E8F0", backgroundColor: dragOver ? "rgba(63,174,140,0.04)" : "transparent" }}
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="mx-auto mb-2" style={{ color: "#CBD5E1" }}>
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Lien
-              </label>
-              <input
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                placeholder="https://sunalaa.com/..."
-                type="url"
-                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
-                style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
-              />
-            </div>
-
-            {/* Image URL */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold flex items-center gap-1.5" style={{ color: "#0F172B" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="#3FAE8C" strokeWidth="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5" stroke="#3FAE8C" strokeWidth="2"/>
-                  <path d="M21 15l-5-5L5 21" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Image (URL)
-              </label>
-              <input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://... .jpg / .png / .webp"
-                type="url"
-                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
-                style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
-              />
-              {imageUrl.trim() && (
-                <img
-                  src={imageUrl.trim()}
-                  alt="preview"
-                  className="mt-1 w-full max-h-40 object-cover rounded-xl border border-slate-100"
-                  onError={(e) => { e.target.style.display = "none"; }}
+                <p className="text-[13px]" style={{ color: "#64748B" }}>
+                  <span className="font-semibold" style={{ color: "#3FAE8C" }}>Cliquez</span> ou glissez un fichier ici
+                </p>
+                <p className="text-[11px] mt-1" style={{ color: "#94A3B8" }}>Images, vidéos, PDF — max 50 Mo</p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*,video/*,application/pdf"
+                  className="hidden"
+                  onChange={(e) => handleFileSelect(e.target.files?.[0])}
                 />
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="border rounded-xl overflow-hidden" style={{ borderColor: "#E2E8F0" }}>
+                {/* Preview */}
+                {mediaType === "image" && mediaPreview && (
+                  <img src={mediaPreview} alt="" className="w-full max-h-48 object-cover" />
+                )}
+                {mediaType === "video" && mediaPreview && (
+                  <video src={mediaPreview} className="w-full max-h-48 bg-black" controls />
+                )}
+                {(mediaType === "pdf" || mediaType === "file") && (
+                  <div className="flex items-center gap-3 px-4 py-4">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "#FEF2F2" }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 2v6h6M9 13h6M9 17h4" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <p className="text-[13px] font-medium truncate" style={{ color: "#0F172B" }}>{mediaFile.name}</p>
+                  </div>
+                )}
+
+                {/* Status bar */}
+                <div className="flex items-center justify-between px-4 py-2.5 border-t" style={{ borderColor: "#F1F5F9", backgroundColor: "#F8FAFC" }}>
+                  {uploading && (
+                    <div className="flex items-center gap-2 text-[12px]" style={{ color: "#94A3B8" }}>
+                      <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="40 20"/>
+                      </svg>
+                      Upload en cours…
+                    </div>
+                  )}
+                  {!uploading && mediaUrl && !uploadError && (
+                    <div className="flex items-center gap-1.5 text-[12px]" style={{ color: "#059669" }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M22 4L12 14.01l-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Prêt à envoyer
+                    </div>
+                  )}
+                  {!uploading && uploadError && (
+                    <p className="text-[12px]" style={{ color: "#DC2626" }}>{uploadError}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={clearMedia}
+                    className="text-[12px] font-medium hover:underline transition cursor-pointer ml-auto"
+                    style={{ color: "#94A3B8" }}
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -196,7 +310,7 @@ function BroadcastModal({ onClose, onSent }) {
           </button>
           <button
             onClick={handleSend}
-            disabled={loading}
+            disabled={loading || uploading}
             className="px-5 py-2.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
             style={{ backgroundColor: "#3FAE8C" }}
           >
@@ -244,29 +358,31 @@ function NotifDetailModal({ notif, onClose }) {
           </button>
         </div>
         <div className="px-6 py-5 overflow-y-auto flex flex-col gap-4">
-          {notif.imageUrl && (
-            <img
-              src={notif.imageUrl}
-              alt=""
-              className="w-full max-h-56 object-cover rounded-xl border border-slate-100"
-            />
-          )}
+          {notif.imageUrl && (() => {
+            const mt = getMediaTypeFromUrl(notif.imageUrl);
+            if (mt === "video") return (
+              <video src={notif.imageUrl} controls className="w-full max-h-56 rounded-xl border border-slate-100 bg-black" />
+            );
+            if (mt === "pdf") return (
+              <a
+                href={notif.imageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-[13px] font-semibold hover:bg-slate-50 transition w-fit"
+                style={{ borderColor: "#EF4444", color: "#EF4444" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M14 2v6h6M9 13h6M9 17h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Ouvrir le PDF
+              </a>
+            );
+            return (
+              <img src={notif.imageUrl} alt="" className="w-full max-h-56 object-cover rounded-xl border border-slate-100" />
+            );
+          })()}
           <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{notif.message}</p>
-          {notif.link && (
-            <a
-              href={notif.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-[13px] font-semibold hover:bg-slate-50 transition w-fit"
-              style={{ borderColor: "#3FAE8C", color: "#3FAE8C" }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              {notif.link}
-            </a>
-          )}
           <div className="flex flex-wrap gap-4 pt-2 border-t border-slate-100">
             <div>
               <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Destinataires</p>
@@ -427,20 +543,12 @@ export default function NotificationsPage() {
                         </button>
                       )}
                     </p>
-                    {(n.link || n.imageUrl) && (
+                    {n.imageUrl && (
                       <div className="flex items-center gap-2 mt-1.5">
-                        {n.link && (
-                          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full" style={{ backgroundColor: "#F0FDF4", color: "#3FAE8C" }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
-                            Lien
-                          </span>
-                        )}
-                        {n.imageUrl && (
-                          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2.5"/><path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
-                            Image
-                          </span>
-                        )}
+                        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2.5"/><path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                          Média
+                        </span>
                       </div>
                     )}
                   </div>
