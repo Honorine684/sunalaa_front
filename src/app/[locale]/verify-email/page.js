@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { authApi } from "@/lib/api";
@@ -38,7 +38,7 @@ const TEXT = {
   },
 };
 
-export default function VerifyEmailPage() {
+function VerifyEmailInner() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const locale = useLocale();
@@ -143,5 +143,13 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-primary" />}>
+      <VerifyEmailInner />
+    </Suspense>
   );
 }

@@ -15,10 +15,13 @@ function fmtNum(n) {
 export default function AnnouncementBanner() {
   const t = useTranslations("AnnouncementBanner");
   const locale = useLocale();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const prefix = locale === "fr" ? "/fr" : "";
   const [visible, setVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState(FALLBACK);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     settingsApi.getPreLaunchStats()
@@ -33,7 +36,7 @@ export default function AnnouncementBanner() {
       .catch(() => {});
   }, []);
 
-  if (loading || !visible || isAuthenticated) return null;
+  if (!mounted || !visible || isAuthenticated) return null;
 
   return (
     <div

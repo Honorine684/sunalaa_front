@@ -4,6 +4,20 @@ import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { usersApi } from "@/lib/api";
 
+function useHasAddress() {
+  const [hasAddress, setHasAddress] = useState(false);
+  useEffect(() => {
+    usersApi.getAddresses()
+      .then((res) => {
+        const raw = res.data?.data ?? res.data;
+        const list = Array.isArray(raw) ? raw : [];
+        setHasAddress(list.length > 0);
+      })
+      .catch(() => {});
+  }, []);
+  return hasAddress;
+}
+
 const LS_KEY = "snl_welcome_bonus_claimed";
 
 const REQUIRED_FIELDS = [
@@ -68,6 +82,7 @@ function isClaimed(profile) {
 
 export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPhoto }) {
   const locale = useLocale();
+  const hasAddress = useHasAddress();
   const [claimed, setClaimed]   = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [success, setSuccess]   = useState(false);
@@ -102,7 +117,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
 
   const fields = REQUIRED_FIELDS.map((f) => ({
     ...f,
-    done: f.check(profile),
+    done: f.id === "address" ? hasAddress : f.check(profile),
     label: locale === "fr" ? f.fr : f.en,
   }));
 

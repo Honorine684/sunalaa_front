@@ -94,7 +94,8 @@ export default function CourseDetailPage() {
   const isPaid   = price != null && price > 0;
 
   async function handleOrder() {
-    const token = typeof window !== "undefined" && localStorage.getItem("snl_access_token");
+    let token = null;
+    try { token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : null; } catch {};
     if (!token) {
       router.push(`/login?redirect=/formations/${id}`);
       return;

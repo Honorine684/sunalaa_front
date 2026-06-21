@@ -150,12 +150,22 @@ export default function NotificationBell() {
                   >
                     <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${!isRead ? "bg-secondary" : "bg-transparent"}`} />
                     <div className="flex-1 min-w-0">
-                      <p className={`text-[13px] leading-snug line-clamp-3 ${!isRead ? "font-medium text-slate-800" : "text-slate-600"}`}>
-                        {n.title ?? n.message ?? n.content ?? "Nouvelle notification"}
-                      </p>
-                      {(n.body ?? n.description) && (
-                        <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-2">{n.body ?? n.description}</p>
-                      )}
+                      {(() => {
+                        const title = n.title ?? null;
+                        const body  = n.body ?? n.description ?? n.message ?? n.content ?? null;
+                        const displayTitle = title ?? body ?? "Nouvelle notification";
+                        const displayBody  = title ? body : null;
+                        return (
+                          <>
+                            <p className={`text-[13px] leading-snug line-clamp-2 ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-700"}`}>
+                              {displayTitle}
+                            </p>
+                            {displayBody && (
+                              <p className="text-[12px] text-slate-500 mt-0.5 line-clamp-2 leading-snug">{displayBody}</p>
+                            )}
+                          </>
+                        );
+                      })()}
                       <p className="text-[11px] text-slate-400 mt-1">{timeAgo(n.createdAt ?? n.date)}</p>
                     </div>
                     <button

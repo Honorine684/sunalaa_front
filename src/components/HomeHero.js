@@ -96,19 +96,21 @@ export default function HomeHero({ onCollected }) {
   const [errMsg, setErrMsg]    = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("snl_next_collect");
-    if (stored && new Date(stored).getTime() > Date.now()) {
-      setNext(stored);
-      setState("already");
-      return;
-    }
+    try {
+      const stored = localStorage.getItem("snl_next_collect");
+      if (stored && new Date(stored).getTime() > Date.now()) {
+        setNext(stored);
+        setState("already");
+        return;
+      }
+    } catch {}
     usersApi.collectStatus()
       .then((res) => {
         const data = res.data?.data ?? res.data;
         if (data?.collectedToday) {
           const nc = data.nextCollect ?? new Date(Date.now() + 24 * 3_600_000).toISOString();
           setNext(nc);
-          localStorage.setItem("snl_next_collect", nc);
+          try { localStorage.setItem("snl_next_collect", nc); } catch {}
           setState("already");
         } else {
           setState("idle");
@@ -125,7 +127,7 @@ export default function HomeHero({ onCollected }) {
       const nc   = data.nextCollect ?? new Date(Date.now() + 24 * 3_600_000).toISOString();
       setResult(data);
       setNext(nc);
-      localStorage.setItem("snl_next_collect", nc);
+      try { localStorage.setItem("snl_next_collect", nc); } catch {}
       setState("success");
       onCollected?.(data.newBalance);
     } catch (err) {
@@ -135,7 +137,7 @@ export default function HomeHero({ onCollected }) {
         setErrMsg(msg);
         const nc = body.nextCollect ?? new Date(Date.now() + 24 * 3_600_000).toISOString();
         setNext(nc);
-        localStorage.setItem("snl_next_collect", nc);
+        try { localStorage.setItem("snl_next_collect", nc); } catch {}
         setState("already");
       } else {
         setErrMsg(msg);

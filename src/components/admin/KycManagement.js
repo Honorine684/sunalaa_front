@@ -129,7 +129,7 @@ function ReviewModal({ request, onClose, onReview }) {
   const user = request.user ?? {};
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4">
-      <div className="bg-white w-full sm:max-w-lg sm:rounded-2xl shadow-2xl flex flex-col rounded-t-2xl" style={{ maxHeight: "90dvh" }}>
+      <div className="bg-white w-full sm:max-w-lg sm:rounded-2xl shadow-2xl flex flex-col rounded-t-2xl" style={{ maxHeight: "90vh", maxHeight: "90dvh" }}>
 
         {/* Header — fixe */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 shrink-0">

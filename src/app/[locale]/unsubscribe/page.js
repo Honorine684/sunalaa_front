@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { newsletterApi } from "@/lib/api";
 
-export default function UnsubscribePage() {
+function UnsubscribeInner() {
   const t           = useTranslations("Unsubscribe");
   const params      = useSearchParams();
   const email       = params.get("email") ?? "";
@@ -153,5 +153,13 @@ export default function UnsubscribePage() {
         © {new Date().getFullYear()} SUNALA UAB
       </p>
     </main>
+  );
+}
+
+export default function UnsubscribePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" style={{ backgroundColor: "#060e0d" }} />}>
+      <UnsubscribeInner />
+    </Suspense>
   );
 }

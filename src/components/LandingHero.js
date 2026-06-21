@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
@@ -11,6 +12,8 @@ export default function LandingHero() {
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: "#1F4E46" }}>
@@ -32,7 +35,7 @@ export default function LandingHero() {
               {t("subtitle")}
             </p>
             <div className="flex flex-wrap items-center gap-4 justify-center lg:justify-start">
-              {user ? (
+              {mounted && user ? (
                 <Link href={`${prefix}/bonus`}
                   className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
                   style={{ backgroundColor: "#3FAE8C" }}>

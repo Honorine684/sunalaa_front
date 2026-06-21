@@ -181,14 +181,22 @@ export default function NotificationsPage() {
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                          <p className={`text-[14px] leading-snug ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-600"}`}>
-                            {n.title ?? n.message ?? n.content ?? (locale === "fr" ? "Nouvelle notification" : "New notification")}
-                          </p>
-                          {(n.body ?? n.description) && (
-                            <p className="text-[13px] text-slate-500 mt-1 leading-relaxed">
-                              {n.body ?? n.description}
-                            </p>
-                          )}
+                          {(() => {
+                            const title = n.title ?? null;
+                            const body  = n.body ?? n.description ?? n.message ?? n.content ?? null;
+                            const displayTitle = title ?? body ?? (locale === "fr" ? "Nouvelle notification" : "New notification");
+                            const displayBody  = title ? body : null;
+                            return (
+                              <>
+                                <p className={`text-[14px] leading-snug ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-600"}`}>
+                                  {displayTitle}
+                                </p>
+                                {displayBody && (
+                                  <p className="text-[13px] text-slate-500 mt-1 leading-relaxed">{displayBody}</p>
+                                )}
+                              </>
+                            );
+                          })()}
                           <p className="text-[12px] mt-1.5" style={{ color: "#94A3B8" }}>
                             {timeAgo(n.createdAt ?? n.date, locale)}
                           </p>

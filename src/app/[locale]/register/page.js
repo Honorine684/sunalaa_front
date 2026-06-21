@@ -251,11 +251,21 @@ function RegisterInner() {
               </ol>
             </div>
 
-            <p className="text-white/40 text-[12px]">
+            <p className="text-white/40 text-[12px] mb-3">
               {locale === "fr"
                 ? "Vous ne pourrez pas vous connecter tant que votre email n'est pas vérifié."
                 : "You won't be able to log in until your email is verified."}
             </p>
+
+            {/* Spam tip */}
+            <div className="rounded-xl px-4 py-3 flex items-start gap-2.5" style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <span className="text-[15px] shrink-0">📩</span>
+              <p className="text-[12px] leading-relaxed text-left" style={{ color: "rgba(255,255,255,0.50)" }}>
+                {locale === "fr"
+                  ? "Vous ne trouvez pas le mail ? Pensez à vérifier vos courriers indésirables ou votre dossier spam."
+                  : "Can't find the email? Make sure to check your spam or junk folder."}
+              </p>
+            </div>
           </div>
         </div>
       </div>
