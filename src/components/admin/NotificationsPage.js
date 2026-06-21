@@ -168,12 +168,58 @@ function targetLabel(tg) {
   return "Tous les utilisateurs";
 }
 
+const MSG_LIMIT = 120;
+
+/* ── Detail modal ── */
+function NotifDetailModal({ notif, onClose }) {
+  const { date, time } = formatDate(notif.createdAt);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(15,23,43,0.5)" }}>
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[90vh]">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+          <h3 className="text-[16px] font-bold leading-snug pr-4" style={{ color: "#0F172B" }}>{notif.title}</h3>
+          <button onClick={onClose} className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full hover:bg-slate-100 transition cursor-pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="#45556C" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div className="px-6 py-5 overflow-y-auto flex flex-col gap-4">
+          <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{notif.message}</p>
+          <div className="flex flex-wrap gap-4 pt-2 border-t border-slate-100">
+            <div>
+              <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Destinataires</p>
+              <p className="text-[13px]" style={{ color: "#0F172B" }}>{targetLabel(notif.targetGroup)}</p>
+            </div>
+            {notif.recipientCount != null && (
+              <div>
+                <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Envoyés</p>
+                <p className="text-[13px]" style={{ color: "#0F172B" }}>{notif.recipientCount.toLocaleString("fr-FR")}</p>
+              </div>
+            )}
+            <div>
+              <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Date</p>
+              <p className="text-[13px]" style={{ color: "#0F172B" }}>{date} à {time}</p>
+            </div>
+          </div>
+        </div>
+        <div className="px-6 py-4 border-t border-slate-100 flex justify-end">
+          <button onClick={onClose} className="px-5 py-2 rounded-xl border text-[14px] font-semibold hover:bg-slate-50 transition cursor-pointer" style={{ borderColor: "#E2E8F0", color: "#45556C" }}>
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main component ── */
 export default function NotificationsPage() {
   const [history, setHistory]       = useState([]);
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState("");
-  const [showModal, setShowModal]   = useState(false);
+  const [showModal, setShowModal]       = useState(false);
+  const [selectedNotif, setSelectedNotif] = useState(null);
 
   const loadHistory = useCallback(async () => {
     setLoading(true);
@@ -287,7 +333,19 @@ export default function NotificationsPage() {
                 >
                   <div>
                     <p className="text-[14px] font-semibold mb-1 leading-snug" style={{ color: "#0F172B" }}>{n.title}</p>
-                    <p className="text-[12px] leading-relaxed" style={{ color: "#45556C" }}>{n.message}</p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: "#45556C" }}>
+                      {n.message?.length > MSG_LIMIT ? `${n.message.slice(0, MSG_LIMIT)}… ` : n.message}
+                      {n.message?.length > MSG_LIMIT && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNotif(n)}
+                          className="font-semibold underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity"
+                          style={{ color: "#3FAE8C" }}
+                        >
+                          Voir plus
+                        </button>
+                      )}
+                    </p>
                   </div>
                   <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>{targetLabel(n.targetGroup)}</span>
                   <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>
@@ -345,8 +403,9 @@ export default function NotificationsPage() {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       {showModal && <BroadcastModal onClose={() => setShowModal(false)} onSent={handleSent} />}
+      {selectedNotif && <NotifDetailModal notif={selectedNotif} onClose={() => setSelectedNotif(null)} />}
 
     </div>
   );
