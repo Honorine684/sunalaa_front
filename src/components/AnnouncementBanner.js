@@ -15,7 +15,7 @@ function fmtNum(n) {
 export default function AnnouncementBanner() {
   const t = useTranslations("AnnouncementBanner");
   const locale = useLocale();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const prefix = locale === "fr" ? "/fr" : "";
   const [visible, setVisible] = useState(true);
   const [stats, setStats] = useState(FALLBACK);
@@ -33,7 +33,7 @@ export default function AnnouncementBanner() {
       .catch(() => {});
   }, []);
 
-  if (!visible || isAuthenticated) return null;
+  if (loading || !visible || isAuthenticated) return null;
 
   return (
     <div
