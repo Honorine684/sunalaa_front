@@ -17,6 +17,49 @@ function timeAgo(dateStr) {
   return `Il y a ${Math.floor(h / 24)}j`;
 }
 
+const BELL_BODY_LIMIT = 80;
+
+function NotifDetailModal({ notif, onClose }) {
+  const body = notif.body ?? notif.description ?? notif.message ?? notif.content ?? null;
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(15,23,43,0.5)" }}
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-sm flex flex-col max-h-[85vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <h3 className="text-[15px] font-bold leading-snug pr-3" style={{ color: "#0F172B" }}>
+            {notif.title ?? body}
+          </h3>
+          <button onClick={onClose} className="w-7 h-7 shrink-0 flex items-center justify-center rounded-full hover:bg-slate-100 transition cursor-pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="#45556C" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div className="px-5 py-4 overflow-y-auto flex flex-col gap-3">
+          {notif.imageUrl && (
+            <img src={notif.imageUrl} alt="" className="w-full max-h-40 object-cover rounded-xl border border-slate-100" />
+          )}
+          {notif.title && body && (
+            <p className="text-[13px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{body}</p>
+          )}
+          <p className="text-[11px]" style={{ color: "#94A3B8" }}>{timeAgo(notif.createdAt ?? notif.date)}</p>
+        </div>
+        <div className="px-5 py-3 border-t border-slate-100 flex justify-end">
+          <button onClick={onClose} className="px-4 py-1.5 rounded-xl border text-[13px] font-semibold hover:bg-slate-50 transition cursor-pointer" style={{ borderColor: "#E2E8F0", color: "#45556C" }}>
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function NotificationBell() {
   const { isAuthenticated } = useAuth();
   const locale = useLocale();
@@ -25,6 +68,7 @@ export default function NotificationBell() {
   const [unread, setUnread] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedNotif, setSelectedNotif] = useState(null);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -155,13 +199,26 @@ export default function NotificationBell() {
                         const body  = n.body ?? n.description ?? n.message ?? n.content ?? null;
                         const displayTitle = title ?? body ?? "Nouvelle notification";
                         const displayBody  = title ? body : null;
+                        const bodyLong = displayBody && displayBody.length > BELL_BODY_LIMIT;
                         return (
                           <>
                             <p className={`text-[13px] leading-snug line-clamp-2 ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-700"}`}>
                               {displayTitle}
                             </p>
                             {displayBody && (
-                              <p className="text-[12px] text-slate-500 mt-0.5 line-clamp-2 leading-snug">{displayBody}</p>
+                              <p className="text-[12px] text-slate-500 mt-0.5 leading-snug">
+                                {bodyLong ? `${displayBody.slice(0, BELL_BODY_LIMIT)}… ` : displayBody}
+                                {bodyLong && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => { e.stopPropagation(); setOpen(false); setSelectedNotif(n); }}
+                                    className="font-semibold hover:underline cursor-pointer"
+                                    style={{ color: "#3FAE8C" }}
+                                  >
+                                    Voir plus
+                                  </button>
+                                )}
+                              </p>
                             )}
                           </>
                         );
@@ -212,6 +269,9 @@ export default function NotificationBell() {
             </svg>
           </Link>
         </div>
+      )}
+      {selectedNotif && (
+        <NotifDetailModal notif={selectedNotif} onClose={() => setSelectedNotif(null)} />
       )}
     </div>
   );
