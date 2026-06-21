@@ -9,13 +9,24 @@ function useHasAddress() {
   useEffect(() => {
     usersApi.getAddresses()
       .then((res) => {
-        const raw = res.data?.data ?? res.data;
-        const list = Array.isArray(raw) ? raw
-          : Array.isArray(raw?.addresses) ? raw.addresses
-          : Array.isArray(raw?.data) ? raw.data
-          : raw?.total > 0 ? [true]
-          : [];
-        setHasAddress(list.length > 0);
+        const outer = res.data?.data ?? res.data;
+        let found = false;
+        if (Array.isArray(outer)) {
+          found = outer.length > 0;
+        } else if (outer && typeof outer === "object") {
+          const nested =
+            outer.data      != null ? outer.data      :
+            outer.addresses != null ? outer.addresses :
+            outer.items     != null ? outer.items     :
+            outer.results   != null ? outer.results   : null;
+          if (Array.isArray(nested)) {
+            found = nested.length > 0;
+          } else {
+            const count = outer.total ?? outer.count ?? 0;
+            found = Number(count) > 0;
+          }
+        }
+        setHasAddress(found);
       })
       .catch(() => {});
   }, []);

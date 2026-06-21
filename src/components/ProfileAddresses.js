@@ -102,8 +102,19 @@ export default function ProfileAddresses() {
   useEffect(() => {
     usersApi.getAddresses()
       .then((res) => {
-        const raw = res.data?.data ?? res.data;
-        setAddresses(Array.isArray(raw) ? raw : []);
+        const outer = res.data?.data ?? res.data;
+        let list = [];
+        if (Array.isArray(outer)) {
+          list = outer;
+        } else if (outer && typeof outer === "object") {
+          const nested =
+            outer.data      != null ? outer.data      :
+            outer.addresses != null ? outer.addresses :
+            outer.items     != null ? outer.items     :
+            outer.results   != null ? outer.results   : null;
+          if (Array.isArray(nested)) list = nested;
+        }
+        setAddresses(list);
       })
       .catch((err) => setError(getApiError(err)))
       .finally(() => setLoading(false));
