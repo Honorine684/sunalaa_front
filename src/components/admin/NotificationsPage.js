@@ -263,7 +263,7 @@ function BroadcastModal({ onClose, onSent }) {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*,video/*,application/pdf"
+                  accept="image/*,.mp4,.webm,.mov,.avi,.mkv,.m4v,video/mp4,video/webm,video/quicktime,video/x-msvideo,video/x-matroska,application/pdf,.pdf"
                   className="hidden"
                   onChange={(e) => handleFileSelect(e.target.files?.[0])}
                 />
