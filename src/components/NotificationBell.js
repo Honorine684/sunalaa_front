@@ -166,7 +166,25 @@ export default function NotificationBell() {
                           </>
                         );
                       })()}
-                      <p className="text-[11px] text-slate-400 mt-1">{timeAgo(n.createdAt ?? n.date)}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-[11px] text-slate-400">{timeAgo(n.createdAt ?? n.date)}</p>
+                        {n.link && (
+                          <a
+                            href={n.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold hover:underline"
+                            style={{ color: "#3FAE8C" }}
+                          >
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                              <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            Lien
+                          </a>
+                        )}
+                      </div>
                     </div>
                     <button
                       onClick={(e) => handleDelete(e, n.id)}

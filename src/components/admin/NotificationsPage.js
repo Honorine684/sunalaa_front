@@ -31,6 +31,8 @@ function BroadcastModal({ onClose, onSent }) {
   const [title, setTitle]       = useState("");
   const [message, setMessage]   = useState("");
   const [target, setTarget]     = useState("all");
+  const [link, setLink]         = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState("");
 
@@ -42,11 +44,14 @@ function BroadcastModal({ onClose, onSent }) {
     setLoading(true);
     setError("");
     try {
-      const res = await adminApi.broadcastNotification({
+      const payload = {
         title:       title.trim(),
         message:     message.trim(),
         targetGroup: target,
-      });
+        ...(link.trim()     && { link:     link.trim() }),
+        ...(imageUrl.trim() && { imageUrl: imageUrl.trim() }),
+      };
+      const res = await adminApi.broadcastNotification(payload);
       onSent({
         id:             res.data?.data?.id ?? Date.now(),
         title:          title.trim(),
@@ -54,6 +59,8 @@ function BroadcastModal({ onClose, onSent }) {
         targetGroup:    target,
         recipientCount: res.data?.data?.recipientCount ?? null,
         createdAt:      new Date().toISOString(),
+        link:           link.trim() || null,
+        imageUrl:       imageUrl.trim() || null,
       });
       onClose();
     } catch (err) {
@@ -65,10 +72,10 @@ function BroadcastModal({ onClose, onSent }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(15,23,43,0.45)" }}>
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[95vh] overflow-y-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 sticky top-0 bg-white z-10">
           <h3 className="text-[17px] font-bold" style={{ color: "#0F172B" }}>Nouvelle notification</h3>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition cursor-pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -124,10 +131,62 @@ function BroadcastModal({ onClose, onSent }) {
               ))}
             </select>
           </div>
+
+          {/* Divider */}
+          <div className="border-t border-slate-100 pt-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider mb-3" style={{ color: "#94A3B8" }}>Optionnel</p>
+
+            {/* Link */}
+            <div className="flex flex-col gap-1.5 mb-3">
+              <label className="text-[13px] font-semibold flex items-center gap-1.5" style={{ color: "#0F172B" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Lien
+              </label>
+              <input
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="https://sunalaa.com/..."
+                type="url"
+                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+                style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
+              />
+            </div>
+
+            {/* Image URL */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[13px] font-semibold flex items-center gap-1.5" style={{ color: "#0F172B" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="#3FAE8C" strokeWidth="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5" stroke="#3FAE8C" strokeWidth="2"/>
+                  <path d="M21 15l-5-5L5 21" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Image (URL)
+              </label>
+              <input
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://... .jpg / .png / .webp"
+                type="url"
+                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+                style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
+              />
+              {imageUrl.trim() && (
+                <img
+                  src={imageUrl.trim()}
+                  alt="preview"
+                  className="mt-1 w-full max-h-40 object-cover rounded-xl border border-slate-100"
+                  onError={(e) => { e.target.style.display = "none"; }}
+                />
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-100">
+        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 sticky bottom-0 bg-white">
           <button
             onClick={onClose}
             className="px-5 py-2.5 rounded-xl border text-[14px] font-semibold hover:bg-slate-50 transition cursor-pointer"
@@ -185,7 +244,29 @@ function NotifDetailModal({ notif, onClose }) {
           </button>
         </div>
         <div className="px-6 py-5 overflow-y-auto flex flex-col gap-4">
+          {notif.imageUrl && (
+            <img
+              src={notif.imageUrl}
+              alt=""
+              className="w-full max-h-56 object-cover rounded-xl border border-slate-100"
+            />
+          )}
           <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{notif.message}</p>
+          {notif.link && (
+            <a
+              href={notif.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-[13px] font-semibold hover:bg-slate-50 transition w-fit"
+              style={{ borderColor: "#3FAE8C", color: "#3FAE8C" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {notif.link}
+            </a>
+          )}
           <div className="flex flex-wrap gap-4 pt-2 border-t border-slate-100">
             <div>
               <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Destinataires</p>
@@ -346,6 +427,22 @@ export default function NotificationsPage() {
                         </button>
                       )}
                     </p>
+                    {(n.link || n.imageUrl) && (
+                      <div className="flex items-center gap-2 mt-1.5">
+                        {n.link && (
+                          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full" style={{ backgroundColor: "#F0FDF4", color: "#3FAE8C" }}>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                            Lien
+                          </span>
+                        )}
+                        {n.imageUrl && (
+                          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2.5"/><path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                            Image
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>{targetLabel(n.targetGroup)}</span>
                   <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>

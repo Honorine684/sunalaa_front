@@ -197,6 +197,29 @@ export default function NotificationsPage() {
                               </>
                             );
                           })()}
+                          {n.imageUrl && (
+                            <img
+                              src={n.imageUrl}
+                              alt=""
+                              className="mt-2 w-full max-h-48 object-cover rounded-xl border border-slate-100"
+                            />
+                          )}
+                          {n.link && (
+                            <a
+                              href={n.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1.5 mt-2 text-[12px] font-semibold hover:underline"
+                              style={{ color: "#3FAE8C" }}
+                            >
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                              {locale === "fr" ? "Voir le lien" : "Open link"}
+                            </a>
+                          )}
                           <p className="text-[12px] mt-1.5" style={{ color: "#94A3B8" }}>
                             {timeAgo(n.createdAt ?? n.date, locale)}
                           </p>
