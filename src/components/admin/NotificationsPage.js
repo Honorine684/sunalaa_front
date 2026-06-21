@@ -180,8 +180,13 @@ export default function NotificationsPage() {
     setError("");
     try {
       const res = await adminApi.getNotificationsHistory({ page: 1, limit: 50 });
-      const raw = res.data?.data;
-      setHistory(Array.isArray(raw) ? raw : []);
+      const outer = res.data?.data ?? res.data;
+      const list = Array.isArray(outer) ? outer
+        : Array.isArray(outer?.data)       ? outer.data
+        : Array.isArray(outer?.items)      ? outer.items
+        : Array.isArray(outer?.broadcasts) ? outer.broadcasts
+        : [];
+      setHistory(list);
     } catch (err) {
       setError(getApiError(err));
     } finally {
