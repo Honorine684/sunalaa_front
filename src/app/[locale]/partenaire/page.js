@@ -5,7 +5,7 @@ import { useLocale } from "next-intl";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
-import { api } from "@/lib/api";
+import { contactApi } from "@/lib/api";
 
 const PARTNERSHIP_TYPES_FR = [
   "Partenaire agricole / Ferme",
@@ -89,7 +89,7 @@ export default function PartnerPage() {
     setSending(true);
     setApiError("");
     try {
-      await api.post("/contact/partner", fields);
+      await contactApi.submitPartner(fields);
       setDone(true);
     } catch {
       setApiError(isFr ? "Une erreur est survenue. Veuillez réessayer." : "An error occurred. Please try again.");

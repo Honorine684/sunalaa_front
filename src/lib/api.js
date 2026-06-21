@@ -303,6 +303,10 @@ export const newsletterApi = {
   unsubscribe: (email) => api.post("/newsletter/unsubscribe", { email }),
 };
 
+export const contactApi = {
+  submitPartner: (data) => api.post("/contact/partner", data),
+};
+
 export const settingsApi = {
   get: (key) => api.get(`/settings/${key}`),
   getPreLaunchStats: () => api.get("/settings/pre-launch-stats"),
