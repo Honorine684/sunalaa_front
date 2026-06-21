@@ -42,9 +42,20 @@ function NotifDetailModal({ notif, onClose }) {
           </button>
         </div>
         <div className="px-5 py-4 overflow-y-auto flex flex-col gap-3">
-          {notif.imageUrl && (
-            <img src={notif.imageUrl} alt="" className="w-full max-h-40 object-cover rounded-xl border border-slate-100" />
-          )}
+          {notif.imageUrl && (() => {
+            const url = notif.imageUrl;
+            const lower = url.toLowerCase().split("?")[0];
+            if (/\.(mp4|webm|ogg|mov|avi|mkv|m4v)$/.test(lower)) return (
+              <video src={url} controls className="w-full max-h-40 rounded-xl border border-slate-100 bg-black" />
+            );
+            if (/\.pdf$/.test(lower)) return (
+              <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[12px] font-semibold hover:underline" style={{ color: "#EF4444" }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M14 2v6h6M9 13h6M9 17h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Ouvrir le PDF
+              </a>
+            );
+            return <img src={url} alt="" className="w-full max-h-40 object-cover rounded-xl border border-slate-100" />;
+          })()}
           {notif.title && body && (
             <p className="text-[13px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{body}</p>
           )}
@@ -200,6 +211,8 @@ export default function NotificationBell() {
                         const displayTitle = title ?? body ?? "Nouvelle notification";
                         const displayBody  = title ? body : null;
                         const bodyLong = displayBody && displayBody.length > BELL_BODY_LIMIT;
+                        const hasMedia = !!n.imageUrl;
+                        const showMore = bodyLong || hasMedia;
                         return (
                           <>
                             <p className={`text-[13px] leading-snug line-clamp-2 ${!isRead ? "font-semibold text-slate-800" : "font-medium text-slate-700"}`}>
@@ -208,17 +221,17 @@ export default function NotificationBell() {
                             {displayBody && (
                               <p className="text-[12px] text-slate-500 mt-0.5 leading-snug">
                                 {bodyLong ? `${displayBody.slice(0, BELL_BODY_LIMIT)}… ` : displayBody}
-                                {bodyLong && (
-                                  <button
-                                    type="button"
-                                    onClick={(e) => { e.stopPropagation(); setOpen(false); setSelectedNotif(n); }}
-                                    className="font-semibold hover:underline cursor-pointer"
-                                    style={{ color: "#3FAE8C" }}
-                                  >
-                                    Voir plus
-                                  </button>
-                                )}
                               </p>
+                            )}
+                            {showMore && (
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setOpen(false); setSelectedNotif(n); }}
+                                className="text-[11px] font-semibold hover:underline cursor-pointer mt-0.5"
+                                style={{ color: "#3FAE8C" }}
+                              >
+                                Voir plus
+                              </button>
                             )}
                           </>
                         );
