@@ -220,13 +220,13 @@ export default function ProfileKyc() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <FilePickerField label="Front of document" required
                   file={frontFile} onChange={handleFrontChange}
-                  capture="environment" uploading={uploadingFront} uploaded={!!frontUrl} />
+                  uploading={uploadingFront} uploaded={!!frontUrl} />
                 <FilePickerField label="Back of document"
                   file={backFile} onChange={handleBackChange}
-                  capture="environment" uploading={uploadingBack} uploaded={!!backUrl} />
+                  uploading={uploadingBack} uploaded={!!backUrl} />
                 <FilePickerField label="Selfie with document"
                   file={selfieFile} onChange={handleSelfieChange}
-                  capture="user" uploading={uploadingSelfie} uploaded={!!selfieUrl} />
+                  uploading={uploadingSelfie} uploaded={!!selfieUrl} />
               </div>
 
               <p className="text-[11px]" style={{ color: "#94A3B8" }}>
