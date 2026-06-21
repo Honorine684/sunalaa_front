@@ -83,11 +83,15 @@ function BroadcastModal({ onClose, onSent }) {
         headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: form,
       });
+      console.log("Upload status:", res.status);
       const data = await res.json().catch(() => ({}));
+      console.log("Upload response:", data);
+      if (!res.ok) throw new Error(data?.message ?? data?.error ?? `Erreur ${res.status}`);
       const url = data?.data?.url ?? data?.url ?? data?.data?.imageUrl ?? null;
       if (!url) throw new Error("URL non retournée par le serveur.");
       setMediaUrl(url);
     } catch (e) {
+      console.error("Upload error:", e);
       setUploadError(e.message || "Erreur lors de l'upload.");
     } finally {
       setUploading(false);

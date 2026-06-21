@@ -13,12 +13,15 @@ export async function POST(request) {
   }
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1";
-  const response = await fetch(`${apiBase}/uploads/media`, {
+  const targetUrl = `${apiBase}/uploads/media`;
+  console.log("[upload-media] POST", targetUrl);
+  const response = await fetch(targetUrl, {
     method: "POST",
     headers: { ...(authorization ? { Authorization: authorization } : {}) },
     body: outgoing,
   });
-
+  console.log("[upload-media] backend status:", response.status);
   const data = await response.json().catch(() => ({}));
+  console.log("[upload-media] backend response:", data);
   return Response.json(data, { status: response.status });
 }
