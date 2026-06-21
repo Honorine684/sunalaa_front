@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { adminApi, getApiError } from "@/lib/api";
 
 const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B"];
@@ -482,18 +483,18 @@ export default function UsersManagement() {
                       {createdAt ? new Date(createdAt).toLocaleDateString("fr-FR") : "—"}
                     </span>
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setViewUser(user)}
+                      <Link
+                        href={`/admin/utilisateurs/${user.id}`}
                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[12px] font-semibold transition cursor-pointer hover:brightness-110"
                         style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}
-                        title="Voir le réseau"
+                        title="Voir le profil complet"
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
                           <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
                         </svg>
                         Voir
-                      </button>
+                      </Link>
                       <ActionMenu user={user} onStatusChange={handleStatusChange} onDelete={handleDelete} />
                     </div>
                   </div>
