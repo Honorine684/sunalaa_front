@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { getApiError } from "@/lib/api";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 function validate(fields) {
   const errors = {};
@@ -23,10 +25,8 @@ function validate(fields) {
 
   if (fields.phone) {
     const digits = fields.phone.replace(/[\s\-().+]/g, "");
-    if (!/^\d+$/.test(digits)) {
-      errors.phone = "Digits only";
-    } else if (digits.length < 8 || digits.length > 15) {
-      errors.phone = "Between 8 and 15 digits";
+    if (digits.length > 0 && (digits.length < 8 || digits.length > 16)) {
+      errors.phone = "Invalid phone number";
     }
   }
 
@@ -121,20 +121,34 @@ export default function ProfileAbout({ profile, onUpdate, autoEdit = false }) {
           {[
             { key: "firstName", label: "First name" },
             { key: "lastName", label: "Last name" },
-            { key: "phone", label: "Phone", inputMode: "tel" },
-          ].map(({ key, label, inputMode }) => (
+          ].map(({ key, label }) => (
             <div key={key} className="flex flex-col gap-1">
               <label className="text-[12px]" style={{ color: "#45556C" }}>{label}</label>
               <input
                 value={fields[key] ?? ""}
                 onChange={(e) => handleChange(key, e.target.value)}
-                inputMode={inputMode}
                 className={`border rounded-xl px-3 py-2 text-[13px] outline-none focus:ring-2 transition bg-white ${fieldErrors[key] ? "border-red-400 ring-1 ring-red-200" : "border-slate-200 focus:ring-secondary/30"}`}
                 style={{ color: "#0F172B" }}
               />
               {fieldErrors[key] && <p className="text-red-400 text-[11px]">{fieldErrors[key]}</p>}
             </div>
           ))}
+          <div className="flex flex-col gap-1">
+            <label className="text-[12px]" style={{ color: "#45556C" }}>Phone</label>
+            <PhoneInput
+              value={fields.phone ?? ""}
+              onChange={(phone) => handleChange("phone", phone)}
+              defaultCountry="sn"
+              style={{
+                "--react-international-phone-height": "38px",
+                "--react-international-phone-border-radius": "12px",
+                "--react-international-phone-border-color": fieldErrors.phone ? "#f87171" : "#e2e8f0",
+                "--react-international-phone-font-size": "13px",
+                width: "100%",
+              }}
+            />
+            {fieldErrors.phone && <p className="text-red-400 text-[11px]">{fieldErrors.phone}</p>}
+          </div>
           <div className="flex flex-col gap-1">
             <label className="text-[12px]" style={{ color: "#45556C" }}>Gender</label>
             <select

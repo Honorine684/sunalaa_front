@@ -10,7 +10,11 @@ function useHasAddress() {
     usersApi.getAddresses()
       .then((res) => {
         const raw = res.data?.data ?? res.data;
-        const list = Array.isArray(raw) ? raw : [];
+        const list = Array.isArray(raw) ? raw
+          : Array.isArray(raw?.addresses) ? raw.addresses
+          : Array.isArray(raw?.data) ? raw.data
+          : raw?.total > 0 ? [true]
+          : [];
         setHasAddress(list.length > 0);
       })
       .catch(() => {});
