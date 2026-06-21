@@ -19,9 +19,9 @@ export default function Navbar() {
   const navLinks = [
     { label: t("home"),        href: `${prefix}/` },
     { label: t("collect"),     href: `${prefix}/collecter` },
-    { label: t("formations"),  href: `${prefix}/formations` },
     { label: t("bonus"),       href: `${prefix}/bonus` },
     { label: t("leaderboard"), href: `${prefix}/classement` },
+    { label: t("formations"),  href: `${prefix}/formations` },
   ];
 
   useEffect(() => {

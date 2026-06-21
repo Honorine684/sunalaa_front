@@ -189,6 +189,7 @@ export default function Footer() {
             { label: t("nav_classement"), href: `${prefix}/classement` },
             { label: t("nav_parrainage"), href: `${prefix}/bonus` },
             { label: t("nav_snl"),        href: `${prefix}/snl` },
+            { label: t("nav_partner"),    href: `${prefix}/partenaire` },
           ]} />
 
           {/* Le Projet */}

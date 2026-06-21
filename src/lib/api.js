@@ -293,6 +293,8 @@ export const adminApi = {
   deleteNewsletterSubscriber: (id) => api.delete(`/admin/newsletter/subscribers/${id}`),
   sendNewsletter: (data) => api.post("/admin/newsletter/send", data),
   getNewsletterCampaigns: (params) => api.get("/admin/newsletter/campaigns", { params }),
+  getPartnerRequests: (params) => api.get("/admin/partner-requests", { params }),
+  updatePartnerRequest: (id, data) => api.patch(`/admin/partner-requests/${id}`, data),
 };
 
 // ── Public settings ───────────────────────────────────────────────

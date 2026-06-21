@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import LaunchCountdown from "./LaunchCountdown";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LandingHero() {
   const t = useTranslations("LandingHero");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
+  const { user } = useAuth();
 
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: "#1F4E46" }}>
@@ -28,16 +32,29 @@ export default function LandingHero() {
               {t("subtitle")}
             </p>
             <div className="flex flex-wrap items-center gap-4 justify-center lg:justify-start">
-              <Link href={`${prefix}/login`}
-                className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
-                style={{ backgroundColor: "#3FAE8C" }}>
-                {t("cta_primary")}
-                <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </Link>
+              {user ? (
+                <Link href={`${prefix}/bonus`}
+                  className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#3FAE8C" }}>
+                  {locale === "fr" ? "Accumuler plus" : "Earn more"}
+                  <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </Link>
+              ) : (
+                <Link href={`${prefix}/login`}
+                  className="inline-flex items-center gap-6 rounded-full font-bold text-[16px] text-white pl-6 pr-4 py-4 transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#3FAE8C" }}>
+                  {t("cta_primary")}
+                  <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 18l6-6-6-6" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </Link>
+              )}
               <Link href={`${prefix}/snl`}
                 className="inline-flex items-center gap-2 rounded-full font-semibold text-[15px] text-white px-6 py-4 transition-all hover:bg-white/10"
                 style={{ border: "1.5px solid rgba(255,255,255,0.35)" }}>
