@@ -11,7 +11,9 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
 /* ─── Validation ─────────────────────────────────────────────────── */
-function validate(fields) {
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+function validate(fields, locale) {
   const errors = {};
 
   if (!fields.username.trim()) {
@@ -34,11 +36,11 @@ function validate(fields) {
   }
 
   if (!fields.password) {
-    errors.password = "Password is required";
-  } else if (fields.password.length < 8) {
-    errors.password = "Minimum 8 characters";
-  } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(fields.password)) {
-    errors.password = "Must contain uppercase, lowercase and number";
+    errors.password = locale === "fr" ? "Le mot de passe est requis" : "Password is required";
+  } else if (!PASSWORD_REGEX.test(fields.password)) {
+    errors.password = locale === "fr"
+      ? "Le mot de passe doit contenir au moins 8 caractères avec une majuscule, une minuscule et un chiffre"
+      : "Password must be at least 8 characters with uppercase, lowercase and a number";
   }
 
   if (!fields.confirmPassword) {
@@ -177,7 +179,7 @@ function RegisterInner() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const errs = validate(fields);
+      const errs = validate(fields, locale);
       if (Object.keys(errs).length) { setErrors(errs); return; }
 
       setLoading(true);

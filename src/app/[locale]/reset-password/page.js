@@ -7,6 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import { authApi, getApiError } from "@/lib/api";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
 const TEXT = {
   en: {
     title:        "New password",
@@ -17,8 +19,8 @@ const TEXT = {
     placeholder_confirm: "Repeat password",
     submit:       "Update password",
     submitting:   "Updating…",
-    err_required: "Password is required",
-    err_min:      "Minimum 8 characters",
+    err_required:    "Password is required",
+    err_complexity:  "Password must be at least 8 characters with uppercase, lowercase and a number",
     err_confirm:  "Please confirm your password",
     err_match:    "Passwords do not match",
     done_title:   "Password updated!",
@@ -37,8 +39,8 @@ const TEXT = {
     placeholder_confirm: "Répétez le mot de passe",
     submit:       "Modifier le mot de passe",
     submitting:   "Modification en cours…",
-    err_required: "Le mot de passe est requis",
-    err_min:      "Minimum 8 caractères",
+    err_required:    "Le mot de passe est requis",
+    err_complexity:  "Le mot de passe doit contenir au moins 8 caractères avec une majuscule, une minuscule et un chiffre",
     err_confirm:  "Veuillez confirmer le mot de passe",
     err_match:    "Les mots de passe ne correspondent pas",
     done_title:   "Mot de passe modifié !",
@@ -68,7 +70,7 @@ function ResetPasswordForm() {
   function validate() {
     const e = {};
     if (!fields.password)                           e.password = t.err_required;
-    else if (fields.password.length < 8)            e.password = t.err_min;
+    else if (!PASSWORD_REGEX.test(fields.password)) e.password = t.err_complexity;
     if (!fields.confirm)                            e.confirm  = t.err_confirm;
     else if (fields.password !== fields.confirm)    e.confirm  = t.err_match;
     return e;
