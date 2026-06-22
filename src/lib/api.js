@@ -208,6 +208,7 @@ export const notificationsApi = {
   getUnreadCount: () => api.get("/notifications/unread-count"),
   markRead: (id) => api.put(`/notifications/${id}/read`),
   markAllRead: () => api.put("/notifications/mark-all-read"),
+  trackClick: (id) => api.post(`/notifications/${id}/click`),
   delete: (id) => api.delete(`/notifications/${id}`),
 };
 

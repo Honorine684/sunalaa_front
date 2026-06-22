@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { adminApi, getApiError } from "@/lib/api";
 
-const COLS = ["NOTIFICATION", "DESTINATAIRES", "ENVOYÉS", "STATUT", "DATE & HEURE"];
+const COLS = ["NOTIFICATION", "DESTINATAIRES", "ENVOYÉS", "VUES", "CLICS", "STATUT", "DATE & HEURE"];
 
 const TARGET_OPTIONS = [
   { value: "all",    label: "Tous les utilisateurs" },
@@ -440,6 +440,18 @@ function NotifDetailModal({ notif, onClose }) {
                 <p className="text-[13px]" style={{ color: "#0F172B" }}>{notif.recipientCount.toLocaleString("fr-FR")}</p>
               </div>
             )}
+            {notif.viewCount != null && (
+              <div>
+                <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Vues</p>
+                <p className="text-[13px] font-semibold" style={{ color: "#3FAE8C" }}>{notif.viewCount.toLocaleString("fr-FR")}</p>
+              </div>
+            )}
+            {notif.clickCount != null && (
+              <div>
+                <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Clics</p>
+                <p className="text-[13px] font-semibold" style={{ color: "#3B82F6" }}>{notif.clickCount.toLocaleString("fr-FR")}</p>
+              </div>
+            )}
             <div>
               <p className="text-[11px] uppercase font-bold tracking-wide mb-0.5" style={{ color: "#94A3B8" }}>Date</p>
               <p className="text-[13px]" style={{ color: "#0F172B" }}>{date} à {time}</p>
@@ -491,6 +503,12 @@ export default function NotificationsPage() {
 
   const totalSent       = history.length;
   const totalRecipients = history.reduce((acc, n) => acc + (n.recipientCount ?? 0), 0);
+  const totalViews      = history.some((n) => n.viewCount != null)
+    ? history.reduce((acc, n) => acc + (n.viewCount ?? 0), 0)
+    : null;
+  const totalClicks     = history.some((n) => n.clickCount != null)
+    ? history.reduce((acc, n) => acc + (n.clickCount ?? 0), 0)
+    : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -555,7 +573,7 @@ export default function NotificationsPage() {
           <div className="overflow-x-auto rounded-xl border border-slate-100">
           <div className="bg-white min-w-150">
             {/* Head */}
-            <div className="grid grid-cols-[3fr_1.5fr_1fr_1fr_1.2fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+            <div className="grid grid-cols-[3fr_1.2fr_0.8fr_0.8fr_0.8fr_0.8fr_1.1fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
               {COLS.map((col) => (
                 <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>
                   {col}
@@ -570,7 +588,7 @@ export default function NotificationsPage() {
                 <div
                   key={n.id}
                   className={[
-                    "grid grid-cols-[3fr_1.5fr_1fr_1fr_1.2fr] px-6 py-5 items-start hover:bg-slate-50 transition-colors duration-150",
+                    "grid grid-cols-[3fr_1.2fr_0.8fr_0.8fr_0.8fr_0.8fr_1.1fr] px-6 py-5 items-start hover:bg-slate-50 transition-colors duration-150",
                     i < history.length - 1 ? "border-b border-slate-100" : "",
                   ].join(" ")}
                 >
@@ -610,6 +628,12 @@ export default function NotificationsPage() {
                   <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>
                     {n.recipientCount != null ? n.recipientCount.toLocaleString("fr-FR") : "—"}
                   </span>
+                  <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>
+                    {n.viewCount != null ? n.viewCount.toLocaleString("fr-FR") : "—"}
+                  </span>
+                  <span className="text-[13px] pt-0.5" style={{ color: "#45556C" }}>
+                    {n.clickCount != null ? n.clickCount.toLocaleString("fr-FR") : "—"}
+                  </span>
                   <div className="pt-0.5"><EnvoyéBadge /></div>
                   <div className="pt-0.5">
                     <p className="text-[13px]" style={{ color: "#45556C" }}>{date}</p>
@@ -624,7 +648,7 @@ export default function NotificationsPage() {
       </div>
 
       {/* Bottom mini stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           {
             label: "Notifications envoyées",
@@ -638,7 +662,7 @@ export default function NotificationsPage() {
             ),
           },
           {
-            label: "Destinataires touchés (total)",
+            label: "Destinataires touchés",
             value: totalRecipients > 0 ? totalRecipients.toLocaleString("fr-FR") : "—",
             iconBg: "#ECFDF5",
             icon: (
@@ -646,6 +670,28 @@ export default function NotificationsPage() {
                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <circle cx="9" cy="7" r="4" stroke="#3FAE8C" strokeWidth="2"/>
                 <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ),
+          },
+          {
+            label: "Vues totales",
+            value: totalViews != null ? totalViews.toLocaleString("fr-FR") : "—",
+            iconBg: "#F0FDF4",
+            icon: (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="#3FAE8C" strokeWidth="2"/>
+              </svg>
+            ),
+          },
+          {
+            label: "Clics totaux",
+            value: totalClicks != null ? totalClicks.toLocaleString("fr-FR") : "—",
+            iconBg: "#EFF6FF",
+            icon: (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M14 2v6h6M9 13l2 2 4-4" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             ),
           },

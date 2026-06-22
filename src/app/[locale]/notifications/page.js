@@ -297,7 +297,10 @@ export default function NotificationsPage() {
                               href={n.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                notificationsApi.trackClick(n.id).catch(() => {});
+                              }}
                               className="inline-flex items-center gap-1.5 mt-2 text-[12px] font-semibold hover:underline"
                               style={{ color: "#3FAE8C" }}
                             >
