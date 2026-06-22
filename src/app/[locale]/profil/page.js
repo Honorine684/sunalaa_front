@@ -49,7 +49,7 @@ export default function ProfilPage() {
   const locale = useLocale();
   const { logout, user } = useAuth();
   const isAdmin = user?.role?.toLowerCase().includes("admin");
-  const { profile, loading, error, updateProfile, uploadAvatar, updateBalance, refreshProfile } = useProfile();
+  const { profile, loading, error, updateProfile, uploadAvatar, refreshProfile } = useProfile();
   const [activeTab, setActiveTab] = useState("profil");
   const [editAbout, setEditAbout] = useState(false);
 
@@ -173,7 +173,7 @@ export default function ProfilPage() {
 
             {activeTab === "snl" && (
               <div className="grid grid-cols-12 gap-6">
-                <ProfileTransfer onTransferComplete={updateBalance} />
+                <ProfileTransfer onTransferComplete={refreshProfile} />
               </div>
             )}
 

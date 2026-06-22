@@ -510,7 +510,10 @@ export default function ProfileTransfer({ onTransferComplete }) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] font-semibold truncate" style={{ color: "#0F172B" }}>
-                          {t.description ?? (isSent ? "Transfer sent" : "Transfer received")}
+                          {(() => {
+                            const desc = t.description?.replace(/null/gi, "").replace(/\s{2,}/g, " ").replace(/^[\s@—\-]+|[\s@—\-]+$/g, "").trim();
+                            return desc || (isSent ? "Transfer sent" : "Transfer received");
+                          })()}
                         </p>
                         <p className="text-[11px] text-slate-400">{fmtDate(t.createdAt)}</p>
                       </div>
