@@ -6,7 +6,7 @@ import { authApi, usersApi } from "@/lib/api";
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const raw = window.atob(base64);
+  const raw = atob(base64);
   const output = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; i++) output[i] = raw.charCodeAt(i);
   return output;
@@ -32,7 +32,7 @@ function lsSetSub(val) {
 
 export function usePushNotifications() {
   const [permission, setPermission]   = useState(null);
-  const [subscribed, setSubscribed]   = useState(lsGetSub); // instant from localStorage
+  const [subscribed, setSubscribed]   = useState(false);
   const [loading, setLoading]         = useState(false);
   const [supported, setSupported]     = useState(false);
 
@@ -40,6 +40,7 @@ export function usePushNotifications() {
     if (!isSupported()) return;
     setSupported(true);
     setPermission(Notification.permission);
+    setSubscribed(lsGetSub());
     // Verify the real browser subscription and sync with localStorage
     navigator.serviceWorker.ready.then((reg) => {
       reg.pushManager.getSubscription().then((sub) => {

@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
 import { useAuth } from "@/context/AuthContext";
+import { useLocale } from "next-intl";
 
 export default function Hero() {
   const { user } = useAuth();
+  const locale = useLocale();
+  const prefix = locale === "fr" ? "/fr" : "";
 
   const href = !user
-    ? "/login"
+    ? `${prefix}/login`
     : user.role?.toLowerCase() === "admin"
       ? "/admin"
-      : "/collecter";
+      : `${prefix}/collecter`;
   return (
     <section className="relative min-h-96 lg:min-h-150 flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
       {/* Background coin */}

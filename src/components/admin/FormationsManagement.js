@@ -499,7 +499,7 @@ export default function FormationsManagement() {
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
                           {p.images?.[0] ? (
-                            <img src={toAbsoluteUrl(p.images[0])} alt="" className="w-9 h-9 rounded-lg object-cover shrink-0" />
+                            <img src={toAbsoluteUrl(p.images[0])} alt="" className="w-9 h-9 rounded-lg object-cover shrink-0" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                           ) : (
                             <div className="w-9 h-9 rounded-lg shrink-0 flex items-center justify-center" style={{ background: "linear-gradient(135deg, #1F4E46, #3FAE8C)" }}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" opacity="0.6">

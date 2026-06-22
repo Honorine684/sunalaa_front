@@ -95,7 +95,7 @@ export default function ProfileCommandes() {
             return (
               <div key={order.id} className="py-3 flex items-center gap-3">
                 {product.images?.[0] ? (
-                  <img src={product.images[0]} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
+                  <img src={product.images[0]} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                 ) : (
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none">

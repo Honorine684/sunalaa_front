@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { parseFieldErrors, authApi } from "@/lib/api";
 import { PhoneInput } from "react-international-phone";
@@ -14,44 +14,49 @@ import "react-international-phone/style.css";
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 function validate(fields, locale) {
+  const fr = locale === "fr";
   const errors = {};
 
   if (!fields.username.trim()) {
-    errors.username = "Username is required";
+    errors.username = fr ? "Le nom d'utilisateur est requis" : "Username is required";
   } else if (fields.username.trim().length < 3) {
-    errors.username = "Minimum 3 characters";
+    errors.username = fr ? "Minimum 3 caractères" : "Minimum 3 characters";
   } else if (!/^[a-zA-Z0-9_]+$/.test(fields.username.trim())) {
-    errors.username = "Letters, numbers and _ only";
+    errors.username = fr ? "Lettres, chiffres et _ uniquement" : "Letters, numbers and _ only";
   }
 
   if (!fields.email.trim()) {
-    errors.email = "Email is required";
+    errors.email = fr ? "L'email est requis" : "Email is required";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
-    errors.email = "Invalid email format";
+    errors.email = fr ? "Format d'email invalide" : "Invalid email format";
   }
 
   const digitsOnly = (fields.phone || "").replace(/\D/g, "");
   if (digitsOnly.length < 8) {
-    errors.phone = "Valid phone number is required";
+    errors.phone = fr ? "Numéro de téléphone valide requis" : "Valid phone number is required";
   }
 
   if (!fields.password) {
-    errors.password = locale === "fr" ? "Le mot de passe est requis" : "Password is required";
+    errors.password = fr ? "Le mot de passe est requis" : "Password is required";
   } else if (!PASSWORD_REGEX.test(fields.password)) {
-    errors.password = locale === "fr"
+    errors.password = fr
       ? "Le mot de passe doit contenir au moins 8 caractères avec une majuscule, une minuscule et un chiffre"
       : "Password must be at least 8 characters with uppercase, lowercase and a number";
   }
 
   if (!fields.confirmPassword) {
-    errors.confirmPassword = "Please confirm your password";
+    errors.confirmPassword = fr ? "Veuillez confirmer votre mot de passe" : "Please confirm your password";
   } else if (fields.password !== fields.confirmPassword) {
-    errors.confirmPassword = "Passwords do not match";
+    errors.confirmPassword = fr ? "Les mots de passe ne correspondent pas" : "Passwords do not match";
   }
 
-  if (!fields.referralCode.trim()) errors.referralCode = "Referral code is required";
+  if (!fields.referralCode.trim()) {
+    errors.referralCode = fr ? "Code de parrainage requis" : "Referral code is required";
+  }
 
-  if (!fields.agreed) errors.agreed = "You must accept the terms";
+  if (!fields.agreed) {
+    errors.agreed = fr ? "Vous devez accepter les conditions" : "You must accept the terms";
+  }
 
   return errors;
 }
@@ -87,6 +92,8 @@ function RegisterInner() {
   const { register } = useAuth();
   const searchParams = useSearchParams();
   const locale = useLocale();
+  const t = useTranslations("Auth");
+  const prefix = locale === "fr" ? "/fr" : "";
   const rawRef = searchParams.get("ref");
   const refFromUrl = rawRef && rawRef !== "undefined" ? rawRef : "";
 
@@ -222,7 +229,7 @@ function RegisterInner() {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-lg flex flex-col items-center gap-6 text-center">
-          <Link href="/"><Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority /></Link>
+          <Link href={`${prefix}/`}><Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority /></Link>
           <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-4xl px-8 py-10">
 
             {/* Icône enveloppe */}
@@ -278,18 +285,18 @@ function RegisterInner() {
     <div className="min-h-screen bg-primary flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-215 flex flex-col items-center gap-6">
 
-        <Link href="/"><Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority /></Link>
+        <Link href={`${prefix}/`}><Image src="/images/logo Sunaala.png" alt="SUNALA" width={130} height={34} className="object-contain" priority /></Link>
 
-        <Link href="/" className="flex items-center gap-1.5 text-white/60 hover:text-white text-[13px] transition-colors -mt-2">
+        <Link href={`${prefix}/`} className="flex items-center gap-1.5 text-white/60 hover:text-white text-[13px] transition-colors -mt-2">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
             <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Back to home
+          {t("back_to_home")}
         </Link>
 
         <div className="w-full bg-white/10 backdrop-blur-sm border-[3px] border-white/70 rounded-4xl px-6 sm:px-22.75" style={{ paddingTop: 36, paddingBottom: 36 }}>
 
-          <h1 className="text-white mb-5" style={{ fontSize: 28, fontWeight: 700 }}>Register</h1>
+          <h1 className="text-white mb-5" style={{ fontSize: 28, fontWeight: 700 }}>{t("register_title")}</h1>
 
           {apiError && (
             <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-[13px]">
@@ -301,7 +308,7 @@ function RegisterInner() {
 
             {/* Username — check live + suggestions */}
             <div className="flex flex-col gap-1.5">
-              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Username</label>
+              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("username")}</label>
               <div className="relative">
                 <input
                   type="text"
@@ -348,7 +355,7 @@ function RegisterInner() {
 
               {(errors.username || usernameStatus === "taken") && (
                 <p className="text-red-400 text-[12px] mt-0.5">
-                  {errors.username || "This username is already taken"}
+                  {errors.username || t("username_taken")}
                 </p>
               )}
               {usernameStatus === "available" && !errors.username && (
@@ -356,12 +363,12 @@ function RegisterInner() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Username available
+                  {t("username_available")}
                 </p>
               )}
               {usernameStatus === "taken" && suggestions.length > 0 && (
                 <div className="flex flex-col gap-1.5 mt-0.5">
-                  <p className="text-white/50 text-[12px]">Try one of these:</p>
+                  <p className="text-white/50 text-[12px]">{t("username_suggestions")}</p>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((s) => (
                       <button
@@ -380,10 +387,10 @@ function RegisterInner() {
 
             {/* Email / Téléphone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Email" type="email" name="email" placeholder="john@example.com" value={fields.email} onChange={handleChange} error={errors.email} autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
+              <Field label={t("email")} type="email" name="email" placeholder="john@example.com" value={fields.email} onChange={handleChange} error={errors.email} autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
               {/* Phone */}
               <div className="flex flex-col gap-1.5">
-                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Phone</label>
+                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("phone")}</label>
                 <div
                   style={{
                     "--react-international-phone-height": "42px",
@@ -417,14 +424,14 @@ function RegisterInner() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Password */}
               <div className="flex flex-col gap-1.5">
-                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Password</label>
+                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("password")}</label>
                 <div className="relative">
                   <input
                     type={showPass ? "text" : "password"}
                     name="password"
                     value={fields.password}
                     onChange={handleChange}
-                    placeholder="Min. 8 characters"
+                    placeholder={t("password_placeholder")}
                     autoComplete="new-password"
                     className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                     style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.password ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
@@ -438,14 +445,14 @@ function RegisterInner() {
 
               {/* Confirm */}
               <div className="flex flex-col gap-1.5">
-                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Confirm password</label>
+                <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("confirm_password")}</label>
                 <div className="relative">
                   <input
                     type={showConfirm ? "text" : "password"}
                     name="confirmPassword"
                     value={fields.confirmPassword}
                     onChange={handleChange}
-                    placeholder="Repeat password"
+                    placeholder={t("confirm_password_placeholder")}
                     autoComplete="new-password"
                     className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.confirmPassword ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                     style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.confirmPassword ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
@@ -460,7 +467,7 @@ function RegisterInner() {
 
             {/* Genre (optionnel) */}
             <div className="flex flex-col gap-1.5">
-              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>Gender <span className="text-white/40">(optional)</span></label>
+              <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>{t("gender_optional")}</label>
               <select
                 name="gender"
                 value={fields.gender}
@@ -468,24 +475,24 @@ function RegisterInner() {
                 className="w-full bg-white text-gray-700 text-sm outline-none focus:ring-2 focus:ring-secondary/50 transition cursor-pointer"
                 style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", padding: "0 16px" }}
               >
-                <option value="">Select</option>
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-                <option value="OTHER">Other</option>
+                <option value="">{t("gender_select")}</option>
+                <option value="MALE">{t("gender_male")}</option>
+                <option value="FEMALE">{t("gender_female")}</option>
+                <option value="OTHER">{t("gender_other")}</option>
               </select>
             </div>
 
             {/* Code de parrainage */}
             <div className="flex flex-col gap-1.5">
               <label style={{ fontSize: 14, fontWeight: 400, color: "#FFFFFF" }}>
-                Referral code <span className="text-red-400">*</span>
+                {t("referral_code_required")} <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 name="referralCode"
                 value={fields.referralCode}
                 onChange={handleChange}
-                placeholder="Enter your referral code"
+                placeholder={t("referral_placeholder")}
                 autoCapitalize="characters"
                 autoCorrect="off"
                 spellCheck={false}
@@ -499,7 +506,7 @@ function RegisterInner() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Code pre-filled from your invitation link
+                  {t("referral_prefilled")}
                 </p>
               )}
             </div>
@@ -507,10 +514,13 @@ function RegisterInner() {
             {/* Info parrainage */}
             {!refFromUrl && (
               <div className="rounded-lg px-4 py-3" style={{ backgroundColor: "rgba(230,184,76,0.18)", border: "1px solid rgba(230,184,76,0.55)" }}>
-                <p className="text-[13px] font-bold mb-1" style={{ color: "#E6B84C" }}>⚠ Required code</p>
+                <p className="text-[13px] font-bold mb-1" style={{ color: "#E6B84C" }}>{t("referral_warning_title")}</p>
                 <p className="text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>
-                  Every registration requires a referral code.<br />
-                  → Default active code <strong style={{ color: "#E6B84C" }}>SUNALAA</strong>. You can replace it if you have another code.
+                  {t("referral_warning_desc").split("SUNALAA").map((part, i, arr) =>
+                    i < arr.length - 1
+                      ? <span key={i}>{part}<strong style={{ color: "#E6B84C" }}>SUNALAA</strong></span>
+                      : <span key={i}>{part}</span>
+                  )}
                 </p>
               </div>
             )}
@@ -527,10 +537,10 @@ function RegisterInner() {
                   className="w-4 h-4 mt-0.5 accent-secondary cursor-pointer shrink-0"
                 />
                 <label htmlFor="terms" className="cursor-pointer" style={{ fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.7)" }}>
-                  I accept the{" "}
-                  <Link href="/terms" className="text-secondary hover:underline">Terms of Service</Link>{" "}
-                  and the{" "}
-                  <Link href="/privacy" className="text-secondary hover:underline">Privacy Policy</Link>
+                  {t("terms_accept")}{" "}
+                  <Link href={`${prefix}/terms`} className="text-secondary hover:underline">{t("terms_of_service")}</Link>{" "}
+                  {t("terms_and")}{" "}
+                  <Link href={`${prefix}/privacy`} className="text-secondary hover:underline">{t("privacy_policy")}</Link>
                 </label>
               </div>
               {errors.agreed && <p className="text-red-400 text-[12px] ml-6">{errors.agreed}</p>}
@@ -548,27 +558,27 @@ function RegisterInner() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                 </svg>
               )}
-              {loading ? "Creating account..." : "Create my account"}
+              {loading ? t("register_loading") : t("register_btn")}
             </button>
           </form>
 
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-white/20" />
-            <span className="text-white/50 text-[13px]">continue with</span>
+            <span className="text-white/50 text-[13px]">{t("or_continue_with")}</span>
             <div className="flex-1 h-px bg-white/20" />
           </div>
 
           <div className="flex gap-3">
             <button type="button" aria-label="Google" onClick={handleGoogleLogin} className="flex-1 flex items-center justify-center gap-2.5 py-3 bg-white rounded-xl border border-gray-200 hover:bg-gray-50 transition cursor-pointer text-sm font-medium text-gray-700">
               <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-              Continue with Google
+              {t("continue_google")}
             </button>
           </div>
 
           <p className="text-center text-white/60 text-[13px] mt-5">
-            Already have an account?{" "}
-            <Link href="/login" className="text-white font-semibold underline underline-offset-2 hover:text-secondary transition-colors">
-              Log in
+            {t("already_account")}{" "}
+            <Link href={`${prefix}/login`} className="text-white font-semibold underline underline-offset-2 hover:text-secondary transition-colors">
+              {t("sign_in")}
             </Link>
           </p>
         </div>

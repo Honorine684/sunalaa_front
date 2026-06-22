@@ -35,9 +35,12 @@ export default function Navbar() {
     window.location.href = prefix + "/";
   }
 
-  const initials = user?.username?.[0]?.toUpperCase()
-    || ([user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join("").toUpperCase())
-    || "?";
+  const initials =
+    user?.username?.[0]?.toUpperCase() ??
+    user?.firstName?.[0]?.toUpperCase() ??
+    user?.email?.[0]?.toUpperCase() ??
+    "?";
+  const [avatarError, setAvatarError] = useState(false);
 
   return (
     <>
@@ -73,7 +76,7 @@ export default function Navbar() {
             {/* Auth + LanguageSwitcher */}
             <div className="flex items-center gap-1.5 lg:gap-3 shrink-0">
 
-              <div className="hidden lg:block"><LanguageSwitcher /></div>
+              <LanguageSwitcher />
 
               {isAuthenticated ? (
                 <>
@@ -96,7 +99,9 @@ export default function Navbar() {
                   >
                     <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-secondary flex items-center justify-center text-white text-[9px] lg:text-[12px] font-bold shrink-0 overflow-hidden">
                       {user?.profileImage
-                        ? <img src={user.profileImage} alt={initials} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        ? (avatarError
+                            ? initials
+                            : <img src={user.profileImage} alt={initials} className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={() => setAvatarError(true)} />)
                         : initials}
                     </div>
                     <span className="hidden lg:inline text-[15px] font-semibold">

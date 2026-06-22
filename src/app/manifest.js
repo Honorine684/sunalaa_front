@@ -6,10 +6,12 @@ export default function manifest() {
     description:
       "Collectez des points SNL chaque jour, parrainez vos proches et progressez ensemble.",
     start_url: "/",
+    scope: "/",
     display: "standalone",
     background_color: "#1F4E46",
     theme_color: "#1F4E46",
     orientation: "portrait",
+    prefer_related_applications: false,
     categories: ["finance", "lifestyle"],
     icons: [
       {

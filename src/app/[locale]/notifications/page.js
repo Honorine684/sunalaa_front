@@ -42,7 +42,7 @@ function MediaDisplay({ url }) {
     </a>
   );
   return (
-    <img src={url} alt="" className="mt-2 w-full max-h-48 object-cover rounded-xl border border-slate-100" />
+    <img src={url} alt="" className="mt-2 w-full max-h-48 object-cover rounded-xl border border-slate-100" onError={(e) => { e.currentTarget.style.display = "none"; }} />
   );
 }
 

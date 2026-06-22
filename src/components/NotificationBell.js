@@ -54,7 +54,7 @@ function NotifDetailModal({ notif, onClose }) {
                 Ouvrir le PDF
               </a>
             );
-            return <img src={url} alt="" className="w-full max-h-40 object-cover rounded-xl border border-slate-100" />;
+            return <img src={url} alt="" className="w-full max-h-40 object-cover rounded-xl border border-slate-100" onError={(e) => { e.currentTarget.style.display = "none"; }} />;
           })()}
           {notif.title && body && (
             <p className="text-[13px] leading-relaxed whitespace-pre-wrap" style={{ color: "#45556C" }}>{body}</p>

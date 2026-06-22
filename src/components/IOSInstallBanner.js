@@ -3,8 +3,29 @@
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 
-const DISMISSED_KEY = "snl_ios_install_dismissed";
+const DAILY_KEY = "snl_ios_install_daily";
+const MAX_PER_DAY = 4;
 const DELAY_MS = 4000;
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+}
+
+function getDailyCount() {
+  try {
+    const raw = localStorage.getItem(DAILY_KEY);
+    if (!raw) return 0;
+    const { date, count } = JSON.parse(raw);
+    return date === todayStr() ? (count ?? 0) : 0;
+  } catch { return 0; }
+}
+
+function incrementDailyCount() {
+  try {
+    const count = getDailyCount();
+    localStorage.setItem(DAILY_KEY, JSON.stringify({ date: todayStr(), count: count + 1 }));
+  } catch {}
+}
 
 const TEXT = {
   en: {
@@ -33,24 +54,21 @@ export default function IOSInstallBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Only on iOS Safari, not already installed as standalone
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isStandalone = window.navigator.standalone === true;
     const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(navigator.userAgent);
 
     if (!isIOS || isStandalone || !isSafari) return;
+    if (getDailyCount() >= MAX_PER_DAY) return;
 
-    try {
-      const dismissed = localStorage.getItem(DISMISSED_KEY);
-      if (dismissed && Date.now() - Number(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
-    } catch {}
-
-    const timer = setTimeout(() => setVisible(true), DELAY_MS);
+    const timer = setTimeout(() => {
+      incrementDailyCount();
+      setVisible(true);
+    }, DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
 
   function dismiss() {
-    try { localStorage.setItem(DISMISSED_KEY, String(Date.now())); } catch {}
     setVisible(false);
   }
 

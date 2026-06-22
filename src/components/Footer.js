@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "./Container";
 import { useLocale, useTranslations } from "next-intl";
 import { newsletterApi } from "@/lib/api";
@@ -97,9 +97,10 @@ export default function Footer() {
 
   const t = useTranslations("Footer");
   const [email, setEmail]     = useState("");
-  const [subDone, setSubDone] = useState(() => {
-    try { return localStorage.getItem("snl_newsletter_sub") === "1"; } catch { return false; }
-  });
+  const [subDone, setSubDone] = useState(false);
+  useEffect(() => {
+    try { if (localStorage.getItem("snl_newsletter_sub") === "1") setSubDone(true); } catch {}
+  }, []);
 
   async function handleSubscribe(e) {
     e.preventDefault();

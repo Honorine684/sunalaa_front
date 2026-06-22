@@ -206,10 +206,12 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
     else if (tip.action === "copy_referral") {
       const username = profile?.username ?? profile?.referralCode ?? "";
       const link = `${window.location.origin}/ref/${username}`;
-      navigator.clipboard.writeText(link).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2500);
-      }).catch(() => {});
+      try {
+        navigator.clipboard?.writeText(link).then?.(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        });
+      } catch {}
     }
   }
 

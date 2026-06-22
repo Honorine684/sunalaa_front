@@ -206,7 +206,7 @@ export default function CourseDetailPage() {
                 <div className="relative w-full" style={{ height: 160 }}>
                   {image ? (
                     <>
-                      <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
+                      <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                       <div className="absolute inset-0 bg-primary/30" />
                     </>
                   ) : (

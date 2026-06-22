@@ -65,7 +65,7 @@ function CourseCard({ product }) {
       {/* Image */}
       <div className="relative aspect-[16/9] w-full bg-slate-100">
         {image ? (
-          <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
+          <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
         ) : (
           <div className="w-full h-full flex items-center justify-center"
             style={{ background: "linear-gradient(135deg, #1F4E46, #3FAE8C)" }}>

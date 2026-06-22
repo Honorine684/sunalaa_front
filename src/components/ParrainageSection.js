@@ -109,7 +109,7 @@ export default function ParrainageSection() {
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(referralLink).catch(() => {});
+    try { navigator.clipboard?.writeText(referralLink); } catch {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }

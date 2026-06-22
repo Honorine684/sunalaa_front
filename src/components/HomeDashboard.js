@@ -5,6 +5,7 @@ import { useState } from "react";
 import Container from "./Container";
 import CollecteModal from "./CollecteModal";
 import { useDashboard } from "@/hooks/useDashboard";
+import { useLocale } from "next-intl";
 
 /* ── Skeleton ─────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
@@ -69,6 +70,8 @@ function TxRow({ tx, last }) {
 
 export default function HomeDashboard() {
   const { data, network, transactions, balance, levelData, referralCode, rank, streak, loading, error } = useDashboard();
+  const locale = useLocale();
+  const prefix = locale === "fr" ? "/fr" : "";
   const [showModal, setShowModal] = useState(false);
   const [localBalance, setLocalBalance] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -79,7 +82,7 @@ export default function HomeDashboard() {
     if (typeof navigator !== "undefined" && navigator.share) {
       try { await navigator.share({ title: "SUNALAA", text, url: link }); } catch {}
     } else {
-      navigator.clipboard.writeText(link).catch(() => {});
+      try { navigator.clipboard?.writeText(link); } catch {}
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -188,7 +191,7 @@ export default function HomeDashboard() {
             <p className="text-[12px] mb-5" style={{ color: "#62748E" }}>
               {loading ? "" : levelNext ? `${100 - levelProgress}% more to reach ${levelNext}` : levelName !== "—" ? "You're at the top!" : ""}
             </p>
-            <Link href="/profil" className="block w-full text-center border border-slate-200 text-slate-700 text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:bg-slate-50 transition">
+            <Link href={`${prefix}/profil`} className="block w-full text-center border border-slate-200 text-slate-700 text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:bg-slate-50 transition">
               View my profile
             </Link>
           </Card>
@@ -232,7 +235,7 @@ export default function HomeDashboard() {
               <button
                 onClick={() => {
                   const code = referralCode ?? "";
-                  navigator.clipboard.writeText(`https://sunalaa.com/register?ref=${code}`).catch(() => {});
+                  try { navigator.clipboard?.writeText(`https://sunalaa.com/register?ref=${code}`); } catch {}
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}

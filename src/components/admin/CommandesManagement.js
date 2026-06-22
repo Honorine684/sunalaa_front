@@ -128,7 +128,7 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             <p className="text-[12px] text-slate-400 mb-2 font-semibold uppercase tracking-wider">Formation / Produit</p>
             <div className="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
               {product.images?.[0] ? (
-                <img src={product.images[0]} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                <img src={product.images[0]} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" onError={(e) => { e.currentTarget.style.display = "none"; }} />
               ) : (
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">

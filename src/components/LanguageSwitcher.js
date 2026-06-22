@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
         <button
           key={loc}
           onClick={() => switchTo(loc)}
-          className="px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+          className="px-2 lg:px-3 py-1 rounded-full text-[10px] lg:text-[12px] font-bold uppercase tracking-wider transition-all cursor-pointer"
           style={{
             backgroundColor: locale === loc ? "#E6B84C" : "transparent",
             color: locale === loc ? "#1A3A34" : "rgba(255,255,255,0.70)",

@@ -71,7 +71,7 @@ export default function PodiumItem({ rank, username, score, avatar }) {
           className={`${size} bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-lg overflow-hidden`}
         >
           {avatar
-            ? <img src={avatar} alt={username} className="w-full h-full object-cover" />
+            ? <img src={avatar} alt={username} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
             : icon}
           {/* Badge rang centré en bas */}
           <span

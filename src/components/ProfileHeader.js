@@ -27,6 +27,7 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [lightbox, setLightbox] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
 
   useEffect(() => {
     if (lightbox) {
@@ -92,8 +93,8 @@ export default function ProfileHeader({ profile, loading, onUploadAvatar }) {
               style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.15)", backgroundColor: profile?.avatar ? undefined : avatarColor }}
               onClick={() => profile?.avatar && setLightbox(true)}
             >
-              {profile?.avatar ? (
-                <img src={profile.avatar} alt={username || fullName} className="w-full h-full object-cover" />
+              {profile?.avatar && !avatarError ? (
+                <img src={profile.avatar} alt={username || fullName} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
               ) : (
                 <span className="text-white text-[48px] font-bold select-none">
                   {loading ? "" : initials}
