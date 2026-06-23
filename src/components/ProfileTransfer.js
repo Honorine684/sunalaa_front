@@ -218,11 +218,14 @@ function useCountdown() {
   const exchangeDate = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2026-10-18");
   const launchDate   = new Date(process.env.NEXT_PUBLIC_SNL_LAUNCH_DATE   || "2026-06-18");
 
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(null);
   useEffect(() => {
+    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
+
+  if (!now) return { days: 0, hours: 0, minutes: 0, seconds: 0, progress: 0, done: false, exchangeDate, ready: false };
 
   const total     = exchangeDate - launchDate;
   const elapsed   = Math.max(0, now - launchDate);
@@ -234,13 +237,19 @@ function useCountdown() {
   const minutes = Math.floor((remaining % 3600000) / 60000);
   const seconds = Math.floor((remaining % 60000) / 1000);
 
-  return { days, hours, minutes, seconds, progress, done: remaining === 0, exchangeDate };
+  return { days, hours, minutes, seconds, progress, done: remaining === 0, exchangeDate, ready: true };
 }
 
 function TokenCountdown() {
-  const { days, hours, minutes, seconds, progress, done, exchangeDate } = useCountdown();
+  const { days, hours, minutes, seconds, progress, done, exchangeDate, ready } = useCountdown();
 
   const dateStr = exchangeDate.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+
+  if (!ready) return (
+    <div className="mx-6 mt-5 mb-1 rounded-2xl overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3A34 0%, #1F4E46 100%)" }}>
+      <div className="px-5 py-4 h-30 animate-pulse" style={{ backgroundColor: "rgba(255,255,255,0.04)" }} />
+    </div>
+  );
 
   return (
     <div className="mx-6 mt-5 mb-1 rounded-2xl overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3A34 0%, #1F4E46 100%)" }}>

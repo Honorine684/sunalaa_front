@@ -57,7 +57,7 @@ export default function LocaleError({ error, reset }) {
         style={{ backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
       >
         <p className="mb-3" style={{ fontSize: 14, color: "rgba(255,255,255,0.80)", lineHeight: 1.7 }}>
-          <strong style={{ color: "#E6B84C" }}>FR :</strong> Une erreur inattendue s'est produite.
+          <strong style={{ color: "#E6B84C" }}>🇫🇷</strong> Une erreur inattendue s'est produite.
           Veuillez recharger la page. Si le problème persiste, contactez le support à{" "}
           <a href="mailto:honorinedede0@gmail.com" style={{ color: "#3FAE8C", textDecoration: "underline" }}>
             honorinedede0@gmail.com
@@ -65,7 +65,7 @@ export default function LocaleError({ error, reset }) {
           en décrivant ce que vous faisiez au moment de l'erreur.
         </p>
         <p style={{ fontSize: 14, color: "rgba(255,255,255,0.80)", lineHeight: 1.7 }}>
-          <strong style={{ color: "#E6B84C" }}>EN :</strong> An unexpected error occurred.
+          <strong style={{ color: "#E6B84C" }}>🇬🇧</strong> An unexpected error occurred.
           Please reload the page. If the problem persists, contact support at{" "}
           <a href="mailto:honorinedede0@gmail.com" style={{ color: "#3FAE8C", textDecoration: "underline" }}>
             honorinedede0@gmail.com

@@ -79,12 +79,12 @@ export default function AppError({ error, reset }) {
         }}
       >
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.80)", lineHeight: 1.7, marginBottom: 12 }}>
-          <strong style={{ color: "#E6B84C" }}>FR :</strong> Une erreur inattendue s'est produite.
+          <strong style={{ color: "#E6B84C" }}>🇫🇷</strong> Une erreur inattendue s'est produite.
           Veuillez recharger la page. Si le problème persiste, contactez{" "}
           <a href="mailto:honorinedede0@gmail.com" style={{ color: "#3FAE8C" }}>honorinedede0@gmail.com</a>.
         </p>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.80)", lineHeight: 1.7 }}>
-          <strong style={{ color: "#E6B84C" }}>EN :</strong> An unexpected error occurred.
+          <strong style={{ color: "#E6B84C" }}>🇬🇧</strong> An unexpected error occurred.
           Please reload the page. If the problem persists, contact{" "}
           <a href="mailto:honorinedede0@gmail.com" style={{ color: "#3FAE8C" }}>honorinedede0@gmail.com</a>.
         </p>

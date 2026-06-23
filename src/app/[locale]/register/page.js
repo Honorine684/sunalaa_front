@@ -3,12 +3,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useState, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { parseFieldErrors, authApi } from "@/lib/api";
-import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
+
+const PhoneInput = dynamic(
+  () => import("react-international-phone").then((m) => ({ default: m.PhoneInput })),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{ height: 42, borderRadius: 10, border: "1px solid #BCBEC0", backgroundColor: "#fff" }} />
+    ),
+  }
+);
 
 /* ─── Validation ─────────────────────────────────────────────────── */
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
