@@ -74,7 +74,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning translate="no" className="notranslate">
       <body suppressHydrationWarning>
         <script
           type="application/ld+json"
