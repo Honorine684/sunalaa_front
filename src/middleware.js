@@ -31,13 +31,9 @@ export async function middleware(request) {
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/api") || pathname.startsWith("/auth/callback")) {
     if (pathname.startsWith("/admin")) {
-      const rawToken = request.cookies.get("snl_access_token")?.value;
-      const token = rawToken && rawToken !== "null" && rawToken !== "undefined" ? rawToken : null;
-      if (token) {
-        const role = request.cookies.get("snl_user_role")?.value ?? "user";
-        if (!role.includes("admin")) {
-          return NextResponse.redirect(new URL("/profil", request.url));
-        }
+      const role = request.cookies.get("snl_user_role")?.value;
+      if (role && !role.includes("admin")) {
+        return NextResponse.redirect(new URL("/profil", request.url));
       }
     }
     return NextResponse.next();
@@ -52,21 +48,22 @@ export async function middleware(request) {
     }
   }
 
-  const rawToken = request.cookies.get("snl_access_token")?.value;
-  const token = rawToken && rawToken !== "null" && rawToken !== "undefined" ? rawToken : null;
+  // snl_user_role est le seul cookie effaçable par JS — utilisé comme indicateur de session active
+  // snl_access_token est HttpOnly (non effaçable par JS) → ne pas l'utiliser pour le routing
+  const role = request.cookies.get("snl_user_role")?.value;
+  const isAuthenticated = !!role;
 
   const isPrivate  = PRIVATE_PATHS.some((p) => cleanPath.startsWith(p));
   const isAuthPath = AUTH_PATHS.some((p) => cleanPath.startsWith(p));
 
-  if (isPrivate && !token) {
+  if (isPrivate && !isAuthenticated) {
     const locale = pathname.startsWith("/fr") ? "/fr" : "";
     const loginUrl = new URL(`${locale}/login`, request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthPath && token) {
-    const role = request.cookies.get("snl_user_role")?.value ?? "user";
+  if (isAuthPath && isAuthenticated) {
     const locale = pathname.startsWith("/fr") ? "/fr" : "";
     const home = role.includes("admin") ? "/admin" : `${locale}/profil`;
     return NextResponse.redirect(new URL(home, request.url));
