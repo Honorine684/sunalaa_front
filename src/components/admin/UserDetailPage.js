@@ -157,7 +157,6 @@ export default function UserDetailPage({ userId }) {
           <Row label="Email" value={user.email} />
           <Row label="Téléphone" value={user.phone} />
           <Row label="Genre" value={user.gender} />
-          <Row label="Date de naissance" value={user.dateOfBirth ? fmtDate(user.dateOfBirth) : null} />
         </Card>
 
         {/* Compte */}
@@ -184,7 +183,6 @@ export default function UserDetailPage({ userId }) {
             <>
               <Row label="Statut KYC" value={kycStyle[kycStatus]?.label ?? kycStatus} />
               <Row label="Type de pièce" value={user.kyc?.documentType ?? user.kycDocumentType} />
-              <Row label="Numéro pièce" value={user.kyc?.documentNumber ?? user.kycDocumentNumber} />
               <Row label="Soumis le" value={fmtDate(user.kyc?.createdAt ?? user.kycSubmittedAt)} />
               <Row label="Décision le" value={fmtDate(user.kyc?.updatedAt ?? user.kycReviewedAt)} />
             </>
