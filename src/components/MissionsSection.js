@@ -89,7 +89,12 @@ export default function MissionsSection() {
         prev.map((m) => m.id === mission.id ? { ...m, userStatus: "PENDING" } : m)
       );
     } catch {
-      // status will refresh on next page load
+      missionsApi.getMyMissions()
+        .then((res) => {
+          const raw = res.data?.data ?? res.data;
+          if (Array.isArray(raw)) setMissions(raw);
+        })
+        .catch(() => {});
     } finally {
       setLoadingId(null);
     }
