@@ -236,6 +236,11 @@ export const ordersApi = {
   adminConfirmPayment: (id) => api.put(`/orders/admin/${id}/confirm-payment`),
 };
 
+// ── Payments (Stripe) ─────────────────────────────────────────────
+export const paymentsApi = {
+  createCheckoutSession: (productId) => api.post("/payments/checkout-session", { productId }),
+};
+
 // ── Levels ───────────────────────────────────────────────────────
 export const levelsApi = {
   getAll: () => api.get("/levels"),

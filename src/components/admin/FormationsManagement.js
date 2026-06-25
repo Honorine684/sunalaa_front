@@ -89,6 +89,7 @@ function FormationModal({ initial, categories, onClose, onSave }) {
     categoryId: initial?.categoryId ?? "",
     price: initial?.price ?? 0,
     pv: initial?.pv ?? 0,
+    stripePriceId: initial?.stripePriceId ?? "",
     contentUrl: initial?.contentUrl ?? initial?.videoUrl ?? initial?.pdfUrl ?? initial?.zoomLink ?? "",
     imageUrl: initial?.images?.[0] ?? "",
     status: initial?.status ?? "ACTIVE",
@@ -137,6 +138,7 @@ function FormationModal({ initial, categories, onClose, onSave }) {
       comparePrice: 0,
       cost: 0,
       pv: Number(fields.pv) || 0,
+      stripePriceId: fields.stripePriceId.trim() || undefined,
       bv: 0,
       stock: 9999,
       status: fields.status,
@@ -256,6 +258,12 @@ function FormationModal({ initial, categories, onClose, onSave }) {
                 type="number" min="0" className="input-base" />
             </Field>
           </div>
+
+          {/* Stripe Price ID */}
+          <Field label="Stripe Price ID (ex: price_xxx)">
+            <input value={fields.stripePriceId} onChange={e => set("stripePriceId", e.target.value)}
+              placeholder="price_1ABC..." className="input-base" />
+          </Field>
 
           {/* Statut + Featured */}
           <div className="grid grid-cols-2 gap-3">

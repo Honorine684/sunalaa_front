@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/Container";
-import { productsApi, ordersApi, getApiError } from "@/lib/api";
+import { productsApi, paymentsApi, getApiError } from "@/lib/api";
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
 function toAbsoluteUrl(url) {
@@ -49,12 +49,14 @@ function SkeletonDetail() {
 export default function CourseDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [product, setProduct]     = useState(null);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState("");
-  const [ordering, setOrdering]   = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderError, setOrderError]     = useState("");
+  const searchParams = useSearchParams();
+  const [product, setProduct]       = useState(null);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState("");
+  const [checking, setChecking]     = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  const paymentStatus = searchParams.get("payment");
 
   useEffect(() => {
     productsApi.getOne(id)
@@ -88,30 +90,33 @@ export default function CourseDetailPage() {
   const contentUrl  = product?.contentUrl ?? product?.videoUrl ?? product?.pdfUrl ?? product?.zoomLink ?? null;
   const instructor  = product?.instructor ?? { name: "Équipe SUNALA", role: "Experts Blockchain" };
   const locked      = product?.status !== "ACTIVE";
+  const userHasAccess = product?.userHasAccess ?? false;
 
   const done     = lessons.filter((l) => l.done).length;
   const progress = lessons.length > 0 ? Math.round((done / lessons.length) * 100) : 0;
   const isPaid   = price != null && price > 0;
 
-  async function handleOrder() {
+  async function handleCheckout() {
     let token = null;
-    try { token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : null; } catch {};
+    try { token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : null; } catch {}
     if (!token) {
       router.push(`/login?redirect=/formations/${id}`);
       return;
     }
-    setOrdering(true);
-    setOrderError("");
+    setChecking(true);
+    setCheckoutError("");
     try {
-      await ordersApi.create({
-        items: [{ productId: product.id, quantity: 1 }],
-        paymentMethod: "CREDIT_CARD",
-      });
-      setOrderSuccess(true);
+      const res = await paymentsApi.createCheckoutSession(product.id);
+      const url = res.data?.url ?? res.data?.data?.url;
+      if (url) {
+        window.location.href = url;
+      } else {
+        setCheckoutError("Erreur : URL de paiement introuvable.");
+      }
     } catch (err) {
-      setOrderError(getApiError(err));
+      setCheckoutError(getApiError(err));
     } finally {
-      setOrdering(false);
+      setChecking(false);
     }
   }
 
@@ -266,42 +271,48 @@ export default function CourseDetailPage() {
                     </div>
                   )}
 
+                  {/* Bannière retour Stripe */}
+                  {paymentStatus === "success" && (
+                    <div className="flex items-center gap-2 mb-3 px-3 py-2.5 rounded-xl" style={{ backgroundColor: "#ECFDF5", border: "1px solid #A7F3D0" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <p className="text-[13px] font-semibold text-green-700">Paiement réussi ! Accès débloqué.</p>
+                    </div>
+                  )}
+                  {paymentStatus === "cancel" && (
+                    <div className="flex items-center gap-2 mb-3 px-3 py-2.5 rounded-xl" style={{ backgroundColor: "#FFF7ED", border: "1px solid #FED7AA" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01" stroke="#D97706" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="12" r="10" stroke="#D97706" strokeWidth="2"/></svg>
+                      <p className="text-[13px] font-semibold" style={{ color: "#92400E" }}>Paiement annulé.</p>
+                    </div>
+                  )}
+
                   {locked ? (
                     <button disabled className="w-full bg-slate-100 text-slate-400 text-[15px] font-semibold py-3.5 rounded-xl cursor-default">
                       Verrouillée
                     </button>
-                  ) : orderSuccess ? (
-                    <div className="flex flex-col items-center gap-2 py-3">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M20 6L9 17l-5-5" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <p className="text-[13px] font-semibold text-green-700">Commande envoyée !</p>
-                      <p className="text-[12px] text-slate-500 text-center">Vous serez contacté pour finaliser le paiement.</p>
-                    </div>
-                  ) : isPaid ? (
+                  ) : userHasAccess || (!isPaid) ? (
+                    contentUrl ? (
+                      <a href={contentUrl} target="_blank" rel="noopener noreferrer"
+                        className="block w-full bg-primary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-110 transition text-center cursor-pointer">
+                        {type?.toLowerCase() === "pdf" ? "Ouvrir le PDF" : type?.toLowerCase() === "zoom" ? "Rejoindre le Zoom" : done > 0 ? "Continuer" : "Commencer"}
+                      </a>
+                    ) : (
+                      <button className="w-full bg-primary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-110 transition cursor-pointer">
+                        {done > 0 ? "Continuer la formation" : "Commencer la formation"}
+                      </button>
+                    )
+                  ) : (
                     <>
                       <button
-                        onClick={handleOrder}
-                        disabled={ordering}
+                        onClick={handleCheckout}
+                        disabled={checking}
                         className="w-full bg-secondary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-110 transition cursor-pointer disabled:opacity-60 disabled:cursor-default"
                       >
-                        {ordering ? "Traitement…" : `Commander — ${fmt(price)} FCFA`}
+                        {checking ? "Redirection…" : `Acheter — ${fmt(price)} FCFA`}
                       </button>
-                      {orderError && (
-                        <p className="mt-2 text-[12px] text-red-500 text-center">{orderError}</p>
+                      {checkoutError && (
+                        <p className="mt-2 text-[12px] text-red-500 text-center">{checkoutError}</p>
                       )}
                     </>
-                  ) : contentUrl ? (
-                    <a href={contentUrl} target="_blank" rel="noopener noreferrer"
-                      className="block w-full bg-primary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-110 transition text-center cursor-pointer">
-                      {type?.toLowerCase() === "pdf" ? "Ouvrir le PDF" : type?.toLowerCase() === "zoom" ? "Rejoindre le Zoom" : "Commencer"}
-                    </a>
-                  ) : (
-                    <button className="w-full bg-primary text-white font-semibold text-[15px] py-3.5 rounded-xl hover:brightness-110 transition cursor-pointer">
-                      {done > 0 ? "Continuer la formation" : "Commencer la formation"}
-                    </button>
                   )}
                 </div>
               </div>
