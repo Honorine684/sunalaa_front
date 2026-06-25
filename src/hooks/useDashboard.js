@@ -19,15 +19,8 @@ export function useDashboard() {
     function catchOrNull(promise) {
       return promise.catch((err) => {
         if (err?.response?.status === 401) {
-          try {
-            localStorage.removeItem("snl_access_token");
-            localStorage.removeItem("snl_refresh_token");
-            localStorage.removeItem("snl_user");
-          } catch {}
-          try {
-            document.cookie = "snl_access_token=; path=/; max-age=0";
-            document.cookie = "snl_user_role=; path=/; max-age=0";
-          } catch {}
+          try { localStorage.removeItem("snl_user"); } catch {}
+          try { document.cookie = "snl_user_role=; path=/; max-age=0"; } catch {}
           window.location.href = "/login";
         }
         return null;

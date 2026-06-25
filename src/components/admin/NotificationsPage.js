@@ -76,12 +76,11 @@ function BroadcastModal({ onClose, onSent }) {
     setUploadError("");
     setUploading(true);
     try {
-      const token = typeof localStorage !== "undefined" ? localStorage.getItem("snl_access_token") : null;
       const form = new FormData();
       form.append("file", file);
       const res = await fetch("/api/upload-media", {
         method: "POST",
-        headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        credentials: "include",
         body: form,
       });
       console.log("Upload status:", res.status);

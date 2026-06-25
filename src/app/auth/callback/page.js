@@ -28,24 +28,18 @@ export default function OAuthCallbackPage() {
 
     (async () => {
       try {
+        // Backend a déjà posé les cookies HttpOnly via /auth/oauth/exchange
         const { data } = await authApi.exchangeOAuth(code);
         const tokenData = data?.data ?? data;
-        const { accessToken, refreshToken } = tokenData;
-        if (!accessToken) throw new Error("No access token");
-
-        const isProduction = window.location.hostname !== "localhost";
-        const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
-
-        lsSet("snl_access_token", accessToken);
-        lsSet("snl_refresh_token", refreshToken);
-        document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
 
         const meRes = await authApi.getMe();
         const user = meRes.data?.data?.data ?? meRes.data?.data ?? meRes.data;
 
+        const isProduction = window.location.hostname !== "localhost";
+        const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
         lsSet("snl_user", JSON.stringify(user));
-        document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
         lsSet("snl_login_time", String(Date.now()));
+        document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
 
         const locale = ssGet("snl_oauth_locale") ?? "en";
         ssRemove("snl_oauth_locale");
@@ -53,7 +47,6 @@ export default function OAuthCallbackPage() {
         const prefix = locale === "fr" ? "/fr" : "";
         const role = (user?.role ?? "user").toLowerCase();
 
-        // Nouveau user OAuth → doit choisir son username
         const isNewUser = tokenData.isNewUser === true || tokenData.newUser === true || user?.isUsernameSet === false;
         if (isNewUser && !role.includes("admin")) {
           try { sessionStorage.setItem("snl_needs_username_setup", "1"); } catch {}

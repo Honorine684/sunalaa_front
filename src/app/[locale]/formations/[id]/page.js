@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/Container";
 import { productsApi, paymentsApi, getApiError } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
 function toAbsoluteUrl(url) {
@@ -50,6 +51,7 @@ export default function CourseDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct]       = useState(null);
   const [loading, setLoading]       = useState(true);
   const [error, setError]           = useState("");
@@ -97,9 +99,7 @@ export default function CourseDetailPage() {
   const isPaid   = price != null && price > 0;
 
   async function handleCheckout() {
-    let token = null;
-    try { token = typeof window !== "undefined" ? localStorage.getItem("snl_access_token") : null; } catch {}
-    if (!token) {
+    if (!isAuthenticated) {
       router.push(`/login?redirect=/formations/${id}`);
       return;
     }

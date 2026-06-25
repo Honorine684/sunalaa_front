@@ -1,5 +1,10 @@
 export async function POST(request) {
-  const authorization = request.headers.get("Authorization");
+  const authorization = request.headers.get("Authorization")
+    ?? (() => {
+      const cookie = request.headers.get("cookie") ?? "";
+      const token = cookie.match(/snl_access_token=([^;]+)/)?.[1];
+      return token ? `Bearer ${token}` : null;
+    })();
 
   const incoming = await request.formData();
   const fileEntry = incoming.get("avatar");

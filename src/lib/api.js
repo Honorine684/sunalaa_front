@@ -109,12 +109,7 @@ export const usersApi = {
   getDashboard: () => api.get("/users/me/dashboard"),
   getProfile: () => api.get("/users/me/profile"),
   updateProfile: (data) => api.put("/users/me/profile", data),
-  uploadAvatar: (formData) => {
-    const token = typeof window !== "undefined" ? lsGet("snl_access_token") : "";
-    return axios.post("/api/upload-avatar", formData, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-  },
+  uploadAvatar: (formData) => axios.post("/api/upload-avatar", formData, { withCredentials: true }),
   getAddresses: () => api.get("/users/me/addresses"),
   addAddress: (data) => api.post("/users/me/addresses", data),
   updateAddress: (id, data) => api.put(`/users/me/addresses/${id}`, data),
