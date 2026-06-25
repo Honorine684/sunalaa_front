@@ -16,11 +16,9 @@ function lsRemove(key) {
 }
 
 function clearSession() {
-  lsRemove("snl_access_token");
-  lsRemove("snl_refresh_token");
   lsRemove("snl_user");
   lsRemove("snl_login_time");
-  document.cookie = "snl_access_token=; path=/; max-age=0";
+  // snl_access_token et snl_refresh_token sont HttpOnly — effacés par POST /auth/logout
   document.cookie = "snl_user_role=; path=/; max-age=0";
 }
 
@@ -30,15 +28,15 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore session on mount — expire after 24h, then refresh from API in background
+  // Restore session on mount
   useEffect(() => {
     const stored = lsGet("snl_user");
-    const token = lsGet("snl_access_token");
     const loginTime = parseInt(lsGet("snl_login_time") ?? "0", 10);
     const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
-    if (stored && token && !expired) {
+
+    if (stored && !expired) {
       try { setUser(JSON.parse(stored)); } catch {}
-      // Refresh user data silently so stale localStorage fields (firstName, profileImage…) get updated
+      // Valide silencieusement — cookie HttpOnly envoyé automatiquement
       authApi.getMe()
         .then(({ data }) => {
           const fresh = data?.data?.data ?? data?.data ?? data;
@@ -48,36 +46,31 @@ export function AuthProvider({ children }) {
           }
         })
         .catch((err) => {
-          if (err?.response?.status === 401) clearSession();
+          if (err?.response?.status === 401) { clearSession(); setUser(null); }
         })
         .finally(() => setLoading(false));
     } else {
-      if (stored || token) clearSession();
+      if (stored) clearSession();
       setLoading(false);
     }
   }, []);
 
   const saveSession = useCallback((raw) => {
-    // API response: { success, data: { user, accessToken, refreshToken } }
-    const d = raw?.data?.accessToken ? raw.data : (raw?.accessToken ? raw : raw?.data ?? raw);
+    // Tokens dans cookies HttpOnly posés par le backend — on stocke seulement l'user
+    const d = raw?.data ?? raw;
+    const u = d?.user ?? d;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     const cookieOpts = `path=/; max-age=86400; SameSite=Lax${secure}`;
-    lsSet("snl_access_token", d.accessToken);
-    lsSet("snl_refresh_token", d.refreshToken);
-    lsSet("snl_user", JSON.stringify(d.user));
+    lsSet("snl_user", JSON.stringify(u));
     lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_access_token=${d.accessToken}; ${cookieOpts}`;
-    document.cookie = `snl_user_role=${(d.user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
-    setUser(d.user);
+    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
+    setUser(u);
   }, []);
 
   const login = useCallback(async (credentials) => {
     const { data } = await authApi.login(credentials);
     const d = data?.data ?? data;
-    // 2FA required — don't save session yet, return as-is so the page can handle it
-    if (d?.requiresTwoFactor || d?.twoFactorRequired || d?.mfaRequired) {
-      return data;
-    }
+    if (d?.requiresTwoFactor || d?.twoFactorRequired || d?.mfaRequired) return data;
     saveSession(data);
     return data;
   }, [saveSession]);
@@ -99,27 +92,24 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const loginWithOAuth = useCallback(async ({ accessToken, refreshToken }) => {
-    const isProduction = typeof window !== "undefined" && window.location.hostname !== "localhost";
-    const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
-    lsSet("snl_access_token", accessToken);
-    lsSet("snl_refresh_token", refreshToken);
-    lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_access_token=${accessToken}; ${cookieOpts}`;
+  const loginWithOAuth = useCallback(async () => {
+    // Cookie HttpOnly déjà posé par le backend via /auth/google/callback
     const { data } = await authApi.getMe();
-    const user = data?.data?.data ?? data?.data ?? data;
-    lsSet("snl_user", JSON.stringify(user));
-    document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
-    setUser(user);
-    return user;
+    const u = data?.data?.data ?? data?.data ?? data;
+    const secure = typeof window !== "undefined" && window.location.hostname !== "localhost" ? "; Secure" : "";
+    lsSet("snl_user", JSON.stringify(u));
+    lsSet("snl_login_time", String(Date.now()));
+    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; path=/; max-age=86400; SameSite=Lax${secure}`;
+    setUser(u);
+    return u;
   }, []);
 
   const refreshUser = useCallback(async () => {
     try {
       const { data } = await authApi.getMe();
-      const user = data?.data?.data ?? data?.data ?? data;
-      setUser(user);
-      lsSet("snl_user", JSON.stringify(user));
+      const u = data?.data?.data ?? data?.data ?? data;
+      setUser(u);
+      lsSet("snl_user", JSON.stringify(u));
     } catch {}
   }, []);
 

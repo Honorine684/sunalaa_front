@@ -2,12 +2,6 @@ import axios from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/proxy";
 
-function lsGet(key) {
-  try { return localStorage.getItem(key); } catch { return null; }
-}
-function lsSet(key, val) {
-  try { localStorage.setItem(key, val); } catch {}
-}
 function lsRemove(key) {
   try { localStorage.removeItem(key); } catch {}
 }
@@ -15,14 +9,13 @@ function lsRemove(key) {
 const api = axios.create({
   baseURL: BASE_URL,
   timeout: 15000,
+  withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
 
-// ── Attach JWT + locale to every request ─────────────────────────
+// ── Attach locale to every request (token is in HttpOnly cookie) ──
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = lsGet("snl_access_token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
     const lang = window.location.pathname.startsWith("/fr") ? "fr" : "en";
     config.headers["Accept-Language"] = lang;
   }
@@ -33,10 +26,10 @@ api.interceptors.request.use((config) => {
 let isRefreshing = false;
 let failedQueue = [];
 
-function processQueue(error, token = null) {
+function processQueue(error) {
   failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
-    else prom.resolve(token);
+    else prom.resolve();
   });
   failedQueue = [];
 }
@@ -46,16 +39,13 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
-    const isAuthEndpoint = original.url?.includes("/auth/login") || original.url?.includes("/auth/register");
+    const isAuthEndpoint = original.url?.includes("/auth/login") || original.url?.includes("/auth/register") || original.url?.includes("/auth/refresh");
     if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
-            original.headers.Authorization = `Bearer ${token}`;
-            return api(original);
-          })
+          .then(() => api(original))
           .catch((err) => Promise.reject(err));
       }
 
@@ -63,32 +53,15 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = lsGet("snl_refresh_token");
-        if (!refreshToken) throw new Error("No refresh token");
-
-        const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
-          refreshToken,
-        });
-
-        // API response: { success, data: { accessToken, refreshToken } }
-        const newToken = data?.data?.accessToken ?? data?.accessToken;
-        if (!newToken) throw new Error("Failed to extract access token from refresh response");
-
-        const newRefreshToken = data?.data?.refreshToken ?? data?.refreshToken;
-        lsSet("snl_access_token", newToken);
-        if (newRefreshToken) lsSet("snl_refresh_token", newRefreshToken);
-
-        api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
-        processQueue(null, newToken);
-        original.headers.Authorization = `Bearer ${newToken}`;
+        // Cookie snl_refresh_token envoyé automatiquement via withCredentials
+        await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        processQueue(null);
         return api(original);
       } catch (err) {
-        processQueue(err, null);
-        lsRemove("snl_access_token");
-        lsRemove("snl_refresh_token");
+        processQueue(err);
         lsRemove("snl_user");
+        lsRemove("snl_login_time");
         if (typeof window !== "undefined") {
-          document.cookie = "snl_access_token=; path=/; max-age=0";
           document.cookie = "snl_user_role=; path=/; max-age=0";
           window.location.href = "/login";
         }
