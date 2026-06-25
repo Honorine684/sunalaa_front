@@ -19,7 +19,7 @@ function EyeIcon({ visible }) {
   );
 }
 
-function ChangePasswordForm() {
+function ChangePasswordForm({ isOAuth }) {
   const [fields, setFields] = useState({ currentPassword: "", newPassword: "", confirm: "" });
   const [showFields, setShowFields] = useState({ currentPassword: false, newPassword: false, confirm: false });
   const [errors, setErrors] = useState({});
@@ -29,11 +29,11 @@ function ChangePasswordForm() {
 
   function validate() {
     const e = {};
-    if (!fields.currentPassword) e.currentPassword = "Required";
+    if (!isOAuth && !fields.currentPassword) e.currentPassword = "Required";
     if (!fields.newPassword) e.newPassword = "Required";
     else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(fields.newPassword))
       e.newPassword = "Password must be at least 8 characters with uppercase, lowercase and a number";
-    if (!e.newPassword && fields.newPassword === fields.currentPassword) e.newPassword = "Must be different from the old one";
+    if (!e.newPassword && !isOAuth && fields.newPassword === fields.currentPassword) e.newPassword = "Must be different from the old one";
     if (!fields.confirm) e.confirm = "Required";
     else if (fields.confirm !== fields.newPassword) e.confirm = "Passwords do not match";
     return e;
@@ -48,8 +48,10 @@ function ChangePasswordForm() {
     setApiError("");
     setSuccess("");
     try {
-      await authApi.changePassword({ currentPassword: fields.currentPassword, newPassword: fields.newPassword });
-      setSuccess("Password changed successfully.");
+      const payload = { newPassword: fields.newPassword };
+      if (!isOAuth) payload.currentPassword = fields.currentPassword;
+      await authApi.changePassword(payload);
+      setSuccess(isOAuth ? "Password set successfully. You can now log in with email too." : "Password changed successfully.");
       setFields({ currentPassword: "", newPassword: "", confirm: "" });
     } catch (err) {
       setApiError(getApiError(err));
@@ -65,9 +67,23 @@ function ChangePasswordForm() {
     setSuccess("");
   }
 
+  const fieldDefs = [
+    ...(!isOAuth ? [{ key: "currentPassword", label: "Current password", placeholder: "••••••••" }] : []),
+    { key: "newPassword", label: isOAuth ? "Set a password" : "New password", placeholder: "Minimum 8 characters" },
+    { key: "confirm", label: "Confirm password", placeholder: "Repeat password" },
+  ];
+
   return (
     <div>
-      <p className="text-[16px] font-bold mb-4" style={{ color: "#0F172B" }}>Change password</p>
+      <p className="text-[16px] font-bold mb-1" style={{ color: "#0F172B" }}>
+        {isOAuth ? "Set a password" : "Change password"}
+      </p>
+      {isOAuth && (
+        <p className="text-[12px] mb-4" style={{ color: "#94A3B8" }}>
+          You signed in with Google — set a password to also log in with email.
+        </p>
+      )}
+      {!isOAuth && <div className="mb-4" />}
 
       {apiError && (
         <div className="mb-3 px-4 py-2.5 rounded-xl text-[13px]" style={{ backgroundColor: "#FFF1F2", color: "#E11D48", border: "1px solid #FFE4E6" }}>
@@ -81,11 +97,7 @@ function ChangePasswordForm() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
-        {[
-          { key: "currentPassword", label: "Current password", placeholder: "••••••••" },
-          { key: "newPassword", label: "New password", placeholder: "Minimum 8 characters" },
-          { key: "confirm", label: "Confirm new password", placeholder: "Repeat new password" },
-        ].map(({ key, label, placeholder }) => (
+        {fieldDefs.map(({ key, label, placeholder }) => (
           <div key={key} className="flex flex-col gap-1">
             <label className="text-[14px]" style={{ color: "#45556C" }}>{label}</label>
             <div className="relative">
@@ -111,7 +123,7 @@ function ChangePasswordForm() {
           className="w-full py-3 rounded-xl text-white text-[15px] font-semibold hover:brightness-90 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-1"
           style={{ backgroundColor: "#1F4E46" }}>
           {loading && <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>}
-          {loading ? "Changing..." : "Change password"}
+          {loading ? "Saving..." : isOAuth ? "Set password" : "Change password"}
         </button>
       </form>
     </div>
@@ -396,7 +408,7 @@ export default function ProfileSecurity({ user }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ChangePasswordForm />
+        <ChangePasswordForm isOAuth={user?.hasPassword === false} />
         <div className="md:border-l md:border-slate-100 md:pl-8 flex flex-col gap-0">
           <TwoFactorSection user={user} />
           <PushNotifSection />
