@@ -22,12 +22,17 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     (async () => {
       try {
-        const params = new URLSearchParams(window.location.search);
-        const isNewUser = params.get("new_user") === "true";
+        const code = new URLSearchParams(window.location.search).get("code");
+        if (!code) {
+          window.location.replace("/login?error=oauth_no_code");
+          return;
+        }
 
-        // Cookies HttpOnly déjà posés par le backend — on récupère juste le profil
-        const meRes = await authApi.getMe();
-        const user = meRes.data?.data?.data ?? meRes.data?.data ?? meRes.data;
+        // Échange le code one-time → backend pose les cookies HttpOnly + retourne { user, isNewUser }
+        const { data } = await authApi.exchangeOAuth(code);
+        const exchanged = data?.data ?? data;
+        const user = exchanged?.user ?? exchanged;
+        const isNewUser = exchanged?.isNewUser === true;
 
         const isProduction = window.location.hostname !== "localhost";
         const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
