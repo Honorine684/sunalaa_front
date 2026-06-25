@@ -98,9 +98,11 @@ export default function MissionsSection() {
   async function handleComplete(id) {
     setLoadingId(id);
     try {
-      await missionsApi.complete(id);
+      const res = await missionsApi.complete(id);
+      const updated = res.data?.data ?? res.data;
+      const newStatus = updated?.status ?? updated?.userStatus ?? "UNDER_REVIEW";
       setMissions((prev) =>
-        prev.map((m) => m.id === id ? { ...m, userStatus: "COMPLETED" } : m)
+        prev.map((m) => m.id === id ? { ...m, userStatus: newStatus } : m)
       );
     } catch {
       // status will refresh on next page load
