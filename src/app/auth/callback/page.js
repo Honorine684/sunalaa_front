@@ -22,15 +22,10 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     (async () => {
       try {
-        // Backend pose les cookies HttpOnly pendant le callback OAuth et redirige ici.
-        // Un code temporaire peut être présent (ancien flux) ou absent (nouveau flux HttpOnly).
-        const code = new URLSearchParams(window.location.search).get("code");
-        let tokenData = {};
-        if (code) {
-          const { data } = await authApi.exchangeOAuth(code);
-          tokenData = data?.data ?? data;
-        }
+        const params = new URLSearchParams(window.location.search);
+        const isNewUser = params.get("new_user") === "true";
 
+        // Cookies HttpOnly déjà posés par le backend — on récupère juste le profil
         const meRes = await authApi.getMe();
         const user = meRes.data?.data?.data ?? meRes.data?.data ?? meRes.data;
 
@@ -46,8 +41,8 @@ export default function OAuthCallbackPage() {
         const prefix = locale === "fr" ? "/fr" : "";
         const role = (user?.role ?? "user").toLowerCase();
 
-        const isNewUser = tokenData.isNewUser === true || tokenData.newUser === true || user?.isUsernameSet === false;
-        if (isNewUser && !role.includes("admin")) {
+        const needsSetup = isNewUser || user?.isUsernameSet === false;
+        if (needsSetup && !role.includes("admin")) {
           try { sessionStorage.setItem("snl_needs_username_setup", "1"); } catch {}
           window.location.replace(`${prefix}/setup-username`);
           return;
