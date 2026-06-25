@@ -46,7 +46,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 left-0 w-full z-50 py-3 lg:py-5" style={{ backgroundColor: "#1F4E46" }}>
+      <nav className="sticky top-0 left-0 w-full z-50 pb-3 lg:pb-5" style={{ backgroundColor: "#1F4E46", paddingTop: "max(12px, env(safe-area-inset-top))" }}>
         <div className="max-w-[1280px] mx-auto px-4 lg:px-16">
           <div className="flex items-center gap-2 lg:gap-12">
 

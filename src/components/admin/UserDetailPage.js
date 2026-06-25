@@ -89,10 +89,9 @@ export default function UserDetailPage({ userId }) {
   const avatarSrc = avatar ? (avatar.startsWith("http") ? avatar : `${API_BASE}${avatar}`) : null;
   const initials = (user.username?.[0] ?? user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase();
 
-  const status    = user.status ?? (user.isActive ? "active" : "inactive");
+  const status    = (user.status ?? "").toLowerCase() || (user.isActive ? "active" : "inactive");
   const kycStatus = user.kycStatus ?? user.kyc?.status ?? null;
-  const points    = user.snlBalance ?? user.points ?? user.balance ?? 0;
-  const refs      = user.referralCount ?? user.filleulsCount ?? user.network?.total ?? 0;
+  const refs      = user.directCount ?? user._count?.downlines ?? 0;
 
   const addresses = Array.isArray(user.addresses) ? user.addresses : user.address ? [user.address] : [];
 
@@ -134,9 +133,9 @@ export default function UserDetailPage({ userId }) {
       {/* Stats rapides */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Points SNL", value: fmt(points), color: "#E6B84C" },
-          { label: "Filleuls", value: fmt(refs), color: "#3FAE8C" },
-          { label: "Commissions", value: fmt(user.commissionsTotal ?? user.totalCommissions), color: "#8B5CF6" },
+          { label: "Points SNL", value: user.snlBalance != null ? fmt(user.snlBalance) : "—", color: "#E6B84C" },
+          { label: "Filleuls directs", value: fmt(refs), color: "#3FAE8C" },
+          { label: "Équipe totale", value: fmt(user.teamCount), color: "#8B5CF6" },
           { label: "Inscrit le", value: user.createdAt ? new Date(user.createdAt).toLocaleDateString("fr-FR") : "—", color: "#3B82F6" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm px-4 py-4">
@@ -152,13 +151,13 @@ export default function UserDetailPage({ userId }) {
         <Card title="Informations personnelles" icon={
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2"/></svg>
         }>
-          <Row label="Prénom" value={user.firstName ?? user.first_name} />
-          <Row label="Nom" value={user.lastName ?? user.last_name} />
+          <Row label="Prénom" value={user.firstName} />
+          <Row label="Nom" value={user.lastName} />
           <Row label="Pseudo" value={user.username} />
           <Row label="Email" value={user.email} />
-          <Row label="Téléphone" value={user.phone ?? user.phoneNumber} />
+          <Row label="Téléphone" value={user.phone} />
           <Row label="Genre" value={user.gender} />
-          <Row label="Date de naissance" value={user.birthDate ?? user.dateOfBirth ? fmtDate(user.birthDate ?? user.dateOfBirth) : null} />
+          <Row label="Date de naissance" value={user.dateOfBirth ? fmtDate(user.dateOfBirth) : null} />
         </Card>
 
         {/* Compte */}
@@ -166,12 +165,15 @@ export default function UserDetailPage({ userId }) {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
         }>
           <Row label="Rôle" value={user.role} />
+          <Row label="Rang" value={user.rank} />
+          <Row label="Niveau" value={user.level != null ? `Niveau ${user.level}` : null} />
           <Row label="Statut" value={statusStyle[status]?.label ?? status} />
-          <Row label="2FA activé" value={user.twoFactorEnabled ?? user.is2FAEnabled ? "✓ Oui" : "✗ Non"} />
-          <Row label="Email vérifié" value={user.emailVerified ?? user.isEmailVerified ? "✓ Oui" : "✗ Non"} />
+          <Row label="2FA activé" value={user.twoFactorEnabled ? "✓ Oui" : "✗ Non"} />
+          <Row label="Email vérifié" value={user.emailVerified ? "✓ Oui" : "✗ Non"} />
+          <Row label="Tél. vérifié" value={user.phoneVerified ? "✓ Oui" : "✗ Non"} />
           <Row label="Inscrit le" value={fmtDate(user.createdAt)} />
-          <Row label="Dernière connexion" value={fmtDate(user.lastLogin ?? user.lastLoginAt ?? user.lastActive)} />
-          <Row label="Code parrainage" value={user.referralCode ?? user.sponsorCode} />
+          <Row label="Dernière connexion" value={fmtDate(user.lastLoginAt)} />
+          <Row label="Code parrainage" value={user.referralCode} />
         </Card>
 
         {/* KYC */}
@@ -197,13 +199,15 @@ export default function UserDetailPage({ userId }) {
         }>
           <Row label="Parrain (sponsor)" value={
             user.sponsor
-              ? (user.sponsor.username || [user.sponsor.firstName, user.sponsor.lastName].filter(Boolean).join(" ") || user.sponsor.email)
-              : (user.sponsorId ?? user.referredBy)
+              ? [user.sponsor.firstName, user.sponsor.lastName].filter(Boolean).join(" ") || user.sponsor.referralCode
+              : user.sponsorId
           } />
-          <Row label="Code parrainage" value={user.referralCode ?? user.sponsorCode} />
-          <Row label="Nombre de filleuls" value={fmt(refs)} />
-          <Row label="Filleuls actifs" value={fmt(user.activeReferrals ?? user.activeFilleuls)} />
-          <Row label="Total commissions" value={user.commissionsTotal != null ? `${fmt(user.commissionsTotal)} SNL` : null} />
+          <Row label="Code parrain" value={user.sponsor?.referralCode} />
+          <Row label="Mon code parrainage" value={user.referralCode} />
+          <Row label="Filleuls directs" value={fmt(refs)} />
+          <Row label="Équipe totale" value={fmt(user.teamCount)} />
+          <Row label="Volume personnel" value={fmt(user.personalVolume)} />
+          <Row label="Volume groupe" value={fmt(user.groupVolume)} />
         </Card>
 
         {/* Adresses */}
@@ -230,13 +234,13 @@ export default function UserDetailPage({ userId }) {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
         }>
           <Row label="ID utilisateur" value={<span className="font-mono text-[11px] select-all">{user.id}</span>} />
-          <Row label="Profil complété" value={
-            user.profileBonusClaimed || user.profileCompletionBonusClaimed
-              ? "✓ Bonus réclamé"
-              : "✗ Non réclamé"
-          } />
-          <Row label="Points en attente" value={user.pendingPoints != null ? fmt(user.pendingPoints) : null} />
-          <Row label="Source inscription" value={user.authProvider ?? user.registrationSource ?? user.provider} />
+          <Row label="Bonus profil réclamé" value={user.profileBonusClaimed ? "✓ Oui" : "✗ Non"} />
+          <Row label="Bonus bienvenue réclamé" value={user.welcomeBonusClaimed ? "✓ Oui" : "✗ Non"} />
+          <Row label="Username défini" value={user.isUsernameSet ? "✓ Oui" : "✗ Non"} />
+          <Row label="Wallet — solde" value={user.wallet?.balance != null ? `${parseFloat(user.wallet.balance).toLocaleString("fr-FR")} ${user.wallet.currency ?? ""}`.trim() : null} />
+          <Row label="Wallet — en attente" value={user.wallet?.pendingBalance != null ? `${parseFloat(user.wallet.pendingBalance).toLocaleString("fr-FR")} ${user.wallet.currency ?? ""}`.trim() : null} />
+          <Row label="Wallet — total gagné" value={user.wallet?.totalEarned != null ? `${parseFloat(user.wallet.totalEarned).toLocaleString("fr-FR")} ${user.wallet.currency ?? ""}`.trim() : null} />
+          <Row label="Wallet — total retiré" value={user.wallet?.totalWithdrawn != null ? `${parseFloat(user.wallet.totalWithdrawn).toLocaleString("fr-FR")} ${user.wallet.currency ?? ""}`.trim() : null} />
         </Card>
 
       </div>
