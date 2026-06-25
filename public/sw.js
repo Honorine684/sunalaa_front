@@ -48,16 +48,20 @@ self.addEventListener("fetch", (e) => {
       caches.match(request).then(
         (cached) =>
           cached ||
-          fetch(request).then((res) => {
-            const clone = res.clone();
-            caches.open(CACHE).then((c) => c.put(request, clone));
-            return res;
-          })
+          fetch(request)
+            .then((res) => {
+              const clone = res.clone();
+              caches.open(CACHE).then((c) => c.put(request, clone));
+              return res;
+            })
+            .catch(() => new Response("", { status: 503 }))
       )
     );
   } else {
     e.respondWith(
-      fetch(request).catch(() => caches.match(request))
+      fetch(request).catch(() =>
+        caches.match(request).then((cached) => cached || new Response("", { status: 503 }))
+      )
     );
   }
 });

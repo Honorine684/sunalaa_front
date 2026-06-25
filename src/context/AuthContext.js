@@ -47,7 +47,9 @@ export function AuthProvider({ children }) {
             lsSet("snl_user", JSON.stringify(fresh));
           }
         })
-        .catch(() => {})
+        .catch((err) => {
+          if (err?.response?.status === 401) clearSession();
+        })
         .finally(() => setLoading(false));
     } else {
       if (stored || token) clearSession();
