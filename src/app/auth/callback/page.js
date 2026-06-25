@@ -20,17 +20,16 @@ export default function OAuthCallbackPage() {
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) {
-      window.location.replace("/login?error=oauth_no_code");
-      return;
-    }
-
     (async () => {
       try {
-        // Backend a déjà posé les cookies HttpOnly via /auth/oauth/exchange
-        const { data } = await authApi.exchangeOAuth(code);
-        const tokenData = data?.data ?? data;
+        // Backend pose les cookies HttpOnly pendant le callback OAuth et redirige ici.
+        // Un code temporaire peut être présent (ancien flux) ou absent (nouveau flux HttpOnly).
+        const code = new URLSearchParams(window.location.search).get("code");
+        let tokenData = {};
+        if (code) {
+          const { data } = await authApi.exchangeOAuth(code);
+          tokenData = data?.data ?? data;
+        }
 
         const meRes = await authApi.getMe();
         const user = meRes.data?.data?.data ?? meRes.data?.data ?? meRes.data;
