@@ -64,8 +64,8 @@ const quickAccess = [
         <path d="M3 6h18M16 10a4 4 0 01-8 0" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    title: "Commandes",
-    desc: "Gérer et suivre les commandes des formations",
+    title: "Achats",
+    desc: "Suivre les achats de formations via Stripe",
     href: "/admin/commandes",
   },
   {

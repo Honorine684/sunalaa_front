@@ -5,9 +5,9 @@ import { ordersApi, getApiError } from "@/lib/api";
 
 const STATUS_INFO = {
   PENDING:   { label: "En attente",  bg: "#FEF9C3", color: "#854D0E" },
-  CONFIRMED: { label: "Confirmée",   bg: "#D1FAE5", color: "#065F46" },
-  CANCELLED: { label: "Annulée",     bg: "#FEE2E2", color: "#7F1D1D" },
-  REFUNDED:  { label: "Remboursée",  bg: "#F1F5F9", color: "#475569" },
+  CONFIRMED: { label: "Confirmé",    bg: "#D1FAE5", color: "#065F46" },
+  CANCELLED: { label: "Annulé",      bg: "#FEE2E2", color: "#7F1D1D" },
+  REFUNDED:  { label: "Remboursé",   bg: "#F1F5F9", color: "#475569" },
 };
 
 function StatusBadge({ status }) {
@@ -38,9 +38,8 @@ function normalizeList(raw) {
 }
 
 // ── Detail modal ──────────────────────────────────────────────────────────────
-function OrderDetailModal({ order, onClose, onStatusChange }) {
+function AchatDetailModal({ order, onClose, onStatusChange }) {
   const [updating, setUpdating] = useState(false);
-  const [confirming, setConfirming] = useState(false);
   const [newStatus, setNewStatus] = useState(order.status ?? "PENDING");
   const [err, setErr] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -51,30 +50,15 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
     try {
       await ordersApi.adminUpdateStatus(order.id, { status: newStatus });
       onStatusChange(order.id, newStatus);
-      showMsg("Statut mis à jour !");
+      setSuccessMsg("Statut mis à jour !");
+      setTimeout(() => setSuccessMsg(""), 3000);
     } catch (e) {
       setErr(getApiError(e));
     } finally { setUpdating(false); }
   }
 
-  async function confirmPay() {
-    setConfirming(true); setErr("");
-    try {
-      await ordersApi.adminConfirmPayment(order.id);
-      onStatusChange(order.id, "CONFIRMED");
-      showMsg("Paiement confirmé !");
-    } catch (e) {
-      setErr(getApiError(e));
-    } finally { setConfirming(false); }
-  }
-
-  function showMsg(m) {
-    setSuccessMsg(m);
-    setTimeout(() => setSuccessMsg(""), 3000);
-  }
-
-  const user = order.user ?? order.buyer ?? {};
-  const items = order.items ?? order.orderItems ?? [];
+  const user    = order.user ?? order.buyer ?? {};
+  const items   = order.items ?? order.orderItems ?? [];
   const product = order.product ?? items[0]?.product ?? {};
 
   return (
@@ -82,7 +66,7 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <h2 className="text-[17px] font-bold" style={{ color: "#1F4E46" }}>
-            Commande #{String(order.id).slice(-6).toUpperCase()}
+            Achat #{String(order.id).slice(-6).toUpperCase()}
           </h2>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 cursor-pointer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -93,7 +77,6 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
 
         <div className="px-6 py-5 flex flex-col gap-5 max-h-[70vh] overflow-y-auto">
 
-          {/* Success / Error */}
           {successMsg && (
             <div className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-green-700 bg-green-50 border border-green-200">
               {successMsg}
@@ -123,12 +106,13 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             </div>
           </div>
 
-          {/* Produit */}
+          {/* Formation */}
           <div>
-            <p className="text-[12px] text-slate-400 mb-2 font-semibold uppercase tracking-wider">Formation / Produit</p>
+            <p className="text-[12px] text-slate-400 mb-2 font-semibold uppercase tracking-wider">Formation</p>
             <div className="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
               {product.images?.[0] ? (
-                <img src={product.images[0]} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                <img src={product.images[0]} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0"
+                  onError={(e) => { e.currentTarget.style.display = "none"; }} />
               ) : (
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -152,8 +136,8 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             {[
               { label: "Date", value: fmtDate(order.createdAt) },
               { label: "Montant", value: `${fmt(order.total ?? order.amount ?? order.price)} FCFA` },
-              { label: "Quantité", value: order.quantity ?? items.reduce((s, i) => s + (i.quantity ?? 1), 0) ?? 1 },
-              { label: "Paiement", value: order.isPaid === true ? "Payé" : (order.paymentStatus ?? "En attente") },
+              { label: "Statut paiement", value: order.isPaid === true ? "✓ Payé" : (order.paymentStatus ?? "En attente") },
+              { label: "Via", value: order.paymentMethod ?? "Stripe" },
             ].map((row) => (
               <div key={row.label} className="bg-slate-50 rounded-xl p-3">
                 <p className="text-[11px] text-slate-400 mb-0.5">{row.label}</p>
@@ -162,7 +146,7 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             ))}
           </div>
 
-          {/* Statut */}
+          {/* Changer statut (remboursement, annulation manuelle) */}
           <div>
             <p className="text-[12px] text-slate-400 mb-2 font-semibold uppercase tracking-wider">Changer le statut</p>
             <div className="flex gap-2">
@@ -185,17 +169,6 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
               </button>
             </div>
           </div>
-
-          {/* Confirmer paiement */}
-          {order.status === "PENDING" && (
-            <button
-              onClick={confirmPay}
-              disabled={confirming}
-              className="w-full py-3 bg-secondary text-white text-[14px] font-semibold rounded-xl hover:brightness-110 transition cursor-pointer disabled:opacity-50"
-            >
-              {confirming ? "Confirmation…" : "✓ Confirmer le paiement"}
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -204,14 +177,14 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function CommandesManagement() {
-  const [orders, setOrders]           = useState([]);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState("");
-  const [page, setPage]               = useState(1);
-  const [total, setTotal]             = useState(0);
+  const [orders, setOrders]         = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState("");
+  const [page, setPage]             = useState(1);
+  const [total, setTotal]           = useState(0);
   const [statusFilter, setStatusFilter] = useState("");
-  const [search, setSearch]           = useState("");
-  const [selected, setSelected]       = useState(null);
+  const [search, setSearch]         = useState("");
+  const [selected, setSelected]     = useState(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
   const limit = 15;
 
@@ -237,10 +210,9 @@ export default function CommandesManagement() {
     setLoadingDetail(true);
     try {
       const res = await ordersApi.adminGetOne(order.id);
-      const full = res.data?.data ?? res.data;
-      setSelected(full);
+      setSelected(res.data?.data ?? res.data);
     } catch {
-      // garde la version partielle déjà affichée
+      // garde la version partielle
     } finally {
       setLoadingDetail(false);
     }
@@ -257,18 +229,16 @@ export default function CommandesManagement() {
     <div className="flex flex-col gap-6">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-[22px] font-bold" style={{ color: "#1F4E46" }}>Commandes</h2>
-          <p className="text-[13px] text-slate-400 mt-0.5">{total} commande{total !== 1 ? "s" : ""} au total</p>
-        </div>
+      <div>
+        <h2 className="text-[22px] font-bold" style={{ color: "#1F4E46" }}>Achats</h2>
+        <p className="text-[13px] text-slate-400 mt-0.5">{total} achat{total !== 1 ? "s" : ""} au total</p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <input
           type="text"
-          placeholder="Rechercher un client ou une commande…"
+          placeholder="Rechercher un client ou un achat…"
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
           className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-[14px] outline-none focus:border-secondary"
@@ -286,7 +256,6 @@ export default function CommandesManagement() {
         </select>
       </div>
 
-      {/* Error */}
       {error && (
         <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-[13px] text-red-600">
           {error}
@@ -299,7 +268,7 @@ export default function CommandesManagement() {
           <table className="w-full">
             <thead>
               <tr className="text-left border-b border-slate-100">
-                {["#", "Client", "Formation", "Montant", "Date", "Statut", "Action"].map((h) => (
+                {["#", "Client", "Formation", "Montant", "Date", "Statut", ""].map((h) => (
                   <th key={h} className="px-5 py-3.5 text-[12px] font-semibold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                     {h}
                   </th>
@@ -320,7 +289,7 @@ export default function CommandesManagement() {
               ) : orders.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-5 py-12 text-center text-slate-400 text-[14px]">
-                    Aucune commande trouvée
+                    Aucun achat trouvé
                   </td>
                 </tr>
               ) : orders.map((order) => {
@@ -331,7 +300,7 @@ export default function CommandesManagement() {
                   ?? items[0]?.productName
                   ?? items[0]?.name
                   ?? order.productName
-                  ?? (items[0]?.productId ? `#${String(items[0].productId).slice(-8)}` : "—");
+                  ?? "—";
                 return (
                   <tr key={order.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition">
                     <td className="px-5 py-3.5">
@@ -350,9 +319,7 @@ export default function CommandesManagement() {
                       </div>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="text-[13px]" style={{ color: "#334155" }}>
-                        {productName}
-                      </span>
+                      <span className="text-[13px]" style={{ color: "#334155" }}>{productName}</span>
                     </td>
                     <td className="px-5 py-3.5">
                       <span className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
@@ -380,12 +347,9 @@ export default function CommandesManagement() {
           </table>
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100">
-            <p className="text-[13px] text-slate-400">
-              Page {page} / {totalPages}
-            </p>
+            <p className="text-[13px] text-slate-400">Page {page} / {totalPages}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -406,9 +370,8 @@ export default function CommandesManagement() {
         )}
       </div>
 
-      {/* Detail modal */}
       {selected && (
-        <OrderDetailModal
+        <AchatDetailModal
           order={selected}
           onClose={() => setSelected(null)}
           onStatusChange={handleStatusChange}

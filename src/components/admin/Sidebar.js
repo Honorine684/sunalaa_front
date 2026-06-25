@@ -107,7 +107,7 @@ const navLinks = [
   },
   {
     id: "commandes",
-    label: "Commandes",
+    label: "Achats",
     href: "/admin/commandes",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
