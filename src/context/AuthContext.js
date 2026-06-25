@@ -46,11 +46,18 @@ export function AuthProvider({ children }) {
           }
         })
         .catch((err) => {
-          if (err?.response?.status === 401) { clearSession(); setUser(null); }
+          if (err?.response?.status === 401) {
+            authApi.logout().catch(() => {});
+            clearSession();
+            setUser(null);
+          }
         })
         .finally(() => setLoading(false));
     } else {
-      if (stored) clearSession();
+      if (stored) {
+        authApi.logout().catch(() => {});
+        clearSession();
+      }
       setLoading(false);
     }
   }, []);
