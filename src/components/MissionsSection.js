@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Container from "./Container";
 import { missionsApi } from "@/lib/api";
 import { useTranslations } from "next-intl";
@@ -60,25 +60,55 @@ const PLATFORM_ICONS = {
 
 export default function MissionsSection() {
   const t = useTranslations("MissionsSection");
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, refreshUser } = useAuth();
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingId, setLoadingId] = useState(null);
+  const prevStatuses = useRef({});
+
+  function applyMissions(list) {
+    const newStatuses = Object.fromEntries(list.map((m) => [m.id, m.userStatus]));
+    const justCompleted = list.some(
+      (m) => m.userStatus === "COMPLETED" && prevStatuses.current[m.id] === "UNDER_REVIEW"
+    );
+    prevStatuses.current = newStatuses;
+    setMissions(list);
+    if (justCompleted) refreshUser().catch(() => {});
+  }
+
+  function fetchMissions(silent = false) {
+    if (!silent) setLoading(true);
+    return missionsApi.getMyMissions()
+      .then((res) => {
+        const raw = res.data?.data ?? res.data;
+        applyMissions(Array.isArray(raw) ? raw : []);
+      })
+      .catch(() => { if (!silent) setMissions([]); })
+      .finally(() => { if (!silent) setLoading(false); });
+  }
 
   useEffect(() => {
     if (!isAuthenticated) { setMissions([]); setLoading(false); return; }
-    let cancelled = false;
-    setLoading(true);
-    missionsApi.getMyMissions()
-      .then((res) => {
-        if (cancelled) return;
-        const raw = res.data?.data ?? res.data;
-        setMissions(Array.isArray(raw) ? raw : []);
-      })
-      .catch(() => { if (!cancelled) setMissions([]); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+    fetchMissions();
   }, [isAuthenticated]);
+
+  // Re-fetch on tab focus + poll every 30s when missions are pending review
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    function onVisible() {
+      if (document.visibilityState === "visible") fetchMissions(true);
+    }
+    document.addEventListener("visibilitychange", onVisible);
+
+    const hasUnderReview = missions.some((m) => m.userStatus === "UNDER_REVIEW");
+    const interval = hasUnderReview ? setInterval(() => fetchMissions(true), 30_000) : null;
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      if (interval) clearInterval(interval);
+    };
+  }, [isAuthenticated, missions]);
 
   async function handleStart(mission) {
     if (mission.actionUrl) window.open(mission.actionUrl, "_blank", "noopener");
