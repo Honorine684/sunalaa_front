@@ -18,7 +18,9 @@ function lsRemove(key) {
 function clearSession() {
   lsRemove("snl_user");
   lsRemove("snl_login_time");
-  // snl_access_token et snl_refresh_token sont HttpOnly — effacés par POST /auth/logout
+  // Nettoyage tokens stales (ancienne version pré-HttpOnly)
+  lsRemove("snl_access_token");
+  lsRemove("snl_refresh_token");
   document.cookie = "snl_user_role=; path=/; max-age=0";
 }
 
@@ -30,6 +32,10 @@ export function AuthProvider({ children }) {
 
   // Restore session on mount
   useEffect(() => {
+    // Purge tokens stales de l'ancienne version pré-HttpOnly
+    lsRemove("snl_access_token");
+    lsRemove("snl_refresh_token");
+
     const stored = lsGet("snl_user");
     const loginTime = parseInt(lsGet("snl_login_time") ?? "0", 10);
     const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
