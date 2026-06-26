@@ -180,8 +180,10 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
     .filter((t) => !dismissed.includes(t.id) && t.condition(profile))
     .sort((a, b) => a.priority - b.priority);
 
-  const total = TIPS.length;
-  const done  = TIPS.filter((t) => !t.condition(profile)).length;
+  // Exclut "referral" du compteur (condition toujours vraie, jamais terminable)
+  const countableTips = TIPS.filter((t) => t.id !== "referral");
+  const total = countableTips.length;
+  const done  = countableTips.filter((t) => !t.condition(profile) || dismissed.includes(t.id)).length;
 
   function dismiss(id) {
     const next = [...dismissed, id];
