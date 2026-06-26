@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { authApi, getApiError } from "@/lib/api";
-import { useAuth } from "@/context/AuthContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 /* ── Change Password ── */
@@ -389,8 +388,7 @@ function PushNotifSection() {
 
 /* ── Main ── */
 export default function ProfileSecurity({ user }) {
-  const { user: authUser } = useAuth();
-  const isOAuth = authUser?.hasPassword === false;
+  const isOAuth = user?.hasPassword === false;
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
