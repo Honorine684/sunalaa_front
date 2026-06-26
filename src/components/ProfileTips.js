@@ -180,8 +180,8 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
     .filter((t) => !dismissed.includes(t.id) && t.condition(profile))
     .sort((a, b) => a.priority - b.priority);
 
-  const total = TIPS.filter((t) => t.condition(profile)).length;
-  const done  = total - activeTips.length;
+  const total = TIPS.length;
+  const done  = TIPS.filter((t) => !t.condition(profile)).length;
 
   function dismiss(id) {
     const next = [...dismissed, id];
