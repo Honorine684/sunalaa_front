@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { authApi, getApiError } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 /* ── Change Password ── */
@@ -388,6 +389,9 @@ function PushNotifSection() {
 
 /* ── Main ── */
 export default function ProfileSecurity({ user }) {
+  const { user: authUser } = useAuth();
+  const isOAuth = authUser?.hasPassword === false;
+
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
       <div className="flex items-center gap-2 mb-5">
@@ -398,7 +402,7 @@ export default function ProfileSecurity({ user }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {user?.hasPassword === false ? (
+        {isOAuth ? (
           <div className="flex flex-col gap-2">
             <p className="text-[16px] font-bold" style={{ color: "#0F172B" }}>Password</p>
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0" }}>
