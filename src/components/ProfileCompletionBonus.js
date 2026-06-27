@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { usersApi } from "@/lib/api";
 
-const LS_KEY = "snl_welcome_bonus_claimed";
+const lsKey = (profile) => `snl_welcome_bonus_claimed_${profile?.id ?? profile?._id ?? "anon"}`;
 
 const REQUIRED_FIELDS = [
   {
@@ -53,7 +53,7 @@ function isClaimed(profile) {
     profile?.profileCompletionBonusClaimed ||
     profile?.profile_bonus_claimed
   ) return true;
-  try { return localStorage.getItem(LS_KEY) === "1"; } catch { return false; }
+  try { return localStorage.getItem(lsKey(profile)) === "1"; } catch { return false; }
 }
 
 export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPhoto }) {
@@ -112,7 +112,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
     setError("");
     try {
       await usersApi.claimProfileBonus();
-      try { localStorage.setItem(LS_KEY, "1"); } catch {}
+      try { localStorage.setItem(lsKey(profile), "1"); } catch {}
       setSuccess(true);
     } catch (err) {
       const msg = err?.response?.data?.message ?? (locale === "fr" ? "Erreur lors du claim." : "Claim failed.");
