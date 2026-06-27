@@ -164,7 +164,7 @@ export default function Navbar() {
           className="lg:hidden overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t"
           style={{ borderColor: "rgba(255,255,255,0.1)" }}
         >
-          <div className="flex px-2 pb-1 pt-0.5">
+          <div className="flex items-center px-2 pb-1 pt-0.5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -175,11 +175,32 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            {/* S'inscrire at the end for non-authenticated mobile users */}
-            {!isAuthenticated && (
+
+            {/* Séparateur */}
+            <span className="shrink-0 w-px h-5 mx-2" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
+
+            {/* Language switcher */}
+            <div className="shrink-0 px-1">
+              <LanguageSwitcher />
+            </div>
+
+            {isAuthenticated ? (
+              /* Logout */
+              <button
+                onClick={() => setConfirmLogout(true)}
+                className="flex items-center gap-1.5 px-3 py-2 ml-1 rounded-full text-[13px] font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+                style={{ color: "#FDA4AF", backgroundColor: "rgba(253,164,175,0.12)" }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {t("logout")}
+              </button>
+            ) : (
+              /* S'inscrire */
               <Link
                 href={`${prefix}/register`}
-                className="px-4 py-2 my-0.5 rounded-full text-[13px] font-semibold whitespace-nowrap shrink-0 ml-1"
+                className="px-4 py-2 my-0.5 ml-1 rounded-full text-[13px] font-semibold whitespace-nowrap shrink-0"
                 style={{ backgroundColor: "#E6B84C", color: "white" }}
               >
                 {t("register")}
