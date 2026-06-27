@@ -213,7 +213,7 @@ function RegisterInner() {
         setSuccess(true);
       } catch (err) {
         try {
-          const { fieldErrors, apiError: msg } = parseFieldErrors(err);
+          const { fieldErrors, apiError: msg } = parseFieldErrors(err, locale);
           if (fieldErrors) {
             setErrors((prev) => ({ ...prev, ...fieldErrors }));
             if (fieldErrors.username?.includes("taken")) {

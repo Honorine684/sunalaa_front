@@ -295,73 +295,78 @@ export function getApiError(error) {
 }
 
 // Maps NestJS { errors: [{field, message}] } response to { fieldErrors, apiError }
-export function parseFieldErrors(error) {
+// locale: "fr" | "en" (default "en")
+export function parseFieldErrors(error, locale = "en") {
+  const fr = locale === "fr";
   const data = error?.response?.data;
-  if (!data) return { apiError: error?.message || "An error occurred" };
+  if (!data) return { apiError: error?.message || (fr ? "Une erreur est survenue" : "An error occurred") };
+
+  const MSG = {
+    referralCode:    fr ? "Ce code de parrainage est invalide ou n'existe pas" : "This referral code is invalid or does not exist",
+    usernameTaken:   fr ? "Ce nom d'utilisateur est déjà pris" : "This username is already taken",
+    emailTaken:      fr ? "Cette adresse email est déjà utilisée" : "This email address is already registered",
+    emailInvalid:    fr ? "Veuillez saisir une adresse email valide" : "Please enter a valid email address",
+    phone:           fr ? "Veuillez saisir un numéro de téléphone valide avec l'indicatif" : "Please enter a valid phone number with country code",
+    passwordMatch:   fr ? "Les mots de passe ne correspondent pas" : "Passwords do not match",
+    password:        fr ? "Le mot de passe doit contenir au moins 8 caractères avec une majuscule, une minuscule et un chiffre" : "Password must be at least 8 characters with uppercase, lowercase and a number",
+    firstName:       fr ? "Le prénom est requis" : "First name is required",
+    lastName:        fr ? "Le nom est requis" : "Last name is required",
+    generic:         fr ? "Veuillez vérifier vos informations et réessayer." : "Please check your information and try again.",
+  };
 
   const fieldErrors = {};
   const general = [];
 
+  const FIELD_MAP = {
+    username: "username", firstname: "firstName", lastname: "lastName",
+    email: "email", phone: "phone", password: "password",
+    confirmpassword: "confirmPassword", referralcode: "referralCode", gender: "gender",
+  };
+
   // Format structuré : errors: [{ field, message }]
   if (Array.isArray(data.errors) && data.errors.length > 0) {
-    const FIELD_MAP = {
-      username: "username",
-      firstname: "firstName",
-      lastname: "lastName",
-      email: "email",
-      phone: "phone",
-      password: "password",
-      confirmpassword: "confirmPassword",
-      referralcode: "referralCode",
-      gender: "gender",
-    };
-
     data.errors.forEach(({ field, message }) => {
       if (!field || !message || typeof field !== "string" || typeof message !== "string") return;
       const key = FIELD_MAP[field.toLowerCase()] ?? field;
       const m = message.toLowerCase();
 
-      // Messages lisibles pour l'utilisateur
       if (key === "referralCode" || m.includes("referral")) {
-        fieldErrors.referralCode = "This referral code is invalid or does not exist";
+        fieldErrors.referralCode = MSG.referralCode;
       } else if (key === "username" && (m.includes("taken") || m.includes("exist") || m.includes("already"))) {
-        fieldErrors.username = "This username is already taken";
+        fieldErrors.username = MSG.usernameTaken;
       } else if (key === "username") {
         fieldErrors.username = message;
       } else if (key === "email" && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) {
-        fieldErrors.email = "This email address is already registered";
+        fieldErrors.email = MSG.emailTaken;
       } else if (key === "email") {
-        fieldErrors.email = "Please enter a valid email address";
+        fieldErrors.email = MSG.emailInvalid;
       } else if (key === "phone") {
-        fieldErrors.phone = "Please enter a valid phone number with country code";
+        fieldErrors.phone = MSG.phone;
       } else if (key === "password" && m.includes("match")) {
-        fieldErrors.confirmPassword = "Passwords do not match";
+        fieldErrors.confirmPassword = MSG.passwordMatch;
       } else if (key === "password") {
-        fieldErrors.password = "Password must be at least 8 characters with uppercase, lowercase and a number";
+        fieldErrors.password = MSG.password;
       } else if (key === "firstName") {
-        fieldErrors.firstName = "First name is required";
+        fieldErrors.firstName = MSG.firstName;
       } else if (key === "lastName") {
-        fieldErrors.lastName = "Last name is required";
+        fieldErrors.lastName = MSG.lastName;
       } else {
         fieldErrors[key] = message;
       }
     });
   } else {
-    // Fallback : message string ou tableau (ancien format)
-    const messages = Array.isArray(data.message)
-      ? data.message
-      : [data.message].filter(Boolean);
-
+    // Fallback : message string ou tableau
+    const messages = Array.isArray(data.message) ? data.message : [data.message].filter(Boolean);
     messages.forEach((msg) => {
       if (!msg || typeof msg !== "string" || msg === "Validation failed" || msg === "Bad Request") return;
       const m = msg.toLowerCase();
-      if (m.includes("referral")) fieldErrors.referralCode = "This referral code is invalid or does not exist";
-      else if (m.includes("username") && (m.includes("taken") || m.includes("exist") || m.includes("already"))) fieldErrors.username = "This username is already taken";
-      else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already"))) fieldErrors.email = "This email address is already registered";
-      else if (m.includes("email")) fieldErrors.email = "Please enter a valid email address";
-      else if (m.includes("phone")) fieldErrors.phone = "Please enter a valid phone number with country code";
-      else if (m.includes("password") && m.includes("match")) fieldErrors.confirmPassword = "Passwords do not match";
-      else if (m.includes("password")) fieldErrors.password = "Password must be at least 8 characters";
+      if (m.includes("referral")) fieldErrors.referralCode = MSG.referralCode;
+      else if (m.includes("username") && (m.includes("taken") || m.includes("exist") || m.includes("already"))) fieldErrors.username = MSG.usernameTaken;
+      else if (m.includes("email") && (m.includes("exist") || m.includes("taken") || m.includes("already") || m.includes("registered"))) fieldErrors.email = MSG.emailTaken;
+      else if (m.includes("email")) fieldErrors.email = MSG.emailInvalid;
+      else if (m.includes("phone")) fieldErrors.phone = MSG.phone;
+      else if (m.includes("password") && m.includes("match")) fieldErrors.confirmPassword = MSG.passwordMatch;
+      else if (m.includes("password")) fieldErrors.password = MSG.password;
       else general.push(msg);
     });
   }
@@ -370,10 +375,6 @@ export function parseFieldErrors(error) {
 
   return {
     fieldErrors: hasFieldErrors ? fieldErrors : null,
-    apiError: general.length > 0
-      ? general.join(". ")
-      : !hasFieldErrors
-        ? "Please check your information and try again."
-        : null,
+    apiError: general.length > 0 ? general.join(". ") : !hasFieldErrors ? MSG.generic : null,
   };
 }
