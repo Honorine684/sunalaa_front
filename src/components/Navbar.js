@@ -16,13 +16,21 @@ export default function Navbar() {
 
   const prefix = locale === "fr" ? "/fr" : "";
 
-  const navLinks = [
+  const publicNavLinks = [
+    { label: t("home"),           href: `${prefix}/` },
+    { label: t("about"),          href: `${prefix}/about` },
+    { label: t("understand_snl"), href: `${prefix}/snl` },
+  ];
+
+  const privateNavLinks = [
     { label: t("home"),        href: `${prefix}/` },
     { label: t("collect"),     href: `${prefix}/collecter` },
     { label: t("bonus"),       href: `${prefix}/bonus` },
     { label: t("leaderboard"), href: `${prefix}/classement` },
     { label: t("formations"),  href: `${prefix}/formations` },
   ];
+
+  const navLinks = isAuthenticated ? privateNavLinks : publicNavLinks;
 
   useEffect(() => {
     document.body.style.overflow = confirmLogout ? "hidden" : "";

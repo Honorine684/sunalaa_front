@@ -146,7 +146,7 @@ export default function SetupUsernamePage() {
         sessionStorage.removeItem("snl_needs_username_setup");
         sessionStorage.removeItem("snl_ref_code");
       } catch {}
-      router.replace(`${prefix}/profil`);
+      router.replace(`${prefix}/collecter`);
     } catch (err) {
       const msg = err?.response?.data?.message;
       const str = typeof msg === "string" ? msg.toLowerCase() : "";

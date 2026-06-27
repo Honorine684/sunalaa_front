@@ -87,7 +87,7 @@ function LoginInner() {
   function redirect(data) {
     const role = (data?.data?.user?.role ?? data?.user?.role ?? data?.role ?? "user").toLowerCase();
     const redirectParam = searchParams.get("redirect");
-    router.push(redirectParam || (role.includes("admin") ? "/admin" : `${prefix}/profil`));
+    router.push(redirectParam || (role.includes("admin") ? "/admin" : `${prefix}/collecter`));
   }
 
   async function handleSubmit(e) {

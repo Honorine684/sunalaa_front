@@ -53,7 +53,7 @@ export default function OAuthCallbackPage() {
           return;
         }
 
-        const target = role.includes("admin") ? "/admin" : `${prefix}/profil`;
+        const target = role.includes("admin") ? "/admin" : `${prefix}/collecter`;
         window.location.replace(target);
       } catch {
         setStatus("error");

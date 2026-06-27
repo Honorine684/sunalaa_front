@@ -1,6 +1,8 @@
 {
   "Navbar": {
     "home": "Accueil",
+    "about": "À propos",
+    "understand_snl": "Comprendre le $SNL",
     "collect": "Collecter",
     "formations": "Formations",
     "bonus": "Bonus & Récompenses",
