@@ -114,7 +114,13 @@ export default function CourseDetailPage() {
         setCheckoutError("Erreur : URL de paiement introuvable.");
       }
     } catch (err) {
-      setCheckoutError(getApiError(err));
+      const msg = getApiError(err);
+      const unavailable = msg?.toLowerCase().includes("not available") || msg?.toLowerCase().includes("online purchase") || err?.response?.status === 400;
+      setCheckoutError(
+        unavailable
+          ? "Le paiement en ligne sera bientôt disponible pour cette formation. Contactez-nous pour plus d'informations."
+          : msg
+      );
     } finally {
       setChecking(false);
     }
@@ -310,7 +316,13 @@ export default function CourseDetailPage() {
                         {checking ? "Redirection…" : `Acheter — ${fmt(price)} FCFA`}
                       </button>
                       {checkoutError && (
-                        <p className="mt-2 text-[12px] text-red-500 text-center">{checkoutError}</p>
+                        <div className="mt-3 flex items-start gap-2 px-3 py-2.5 rounded-xl" style={{ backgroundColor: "#FFF7ED", border: "1px solid #FED7AA" }}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5">
+                            <circle cx="12" cy="12" r="10" stroke="#D97706" strokeWidth="2"/>
+                            <path d="M12 8v4M12 16h.01" stroke="#D97706" strokeWidth="2" strokeLinecap="round"/>
+                          </svg>
+                          <p className="text-[12px] leading-relaxed" style={{ color: "#92400E" }}>{checkoutError}</p>
+                        </div>
                       )}
                     </>
                   )}
