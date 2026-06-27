@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import api, { getApiError } from "@/lib/api";
 
 async function downloadCsv(type) {
@@ -12,6 +12,12 @@ async function downloadCsv(type) {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+const typeToTitle = {
+  users: "Données utilisateurs",
+  points: "Historique des points SNL",
+  referral: "Activité de parrainage",
+};
 
 /* ── Export card data ── */
 const exportCards = [
@@ -137,23 +143,41 @@ export default function ExportsPage() {
   const [loadingId, setLoadingId] = useState(null);
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+
+  const fetchHistory = useCallback(async () => {
+    try {
+      const { data } = await api.get("/admin/exports/history");
+      const rows = data?.data ?? data ?? [];
+      setHistory(
+        rows.map((r) => {
+          const d = new Date(r.createdAt ?? r.exportedAt ?? r.date);
+          const valid = !isNaN(d.getTime());
+          return {
+            id: r.id ?? r._id ?? Math.random(),
+            type: typeToTitle[r.exportType ?? r.type] ?? r.exportType ?? r.type ?? "Export",
+            date: valid ? d.toLocaleDateString("fr-FR") : (r.date ?? "—"),
+            time: valid ? d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : (r.time ?? ""),
+            admin: r.adminName ?? r.adminUsername ?? r.admin ?? "Admin",
+            records: r.recordsCount ?? r.records ?? null,
+          };
+        })
+      );
+    } catch {
+      // Non-critical — leave history empty on error
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchHistory(); }, [fetchHistory]);
 
   async function handleExport(card) {
     setLoadingId(card.id);
     setError("");
     try {
       await downloadCsv(card.id);
-      const now = new Date();
-      setHistory((prev) => [
-        {
-          id: Date.now(),
-          type: card.title,
-          date: now.toLocaleDateString("fr-FR"),
-          time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
-          admin: "Admin",
-        },
-        ...prev,
-      ]);
+      await fetchHistory();
     } catch (err) {
       setError(getApiError(err));
     } finally {
@@ -210,15 +234,22 @@ export default function ExportsPage() {
       <div>
         <h3 className="text-[20px] font-bold mb-4" style={{ color: "#0F172B" }}>Historique des exports</h3>
 
-        {history.length === 0 ? (
+        {historyLoading ? (
+          <div className="bg-white rounded-xl border border-slate-100 px-6 py-10 flex justify-center">
+            <svg className="animate-spin w-6 h-6" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#E2E8F0" strokeWidth="3"/>
+              <path d="M12 2a10 10 0 0110 10" stroke="#3FAE8C" strokeWidth="3" strokeLinecap="round"/>
+            </svg>
+          </div>
+        ) : history.length === 0 ? (
           <div className="bg-white rounded-xl border border-slate-100 px-6 py-10 text-center">
-            <p className="text-[14px]" style={{ color: "#94A3B8" }}>Aucun export effectué dans cette session.</p>
+            <p className="text-[14px]" style={{ color: "#94A3B8" }}>Aucun export effectué pour le moment.</p>
           </div>
         ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-100">
         <div className="bg-white min-w-145">
           {/* Table head */}
-          <div className="grid grid-cols-[2fr_1.5fr_1.2fr_1fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+          <div className="grid grid-cols-[2fr_1.5fr_1.2fr_1fr_1fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
             {COLS.map((col) => (
               <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>
                 {col}
@@ -231,7 +262,7 @@ export default function ExportsPage() {
             <div
               key={row.id}
               className={[
-                "grid grid-cols-[2fr_1.5fr_1.2fr_1fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
+                "grid grid-cols-[2fr_1.5fr_1.2fr_1fr_1fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
                 i < history.length - 1 ? "border-b border-slate-100" : "",
               ].join(" ")}
             >
@@ -250,6 +281,10 @@ export default function ExportsPage() {
               </div>
               {/* Admin */}
               <span className="text-[14px]" style={{ color: "#45556C" }}>{row.admin}</span>
+              {/* Records */}
+              <span className="text-[13px]" style={{ color: "#45556C" }}>
+                {row.records != null ? row.records.toLocaleString("fr-FR") : "—"}
+              </span>
               {/* Status */}
               <ReussiBadge />
             </div>

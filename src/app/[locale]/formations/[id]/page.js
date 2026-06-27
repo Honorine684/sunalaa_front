@@ -459,17 +459,13 @@ export default function CourseDetailPage() {
                 <p className="text-white text-[13px] font-semibold mb-1 relative z-10">Complétez ce cours</p>
                 <p className="text-white/60 text-[12px] mb-3 relative z-10">Gagnez {fmt(snl)} SNL en terminant la formation.</p>
 
-                {orderSuccess ? (
-                  <p className="relative z-10 text-white/80 text-[12px] font-semibold text-center py-2">
-                    ✓ Commande envoyée !
-                  </p>
-                ) : isPaid ? (
+                {isPaid ? (
                   <button
-                    onClick={handleOrder}
-                    disabled={ordering}
+                    onClick={handleCheckout}
+                    disabled={checking}
                     className="relative z-10 w-full bg-secondary text-white text-[13px] font-semibold py-2.5 rounded-xl hover:brightness-110 transition cursor-pointer disabled:opacity-60 disabled:cursor-default"
                   >
-                    {ordering ? "Traitement…" : `Commander — ${fmt(price)} FCFA`}
+                    {checking ? "Redirection…" : `Acheter — ${fmt(price)} FCFA`}
                   </button>
                 ) : contentUrl ? (
                   <a href={contentUrl} target="_blank" rel="noopener noreferrer"
