@@ -17,18 +17,14 @@ const inter = Inter({
   preload: false,
 });
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
-  console.log("[LocaleLayout] locale from params:", locale);
   if (!hasLocale(routing.locales, locale)) notFound();
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  console.log("[LocaleLayout] locale:", locale, "| Navbar.home =", messages?.Navbar?.home, "| BonusHero.title_1 =", messages?.BonusHero?.title_1);
 
   return (
     <html lang={locale} translate="no" className="notranslate">
