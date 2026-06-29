@@ -28,7 +28,7 @@ export default async function LocaleLayout({ children, params }) {
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  console.log("[LocaleLayout] messages keys loaded:", Object.keys(messages).slice(0, 5));
+  console.log("[LocaleLayout] locale:", locale, "| Navbar.home =", messages?.Navbar?.home, "| BonusHero.title_1 =", messages?.BonusHero?.title_1);
 
   return (
     <html lang={locale} translate="no" className="notranslate">
