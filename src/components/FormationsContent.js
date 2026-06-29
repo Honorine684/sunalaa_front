@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Container from "./Container";
 import { productsApi, getApiError } from "@/lib/api";
+import { useTranslations } from "next-intl";
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
 function toAbsoluteUrl(url) {
@@ -52,7 +53,7 @@ function SkeletonCard() {
   );
 }
 
-function CourseCard({ product }) {
+function CourseCard({ product, t }) {
   const image   = toAbsoluteUrl(product?.images?.[0] ?? null);
   const title   = product?.name ?? "—";
   const desc    = product?.shortDesc ?? product?.description ?? "";
@@ -82,7 +83,7 @@ function CourseCard({ product }) {
               <rect x="3" y="11" width="18" height="11" rx="2" stroke="white" strokeWidth="2"/>
               <path d="M7 11V7a5 5 0 0110 0v4" stroke="white" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <p className="text-white font-semibold text-[13px]">Locked course</p>
+            <p className="text-white font-semibold text-[13px]">{t("locked_course")}</p>
           </div>
         )}
 
@@ -116,13 +117,13 @@ function CourseCard({ product }) {
 
         {locked ? (
           <button disabled className="w-full bg-slate-100 text-slate-400 text-[14px] font-normal py-3 rounded-xl cursor-default">
-            Locked
+            {t("locked")}
           </button>
         ) : (
           <Link href={`/formations/${product.id}`}
             className="block w-full bg-secondary text-white font-normal text-center hover:brightness-110 transition cursor-pointer"
             style={{ height: 40, borderRadius: 10, fontSize: 14, fontWeight: 400, lineHeight: "40px", letterSpacing: "-0.15px", boxShadow: "0 2px 2px -4px rgba(0,0,0,0.95), 0 4px 8px -1px rgba(0,0,0,0.35)" }}>
-            Start course
+            {t("start_course")}
           </Link>
         )}
       </div>
@@ -131,6 +132,7 @@ function CourseCard({ product }) {
 }
 
 export default function FormationsContent() {
+  const t = useTranslations("FormationsContent");
   const [products, setProducts]     = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading]       = useState(true);
@@ -195,9 +197,9 @@ export default function FormationsContent() {
             </svg>
           </div>
           <div>
-            <h2 className="text-[18px] lg:text-[22px] font-bold text-slate-900">Courses &amp; Masterclass</h2>
+            <h2 className="text-[18px] lg:text-[22px] font-bold text-slate-900">{t("section_title")}</h2>
             <p className="text-slate-400 text-[12px] lg:text-[13px] mt-0.5">
-              Learn about crypto and adopt the best practices for responsible investing
+              {t("section_sub")}
             </p>
           </div>
         </div>
@@ -206,17 +208,17 @@ export default function FormationsContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           {[
             {
-              label: "Courses",
+              label: t("stat_courses"),
               value: loading ? "—" : String(products.length),
               icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2V3z" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7V3z" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round"/></svg>,
             },
             {
-              label: "Available",
+              label: t("stat_available"),
               value: loading ? "—" : String(available),
               icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3FAE8C" strokeWidth="2"/><path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
             },
             {
-              label: "Rewards",
+              label: t("stat_rewards"),
               value: loading ? "—" : `${totalSnl.toLocaleString("en-US")} SNL`,
               icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="5" stroke="#E6B84C" strokeWidth="2"/><path d="M8.5 14.5L7 21l5-2 5 2-1.5-6.5" stroke="#E6B84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
             },
@@ -239,7 +241,7 @@ export default function FormationsContent() {
                 ? { height: 39, borderRadius: 10, paddingLeft: 16, paddingRight: 16 }
                 : { height: 39, borderRadius: 10, paddingLeft: 16, paddingRight: 16, backgroundColor: "#F8FAFC", border: "1px solid #E2E8FC" }}
               className={`flex items-center text-[13px] font-normal whitespace-nowrap transition cursor-pointer ${activeFilter === "all" ? "bg-secondary text-white" : "text-slate-500 hover:brightness-95"}`}>
-              All
+              {t("filter_all")}
             </button>
             {categories.map((cat) => (
               <button key={cat.id}
@@ -260,7 +262,7 @@ export default function FormationsContent() {
                 <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search for a course..."
+                placeholder={t("search_placeholder")}
                 className="w-full bg-white border border-secondary text-slate-700 placeholder:text-[#0A0A0A]/50 rounded-xl pl-9 pr-4 outline-none focus:ring-2 focus:ring-secondary/30 transition"
                 style={{ fontSize: 14, fontWeight: 400, lineHeight: "100%", paddingTop: 10, paddingBottom: 10 }} />
             </div>
@@ -279,10 +281,10 @@ export default function FormationsContent() {
             [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
           ) : filtered.length === 0 ? (
             <div className="col-span-3 text-center py-16 text-slate-400 text-[14px]">
-              {search ? `No results for "${search}"` : "No courses available at the moment."}
+              {search ? t("no_results", { search }) : t("no_courses")}
             </div>
           ) : (
-            filtered.map((product) => <CourseCard key={product.id} product={product} />)
+            filtered.map((product) => <CourseCard key={product.id} product={product} t={t} />)
           )}
         </div>
 
@@ -295,14 +297,13 @@ export default function FormationsContent() {
           </div>
           <div>
             <h3 className="text-white mb-1" style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", letterSpacing: "-0.31px" }}>
-              Learn at your own pace
+              {t("tip_title")}
             </h3>
             <p className="mb-4" style={{ fontSize: 14, fontWeight: 400, lineHeight: "22.75px", color: "#FFFFFF" }}>
-              Our courses are designed to help you understand crypto in a responsible and secure way.
-              No prior technical knowledge required.
+              {t("tip_desc")}
             </p>
             <div className="flex flex-wrap gap-2">
-              {["Verified content", "Adaptive progress", "SNL Rewards"].map((tag) => (
+              {[t("tag_verified"), t("tag_adaptive"), t("tag_rewards")].map((tag) => (
                 <span key={tag} className="text-[12px] px-3 py-1 rounded-full"
                   style={{ backgroundColor: "rgba(255,255,255,0.80)", border: "1px solid #BEDBFF", color: "#314158" }}>
                   {tag}

@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { levelsApi } from "@/lib/api";
+import { useTranslations } from "next-intl";
+
+const ALL_VALUE = "All";
 
 export default function FilterTabs({ onFilterChange, onSearch, search = "" }) {
-  const [active, setActive] = useState("All");
+  const t = useTranslations("FilterTabs");
+  const [active, setActive] = useState(ALL_VALUE);
   const [levels, setLevels] = useState([]);
 
   useEffect(() => {
@@ -18,7 +22,7 @@ export default function FilterTabs({ onFilterChange, onSearch, search = "" }) {
       .catch(() => {});
   }, []);
 
-  const tabs = ["All", ...levels.map((l) => l.name)];
+  const tabs = [{ value: ALL_VALUE, label: t("filter_all") }, ...levels.map((l) => ({ value: l.name, label: l.name }))];
 
   function handleClick(tab) {
     setActive(tab);
@@ -29,17 +33,17 @@ export default function FilterTabs({ onFilterChange, onSearch, search = "" }) {
     <div className="flex items-center justify-between gap-4 flex-wrap">
       {/* Tabs niveaux */}
       <div className="flex items-center bg-[#2a1a0a] rounded-lg overflow-x-auto scrollbar-none">
-        {tabs.map((tab) => (
+        {tabs.map(({ value, label }) => (
           <button
-            key={tab}
-            onClick={() => handleClick(tab)}
+            key={value}
+            onClick={() => handleClick(value)}
             className={`px-3 lg:px-5 py-2 lg:py-3 text-[12px] lg:text-[14px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
-              active === tab
+              active === value
                 ? "bg-secondary text-white rounded-lg"
                 : "text-white/70 hover:text-white"
             }`}
           >
-            {tab}
+            {label}
           </button>
         ))}
       </div>
@@ -54,7 +58,7 @@ export default function FilterTabs({ onFilterChange, onSearch, search = "" }) {
           type="text"
           value={search}
           onChange={(e) => onSearch?.(e.target.value)}
-          placeholder="Search for a user…"
+          placeholder={t("search_placeholder")}
           className="pl-9 pr-8 py-3 rounded-lg border border-gray-200 text-[13px] text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-secondary/40 transition bg-white w-56 lg:w-64"
         />
         {search && (

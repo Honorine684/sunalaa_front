@@ -5,7 +5,7 @@ import { useState } from "react";
 import Container from "./Container";
 import CollecteModal from "./CollecteModal";
 import { useDashboard } from "@/hooks/useDashboard";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 /* ── Skeleton ─────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
@@ -69,6 +69,7 @@ function TxRow({ tx, last }) {
 }
 
 export default function HomeDashboard() {
+  const t = useTranslations("HomeDashboard");
   const { data, network, transactions, balance, levelData, referralCode, rank, streak, loading, error } = useDashboard();
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
@@ -78,7 +79,7 @@ export default function HomeDashboard() {
 
   async function handleShare() {
     const link = `https://sunalaa.com/register?ref=${referralCode ?? ""}`;
-    const text = "Join me on SUNALAA and earn free SNL points every day!";
+    const text = t("share_text");
     if (typeof navigator !== "undefined" && navigator.share) {
       try { await navigator.share({ title: "SUNALAA", text, url: link }); } catch {}
     } else {
@@ -119,17 +120,17 @@ export default function HomeDashboard() {
         {/* Section title */}
         <div className="text-center mb-10">
           <h2 className="font-bold text-primary mb-3 text-[28px] lg:text-[48px]" style={{ lineHeight: "1.1", letterSpacing: "0.35px" }}>
-            Earn SNL
+            {t("section_title")}
           </h2>
           <p className="text-center mx-auto text-[14px] lg:text-[18px]" style={{ lineHeight: "28px", maxWidth: 672, color: "#0F172B" }}>
-            Complete simple missions on social networks and boost your SNL point balance in just a few clicks.
+            {t("section_sub")}
           </p>
         </div>
 
         {/* Erreur API */}
         {error && (
           <div className="mb-5 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[13px]">
-            Failed to load data: {error}
+            {t("error_load", { error })}
           </div>
         )}
 
@@ -137,13 +138,13 @@ export default function HomeDashboard() {
         <div className="bg-primary mb-6 flex flex-col"
           style={{ borderRadius: 12, border: "1.2px solid rgba(255,255,255,0.10)", paddingTop: 30, paddingRight: 30, paddingBottom: 24, paddingLeft: 30, gap: 9.61, minHeight: 142.92 }}>
           <div className="flex items-center justify-between">
-            <p className="font-bold text-[13px] lg:text-[16.81px]" style={{ color: "#DBEAFE" }}>Total SNL Balance</p>
+            <p className="font-bold text-[13px] lg:text-[16.81px]" style={{ color: "#DBEAFE" }}>{t("balance_label")}</p>
             <div className="flex items-center gap-2 font-normal text-[13px] lg:text-[16.81px]" style={{ color: "#5EE9B5" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M22 7l-9.5 9.5-5-5L1 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M16 7h6v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              {loading ? "…" : `+${fmt(dailyPoints)} today`}
+              {loading ? "…" : t("today_delta", { n: fmt(dailyPoints) })}
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -173,26 +174,26 @@ export default function HomeDashboard() {
               <div>
                 {loading ? <Skeleton className="h-5 w-28 mb-1" /> : (
                   <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>
-                    Level {levelName}
+                    {t("level_title", { name: levelName })}
                   </h3>
                 )}
                 <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45558C" }}>
-                  {loading ? "" : levelNext ? `Progressing towards ${levelNext}` : levelName !== "—" ? "Maximum level reached 🏆" : "Loading…"}
+                  {loading ? "" : levelNext ? t("level_progressing", { next: levelNext }) : levelName !== "—" ? t("level_max") : t("level_loading")}
                 </p>
               </div>
             </div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[13px] text-slate-500">Progress</span>
+              <span className="text-[13px] text-slate-500">{t("progress_label")}</span>
               <span className="text-[13px] font-bold text-slate-700">{loading ? "…" : `${levelProgress}%`}</span>
             </div>
             <div className="w-full h-2 bg-slate-100 rounded-full mb-2">
               <div className="h-2 bg-secondary rounded-full transition-all" style={{ width: `${levelProgress}%` }} />
             </div>
             <p className="text-[12px] mb-5" style={{ color: "#62748E" }}>
-              {loading ? "" : levelNext ? `${100 - levelProgress}% more to reach ${levelNext}` : levelName !== "—" ? "You're at the top!" : ""}
+              {loading ? "" : levelNext ? t("progress_remaining", { pct: 100 - levelProgress, next: levelNext }) : levelName !== "—" ? t("level_top") : ""}
             </p>
             <Link href={`${prefix}/profil`} className="block w-full text-center border border-slate-200 text-slate-700 text-[13px] lg:text-[14px] font-normal py-3 rounded-xl hover:bg-slate-50 transition">
-              View my profile
+              {t("view_profile")}
             </Link>
           </Card>
 
@@ -207,14 +208,14 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Referral</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45558C" }}>Invite and grow together</p>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>{t("referral_title")}</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45558C" }}>{t("referral_sub")}</p>
               </div>
             </div>
 
             {/* Filleuls actifs */}
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[13px] lg:text-[14px] text-slate-500">Active referrals</span>
+              <span className="text-[13px] lg:text-[14px] text-slate-500">{t("active_referrals")}</span>
               {loading ? <Skeleton className="h-8 w-16" /> : (
                 <span className="text-[22px] lg:text-[28px] font-bold text-slate-900">{fmt(referralCount)}</span>
               )}
@@ -223,7 +224,7 @@ export default function HomeDashboard() {
             {/* Lien de parrainage */}
             <div className="rounded-xl px-3 py-3 mb-4 flex items-center gap-2" style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0" }}>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] mb-0.5" style={{ color: "#94A3B8" }}>Your referral link</p>
+                <p className="text-[10px] mb-0.5" style={{ color: "#94A3B8" }}>{t("your_link")}</p>
                 {loading || !referralCode ? (
                   <Skeleton className="h-4 w-40" />
                 ) : (
@@ -253,7 +254,7 @@ export default function HomeDashboard() {
                     <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="white" strokeWidth="2"/>
                   </svg>
                 )}
-                {copied ? "Copied!" : "Copy"}
+                {copied ? t("copied") : t("copy")}
               </button>
             </div>
 
@@ -268,7 +269,7 @@ export default function HomeDashboard() {
                 <circle cx="18" cy="19" r="3" stroke="white" strokeWidth="2"/>
                 <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke="white" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-              Share my link
+              {t("share_link")}
             </button>
 
           </Card>
@@ -283,8 +284,8 @@ export default function HomeDashboard() {
               </svg>
             </IconBox>
             <div>
-              <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Daily collection</h3>
-              <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your daily collection is ready!</p>
+              <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>{t("collect_title")}</h3>
+              <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>{t("collect_sub")}</p>
             </div>
           </div>
           <button
@@ -295,17 +296,14 @@ export default function HomeDashboard() {
             <svg width="21.63" height="24.03" viewBox="0 0 24 24" fill="none">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Collect my SNL points
+            {t("collect_btn")}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M12 5l7 7-7 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
           <div className="flex items-center justify-center gap-2 text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>
-            <span className="w-4 h-4 rounded-full bg-gold/40 inline-block" />
-            <span className="font-bold mx-1" style={{ color: "#45556C" }}>
-              {loading ? "…" : `${streak}-day`}
-            </span>{" "}
-            streak •&nbsp;Keep going to unlock bonuses!
+            <span className="w-4 h-4 rounded-full bg-gold/40 inline-block shrink-0" />
+            {loading ? "…" : t("streak", { n: streak })}
           </div>
         </Card>
 
@@ -321,12 +319,12 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Leaderboard</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your position in the community</p>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>{t("leaderboard_title")}</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>{t("leaderboard_sub")}</p>
               </div>
             </div>
             <Link href="/classement" className="flex items-center gap-1 hover:opacity-70 transition whitespace-nowrap text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#0F172B" }}>
-              View top 100
+              {t("view_top")}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -334,7 +332,7 @@ export default function HomeDashboard() {
           </div>
           <div className="rounded-xl px-6 py-5 flex items-center justify-between mb-4" style={{ backgroundColor: "#1F4E4626" }}>
             <div>
-              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#64748B" }}>Your current rank</p>
+              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#64748B" }}>{t("your_rank")}</p>
               {loading ? <Skeleton className="h-9 w-20" /> : (
                 <p className="font-bold leading-none text-[26px] lg:text-[36px]" style={{ color: "#1F4E46" }}>
                   {rank != null && !isNaN(rank) ? `#${fmt(rank)}` : "—"}
@@ -342,12 +340,12 @@ export default function HomeDashboard() {
               )}
             </div>
             <div className="text-right">
-              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#94A3B8" }}>Goal</p>
+              <p className="mb-1 text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#94A3B8" }}>{t("goal")}</p>
               <p className="font-bold text-[17px] lg:text-[21.62px]" style={{ color: "#000000" }}>Top 100</p>
             </div>
           </div>
           <p className="text-center text-[12px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>
-            Collect regularly and invite your network to climb the leaderboard
+            {t("leaderboard_tip")}
           </p>
         </Card>
 
@@ -361,8 +359,8 @@ export default function HomeDashboard() {
                 </svg>
               </IconBox>
               <div>
-                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>Recent transactions</h3>
-                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>Your latest SNL movements</p>
+                <h3 className="font-bold text-[16px] lg:text-[21.62px]" style={{ lineHeight: "33.63px", color: "#0F172B" }}>{t("tx_title")}</h3>
+                <p className="text-[13px] lg:text-[16.81px]" style={{ fontWeight: 400, color: "#45556C" }}>{t("tx_sub")}</p>
               </div>
             </div>
           </div>
@@ -371,7 +369,7 @@ export default function HomeDashboard() {
               {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
             </div>
           ) : transactions.length === 0 ? (
-            <p className="text-center text-slate-400 text-sm py-6">No transactions yet.</p>
+            <p className="text-center text-slate-400 text-sm py-6">{t("tx_empty")}</p>
           ) : (
             <div>
               {transactions.map((tx, i) => (
@@ -391,12 +389,12 @@ export default function HomeDashboard() {
             </svg>
           </div>
           <div>
-            <h3 className="text-white font-bold mb-2 text-[15px] lg:text-[19.22px]" style={{ lineHeight: "28.82px" }}>Tip of the day</h3>
+            <h3 className="text-white font-bold mb-2 text-[15px] lg:text-[19.22px]" style={{ lineHeight: "28.82px" }}>{t("tip_title")}</h3>
             <p className="text-white mb-4 text-[13px] lg:text-[16.81px]" style={{ lineHeight: "24.02px", fontWeight: 400 }}>
-              Consistency is key! Come back every day to maintain your streak and maximize your earnings. The longer your streak, the more bonuses you unlock.
+              {t("tip_desc")}
             </p>
             <div className="flex flex-wrap gap-2">
-              {["Daily collection", "Active referral", "Continuous progress"].map((tag) => (
+              {[t("tag_daily"), t("tag_referral"), t("tag_progress")].map((tag) => (
                 <span key={tag} className="bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] lg:text-[14.41px]" style={{ fontWeight: 400 }}>
                   {tag}
                 </span>

@@ -106,7 +106,12 @@
     "start_btn": "Démarrer",
     "complete_btn": "Effectuer",
     "completed": "Terminé",
-    "verify_btn": "Vérifier"
+    "verify_btn": "Vérifier",
+    "claimed_btn": "Réclamé ✓",
+    "in_review_btn": "Validation en cours…",
+    "rejected_btn": "Rejeté, réessayer",
+    "verifying_btn": "Vérification…",
+    "verify_claim_btn": "Vérifier et réclamer"
   },
   "ParrainageSection": {
     "title": "Parrainage SUNALA",
@@ -203,7 +208,13 @@
     "loyalty_bonus": "Bonus fidélité",
     "loyalty_value": "selon votre série",
     "new_balance": "Nouveau solde",
-    "footer_tip": "Revenez chaque jour pour maintenir votre série et augmenter vos bonus"
+    "footer_tip": "Revenez chaque jour pour maintenir votre série et augmenter vos bonus",
+    "hero_title_pre": "Bienvenue dans la",
+    "hero_title_post": "communauté",
+    "hero_subtitle": "Chaque jour, votre engagement vous rapproche de plus de récompenses. Continuez à collecter, progresser et grandir avec la communauté.",
+    "daily_reward": "Récompense quotidienne",
+    "mining_ready": "Prêt à collecter",
+    "mining_come_back": "Revenez dans {h}h {m}m pour collecter"
   },
   "Maintenance": {
     "title": "Maintenance en cours",
@@ -593,5 +604,91 @@
     "cta_title": "Prêt à rejoindre l'aventure ?",
     "cta_subtitle": "Rejoignez des milliers de membres qui accumulent des points SNL chaque jour et préparent l'avenir de l'agriculture africaine.",
     "cta_btn": "Commencer gratuitement"
+  },
+  "Hero": {
+    "title_1": "Plateforme rapide & sécurisée",
+    "title_2": "pour investir dans",
+    "subtitle": "Accumulez des points SNL grâce à votre activité quotidienne\net préparez-vous à l'arrivée du token communautaire",
+    "cta": "Essayer GRATUITEMENT"
+  },
+  "FormationsHero": {
+    "title_1": "Cours & Masterclass sur les",
+    "title_brand": "Cryptomonnaies",
+    "subtitle": "Accumulez des points SNL grâce à votre activité quotidienne et préparez-vous\nà l'arrivée du token communautaire",
+    "cta": "Commencer un cours"
+  },
+  "FormationsContent": {
+    "locked_course": "Cours verrouillé",
+    "locked": "Verrouillé",
+    "start_course": "Commencer",
+    "section_title": "Cours & Masterclass",
+    "section_sub": "Apprenez la crypto et adoptez les meilleures pratiques pour investir de façon responsable",
+    "stat_courses": "Cours",
+    "stat_available": "Disponibles",
+    "stat_rewards": "Récompenses",
+    "filter_all": "Tous",
+    "search_placeholder": "Rechercher un cours...",
+    "no_results": "Aucun résultat pour \"{search}\"",
+    "no_courses": "Aucun cours disponible pour le moment.",
+    "tip_title": "Apprenez à votre rythme",
+    "tip_desc": "Nos cours sont conçus pour vous aider à comprendre la crypto de façon responsable et sécurisée. Aucune connaissance technique préalable requise.",
+    "tag_verified": "Contenu vérifié",
+    "tag_adaptive": "Progression adaptée",
+    "tag_rewards": "SNL Rewards"
+  },
+  "HomeDashboard": {
+    "share_text": "Rejoins-moi sur SUNALAA et gagne des points SNL gratuits chaque jour !",
+    "section_title": "Gagne des SNL",
+    "section_sub": "Accomplis des missions simples sur les réseaux sociaux et booste ton solde de points SNL en quelques clics.",
+    "error_load": "Impossible de charger les données : {error}",
+    "balance_label": "Solde SNL total",
+    "today_delta": "+{n} aujourd'hui",
+    "level_title": "Niveau {name}",
+    "level_progressing": "Progression vers {next}",
+    "level_max": "Niveau maximum atteint",
+    "level_loading": "Chargement…",
+    "progress_label": "Progression",
+    "progress_remaining": "{pct}% de plus pour atteindre {next}",
+    "level_top": "Vous êtes au sommet !",
+    "view_profile": "Voir mon profil",
+    "referral_title": "Parrainage",
+    "referral_sub": "Invitez et progressez ensemble",
+    "active_referrals": "Filleuls actifs",
+    "your_link": "Votre lien de parrainage",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "share_link": "Partager mon lien",
+    "collect_title": "Collecte quotidienne",
+    "collect_sub": "Votre collecte du jour est prête !",
+    "collect_btn": "Collecter mes points SNL",
+    "streak": "Série de {n} jour(s) • Continuez pour débloquer des bonus !",
+    "leaderboard_title": "Classement",
+    "leaderboard_sub": "Votre position dans la communauté",
+    "view_top": "Voir le top 100",
+    "your_rank": "Votre rang actuel",
+    "goal": "Objectif",
+    "leaderboard_tip": "Collectez régulièrement et invitez votre réseau pour grimper dans le classement",
+    "tx_title": "Transactions récentes",
+    "tx_sub": "Vos derniers mouvements SNL",
+    "tx_empty": "Aucune transaction pour l'instant.",
+    "tip_title": "Conseil du jour",
+    "tip_desc": "La régularité est la clé ! Revenez chaque jour pour maintenir votre série et maximiser vos gains. Plus votre série est longue, plus vous débloquez de bonus.",
+    "tag_daily": "Collecte quotidienne",
+    "tag_referral": "Parrainage actif",
+    "tag_progress": "Progression continue"
+  },
+  "LeaderboardTable": {
+    "col_name": "NOM",
+    "col_country": "PAYS",
+    "col_total": "TOTAL SNL",
+    "no_results_search": "Aucun résultat pour cette recherche.",
+    "no_participants": "Aucun participant.",
+    "no_results": "Aucun résultat.",
+    "load_more": "Charger plus",
+    "loading_more": "Chargement…"
+  },
+  "FilterTabs": {
+    "filter_all": "Tous",
+    "search_placeholder": "Rechercher un utilisateur…"
   }
 }

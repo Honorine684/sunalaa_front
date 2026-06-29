@@ -12,7 +12,7 @@ const CIRCLE_C = 2 * Math.PI * CIRCLE_R;
 function pad(n) { return String(Math.floor(n)).padStart(2, "0"); }
 function fmt(n) { return Number(n ?? 0).toLocaleString(); }
 
-function MiningRing({ nextCollect, onReady }) {
+function MiningRing({ nextCollect, onReady, t }) {
   const [mined, setMined] = useState(0);
   const [remaining, setRemaining] = useState(0);
 
@@ -47,7 +47,7 @@ function MiningRing({ nextCollect, onReady }) {
       <div className="flex items-center gap-2">
         {!isReady && <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "#E6B84C" }} />}
         <p className="text-[11px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.5)" }}>
-          {isReady ? "Ready to collect" : "Mining in progress"}
+          {isReady ? t("mining_ready") : t("mining_active")}
         </p>
       </div>
 
@@ -81,7 +81,7 @@ function MiningRing({ nextCollect, onReady }) {
 
       {!isReady && (
         <p className="text-[11px] text-center" style={{ color: "rgba(255,255,255,0.35)" }}>
-          Come back in {pad(rh)}h {pad(rm)}m to collect
+          {t("mining_come_back", { h: pad(rh), m: pad(rm) })}
         </p>
       )}
     </div>
@@ -166,14 +166,13 @@ export default function HomeHero({ onCollected }) {
 
         {/* Title */}
         <h1 className="text-[22px] sm:text-[32px] lg:text-[46px] font-bold text-white leading-[1.15]">
-          Welcome to the<br />
-          <span className="text-secondary">SUNALA</span> community
+          {t("hero_title_pre")}<br />
+          <span className="text-secondary">SUNALA</span> {t("hero_title_post")}
         </h1>
 
         {/* Paragraph — tight under title */}
         <p className="text-[13px] sm:text-[15px] max-w-sm mx-auto leading-[1.6]" style={{ color: "rgba(255,255,255,0.65)" }}>
-          Every day, your engagement brings you closer to more rewards.
-          Keep collecting, progressing and growing with the community.
+          {t("hero_subtitle")}
         </p>
 
         {/* Collect widget — inline */}
@@ -195,7 +194,7 @@ export default function HomeHero({ onCollected }) {
 
           {/* Already collected → mining ring */}
           {state === "already" && nextCollect && (
-            <MiningRing nextCollect={nextCollect} onReady={handleReady} />
+            <MiningRing nextCollect={nextCollect} onReady={handleReady} t={t} />
           )}
 
           {/* Success */}
@@ -212,7 +211,7 @@ export default function HomeHero({ onCollected }) {
                 <span className="text-[14px] font-bold" style={{ color: "rgba(255,255,255,0.55)" }}>SNL</span>
               </div>
               <div className="w-full flex justify-between text-[13px] pt-2 border-t" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
-                <span style={{ color: "rgba(255,255,255,0.55)" }}>New balance</span>
+                <span style={{ color: "rgba(255,255,255,0.55)" }}>{t("new_balance")}</span>
                 <span className="text-white font-semibold">{fmt(result.newBalance)} SNL</span>
               </div>
             </div>
@@ -226,7 +225,7 @@ export default function HomeHero({ onCollected }) {
                   <span className="font-black text-[36px] text-white leading-none">100</span>
                   <span className="font-bold text-[14px]" style={{ color: "rgba(255,255,255,0.55)" }}>SNL</span>
                 </div>
-                <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.40)" }}>Daily reward</p>
+                <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.40)" }}>{t("daily_reward")}</p>
               </div>
 
               {state === "error" && errMsg && (

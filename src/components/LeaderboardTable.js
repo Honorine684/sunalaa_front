@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { leaderboardApi } from "@/lib/api";
 import LeaderboardRow from "./LeaderboardRow";
+import { useTranslations } from "next-intl";
 
 const PAGE_SIZE = 20;
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "https://api.sunalaa.com";
@@ -13,18 +14,18 @@ function buildAvatarUrl(raw) {
   return raw.startsWith("http") ? raw : `${API_BASE}${raw}`;
 }
 
-function TableHeader() {
+function TableHeader({ t }) {
   return (
     <div className="flex items-center px-6 py-3 gap-4 border-b border-gray-100">
       <div className="w-14 shrink-0" />
       <div className="flex-1">
-        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">NAME</p>
+        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">{t("col_name")}</p>
       </div>
       <div className="w-32 hidden sm:block">
-        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">COUNTRY</p>
+        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">{t("col_country")}</p>
       </div>
       <div className="w-28 text-right shrink-0">
-        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">TOTAL SNL</p>
+        <p className="text-[12px] font-black text-gray-500 tracking-widest uppercase">{t("col_total")}</p>
       </div>
     </div>
   );
@@ -87,6 +88,7 @@ function fmt(n) {
 }
 
 export default function LeaderboardTable({ search = "", levelFilter = "" }) {
+  const t = useTranslations("LeaderboardTable");
   const { user: authUser } = useAuth();
   const myId = authUser?.id ?? authUser?.userId;
 
@@ -139,17 +141,17 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
         <p className="text-[13px] text-gray-400 mb-3">
           {total > 0
             ? `${fmt(players.length)} / ${fmt(total)} participants`
-            : search ? "No results for this search." : "No participants."}
+            : search ? t("no_results_search") : t("no_participants")}
         </p>
       )}
 
       <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-        <TableHeader />
+        <TableHeader t={t} />
         <div className="overflow-x-auto">
           {loading
             ? [...Array(8)].map((_, i) => <RowSkeleton key={i} />)
             : players.length === 0
-              ? <p className="text-center text-gray-400 text-sm py-10">No results.</p>
+              ? <p className="text-center text-gray-400 text-sm py-10">{t("no_results")}</p>
               : players.map((u, i) => {
                   const rank  = u.rank ?? u.position ?? i + 1;
                   const uid   = u.id ?? u.userId ?? u.user?.id ?? u.user?.userId;
@@ -186,7 +188,7 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                   </svg>
                 ) : null}
-                {loadingMore ? "Loading…" : "Load more"}
+                {loadingMore ? t("loading_more") : t("load_more")}
               </button>
             </div>
           )}

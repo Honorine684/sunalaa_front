@@ -252,12 +252,12 @@ export default function MissionsSection() {
                 {isAuthenticated ? (
                   claimed ? (
                     <button disabled className="w-full py-3 rounded-xl text-white text-[14px] font-normal cursor-default" style={{ backgroundColor: "#E6B84C" }}>
-                      Claimed ✓
+                      {t("claimed_btn")}
                     </button>
                   ) : inReview ? (
                     <button disabled className="w-full py-3 rounded-xl text-[14px] font-normal cursor-default flex items-center justify-center gap-2" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
                       <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3B82F6" strokeWidth="3" strokeDasharray="40 20"/></svg>
-                      Validation in progress…
+                      {t("in_review_btn")}
                     </button>
                   ) : rejected ? (
                     <button
@@ -267,7 +267,7 @@ export default function MissionsSection() {
                       style={{ backgroundColor: "#FEF2F2", color: "#EF4444", borderColor: "#FECACA" }}
                     >
                       {busy && <Spinner />}
-                      {busy ? "…" : "Rejected, retry"}
+                      {busy ? "…" : t("rejected_btn")}
                     </button>
                   ) : pending ? (
                     <button
@@ -277,7 +277,7 @@ export default function MissionsSection() {
                       style={{ backgroundColor: "#E17100" }}
                     >
                       {busy && <Spinner />}
-                      {busy ? "Verifying…" : "Verify and claim"}
+                      {busy ? t("verifying_btn") : t("verify_claim_btn")}
                     </button>
                   ) : (
                     <button
