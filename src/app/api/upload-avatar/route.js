@@ -6,8 +6,13 @@ export async function POST(request) {
       return token ? `Bearer ${token}` : null;
     })();
 
+  console.log("[upload-avatar] auth header present:", !!authorization);
+  console.log("[upload-avatar] cookie present:", !!cookieHeader);
+
   const incoming = await request.formData();
   const fileEntry = incoming.get("avatar");
+
+  console.log("[upload-avatar] fileEntry:", fileEntry ? `${fileEntry.name} (${fileEntry.type}, ${fileEntry.size} bytes)` : "null");
 
   const outgoing = new FormData();
   if (fileEntry) {
@@ -31,5 +36,6 @@ export async function POST(request) {
   );
 
   const data = await response.json().catch(() => ({}));
+  console.log("[upload-avatar] backend status:", response.status, "body:", JSON.stringify(data));
   return Response.json(data, { status: response.status });
 }

@@ -12,11 +12,6 @@ export default function Hero() {
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
 
-  const href = !user
-    ? `${prefix}/login`
-    : user.role?.toLowerCase() === "admin"
-      ? "/admin"
-      : `${prefix}/collecter`;
   return (
     <section className="relative min-h-96 lg:min-h-150 flex items-center justify-center overflow-hidden bg-[#0d2e2a]">
       {/* Background coin */}
@@ -44,24 +39,25 @@ export default function Hero() {
           {t("subtitle")}
         </p>
 
-        <Link
-          href={href}
-          className="inline-flex items-center gap-3 bg-secondary text-white font-semibold text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition"
-        >
-          {t("cta")}
-          {/* Cercle blanc avec flèche droite sombre */}
-          <span className="w-9 h-9 bg-white rounded-full flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18l6-6-6-6"
-                stroke="#3FAE8C"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-        </Link>
+        {!user && (
+          <Link
+            href={`${prefix}/register`}
+            className="inline-flex items-center gap-3 bg-secondary text-white font-semibold text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition"
+          >
+            {t("cta")}
+            <span className="w-9 h-9 bg-white rounded-full flex items-center justify-center shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18l6-6-6-6"
+                  stroke="#3FAE8C"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </Link>
+        )}
       </Container>
     </section>
   );
