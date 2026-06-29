@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getApiError } from "@/lib/api";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
@@ -34,15 +34,16 @@ function validate(fields) {
 }
 
 export default function ProfileAbout({ profile, onUpdate, autoEdit = false }) {
+  const rootRef = useRef(null);
   const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    if (autoEdit) openEdit();
-  }, [autoEdit]);
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [fields, setFields] = useState({});
+
+  useEffect(() => {
+    if (autoEdit) openEdit();
+  }, [autoEdit]);
 
   function openEdit() {
     setFields({
@@ -54,6 +55,14 @@ export default function ProfileAbout({ profile, onUpdate, autoEdit = false }) {
     setFieldErrors({});
     setApiError("");
     setEditing(true);
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        const el = rootRef.current;
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: "smooth" });
+      });
+    }, 200);
   }
 
   function handleChange(key, value) {
@@ -97,7 +106,7 @@ export default function ProfileAbout({ profile, onUpdate, autoEdit = false }) {
   ].filter(Boolean);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+    <div ref={rootRef} className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-[18px] font-bold" style={{ lineHeight: "100%", color: "#0F172B" }}>ABOUT</h3>
         {!editing && onUpdate && (

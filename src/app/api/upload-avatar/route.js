@@ -1,15 +1,14 @@
 export async function POST(request) {
+  const cookieHeader = request.headers.get("cookie") ?? "";
   const authorization = request.headers.get("Authorization")
     ?? (() => {
-      const cookie = request.headers.get("cookie") ?? "";
-      const token = cookie.match(/snl_access_token=([^;]+)/)?.[1];
+      const token = cookieHeader.match(/snl_access_token=([^;]+)/)?.[1];
       return token ? `Bearer ${token}` : null;
     })();
 
   const incoming = await request.formData();
   const fileEntry = incoming.get("avatar");
 
-  // Reconstruire le FormData avec le vrai nom de fichier
   const outgoing = new FormData();
   if (fileEntry) {
     const filename = fileEntry.name && fileEntry.name !== "undefined"
@@ -25,6 +24,7 @@ export async function POST(request) {
       method: "POST",
       headers: {
         ...(authorization ? { Authorization: authorization } : {}),
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
       },
       body: outgoing,
     }

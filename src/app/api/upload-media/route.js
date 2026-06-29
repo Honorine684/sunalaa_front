@@ -1,8 +1,8 @@
 export async function POST(request) {
+  const cookieHeader = request.headers.get("cookie") ?? "";
   const authorization = request.headers.get("Authorization")
     ?? (() => {
-      const cookie = request.headers.get("cookie") ?? "";
-      const token = cookie.match(/snl_access_token=([^;]+)/)?.[1];
+      const token = cookieHeader.match(/snl_access_token=([^;]+)/)?.[1];
       return token ? `Bearer ${token}` : null;
     })();
 
@@ -22,7 +22,10 @@ export async function POST(request) {
   console.log("[upload-media] POST", targetUrl);
   const response = await fetch(targetUrl, {
     method: "POST",
-    headers: { ...(authorization ? { Authorization: authorization } : {}) },
+    headers: {
+      ...(authorization ? { Authorization: authorization } : {}),
+      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+    },
     body: outgoing,
   });
   console.log("[upload-media] backend status:", response.status);

@@ -92,7 +92,8 @@
     "claimed": "Claimed ✓",
     "claim_btn": "Claim +{snl} SNL",
     "claiming": "Claiming…",
-    "claim_success": "+{bonus} SNL added, New balance: {balance} SNL"
+    "claim_success": "+{bonus} SNL added, New balance: {balance} SNL",
+    "streak_expires_in": "Streak resets in"
   },
   "MissionsSection": {
     "title": "Daily Missions",

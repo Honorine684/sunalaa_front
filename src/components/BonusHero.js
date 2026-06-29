@@ -17,6 +17,27 @@ const STREAK_DAYS = [
   { day: 7, snl: 80  },
 ];
 
+function useCountdown(deadline) {
+  const [remaining, setRemaining] = useState("");
+
+  useEffect(() => {
+    if (!deadline) { setRemaining(""); return; }
+    function tick() {
+      const diff = new Date(deadline) - Date.now();
+      if (diff <= 0) { setRemaining("00:00:00"); return; }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setRemaining(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`);
+    }
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [deadline]);
+
+  return remaining;
+}
+
 export default function BonusHero() {
   const t = useTranslations("BonusHero");
   const { isAuthenticated } = useAuth();
@@ -40,7 +61,12 @@ export default function BonusHero() {
       const res  = await usersApi.claimStreak();
       const data = res.data?.data ?? res.data;
       setResult(data);
-      setStreak((prev) => prev ? { ...prev, currentDay: data.nextDay ?? (prev.currentDay < 7 ? prev.currentDay + 1 : 1), todayClaimed: true } : prev);
+      setStreak((prev) => prev ? {
+        ...prev,
+        currentDay: data.nextDay ?? (prev.currentDay < 7 ? prev.currentDay + 1 : 1),
+        todayClaimed: true,
+        nextClaimDeadline: data.nextClaimDeadline ?? prev.nextClaimDeadline,
+      } : prev);
     } catch (e) {
       setErr(getApiError(e));
     } finally {
@@ -48,8 +74,10 @@ export default function BonusHero() {
     }
   }
 
-  const currentDay    = streak?.currentDay ?? 1;
-  const todayClaimed  = streak?.todayClaimed ?? false;
+  const currentDay         = streak?.currentDay ?? 1;
+  const todayClaimed       = streak?.todayClaimed ?? false;
+  const nextClaimDeadline  = streak?.nextClaimDeadline ?? null;
+  const countdown          = useCountdown(todayClaimed ? nextClaimDeadline : null);
 
   return (
     <section className="relative flex items-center justify-center bg-[#0d2e2a] lg:min-h-180">
@@ -131,12 +159,19 @@ export default function BonusHero() {
               {t("loading")}
             </div>
           ) : todayClaimed ? (
-            <button
-              disabled
-              className="bg-secondary text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-70 cursor-default"
-            >
-              {t("claimed")}
-            </button>
+            <div className="flex flex-col items-center gap-3">
+              <button
+                disabled
+                className="bg-secondary text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-70 cursor-default"
+              >
+                {t("claimed")}
+              </button>
+              {countdown && (
+                <p className="text-[12px] lg:text-[13px]" style={{ color: "rgba(255,255,255,0.55)" }}>
+                  {t("streak_expires_in")} <span className="font-bold tabular-nums" style={{ color: "#F87171" }}>{countdown}</span>
+                </p>
+              )}
+            </div>
           ) : (
             <button
               onClick={handleClaim}
