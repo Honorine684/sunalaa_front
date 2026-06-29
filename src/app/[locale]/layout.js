@@ -23,10 +23,12 @@ export function generateStaticParams() {
 
 export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
+  console.log("[LocaleLayout] locale from params:", locale);
   if (!hasLocale(routing.locales, locale)) notFound();
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  console.log("[LocaleLayout] messages keys loaded:", Object.keys(messages).slice(0, 5));
 
   return (
     <html lang={locale} translate="no" className="notranslate">
