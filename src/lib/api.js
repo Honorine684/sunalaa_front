@@ -109,12 +109,9 @@ export const usersApi = {
   getDashboard: () => api.get("/users/me/dashboard"),
   getProfile: () => api.get("/users/me/profile"),
   updateProfile: (data) => api.put("/users/me/profile", data),
-  uploadAvatar: (formData) => {
-    const url = typeof window !== "undefined"
-      ? `${window.location.origin}/api/upload-avatar`
-      : "/api/upload-avatar";
-    return api.post(url, formData, { headers: { "Content-Type": undefined } });
-  },
+  uploadAvatar: (formData) => api.post("/users/me/profile/avatar", formData, {
+    headers: { "Content-Type": undefined },
+  }),
   getAddresses: () => api.get("/users/me/addresses"),
   addAddress: (data) => api.post("/users/me/addresses", data),
   updateAddress: (id, data) => api.put(`/users/me/addresses/${id}`, data),
