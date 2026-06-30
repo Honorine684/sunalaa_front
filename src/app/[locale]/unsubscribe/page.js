@@ -20,7 +20,6 @@ function UnsubscribeInner() {
     if (!email) { setStatus("error"); return; }
     newsletterApi.unsubscribe(email)
       .then(() => {
-        try { localStorage.removeItem("snl_newsletter_sub"); } catch {}
         setStatus("success");
       })
       .catch((err) => {

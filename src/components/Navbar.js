@@ -63,9 +63,9 @@ export default function Navbar() {
               <Image
                 src="/images/logo Sunaala.png"
                 alt="SUNALA"
-                width={130}
-                height={34}
-                className="object-contain w-[90px] lg:w-[130px]"
+                width={150}
+                height={40}
+                className="object-contain w-27.5 lg:w-37.5"
                 priority
               />
             </Link>

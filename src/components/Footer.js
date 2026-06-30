@@ -98,17 +98,15 @@ export default function Footer() {
   const t = useTranslations("Footer");
   const [email, setEmail]     = useState("");
   const [subDone, setSubDone] = useState(false);
-  useEffect(() => {
-    try { if (localStorage.getItem("snl_newsletter_sub") === "1") setSubDone(true); } catch {}
-  }, []);
 
   async function handleSubscribe(e) {
     e.preventDefault();
     if (!email.trim()) return;
     try {
       await newsletterApi.subscribe(email.trim());
-      try { localStorage.setItem("snl_newsletter_sub", "1"); } catch {}
+      setEmail("");
       setSubDone(true);
+      setTimeout(() => setSubDone(false), 3000);
     } catch {
       // silent — don't block the UX on network error
     }
