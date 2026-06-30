@@ -180,7 +180,7 @@ export default async function SnlPage({ params }) {
             {tUtil("hero_badge")}
           </span>
           <h2 className="font-black text-[30px] sm:text-[46px] leading-tight mb-4" style={{ color: "#0F172B" }}>
-            {tUtil("hero_h1_1")}<br />{tUtil("hero_h1_2")} <span style={{ color: "#3FAE8C" }}>$SNL</span>
+            {tUtil("hero_h1_1")}<br />{tUtil("hero_h1_2")} $SNL
           </h2>
           <p className="text-[15px] sm:text-[17px] leading-relaxed" style={{ color: "#45556C" }}>
             {tUtil("hero_subtitle_1")}<br />{tUtil("hero_subtitle_2")}
@@ -351,7 +351,7 @@ export default async function SnlPage({ params }) {
             {tValeur("hero_badge")}
           </span>
           <h2 className="font-black text-[30px] sm:text-[46px] leading-tight mb-4" style={{ color: "#0F172B" }}>
-            {tValeur("hero_h1_1")} <span style={{ color: "#3FAE8C" }}>$SNL</span><br />{tValeur("hero_h1_2")}
+            {tValeur("hero_h1_1")} $SNL<br />{tValeur("hero_h1_2")}
           </h2>
           <p className="text-[15px] sm:text-[17px] leading-relaxed" style={{ color: "#45556C" }}>
             {tValeur("hero_subtitle")}
