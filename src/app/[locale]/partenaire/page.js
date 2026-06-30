@@ -146,7 +146,7 @@ export default function PartnerPage() {
                       onChange={(e) => set("name", e.target.value)}
                       placeholder={isFr ? "Ex : Jean Dupont ou SUNALA Corp" : "e.g. John Doe or SUNALA Corp"}
                       className="w-full px-4 py-3 rounded-xl border outline-none transition"
-                      style={{ borderColor: errors.name ? "#EF4444" : "#E2E8F0", fontSize: 14, color: "#0F172B" }}
+                      style={{ borderColor: errors.name ? "#EF4444" : "#E2E8F0", fontSize: 16, color: "#0F172B" }}
                     />
                   </Field>
 
@@ -159,7 +159,7 @@ export default function PartnerPage() {
                         onChange={(e) => set("phone", e.target.value)}
                         placeholder="+229 00 00 00 00"
                         className="w-full px-4 py-3 rounded-xl border outline-none transition"
-                        style={{ borderColor: errors.phone ? "#EF4444" : "#E2E8F0", fontSize: 14, color: "#0F172B" }}
+                        style={{ borderColor: errors.phone ? "#EF4444" : "#E2E8F0", fontSize: 16, color: "#0F172B" }}
                       />
                     </Field>
                     <Field label={txt.email} error={errors.email}>
@@ -169,7 +169,7 @@ export default function PartnerPage() {
                         onChange={(e) => set("email", e.target.value)}
                         placeholder="contact@exemple.com"
                         className="w-full px-4 py-3 rounded-xl border outline-none transition"
-                        style={{ borderColor: errors.email ? "#EF4444" : "#E2E8F0", fontSize: 14, color: "#0F172B" }}
+                        style={{ borderColor: errors.email ? "#EF4444" : "#E2E8F0", fontSize: 16, color: "#0F172B" }}
                       />
                     </Field>
                   </div>
@@ -180,7 +180,7 @@ export default function PartnerPage() {
                       value={fields.partnershipType}
                       onChange={(e) => set("partnershipType", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border outline-none transition bg-white appearance-none"
-                      style={{ borderColor: errors.partnershipType ? "#EF4444" : "#E2E8F0", fontSize: 14, color: fields.partnershipType ? "#0F172B" : "#94A3B8" }}
+                      style={{ borderColor: errors.partnershipType ? "#EF4444" : "#E2E8F0", fontSize: 16, color: fields.partnershipType ? "#0F172B" : "#94A3B8" }}
                     >
                       <option value="" disabled>{txt.typePlaceholder}</option>
                       {types.map((tp) => (
@@ -197,7 +197,7 @@ export default function PartnerPage() {
                       placeholder={txt.messagePlaceholder}
                       rows={5}
                       className="w-full px-4 py-3 rounded-xl border outline-none transition resize-none"
-                      style={{ borderColor: errors.message ? "#EF4444" : "#E2E8F0", fontSize: 14, color: "#0F172B" }}
+                      style={{ borderColor: errors.message ? "#EF4444" : "#E2E8F0", fontSize: 16, color: "#0F172B" }}
                     />
                   </Field>
 

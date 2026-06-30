@@ -87,7 +87,7 @@ function Field({ label, type = "text", name, placeholder, value, onChange, error
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
           spellCheck={spellCheck}
-          className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+          className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
           style={{ height: 42, borderRadius: 10, border: `1px solid ${error ? "#f87171" : "#BCBEC0"}`, padding: "12px 16px" }}
         />
         {children}
@@ -330,7 +330,7 @@ function RegisterInner() {
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
-                  className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${
+                  className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${
                     errors.username || usernameStatus === "taken"
                       ? "ring-2 ring-red-400"
                       : usernameStatus === "available"
@@ -423,7 +423,7 @@ function RegisterInner() {
                       setApiError("");
                     }}
                     style={{ width: "100%" }}
-                    inputStyle={{ width: "100%", fontSize: 14 }}
+                    inputStyle={{ width: "100%", fontSize: 16 }}
                   />
                 </div>
                 {errors.phone && <p className="text-red-400 text-[12px] mt-0.5">{errors.phone}</p>}
@@ -443,7 +443,7 @@ function RegisterInner() {
                     onChange={handleChange}
                     placeholder={t("password_placeholder")}
                     autoComplete="new-password"
-                    className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+                    className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                     style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.password ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
                   />
                   <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer" aria-label="Show password">
@@ -464,7 +464,7 @@ function RegisterInner() {
                     onChange={handleChange}
                     placeholder={t("confirm_password_placeholder")}
                     autoComplete="new-password"
-                    className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.confirmPassword ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+                    className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.confirmPassword ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                     style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.confirmPassword ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
                   />
                   <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer" aria-label="Show confirmation">
@@ -507,7 +507,7 @@ function RegisterInner() {
                 autoCorrect="off"
                 spellCheck={false}
                 autoComplete="off"
-                className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.referralCode ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+                className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.referralCode ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                 style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.referralCode ? "#f87171" : refFromUrl ? "#3FAE8C" : "#BCBEC0"}`, padding: "12px 16px" }}
               />
               {errors.referralCode && <p className="text-red-400 text-[12px] mt-0.5">{errors.referralCode}</p>}

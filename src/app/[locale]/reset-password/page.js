@@ -150,7 +150,7 @@ function ResetPasswordForm() {
               onChange={(e) => { setFields((p) => ({ ...p, password: e.target.value })); setErrors((p) => ({ ...p, password: "" })); setApiError(""); }}
               placeholder={t.placeholder_pass}
               autoComplete="new-password"
-              className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+              className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
               style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.password ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
             />
             <button type="button" onClick={() => setShowPass((v) => !v)}
@@ -175,7 +175,7 @@ function ResetPasswordForm() {
             onChange={(e) => { setFields((p) => ({ ...p, confirm: e.target.value })); setErrors((p) => ({ ...p, confirm: "" })); setApiError(""); }}
             placeholder={t.placeholder_confirm}
             autoComplete="new-password"
-            className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.confirm ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+            className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.confirm ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
             style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.confirm ? "#f87171" : "#BCBEC0"}`, padding: "12px 16px" }}
           />
           {errors.confirm && <p className="text-red-400 text-[12px]">{errors.confirm}</p>}

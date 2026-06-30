@@ -3,11 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SnlNavbar() {
   const t = useTranslations("SnlNavbar");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
+  const { isAuthenticated } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 w-full flex items-center justify-between px-6 py-4 bg-white" style={{ borderBottom: "1px solid rgba(31,78,70,0.10)" }}>
@@ -21,13 +23,15 @@ export default function SnlNavbar() {
           </svg>
           {t("back")}
         </Link>
-        <Link
-          href={`${prefix}/register`}
-          className="inline-flex items-center gap-2 font-semibold text-[13px] text-white px-4 py-2 rounded-full transition hover:brightness-90"
-          style={{ backgroundColor: "#3FAE8C" }}
-        >
-          {t("join")}
-        </Link>
+        {!isAuthenticated && (
+          <Link
+            href={`${prefix}/register`}
+            className="inline-flex items-center gap-2 font-semibold text-[13px] text-white px-4 py-2 rounded-full transition hover:brightness-90"
+            style={{ backgroundColor: "#3FAE8C" }}
+          >
+            {t("join")}
+          </Link>
+        )}
       </div>
     </nav>
   );

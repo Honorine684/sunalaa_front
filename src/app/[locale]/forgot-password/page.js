@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
                     onChange={handleChange}
                     placeholder="username@gmail.com"
                     autoComplete="email"
-                    className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+                    className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                     style={{ height: 50, borderRadius: 10, border: `1px solid ${error ? "#f87171" : "#BCBEC0"}`, padding: "17px 23px" }}
                   />
                   {error && <p className="text-red-400 text-[12px] mt-0.5">{error}</p>}

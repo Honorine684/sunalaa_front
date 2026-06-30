@@ -107,11 +107,11 @@ export default function Footer() {
     if (!email.trim()) return;
     try {
       await newsletterApi.subscribe(email.trim());
+      try { localStorage.setItem("snl_newsletter_sub", "1"); } catch {}
+      setSubDone(true);
     } catch {
       // silent — don't block the UX on network error
     }
-    try { localStorage.setItem("snl_newsletter_sub", "1"); } catch {}
-    setSubDone(true);
   }
 
   return (
@@ -207,8 +207,8 @@ export default function Footer() {
           <div className="flex flex-col gap-8">
             <FootCol title={t("section_legal")} links={[
               { label: t("legal_mentions"), href: `${prefix}/mentions-legales` },
-              { label: t("legal_cgu"),      href: "#", soon: t("soon") },
-              { label: t("legal_privacy"),  href: "#", soon: t("soon") },
+              { label: t("legal_cgu"),      href: `${prefix}/cgu` },
+              { label: t("legal_privacy"),  href: `${prefix}/confidentialite` },
               { label: t("legal_cookies"),  href: `${prefix}/cookies` },
               { label: t("legal_risk"),     href: `${prefix}/avertissement-risque` },
               { label: t("legal_contact"),  href: `${prefix}/contact` },
@@ -285,6 +285,8 @@ export default function Footer() {
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             {[
               { key: "bar_mentions", href: `${prefix}/mentions-legales` },
+              { key: "bar_cgu",      href: `${prefix}/cgu` },
+              { key: "bar_privacy",  href: `${prefix}/confidentialite` },
               { key: "bar_cookies",  href: `${prefix}/cookies` },
               { key: "bar_sitemap",  href: "/sitemap.xml" },
             ].map((l) => (

@@ -41,7 +41,7 @@ function Input({ label, type = "text", placeholder, name, value, onChange, error
           autoCapitalize={isEmail ? "none" : undefined}
           autoCorrect={isEmail ? "off" : undefined}
           spellCheck={isEmail ? false : undefined}
-          className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+          className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${error ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
           style={{ height: 42, borderRadius: 10, border: `1px solid ${error ? "#f87171" : "#BCBEC0"}`, padding: "12px 16px" }}
         />
         {children}
@@ -311,7 +311,7 @@ function LoginInner() {
                       onChange={handleChange}
                       placeholder={t("password_placeholder")}
                       autoComplete="current-password"
-                      className={`w-full bg-white text-gray-700 text-sm placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
+                      className={`w-full bg-white text-gray-700 text-base placeholder:text-[#BCBEC0] outline-none focus:ring-2 transition ${errors.password ? "ring-2 ring-red-400" : "focus:ring-secondary/50"}`}
                       style={{ height: 42, borderRadius: 10, border: `1px solid ${errors.password ? "#f87171" : "#BCBEC0"}`, padding: "12px 40px 12px 16px" }}
                     />
                     <button type="button" onClick={() => setShowPass(!showPass)}

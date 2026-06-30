@@ -40,10 +40,10 @@ export default async function SnlPage({ params }) {
   const prefix = locale === "fr" ? "/fr" : "";
 
   const navItems = [
-    { href: "#comprendre", label: t("nav_understand"), color: "#3FAE8C" },
-    { href: "#utilites", label: t("nav_utilities"), color: "#1F4E46" },
-    { href: "#usage", label: t("nav_usage"), color: "#E6B84C" },
-    { href: "#valeur", label: t("nav_value"), color: "#3FAE8C" },
+    { href: "#comprendre", label: t("nav_understand") },
+    { href: "#utilites", label: t("nav_utilities") },
+    { href: "#usage", label: t("nav_usage") },
+    { href: "#valeur", label: t("nav_value") },
   ];
 
   const utilites = [
@@ -79,12 +79,12 @@ export default async function SnlPage({ params }) {
         style={{ borderBottom: "1px solid rgba(31,78,70,0.08)" }}
       >
         <div className="flex items-center px-4 py-3 gap-2 w-max min-w-full sm:w-auto sm:min-w-0 max-w-3xl mx-auto sm:justify-center">
-          {navItems.map(({ href, label, color }) => (
+          {navItems.map(({ href, label }) => (
             <a
               key={href}
               href={href}
               className="inline-flex items-center px-5 py-2 rounded-full text-[13px] font-bold whitespace-nowrap text-white hover:brightness-90 transition"
-              style={{ backgroundColor: color }}
+              style={{ backgroundColor: "#1F4E46" }}
             >
               {label}
             </a>
@@ -111,7 +111,7 @@ export default async function SnlPage({ params }) {
           </span>
           <h1 className="font-black text-[36px] sm:text-[52px] leading-tight mb-6" style={{ color: "#0F172B" }}>
             {t("hero_h1_pre")}<br />
-            <span style={{ color: "#3FAE8C" }}>{t("hero_h1_accent")}</span>
+            {t("hero_h1_accent")}
             <br />{t("hero_h1_post")}
           </h1>
           <p className="text-[15px] sm:text-[17px] leading-relaxed max-w-xl mx-auto" style={{ color: "#45556C" }}>

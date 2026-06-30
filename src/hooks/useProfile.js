@@ -30,12 +30,19 @@ export function useProfile() {
     Promise.all([
       usersApi.getProfile(),
       usersApi.getPoints().catch(() => null),
+      usersApi.getKyc().catch(() => null),
     ])
-      .then(([profileRes, pointsRes]) => {
+      .then(([profileRes, pointsRes, kycRes]) => {
         const profileData = normalizeProfile(profileRes.data?.data ?? profileRes.data);
         const pointsRaw = pointsRes?.data?.data ?? pointsRes?.data;
         const balance = pointsRaw?.balance ?? pointsRaw?.snlBalance ?? pointsRaw?.totalPoints ?? null;
-        setProfile({ ...profileData, snlBalance: balance != null ? Number(balance) : Number(profileData?.snlBalance ?? 0) });
+        const kycData = kycRes?.data?.data ?? kycRes?.data;
+        const kycStatus = kycData?.status ?? kycData?.kycStatus ?? null;
+        setProfile({
+          ...profileData,
+          snlBalance: balance != null ? Number(balance) : Number(profileData?.snlBalance ?? 0),
+          ...(kycStatus ? { kycStatus } : {}),
+        });
       })
       .catch((err) => setError(getApiError(err)))
       .finally(() => setLoading(false));
@@ -91,9 +98,14 @@ export function useProfile() {
 
   async function refreshProfile() {
     try {
-      const res = await usersApi.getProfile();
-      const updated = normalizeProfile(res.data?.data ?? res.data);
-      setProfile((prev) => ({ ...prev, ...updated }));
+      const [profileRes, kycRes] = await Promise.all([
+        usersApi.getProfile(),
+        usersApi.getKyc().catch(() => null),
+      ]);
+      const updated = normalizeProfile(profileRes.data?.data ?? profileRes.data);
+      const kycData = kycRes?.data?.data ?? kycRes?.data;
+      const kycStatus = kycData?.status ?? kycData?.kycStatus ?? null;
+      setProfile((prev) => ({ ...prev, ...updated, ...(kycStatus ? { kycStatus } : {}) }));
     } catch {}
   }
 

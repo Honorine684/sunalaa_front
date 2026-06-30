@@ -19,7 +19,10 @@ function UnsubscribeInner() {
   useEffect(() => {
     if (!email) { setStatus("error"); return; }
     newsletterApi.unsubscribe(email)
-      .then(() => setStatus("success"))
+      .then(() => {
+        try { localStorage.removeItem("snl_newsletter_sub"); } catch {}
+        setStatus("success");
+      })
       .catch((err) => {
         const code = err?.response?.status;
         if (code === 404) setStatus("already");

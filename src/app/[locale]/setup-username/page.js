@@ -266,7 +266,7 @@ export default function SetupUsernamePage() {
                   value={phone}
                   onChange={(val) => setPhone(val)}
                   style={{ width: "100%" }}
-                  inputStyle={{ width: "100%", fontSize: 14 }}
+                  inputStyle={{ width: "100%", fontSize: 16 }}
                 />
               </div>
             </div>
