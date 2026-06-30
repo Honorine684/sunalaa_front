@@ -195,23 +195,23 @@ export default function Footer() {
 
           {/* Le Projet */}
           <FootCol title={t("section_project")} links={[
-            { label: t("proj_about"),      href: "#" },
-            { label: t("proj_vision"),     href: "#" },
+            { label: t("proj_about"),      href: `${prefix}/about` },
+            { label: t("proj_vision"),     href: `${prefix}/vision` },
             { label: t("proj_whitepaper"), href: "#", soon: t("soon") },
-            { label: t("proj_roadmap"),    href: "#" },
+            { label: t("proj_roadmap"),    href: `${prefix}/roadmap` },
             { label: t("proj_token"),      href: `${prefix}/snl/valeur` },
-            { label: t("proj_blog"),       href: "#" },
+            { label: t("proj_blog"),       href: `${prefix}/blog` },
           ]} />
 
           {/* Légal + Newsletter */}
           <div className="flex flex-col gap-8">
             <FootCol title={t("section_legal")} links={[
-              { label: t("legal_mentions"), href: "#" },
-              { label: t("legal_cgu"),      href: "#" },
-              { label: t("legal_privacy"),  href: "#" },
-              { label: t("legal_cookies"),  href: "#" },
-              { label: t("legal_risk"),     href: "#" },
-              { label: t("legal_contact"),  href: "#" },
+              { label: t("legal_mentions"), href: `${prefix}/mentions-legales` },
+              { label: t("legal_cgu"),      href: "#", soon: t("soon") },
+              { label: t("legal_privacy"),  href: "#", soon: t("soon") },
+              { label: t("legal_cookies"),  href: `${prefix}/cookies` },
+              { label: t("legal_risk"),     href: `${prefix}/avertissement-risque` },
+              { label: t("legal_contact"),  href: `${prefix}/contact` },
             ]} />
 
             {/* Newsletter — mobile only (desktop version is in brand column) */}
@@ -284,10 +284,8 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             {[
-              { key: "bar_mentions", href: "#" },
-              { key: "bar_cgu",      href: "#" },
-              { key: "bar_privacy",  href: "#" },
-              { key: "bar_cookies",  href: "#" },
+              { key: "bar_mentions", href: `${prefix}/mentions-legales` },
+              { key: "bar_cookies",  href: `${prefix}/cookies` },
               { key: "bar_sitemap",  href: "/sitemap.xml" },
             ].map((l) => (
               <a key={l.key} href={l.href} className="text-[11px] hover:text-white/50 transition-colors" style={{ color: "rgba(255,255,255,0.25)" }}>
