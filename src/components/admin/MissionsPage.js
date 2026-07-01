@@ -144,6 +144,7 @@ function MissionModal({ mission, onClose, onSaved }) {
       const payload = {
         ...fields,
         reward: Number(fields.reward),
+        actionUrl: fields.actionUrl.trim() || null,
         timeRequired: fields.timeRequired ? Number(fields.timeRequired) * 60 : null,
         contentUrl: uploadedUrl || null,
         ...(notifySend && {
