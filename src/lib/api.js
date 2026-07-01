@@ -250,7 +250,7 @@ export const adminApi = {
   }),
   adjustPoints: (userId, data) => api.post(`/admin/users/${userId}/points/adjust`, data),
   getPointsHistory: (params) => api.get("/admin/points/history", { params }),
-  uploadMissionMedia: (formData)  => api.post("/missions/admin/upload-media", formData, { headers: { "Content-Type": undefined } }),
+  uploadMissionMedia: (formData)  => api.post("/missions/admin/upload-media", formData, { headers: { "Content-Type": undefined }, timeout: 300_000 }),
   getMissions: (params)           => api.get("/missions/admin", { params }),
   createMission: (data)           => api.post("/missions", data),
   updateMission: (id, data)       => api.put(`/missions/${id}`, data),
