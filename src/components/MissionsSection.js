@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Container from "./Container";
 import { missionsApi } from "@/lib/api";
 import { useTranslations } from "next-intl";
@@ -58,14 +59,84 @@ const PLATFORM_ICONS = {
   ),
 };
 
-export default function MissionsSection() {
+function fmtTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+}
+
+function Spinner({ color = "currentColor" }) {
+  return (
+    <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="3" strokeDasharray="40 20"/>
+    </svg>
+  );
+}
+
+function MissionsSectionInner() {
   const t = useTranslations("MissionsSection");
   const { isAuthenticated, refreshUser } = useAuth();
-  const [missions, setMissions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingId, setLoadingId] = useState(null);
-  const prevStatuses = useRef({});
+  const searchParams = useSearchParams();
+  const highlightId = searchParams?.get("mission") ?? null;
 
+  const [missions, setMissions]       = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [loadingId, setLoadingId]     = useState(null);
+  const [remainingTimes, setRemainingTimes] = useState({});
+
+  const prevStatuses = useRef({});
+  const missionRefs  = useRef({});
+  const timerRef     = useRef(null);
+
+  /* ── Scroll to highlighted mission ── */
+  useEffect(() => {
+    if (!highlightId || loading) return;
+    const el = missionRefs.current[highlightId];
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 400);
+  }, [highlightId, loading]);
+
+  /* ── Countdown timer for PENDING missions with timeRequired ── */
+  useEffect(() => {
+    const pending = missions.filter((m) => m.userStatus === "PENDING" && m.timeRequired > 0);
+
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    if (pending.length === 0) {
+      setRemainingTimes({});
+      return;
+    }
+
+    const initial = {};
+    pending.forEach((m) => {
+      try {
+        const stored = localStorage.getItem(`snl_mission_start_${m.id}`);
+        const startMs = stored
+          ? Number(stored)
+          : m.startedAt ? new Date(m.startedAt).getTime() : Date.now();
+        initial[m.id] = Math.max(0, m.timeRequired - (Date.now() - startMs) / 1000);
+      } catch {
+        initial[m.id] = m.timeRequired;
+      }
+    });
+    setRemainingTimes(initial);
+
+    timerRef.current = setInterval(() => {
+      setRemainingTimes((prev) => {
+        const next = { ...prev };
+        let anyActive = false;
+        Object.keys(next).forEach((id) => {
+          if (next[id] > 0) { next[id] = Math.max(0, next[id] - 1); }
+          if (next[id] > 0) anyActive = true;
+        });
+        if (!anyActive) clearInterval(timerRef.current);
+        return next;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, [missions]);
+
+  /* ── Data fetching ── */
   function applyMissions(list) {
     const newStatuses = Object.fromEntries(list.map((m) => [m.id, m.userStatus]));
     const justCompleted = list.some(
@@ -76,15 +147,17 @@ export default function MissionsSection() {
     if (justCompleted) refreshUser().catch(() => {});
   }
 
-  function fetchMissions(silent = false) {
+  async function fetchMissions(silent = false) {
     if (!silent) setLoading(true);
-    return missionsApi.getMyMissions()
-      .then((res) => {
-        const raw = res.data?.data ?? res.data;
-        applyMissions(Array.isArray(raw) ? raw : []);
-      })
-      .catch(() => { if (!silent) setMissions([]); })
-      .finally(() => { if (!silent) setLoading(false); });
+    try {
+      const res = await missionsApi.getMyMissions();
+      const raw = res.data?.data ?? res.data;
+      applyMissions(Array.isArray(raw) ? raw : []);
+    } catch {
+      if (!silent) setMissions([]);
+    } finally {
+      if (!silent) setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -92,26 +165,30 @@ export default function MissionsSection() {
     fetchMissions();
   }, [isAuthenticated]);
 
-  // Re-fetch on tab focus + poll every 30s when missions are pending review
   useEffect(() => {
     if (!isAuthenticated) return;
-
     function onVisible() {
       if (document.visibilityState === "visible") fetchMissions(true);
     }
     document.addEventListener("visibilitychange", onVisible);
-
     const hasUnderReview = missions.some((m) => m.userStatus === "UNDER_REVIEW");
     const interval = hasUnderReview ? setInterval(() => fetchMissions(true), 30_000) : null;
-
     return () => {
       document.removeEventListener("visibilitychange", onVisible);
       if (interval) clearInterval(interval);
     };
   }, [isAuthenticated, missions]);
 
+  /* ── Actions ── */
   async function handleStart(mission) {
-    if (mission.actionUrl) window.open(mission.actionUrl, "_blank", "noopener");
+    // LINK missions: open external URL
+    if ((!mission.contentType || mission.contentType === "LINK") && mission.actionUrl) {
+      window.open(mission.actionUrl, "_blank", "noopener");
+    }
+    // Store local startedAt for countdown
+    if (mission.timeRequired) {
+      try { localStorage.setItem(`snl_mission_start_${mission.id}`, Date.now()); } catch {}
+    }
     setLoadingId(mission.id);
     try {
       await missionsApi.start(mission.id);
@@ -120,10 +197,7 @@ export default function MissionsSection() {
       );
     } catch {
       missionsApi.getMyMissions()
-        .then((res) => {
-          const raw = res.data?.data ?? res.data;
-          if (Array.isArray(raw)) setMissions(raw);
-        })
+        .then((res) => { const raw = res.data?.data ?? res.data; if (Array.isArray(raw)) setMissions(raw); })
         .catch(() => {});
     } finally {
       setLoadingId(null);
@@ -136,16 +210,20 @@ export default function MissionsSection() {
       const res = await missionsApi.complete(id);
       const updated = res.data?.data ?? res.data;
       const newStatus = updated?.status ?? updated?.userStatus ?? "UNDER_REVIEW";
-      setMissions((prev) =>
-        prev.map((m) => m.id === id ? { ...m, userStatus: newStatus } : m)
-      );
-    } catch {
-      // status will refresh on next page load
+      setMissions((prev) => prev.map((m) => m.id === id ? { ...m, userStatus: newStatus } : m));
+    } catch (err) {
+      // Backend says timer not done yet → resync remaining from server value
+      const errCode = err?.response?.data?.error;
+      if (errCode === "TIME_NOT_ELAPSED") {
+        const secs = err?.response?.data?.secondsRemaining;
+        if (secs) setRemainingTimes((prev) => ({ ...prev, [id]: Math.ceil(secs) }));
+      }
     } finally {
       setLoadingId(null);
     }
   }
 
+  /* ── Render ── */
   return (
     <section className="bg-white py-16 relative overflow-hidden">
       <div className="absolute left-[13%] top-44.5 pointer-events-none select-none">
@@ -171,7 +249,7 @@ export default function MissionsSection() {
           </p>
         </div>
 
-        <p className="mb-5 text-[16px] lg:text-[24px]" style={{ fontWeight: 600, lineHeight: "1.4", letterSpacing: 0, color: "#0A3706" }}>
+        <p className="mb-5 text-[16px] lg:text-[24px]" style={{ fontWeight: 600, lineHeight: "1.4", color: "#0A3706" }}>
           {t("points_label")}
         </p>
 
@@ -202,108 +280,215 @@ export default function MissionsSection() {
             <p className="text-[14px] max-w-xs" style={{ color: "#45556C" }}>{t("empty_sub")}</p>
           </div>
         ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {missions.map((mission) => {
-            const key      = mission.platform?.toLowerCase();
-            const iconBg   = PLATFORM_COLORS[key] ?? "#1A3C34";
-            const icon     = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
-            const status   = mission.userStatus ?? (mission.completed === true ? "COMPLETED" : null);
-            const claimed  = status === "COMPLETED";
-            const pending  = status === "PENDING";
-            const inReview = status === "UNDER_REVIEW";
-            const rejected = status === "REJECTED";
-            const busy     = loadingId === mission.id;
-            const Spinner  = () => (
-              <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="40 20"/>
-              </svg>
-            );
-            return (
-              <div
-                key={mission.id}
-                className="flex flex-col justify-between bg-white hover:scale-[1.01] transition-transform duration-200"
-                style={{ minHeight: 170, borderRadius: 8, border: "1px solid rgba(7,58,3,0.16)", padding: 16, gap: 12, opacity: claimed ? 0.7 : 1 }}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center shrink-0" style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: iconBg }}>
-                    {icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-[14px] sm:text-[20px]" style={{ fontWeight: 600, lineHeight: "22px", color: "#0F172B" }}>
-                        {mission.title}
-                      </p>
-                      <div className={`relative w-6 h-6 sm:w-8 sm:h-8 shrink-0 ${claimed ? "opacity-40" : ""}`}>
-                        <Image src="/images/4.png" alt="coins" fill className="object-contain" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between gap-2 mt-0.5">
-                      <p className="text-[12px] sm:text-[16px]" style={{ fontWeight: 400, lineHeight: "22.75px", color: "#45556C" }}>
-                        {mission.description}
-                      </p>
-                      <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: claimed ? "#CBD5E1" : "#0A3706" }}>
-                        {mission.reward} SNL
-                      </span>
-                    </div>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {missions.map((mission) => {
+              const key      = mission.platform?.toLowerCase();
+              const iconBg   = PLATFORM_COLORS[key] ?? "#1A3C34";
+              const icon     = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
+              const status   = mission.userStatus ?? (mission.completed === true ? "COMPLETED" : null);
+              const claimed  = status === "COMPLETED";
+              const pending  = status === "PENDING";
+              const inReview = status === "UNDER_REVIEW";
+              const rejected = status === "REJECTED";
+              const busy     = loadingId === mission.id;
+              const isHighlighted = highlightId === String(mission.id);
 
-                {/* Auth users: 5-state button; guests: simple link */}
-                {isAuthenticated ? (
-                  claimed ? (
-                    <button disabled className="w-full py-3 rounded-xl text-white text-[14px] font-normal cursor-default" style={{ backgroundColor: "#E6B84C" }}>
-                      {t("claimed_btn")}
-                    </button>
-                  ) : inReview ? (
-                    <button disabled className="w-full py-3 rounded-xl text-[14px] font-normal cursor-default flex items-center justify-center gap-2" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
-                      <svg className="animate-spin shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3B82F6" strokeWidth="3" strokeDasharray="40 20"/></svg>
-                      {t("in_review_btn")}
-                    </button>
-                  ) : rejected ? (
-                    <button
-                      onClick={() => handleStart(mission)}
-                      disabled={busy}
-                      className="w-full py-3 rounded-xl text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2 border"
-                      style={{ backgroundColor: "#FEF2F2", color: "#EF4444", borderColor: "#FECACA" }}
-                    >
-                      {busy && <Spinner />}
-                      {busy ? "…" : t("rejected_btn")}
-                    </button>
-                  ) : pending ? (
-                    <button
-                      onClick={() => handleComplete(mission.id)}
-                      disabled={busy}
-                      className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
-                      style={{ backgroundColor: "#E17100" }}
-                    >
-                      {busy && <Spinner />}
-                      {busy ? t("verifying_btn") : t("verify_claim_btn")}
-                    </button>
+              const isMedia    = mission.contentType === "VIDEO" || mission.contentType === "IMAGE";
+              const remaining  = remainingTimes[mission.id] ?? 0;
+              const timerDone  = !mission.timeRequired || remaining <= 0;
+              const pct        = mission.timeRequired
+                ? Math.min(100, ((mission.timeRequired - remaining) / mission.timeRequired) * 100)
+                : 100;
+
+              return (
+                <div
+                  key={mission.id}
+                  ref={(el) => { missionRefs.current[mission.id] = el; }}
+                  className="flex flex-col justify-between bg-white hover:scale-[1.01] transition-all duration-200"
+                  style={{
+                    minHeight: 170,
+                    borderRadius: 8,
+                    border: isHighlighted ? "2px solid #E6B84C" : "1px solid rgba(7,58,3,0.16)",
+                    padding: 16,
+                    gap: 12,
+                    opacity: claimed ? 0.7 : 1,
+                    boxShadow: isHighlighted ? "0 0 0 4px rgba(230,184,76,0.15)" : undefined,
+                  }}
+                >
+                  {/* Header */}
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center shrink-0" style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: iconBg }}>
+                      {icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="text-[14px] sm:text-[20px]" style={{ fontWeight: 600, lineHeight: "22px", color: "#0F172B" }}>
+                            {mission.title}
+                          </p>
+                          {/* Media type badge */}
+                          {mission.contentType === "VIDEO" && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#EF4444" }}>🎥 Vidéo</span>
+                          )}
+                          {mission.contentType === "IMAGE" && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(59,130,246,0.1)", color: "#3B82F6" }}>🖼 Image</span>
+                          )}
+                        </div>
+                        <div className={`relative w-6 h-6 sm:w-8 sm:h-8 shrink-0 ${claimed ? "opacity-40" : ""}`}>
+                          <Image src="/images/4.png" alt="coins" fill className="object-contain" />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-2 mt-0.5">
+                        <p className="text-[12px] sm:text-[16px]" style={{ fontWeight: 400, lineHeight: "22.75px", color: "#45556C" }}>
+                          {mission.description}
+                        </p>
+                        <span className="font-bold shrink-0 text-[14px] sm:text-[20px]" style={{ lineHeight: "21px", color: claimed ? "#CBD5E1" : "#0A3706" }}>
+                          {mission.reward} SNL
+                        </span>
+                      </div>
+                      {/* Time required badge (not yet started) */}
+                      {!pending && !claimed && !inReview && mission.timeRequired > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[11px] mt-1" style={{ color: "#94A3B8" }}>
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                            <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          </svg>
+                          {Math.round(mission.timeRequired / 60)} min requis
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Media content — shown when PENDING */}
+                  {pending && isMedia && mission.contentUrl && (
+                    <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(0,0,0,0.08)" }}>
+                      {mission.contentType === "VIDEO" ? (
+                        <video
+                          src={mission.contentUrl}
+                          controls
+                          playsInline
+                          className="w-full"
+                          style={{ maxHeight: 220, backgroundColor: "#000", display: "block" }}
+                        />
+                      ) : (
+                        <img
+                          src={mission.contentUrl}
+                          alt={mission.title}
+                          className="w-full object-cover"
+                          style={{ maxHeight: 200, display: "block" }}
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  {isAuthenticated ? (
+                    claimed ? (
+                      <button disabled className="w-full py-3 rounded-xl text-white text-[14px] font-normal cursor-default" style={{ backgroundColor: "#E6B84C" }}>
+                        {t("claimed_btn")}
+                      </button>
+                    ) : inReview ? (
+                      <button disabled className="w-full py-3 rounded-xl text-[14px] font-normal cursor-default flex items-center justify-center gap-2" style={{ backgroundColor: "#EFF6FF", color: "#3B82F6" }}>
+                        <Spinner color="#3B82F6" />
+                        {t("in_review_btn")}
+                      </button>
+                    ) : rejected ? (
+                      <button
+                        onClick={() => handleStart(mission)}
+                        disabled={busy}
+                        className="w-full py-3 rounded-xl text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2 border"
+                        style={{ backgroundColor: "#FEF2F2", color: "#EF4444", borderColor: "#FECACA" }}
+                      >
+                        {busy && <Spinner color="#EF4444" />}
+                        {busy ? "…" : t("rejected_btn")}
+                      </button>
+                    ) : pending ? (
+                      mission.timeRequired > 0 ? (
+                        /* Timer countdown UI */
+                        <div className="flex flex-col gap-2">
+                          {/* Progress bar */}
+                          <div className="relative h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(31,78,70,0.10)" }}>
+                            <div
+                              className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000"
+                              style={{ width: `${pct}%`, backgroundColor: timerDone ? "#3FAE8C" : "#E6B84C" }}
+                            />
+                          </div>
+                          {timerDone ? (
+                            <button
+                              onClick={() => handleComplete(mission.id)}
+                              disabled={busy}
+                              className="w-full py-3 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                              style={{ backgroundColor: "#3FAE8C" }}
+                            >
+                              {busy && <Spinner color="white" />}
+                              {busy ? t("verifying_btn") : "🎉 " + t("verify_claim_btn")}
+                            </button>
+                          ) : (
+                            <button disabled className="w-full py-3 rounded-xl text-[14px] font-semibold flex items-center justify-center gap-2 cursor-default" style={{ backgroundColor: "#F1F5F9", color: "#64748B" }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="#94A3B8" strokeWidth="2"/>
+                                <path d="M12 6v6l4 2" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/>
+                              </svg>
+                              Disponible dans {fmtTime(remaining)}
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleComplete(mission.id)}
+                          disabled={busy}
+                          className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                          style={{ backgroundColor: "#E17100" }}
+                        >
+                          {busy && <Spinner color="white" />}
+                          {busy ? t("verifying_btn") : t("verify_claim_btn")}
+                        </button>
+                      )
+                    ) : (
+                      <button
+                        onClick={() => handleStart(mission)}
+                        disabled={busy}
+                        className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                        style={{ backgroundColor: "#344054" }}
+                      >
+                        {busy && <Spinner color="white" />}
+                        {busy ? "Starting…" : t("start_btn")}
+                      </button>
+                    )
                   ) : (
                     <button
-                      onClick={() => handleStart(mission)}
-                      disabled={busy}
-                      className="w-full py-3 rounded-xl text-white text-[14px] font-normal hover:brightness-110 transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
-                      style={{ backgroundColor: "#344054" }}
+                      onClick={() => mission.actionUrl && window.open(mission.actionUrl, "_blank", "noopener")}
+                      className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer"
                     >
-                      {busy && <Spinner />}
-                      {busy ? "Starting…" : t("start_btn")}
+                      {t("complete_btn")}
                     </button>
-                  )
-                ) : (
-                  <button
-                    onClick={() => mission.actionUrl && window.open(mission.actionUrl, "_blank", "noopener")}
-                    className="w-full bg-[#344054] text-white text-[14px] font-normal py-3 rounded-xl hover:brightness-110 transition cursor-pointer"
-                  >
-                    {t("complete_btn")}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         )}
       </Container>
     </section>
+  );
+}
+
+export default function MissionsSection() {
+  return (
+    <Suspense fallback={
+      <section className="bg-white py-16">
+        <Container>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="animate-pulse rounded-xl border border-slate-100 p-4" style={{ minHeight: 170 }}>
+                <div className="h-10 bg-slate-200 rounded-xl" />
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+    }>
+      <MissionsSectionInner />
+    </Suspense>
   );
 }

@@ -56,32 +56,100 @@ function PlatformIcon({ platform }) {
 }
 
 const PLATFORMS = ["telegram", "twitter", "youtube", "discord", "facebook", "instagram", "whatsapp"];
+const CONTENT_TYPES = [
+  { value: "LINK",  label: "🔗 Lien externe" },
+  { value: "VIDEO", label: "🎥 Vidéo" },
+  { value: "IMAGE", label: "🖼 Image" },
+];
 const COLS = ["MISSION", "TYPE", "RÉCOMPENSE", "STATUT", "COMPLÉTIONS", "DATE", "ACTIONS"];
 
-const EMPTY_FIELDS = { title: "", description: "", platform: "telegram", actionUrl: "", reward: "", isActive: true, requiresApproval: false };
+const EMPTY_FIELDS = {
+  title: "", description: "", platform: "telegram", actionUrl: "", reward: "",
+  isActive: true, requiresApproval: false, contentType: "LINK", timeRequired: "",
+};
 
 /* ── Mission modal ── */
 function MissionModal({ mission, onClose, onSaved }) {
   const isEdit = !!mission;
   const [fields, setFields] = useState(
     isEdit
-      ? { title: mission.title, description: mission.description, platform: mission.platform,
-          actionUrl: mission.actionUrl, reward: String(mission.reward), isActive: mission.isActive,
-          requiresApproval: mission.requiresApproval ?? false }
+      ? {
+          title: mission.title, description: mission.description ?? "",
+          platform: mission.platform, actionUrl: mission.actionUrl ?? "",
+          reward: String(mission.reward), isActive: mission.isActive,
+          requiresApproval: mission.requiresApproval ?? false,
+          contentType: mission.contentType ?? "LINK",
+          timeRequired: mission.timeRequired ? String(Math.round(mission.timeRequired / 60)) : "",
+        }
       : { ...EMPTY_FIELDS }
   );
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
+
+  const [uploadState,  setUploadState]  = useState(null); // null | "uploading" | "done" | "error"
+  const [uploadedUrl,  setUploadedUrl]  = useState(isEdit ? (mission.contentUrl ?? "") : "");
+  const [previewUrl,   setPreviewUrl]   = useState(isEdit ? (mission.contentUrl ?? "") : "");
+  const [uploadError,  setUploadError]  = useState("");
+  const [notifySend,   setNotifySend]   = useState(false);
+  const [notifTitle,   setNotifTitle]   = useState("");
+  const [notifMessage, setNotifMessage] = useState("");
+  const [loading,      setLoading]      = useState(false);
+  const [error,        setError]        = useState("");
+  const fileRef = useRef(null);
 
   function set(key, val) { setFields((p) => ({ ...p, [key]: val })); }
 
+  function handleContentTypeChange(ct) {
+    set("contentType", ct);
+    if (ct === "LINK") {
+      setUploadedUrl(""); setPreviewUrl(""); setUploadState(null); setUploadError("");
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  async function handleFileSelect(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (previewUrl && previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(URL.createObjectURL(file));
+    setUploadState("uploading"); setUploadError(""); setUploadedUrl("");
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await adminApi.uploadMissionMedia(fd);
+      const data = res.data?.data ?? res.data;
+      setUploadedUrl(data.url);
+      if (data.contentType) set("contentType", data.contentType);
+      setUploadState("done");
+    } catch (err) {
+      setUploadError(getApiError(err));
+      setUploadState("error");
+      setPreviewUrl(""); if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
   async function handleSave() {
-    if (!fields.title.trim() || !fields.actionUrl.trim() || !fields.reward) {
-      setError("Titre, URL et récompense sont requis."); return;
+    if (!fields.title.trim() || !fields.reward) {
+      setError("Titre et récompense sont requis."); return;
+    }
+    if (fields.contentType === "LINK" && !fields.actionUrl.trim()) {
+      setError("URL requise pour un lien externe."); return;
+    }
+    if ((fields.contentType === "VIDEO" || fields.contentType === "IMAGE") && !uploadedUrl) {
+      setError("Veuillez uploader un fichier avant de sauvegarder."); return;
+    }
+    if (notifySend && (!notifTitle.trim() || !notifMessage.trim())) {
+      setError("Titre et message de notification requis."); return;
     }
     setLoading(true); setError("");
     try {
-      const payload = { ...fields, reward: Number(fields.reward) };
+      const payload = {
+        ...fields,
+        reward: Number(fields.reward),
+        timeRequired: fields.timeRequired ? Number(fields.timeRequired) * 60 : null,
+        contentUrl: uploadedUrl || null,
+        ...(notifySend && {
+          notify: { send: true, title: notifTitle.trim(), message: notifMessage.trim() },
+        }),
+      };
       const res = isEdit
         ? await adminApi.updateMission(mission.id, payload)
         : await adminApi.createMission(payload);
@@ -94,11 +162,13 @@ function MissionModal({ mission, onClose, onSaved }) {
     }
   }
 
+  const isMedia = fields.contentType === "VIDEO" || fields.contentType === "IMAGE";
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(15,23,43,0.45)" }}>
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[92vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 sticky top-0 bg-white">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 sticky top-0 bg-white z-10">
           <h3 className="text-[17px] font-bold" style={{ color: "#0F172B" }}>
             {isEdit ? "Modifier la mission" : "Nouvelle mission"}
           </h3>
@@ -116,47 +186,132 @@ function MissionModal({ mission, onClose, onSaved }) {
             </div>
           )}
 
-          {[
-            { key: "title",       label: "Titre",       type: "text",   ph: "Ex : Rejoindre le canal Telegram" },
-            { key: "actionUrl",   label: "URL de l'action", type: "url", ph: "https://t.me/..." },
-            { key: "reward",      label: "Récompense (SNL)", type: "number", ph: "25" },
-          ].map(({ key, label, type, ph }) => (
-            <div key={key} className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>{label}</label>
-              <input
-                type={type}
-                min={type === "number" ? 1 : undefined}
-                value={fields[key]}
-                onChange={(e) => set(key, e.target.value)}
-                placeholder={ph}
-                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
-                style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
-              />
+          {/* Titre */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Titre</label>
+            <input type="text" value={fields.title} onChange={(e) => set("title", e.target.value)}
+              placeholder="Ex : Regarde notre vidéo de présentation"
+              className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+              style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }} />
+          </div>
+
+          {/* Récompense */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Récompense (SNL)</label>
+            <input type="number" min={1} value={fields.reward} onChange={(e) => set("reward", e.target.value)}
+              placeholder="25"
+              className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+              style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }} />
+          </div>
+
+          {/* Type de contenu */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Type de contenu</label>
+            <div className="flex gap-2 flex-wrap">
+              {CONTENT_TYPES.map(({ value, label }) => (
+                <button
+                  key={value} type="button"
+                  onClick={() => handleContentTypeChange(value)}
+                  className="px-4 py-2 rounded-xl border text-[13px] font-semibold transition cursor-pointer"
+                  style={fields.contentType === value
+                    ? { backgroundColor: "#1F4E46", color: "white", borderColor: "#1F4E46" }
+                    : { backgroundColor: "#F8FAFC", color: "#45556C", borderColor: "#E2E8F0" }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* URL — seulement pour LINK */}
+          {fields.contentType === "LINK" && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>URL de l'action</label>
+              <input type="url" value={fields.actionUrl} onChange={(e) => set("actionUrl", e.target.value)}
+                placeholder="https://t.me/..."
+                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+                style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }} />
+            </div>
+          )}
+
+          {/* Upload fichier — VIDEO ou IMAGE */}
+          {isMedia && (
+            <div className="flex flex-col gap-3">
+              <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
+                {fields.contentType === "VIDEO" ? "Fichier vidéo" : "Image"} <span className="font-normal text-slate-400">(max {fields.contentType === "VIDEO" ? "200 MB" : "10 MB"})</span>
+              </label>
+
+              {/* Preview */}
+              {previewUrl && fields.contentType === "VIDEO" && (
+                <video src={previewUrl} controls className="w-full rounded-xl max-h-40 object-contain bg-black" />
+              )}
+              {previewUrl && fields.contentType === "IMAGE" && (
+                <img src={previewUrl} alt="preview" className="w-full rounded-xl max-h-40 object-cover" />
+              )}
+
+              <input ref={fileRef} type="file"
+                accept={fields.contentType === "VIDEO" ? "video/mp4,video/webm" : "image/jpeg,image/png,image/webp,image/gif"}
+                onChange={handleFileSelect} className="hidden" />
+
+              <button type="button" onClick={() => fileRef.current?.click()}
+                disabled={uploadState === "uploading"}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed text-[13px] font-semibold transition cursor-pointer hover:bg-slate-50 disabled:opacity-60"
+                style={{ borderColor: "#CBD5E1", color: "#64748B" }}>
+                {uploadState === "uploading" ? (
+                  <>
+                    <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#3FAE8C" strokeWidth="3" strokeDasharray="40 20"/>
+                    </svg>
+                    Upload en cours…
+                  </>
+                ) : uploadState === "done" ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round"/>
+                    </svg>
+                    <span style={{ color: "#3FAE8C" }}>Fichier uploadé — Changer</span>
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Cliquer pour uploader
+                  </>
+                )}
+              </button>
+              {uploadError && <p className="text-[12px]" style={{ color: "#EF4444" }}>{uploadError}</p>}
+            </div>
+          )}
+
+          {/* Temps requis — visible si VIDEO ou IMAGE */}
+          {isMedia && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
+                Temps minimum avant réclamation <span className="font-normal text-slate-400">(minutes — laisser vide = pas de timer)</span>
+              </label>
+              <input type="number" min={1} value={fields.timeRequired} onChange={(e) => set("timeRequired", e.target.value)}
+                placeholder="Ex : 2"
+                className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2"
+                style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }} />
+            </div>
+          )}
 
           {/* Description */}
           <div className="flex flex-col gap-1.5">
             <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Description</label>
-            <textarea
-              value={fields.description}
-              onChange={(e) => set("description", e.target.value)}
-              placeholder="Décrivez l'action à effectuer…"
-              rows={3}
+            <textarea value={fields.description} onChange={(e) => set("description", e.target.value)}
+              placeholder="Décrivez l'action à effectuer…" rows={3}
               className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2 resize-none"
-              style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
-            />
+              style={{ borderColor: "#E2E8F0", color: "#0F172B" }} />
           </div>
 
           {/* Platform */}
           <div className="flex flex-col gap-1.5">
             <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Plateforme</label>
-            <select
-              value={fields.platform}
-              onChange={(e) => set("platform", e.target.value)}
+            <select value={fields.platform} onChange={(e) => set("platform", e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2 cursor-pointer capitalize"
-              style={{ borderColor: "#E2E8F0", color: "#0F172B" }}
-            >
+              style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }}>
               {PLATFORMS.map((p) => <option key={p} value={p} className="capitalize">{p}</option>)}
             </select>
           </div>
@@ -165,7 +320,7 @@ function MissionModal({ mission, onClose, onSaved }) {
           <div className="flex items-center justify-between">
             <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Mission active</label>
             <button type="button" onClick={() => set("isActive", !fields.isActive)}
-              className={`w-11 h-6 rounded-full transition-colors duration-200 relative ${fields.isActive ? "bg-[#3FAE8C]" : "bg-slate-300"}`}>
+              className={`w-11 h-6 rounded-full transition-colors duration-200 relative ${fields.isActive ? "bg-secondary" : "bg-slate-300"}`}>
               <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${fields.isActive ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
@@ -183,19 +338,49 @@ function MissionModal({ mission, onClose, onSaved }) {
               <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${fields.requiresApproval ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
+
+          {/* Notifier les users */}
+          <div className="rounded-xl border overflow-hidden" style={{ borderColor: notifySend ? "#3FAE8C" : "#E2E8F0" }}>
+            <div className="flex items-center justify-between px-4 py-3" style={{ backgroundColor: notifySend ? "rgba(63,174,140,0.06)" : "#F8FAFC" }}>
+              <div>
+                <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>🔔 Notifier tous les utilisateurs</p>
+                <p className="text-[12px] mt-0.5" style={{ color: "#45556C" }}>Envoie une push notification à tous les inscrits avec un lien vers cette mission</p>
+              </div>
+              <button type="button" onClick={() => setNotifySend((v) => !v)}
+                className={`w-11 h-6 rounded-full transition-colors duration-200 relative shrink-0 ml-4 ${notifySend ? "bg-secondary" : "bg-slate-300"}`}>
+                <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${notifySend ? "translate-x-5" : "translate-x-0.5"}`} />
+              </button>
+            </div>
+            {notifySend && (
+              <div className="px-4 pb-4 flex flex-col gap-3 border-t" style={{ borderColor: "rgba(63,174,140,0.2)" }}>
+                <div className="flex flex-col gap-1.5 pt-3">
+                  <label className="text-[12px] font-semibold" style={{ color: "#45556C" }}>Titre de la notification</label>
+                  <input type="text" value={notifTitle} onChange={(e) => setNotifTitle(e.target.value)}
+                    placeholder="🎯 Nouvelle mission spéciale !"
+                    className="w-full px-4 py-2.5 rounded-xl border text-[13px] outline-none focus:ring-2"
+                    style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }} />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[12px] font-semibold" style={{ color: "#45556C" }}>Message</label>
+                  <textarea value={notifMessage} onChange={(e) => setNotifMessage(e.target.value)}
+                    placeholder="Une vidéo exclusive t'attend. Regarde-la et gagne tes points SNL."
+                    rows={2}
+                    className="w-full px-4 py-2.5 rounded-xl border text-[13px] outline-none focus:ring-2 resize-none"
+                    style={{ borderColor: "#E2E8F0", color: "#0F172B" }} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-100">
+        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 sticky bottom-0 bg-white">
           <button onClick={onClose} className="px-5 py-2.5 rounded-xl border text-[14px] font-semibold hover:bg-slate-50 transition cursor-pointer" style={{ borderColor: "#E2E8F0", color: "#45556C" }}>
             Annuler
           </button>
-          <button
-            onClick={handleSave}
-            disabled={loading}
+          <button onClick={handleSave} disabled={loading || uploadState === "uploading"}
             className="px-5 py-2.5 rounded-xl text-white text-[14px] font-semibold hover:brightness-110 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
-            style={{ backgroundColor: "#3FAE8C" }}
-          >
+            style={{ backgroundColor: "#3FAE8C" }}>
             {loading && <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="3" strokeLinecap="round" strokeDasharray="40 20"/></svg>}
             {loading ? "Enregistrement…" : isEdit ? "Enregistrer" : "Créer"}
           </button>
