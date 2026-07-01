@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { adminApi, getApiError } from "@/lib/api";
 
 /* ── Platform icon ── */
@@ -250,7 +250,7 @@ function MissionModal({ mission, onClose, onSaved }) {
               )}
 
               <input ref={fileRef} type="file"
-                accept={fields.contentType === "VIDEO" ? "video/mp4,video/webm" : "image/jpeg,image/png,image/webp,image/gif"}
+                accept={fields.contentType === "VIDEO" ? "video/mp4,video/*" : "image/jpeg,image/png,image/webp,image/gif"}
                 onChange={handleFileSelect} className="hidden" />
 
               <button type="button" onClick={() => fileRef.current?.click()}

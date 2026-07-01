@@ -120,7 +120,7 @@ function MissionsSectionInner() {
     });
     setRemainingTimes(initial);
 
-    timerRef.current = setInterval(() => {
+    const intervalId = setInterval(() => {
       setRemainingTimes((prev) => {
         const next = { ...prev };
         let anyActive = false;
@@ -128,12 +128,13 @@ function MissionsSectionInner() {
           if (next[id] > 0) { next[id] = Math.max(0, next[id] - 1); }
           if (next[id] > 0) anyActive = true;
         });
-        if (!anyActive) clearInterval(timerRef.current);
+        if (!anyActive) clearInterval(intervalId);
         return next;
       });
     }, 1000);
+    timerRef.current = intervalId;
 
-    return () => clearInterval(timerRef.current);
+    return () => clearInterval(intervalId);
   }, [missions]);
 
   /* ── Data fetching ── */
