@@ -170,6 +170,7 @@ function MissionModal({ mission, onClose, onSaved }) {
       const payload = {
         ...fields,
         reward: Number(fields.reward),
+        platform: fields.platform || null,
         actionUrl: fields.actionUrl.trim() || null,
         timeRequired: fields.timeRequired ? Number(fields.timeRequired) : null,
         contentUrl: uploadedUrl || null,
@@ -611,7 +612,7 @@ export default function MissionsPage() {
   useEffect(() => { load(); }, [load]);
 
   const filtered = missions.filter(
-    (m) => !search || m.title.toLowerCase().includes(search.toLowerCase()) || m.platform.toLowerCase().includes(search.toLowerCase())
+    (m) => !search || m.title.toLowerCase().includes(search.toLowerCase()) || (m.platform ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
   function handleSaved(saved) {
