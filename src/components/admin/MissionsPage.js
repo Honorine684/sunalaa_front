@@ -56,10 +56,31 @@ function PlatformIcon({ platform }) {
 }
 
 const PLATFORMS = ["telegram", "twitter", "youtube", "discord", "facebook", "instagram", "whatsapp"];
+const CONTENT_TYPE_ICONS = {
+  LINK: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  VIDEO: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+      <polygon points="23 7 16 12 23 17 23 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  IMAGE: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2"/>
+      <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+};
 const CONTENT_TYPES = [
-  { value: "LINK",  label: "🔗 Lien externe" },
-  { value: "VIDEO", label: "🎥 Vidéo" },
-  { value: "IMAGE", label: "🖼 Image" },
+  { value: "LINK",  label: "Lien externe" },
+  { value: "VIDEO", label: "Vidéo" },
+  { value: "IMAGE", label: "Image" },
 ];
 const COLS = ["MISSION", "TYPE", "RÉCOMPENSE", "STATUT", "COMPLÉTIONS", "DATE", "ACTIONS"];
 
@@ -224,11 +245,12 @@ function MissionModal({ mission, onClose, onSaved }) {
                 <button
                   key={value} type="button"
                   onClick={() => handleContentTypeChange(value)}
-                  className="px-4 py-2 rounded-xl border text-[13px] font-semibold transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border text-[13px] font-semibold transition cursor-pointer"
                   style={fields.contentType === value
                     ? { backgroundColor: "#1F4E46", color: "white", borderColor: "#1F4E46" }
                     : { backgroundColor: "#F8FAFC", color: "#45556C", borderColor: "#E2E8F0" }}
                 >
+                  {CONTENT_TYPE_ICONS[value]}
                   {label}
                 </button>
               ))}
@@ -355,7 +377,12 @@ function MissionModal({ mission, onClose, onSaved }) {
           <div className="rounded-xl border overflow-hidden" style={{ borderColor: notifySend ? "#3FAE8C" : "#E2E8F0" }}>
             <div className="flex items-center justify-between px-4 py-3" style={{ backgroundColor: notifySend ? "rgba(63,174,140,0.06)" : "#F8FAFC" }}>
               <div>
-                <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>🔔 Notifier tous les utilisateurs</p>
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="#0F172B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <p className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>Notifier tous les utilisateurs</p>
+                </div>
                 <p className="text-[12px] mt-0.5" style={{ color: "#45556C" }}>Envoie une push notification à tous les inscrits avec un lien vers cette mission</p>
               </div>
               <button type="button" onClick={() => setNotifySend((v) => !v)}

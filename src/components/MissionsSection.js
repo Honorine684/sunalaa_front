@@ -329,10 +329,16 @@ function MissionsSectionInner() {
                           </p>
                           {/* Media type badge */}
                           {mission.contentType === "VIDEO" && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#EF4444" }}>🎥 Vidéo</span>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#EF4444" }}>
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polygon points="23 7 16 12 23 17 23 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                              Vidéo
+                            </span>
                           )}
                           {mission.contentType === "IMAGE" && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(59,130,246,0.1)", color: "#3B82F6" }}>🖼 Image</span>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(59,130,246,0.1)", color: "#3B82F6" }}>
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2"/><polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                              Image
+                            </span>
                           )}
                         </div>
                         <div className={`relative w-6 h-6 sm:w-8 sm:h-8 shrink-0 ${claimed ? "opacity-40" : ""}`}>
@@ -425,7 +431,7 @@ function MissionsSectionInner() {
                               style={{ backgroundColor: "#3FAE8C" }}
                             >
                               {busy && <Spinner color="white" />}
-                              {busy ? t("verifying_btn") : "🎉 " + t("verify_claim_btn")}
+                              {busy ? t("verifying_btn") : t("verify_claim_btn")}
                             </button>
                           ) : (
                             <button disabled className="w-full py-3 rounded-xl text-[14px] font-semibold flex items-center justify-center gap-2 cursor-default" style={{ backgroundColor: "#F1F5F9", color: "#64748B" }}>
