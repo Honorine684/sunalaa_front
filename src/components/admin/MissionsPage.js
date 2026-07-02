@@ -47,10 +47,15 @@ const PLATFORM_ICONS = {
 };
 
 function PlatformIcon({ platform }) {
-  const render = PLATFORM_ICONS[platform?.toLowerCase()] ?? PLATFORM_ICONS.telegram;
+  const render = platform ? (PLATFORM_ICONS[platform.toLowerCase()] ?? PLATFORM_ICONS.telegram) : null;
   return (
     <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "#ECFDF5" }}>
-      {render()}
+      {render ? render() : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#94A3B8" strokeWidth="2"/>
+          <path d="M12 8v4l3 3" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      )}
     </div>
   );
 }
@@ -85,7 +90,7 @@ const CONTENT_TYPES = [
 const COLS = ["MISSION", "TYPE", "RÉCOMPENSE", "STATUT", "COMPLÉTIONS", "DATE", "ACTIONS"];
 
 const EMPTY_FIELDS = {
-  title: "", description: "", platform: "telegram", actionUrl: "", reward: "",
+  title: "", description: "", platform: "", actionUrl: "", reward: "",
   isActive: true, requiresApproval: false, contentType: "LINK", timeRequired: "",
 };
 
@@ -96,7 +101,7 @@ function MissionModal({ mission, onClose, onSaved }) {
     isEdit
       ? {
           title: mission.title, description: mission.description ?? "",
-          platform: mission.platform, actionUrl: mission.actionUrl ?? "",
+          platform: mission.platform ?? "", actionUrl: mission.actionUrl ?? "",
           reward: String(mission.reward), isActive: mission.isActive,
           requiresApproval: mission.requiresApproval ?? false,
           contentType: mission.contentType ?? "LINK",
@@ -346,6 +351,7 @@ function MissionModal({ mission, onClose, onSaved }) {
             <select value={fields.platform} onChange={(e) => set("platform", e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border text-[14px] outline-none focus:ring-2 cursor-pointer capitalize"
               style={{ borderColor: "#E2E8F0", color: "#0F172B", fontSize: 16 }}>
+              <option value="">— Aucune —</option>
               {PLATFORMS.map((p) => <option key={p} value={p} className="capitalize">{p}</option>)}
             </select>
           </div>
@@ -701,7 +707,7 @@ export default function MissionsPage() {
                 <p className="text-[11px] mt-0.5" style={{ color: "#94A3B8" }}>{m.description}</p>
               </div>
             </div>
-            <span className="text-[13px] capitalize" style={{ color: "#45556C" }}>{m.platform}</span>
+            <span className="text-[13px] capitalize" style={{ color: "#45556C" }}>{m.platform || "—"}</span>
             <div className="flex items-center gap-1.5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="6" stroke="#E6B84C" strokeWidth="2"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12" stroke="#E6B84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               <span className="text-[13px] font-semibold" style={{ color: "#E6B84C" }}>{m.reward} SNL</span>
