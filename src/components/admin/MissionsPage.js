@@ -591,7 +591,7 @@ export default function MissionsPage() {
     try {
       const res = await adminApi.getMissions({ page: 1, limit: 100 });
       const body = res.data?.data ?? res.data;
-      const list = Array.isArray(body) ? body : (body?.data ?? []);
+      const list = (Array.isArray(body) ? body : (body?.data ?? [])).filter((m) => m.isActive !== false);
       setMissions(list);
       const total            = list.length;
       const active           = list.filter((m) => m.isActive).length;

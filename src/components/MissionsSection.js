@@ -282,7 +282,7 @@ function MissionsSectionInner() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {missions.map((mission) => {
+            {missions.filter((m) => m.userStatus !== "COMPLETED" && m.completed !== true).map((mission) => {
               const key      = mission.platform?.toLowerCase();
               const iconBg   = PLATFORM_COLORS[key] ?? "#1A3C34";
               const icon     = PLATFORM_ICONS[key]  ?? PLATFORM_ICONS.telegram;
