@@ -354,7 +354,9 @@ function MissionsSectionInner() {
                             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                             <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                           </svg>
-                          {Math.round(mission.timeRequired / 60)} min requis
+                          {mission.timeRequired >= 60
+                            ? `${Math.round(mission.timeRequired / 60)} min requis`
+                            : `${mission.timeRequired} sec requis`}
                         </span>
                       )}
                     </div>
@@ -367,6 +369,7 @@ function MissionsSectionInner() {
                         <video
                           src={mission.contentUrl}
                           controls
+                          autoPlay
                           playsInline
                           className="w-full"
                           style={{ maxHeight: 220, backgroundColor: "#000", display: "block" }}

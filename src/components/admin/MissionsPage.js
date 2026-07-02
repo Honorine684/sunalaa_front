@@ -79,7 +79,7 @@ function MissionModal({ mission, onClose, onSaved }) {
           reward: String(mission.reward), isActive: mission.isActive,
           requiresApproval: mission.requiresApproval ?? false,
           contentType: mission.contentType ?? "LINK",
-          timeRequired: mission.timeRequired ? String(Math.round(mission.timeRequired / 60)) : "",
+          timeRequired: mission.timeRequired ? String(mission.timeRequired) : "",
         }
       : { ...EMPTY_FIELDS }
   );
@@ -145,16 +145,27 @@ function MissionModal({ mission, onClose, onSaved }) {
         ...fields,
         reward: Number(fields.reward),
         actionUrl: fields.actionUrl.trim() || null,
-        timeRequired: fields.timeRequired ? Number(fields.timeRequired) * 60 : null,
+        timeRequired: fields.timeRequired ? Number(fields.timeRequired) : null,
         contentUrl: uploadedUrl || null,
-        ...(notifySend && {
-          notify: { send: true, title: notifTitle.trim(), message: notifMessage.trim() },
-        }),
       };
       const res = isEdit
         ? await adminApi.updateMission(mission.id, payload)
         : await adminApi.createMission(payload);
-      onSaved(res.data?.data ?? res.data);
+      const saved = res.data?.data ?? res.data;
+
+      // Envoyer la push notification via broadcast (fire-and-forget)
+      if (notifySend && saved?.id) {
+        const missionLink = `https://sunalaa.com/bonus?mission=${saved.id}`;
+        adminApi.broadcastNotification({
+          title:       notifTitle.trim(),
+          message:     notifMessage.trim(),
+          targetGroup: "all",
+          link:        missionLink,
+          ...(fields.contentType === "IMAGE" && uploadedUrl ? { imageUrl: uploadedUrl } : {}),
+        }).catch(() => {}); // ne pas bloquer si la notif échoue
+      }
+
+      onSaved(saved);
       onClose();
     } catch (err) {
       setError(getApiError(err));
@@ -289,7 +300,7 @@ function MissionModal({ mission, onClose, onSaved }) {
           {isMedia && (
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                Temps minimum avant réclamation <span className="font-normal text-slate-400">(minutes — laisser vide = pas de timer)</span>
+                Temps minimum avant réclamation <span className="font-normal text-slate-400">(secondes — laisser vide = pas de timer)</span>
               </label>
               <input type="number" min={1} value={fields.timeRequired} onChange={(e) => set("timeRequired", e.target.value)}
                 placeholder="Ex : 2"
