@@ -125,9 +125,9 @@
     "step1_title": "Partagez votre lien",
     "step1_desc": "Invitez vos amis, votre famille et votre communauté à rejoindre SUNALA",
     "step2_title": "Ils s'inscrivent",
-    "step2_desc": "Vos filleuls créent leur compte et commencent à collecter leurs points SNL",
+    "step2_desc": "Vos filleuls créent leur compte et gagnent des points SNL : collecte quotidienne, missions, streak, inscription, profil, transferts…",
     "step3_title": "Vous gagnez ensemble",
-    "step3_desc": "Recevez un bonus sur leurs collectes quotidiennes et progressez en équipe",
+    "step3_desc": "Vous recevez votre % sur tous les points gagnés par vos filleuls, sans exception — collecte, missions, streak, inscription, profil, transferts.",
     "gains_title": "Vos gains par niveau",
     "level1": "Niveau 1",
     "level1_sub": "Vos invitations directes",
@@ -136,12 +136,12 @@
     "level3": "Niveau 3",
     "level3_sub": "Invitations de niveau 2",
     "referrals": "{n} filleuls",
-    "daily_bonus": "{pct}% des collectes journalières",
+    "daily_bonus": "{pct}% de tous les points du filleul",
     "claim_btn": "+{snl} SNL",
     "claimed": "À jour",
     "no_referrals": "Aucun filleul",
-    "info_1": "Chaque collecte d'un filleul vous crédite automatiquement un bonus en SNL.",
-    "info_2": "Réclamez vos bonus accumulés en cliquant sur le bouton de chaque niveau."
+    "info_1": "Chaque point gagné par un filleul vous crédite automatiquement un bonus SNL — collecte, missions, streak, inscription, profil, transferts reçus.",
+    "info_2": "Le bonus est mis en attente à chaque collecte du filleul. Réclamez-le en cliquant sur le bouton de chaque niveau."
   },
   "Footer": {
     "brand_desc": "L'écosystème AgriFi qui connecte l'agriculture africaine réelle à la blockchain.",

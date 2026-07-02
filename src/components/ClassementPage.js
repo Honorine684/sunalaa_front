@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { leaderboardApi, usersApi } from "@/lib/api";
 
+const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
+function buildAvatarUrl(raw) {
+  if (!raw) return null;
+  return raw.startsWith("http") ? raw : `${API_ORIGIN}${raw}`;
+}
+
 /* ── Helpers ──────────────────────────────────────────────────────── */
 function getInitials(u) {
   if (u?.username) return u.username[0].toUpperCase();
@@ -66,7 +72,7 @@ function CrownIcon({ size = 20 }) {
 
 function Avatar({ user, size = 36, rank }) {
   const color = rank === 1 ? "#E5B858" : rank === 2 ? "#94A3B8" : rank === 3 ? "#CD7F32" : "#3FAE8C";
-  const photo = user?.avatar ?? user?.profileImage ?? user?.profilePicture ?? user?.picture ?? null;
+  const photo = buildAvatarUrl(user?.avatar ?? user?.profileImage ?? user?.profilePicture ?? user?.picture ?? null);
   if (photo) {
     return (
       <img

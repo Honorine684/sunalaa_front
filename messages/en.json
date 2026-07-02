@@ -125,9 +125,9 @@
     "step1_title": "Share your link",
     "step1_desc": "Invite your friends, family and community to join SUNALA",
     "step2_title": "They sign up",
-    "step2_desc": "Your referrals create their account and start collecting SNL points",
+    "step2_desc": "Your referrals create their account and earn SNL points: daily collect, missions, streak, registration, profile, transfers…",
     "step3_title": "You win together",
-    "step3_desc": "Receive a bonus on their daily collects and progress as a team",
+    "step3_desc": "You receive your % on every point your referrals earn, no exceptions — collect, missions, streak, registration, profile, transfers.",
     "gains_title": "Your earnings by level",
     "level1": "Level 1",
     "level1_sub": "Your direct referrals",
@@ -136,12 +136,12 @@
     "level3": "Level 3",
     "level3_sub": "Level 2 referrals",
     "referrals": "{n} referrals",
-    "daily_bonus": "{pct}% of daily collects",
+    "daily_bonus": "{pct}% of all referral points",
     "claim_btn": "+{snl} SNL",
     "claimed": "Up to date",
     "no_referrals": "No referrals",
-    "info_1": "Every collect by a referral automatically credits you a SNL bonus.",
-    "info_2": "Claim your accumulated bonuses by clicking the button at each level."
+    "info_1": "Every point earned by a referral automatically credits you a SNL bonus — collect, missions, streak, registration, profile, transfers received.",
+    "info_2": "The bonus is held pending at each referral collect. Claim it by clicking the button at each level."
   },
   "Footer": {
     "brand_desc": "The AgriFi ecosystem connecting real African agriculture to the blockchain.",

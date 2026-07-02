@@ -5,6 +5,15 @@ import { authApi } from "@/lib/api";
 
 const SESSION_DURATION_MS = 86400 * 1000; // 24h
 
+const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
+
+function normalizeUser(u) {
+  if (!u) return u;
+  const raw = u.profileImage ?? u.avatar ?? null;
+  const profileImage = raw && !raw.startsWith("http") ? `${API_ORIGIN}${raw}` : raw;
+  return profileImage ? { ...u, profileImage } : u;
+}
+
 function lsGet(key) {
   try { return localStorage.getItem(key); } catch { return null; }
 }
@@ -41,11 +50,11 @@ export function AuthProvider({ children }) {
     const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
 
     if (stored && !expired) {
-      try { setUser(JSON.parse(stored)); } catch {}
+      try { setUser(normalizeUser(JSON.parse(stored))); } catch {}
       // Valide silencieusement — cookie HttpOnly envoyé automatiquement
       authApi.getMe()
         .then(({ data }) => {
-          const fresh = data?.data?.data ?? data?.data ?? data;
+          const fresh = normalizeUser(data?.data?.data ?? data?.data ?? data);
           if (fresh?.id) {
             setUser(fresh);
             lsSet("snl_user", JSON.stringify(fresh));
@@ -74,10 +83,11 @@ export function AuthProvider({ children }) {
     const u = d?.user ?? d;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     const cookieOpts = `path=/; max-age=86400; SameSite=Lax${secure}`;
-    lsSet("snl_user", JSON.stringify(u));
+    const norm = normalizeUser(u);
+    lsSet("snl_user", JSON.stringify(norm));
     lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
-    setUser(u);
+    document.cookie = `snl_user_role=${(norm?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
+    setUser(norm);
   }, []);
 
   const login = useCallback(async (credentials) => {
@@ -108,7 +118,7 @@ export function AuthProvider({ children }) {
   const loginWithOAuth = useCallback(async () => {
     // Cookie HttpOnly déjà posé par le backend via /auth/google/callback
     const { data } = await authApi.getMe();
-    const u = data?.data?.data ?? data?.data ?? data;
+    const u = normalizeUser(data?.data?.data ?? data?.data ?? data);
     const secure = typeof window !== "undefined" && window.location.hostname !== "localhost" ? "; Secure" : "";
     lsSet("snl_user", JSON.stringify(u));
     lsSet("snl_login_time", String(Date.now()));
@@ -120,7 +130,7 @@ export function AuthProvider({ children }) {
   const refreshUser = useCallback(async () => {
     try {
       const { data } = await authApi.getMe();
-      const u = data?.data?.data ?? data?.data ?? data;
+      const u = normalizeUser(data?.data?.data ?? data?.data ?? data);
       setUser(u);
       lsSet("snl_user", JSON.stringify(u));
     } catch {}
