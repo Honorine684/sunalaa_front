@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { authApi } from "@/lib/api";
 
-const SESSION_DURATION_MS = 86400 * 1000; // 24h
+const SESSION_DURATION_MS = 5 * 3600 * 1000; // 5h
 
 const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
 
@@ -82,7 +82,7 @@ export function AuthProvider({ children }) {
     const d = raw?.data ?? raw;
     const u = d?.user ?? d;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-    const cookieOpts = `path=/; max-age=86400; SameSite=Lax${secure}`;
+    const cookieOpts = `path=/; max-age=18000; SameSite=Lax${secure}`;
     const norm = normalizeUser(u);
     lsSet("snl_user", JSON.stringify(norm));
     lsSet("snl_login_time", String(Date.now()));
@@ -122,7 +122,7 @@ export function AuthProvider({ children }) {
     const secure = typeof window !== "undefined" && window.location.hostname !== "localhost" ? "; Secure" : "";
     lsSet("snl_user", JSON.stringify(u));
     lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; path=/; max-age=86400; SameSite=Lax${secure}`;
+    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; path=/; max-age=18000; SameSite=Lax${secure}`;
     setUser(u);
     return u;
   }, []);
