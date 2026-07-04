@@ -199,22 +199,41 @@ function MissionsSectionInner() {
       return;
     }
 
+    // Init: prefer saved remaining (set on visibilitychange) over wall-clock recalc
     const initial = {};
     pending.forEach((m) => {
       try {
-        const stored = localStorage.getItem(`snl_mission_start_${m.id}`);
-        const startMs = stored
-          ? Number(stored)
-          : m.startedAt ? new Date(m.startedAt).getTime() : Date.now();
-        initial[m.id] = Math.max(0, m.timeRequired - (Date.now() - startMs) / 1000);
+        const saved = localStorage.getItem(`snl_mission_remaining_${m.id}`);
+        if (saved) {
+          initial[m.id] = Math.max(0, Number(saved));
+        } else {
+          const startMs = localStorage.getItem(`snl_mission_start_${m.id}`)
+            ? Number(localStorage.getItem(`snl_mission_start_${m.id}`))
+            : m.startedAt ? new Date(m.startedAt).getTime() : Date.now();
+          initial[m.id] = Math.max(0, m.timeRequired - (Date.now() - startMs) / 1000);
+        }
       } catch {
         initial[m.id] = m.timeRequired;
       }
     });
     setRemainingTimes(initial);
 
+    // Save remaining when tab goes hidden so iOS reload doesn't recalculate from startMs
+    function onHide() {
+      if (document.visibilityState !== "hidden") return;
+      setRemainingTimes((current) => {
+        Object.entries(current).forEach(([id, rem]) => {
+          try { localStorage.setItem(`snl_mission_remaining_${id}`, String(rem)); } catch {}
+        });
+        return current;
+      });
+    }
+    document.addEventListener("visibilitychange", onHide);
+    // pagehide fires on iOS when page is unloaded (more reliable than visibilitychange)
+    window.addEventListener("pagehide", onHide);
+
     const intervalId = setInterval(() => {
-      if (document.visibilityState !== "visible") return; // pause when tab inactive
+      if (document.visibilityState !== "visible") return;
       setRemainingTimes((prev) => {
         const next = { ...prev };
         let anyActive = false;
@@ -223,10 +242,12 @@ function MissionsSectionInner() {
             const mission = pending.find((m) => String(m.id) === String(id));
             const isMedia = mission?.contentType === "VIDEO" || mission?.contentType === "IMAGE";
             if (isMedia && String(mediaModalIdRef.current) !== String(id)) {
-              anyActive = true; // garder l'intervalle vivant même si on ne décompte pas
+              anyActive = true;
               return;
             }
             next[id] = Math.max(0, next[id] - 1);
+            // Keep saved remaining in sync
+            try { localStorage.setItem(`snl_mission_remaining_${id}`, String(next[id])); } catch {}
             if (next[id] > 0) anyActive = true;
           }
         });
@@ -236,7 +257,11 @@ function MissionsSectionInner() {
     }, 1000);
     timerRef.current = intervalId;
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("pagehide", onHide);
+    };
   }, [missions]);
 
   /* ── Data fetching ── */
@@ -317,6 +342,10 @@ function MissionsSectionInner() {
       const updated = res.data?.data ?? res.data;
       const newStatus = updated?.status ?? updated?.userStatus ?? "UNDER_REVIEW";
       setMissions((prev) => prev.map((m) => m.id === id ? { ...m, userStatus: newStatus } : m));
+      try {
+        localStorage.removeItem(`snl_mission_remaining_${id}`);
+        localStorage.removeItem(`snl_mission_start_${id}`);
+      } catch {}
     } catch (err) {
       // Backend says timer not done yet → resync remaining from server value
       const errCode = err?.response?.data?.error;
