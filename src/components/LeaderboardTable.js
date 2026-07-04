@@ -6,7 +6,6 @@ import { leaderboardApi } from "@/lib/api";
 import LeaderboardRow from "./LeaderboardRow";
 import { useTranslations } from "next-intl";
 
-const PAGE_SIZE = 20;
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "https://api.sunalaa.com";
 
 function buildAvatarUrl(raw) {
@@ -89,58 +88,57 @@ function fmt(n) {
 
 export default function LeaderboardTable({ search = "", levelFilter = "" }) {
   const t = useTranslations("LeaderboardTable");
-  const { user: authUser } = useAuth();
+  const { user: authUser, isAuthenticated } = useAuth();
   const myId = authUser?.id ?? authUser?.userId;
 
-  const [players, setPlayers]     = useState([]);
-  const [total, setTotal]         = useState(0);
-  const [page, setPage]           = useState(1);
-  const [loading, setLoading]     = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore]     = useState(false);
+  const [players, setPlayers] = useState([]);
+  const [myRank, setMyRank]   = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const fetchPage = useCallback((pageNum, replace = false) => {
-    const setter = replace ? setLoading : setLoadingMore;
-    setter(true);
+  const load = useCallback(() => {
+    setLoading(true);
 
-    const params = { limit: PAGE_SIZE, page: pageNum };
-    if (search.trim()) params.search = search.trim();
-    if (levelFilter && levelFilter !== "All") params.level = levelFilter;
+    const rankPromise = isAuthenticated
+      ? leaderboardApi.getMyRank().then((r) => {
+          const d = r?.data?.data ?? r?.data;
+          return d?.rank ?? d?.position ?? d?.leaderboardRank ?? null;
+        }).catch(() => null)
+      : Promise.resolve(null);
 
-    leaderboardApi.getTop(params)
-      .then((res) => {
-        const body = res?.data?.data ?? res?.data;
-        const raw  = body?.data ?? body?.items ?? body?.users ?? body;
-        const list = Array.isArray(raw) ? raw : [];
-        const tot  = body?.meta?.total ?? body?.total ?? list.length;
+    rankPromise.then((rank) => {
+      setMyRank(rank);
+      // If authenticated and no search/filter: fetch up to user's rank (min 20)
+      const limit = (isAuthenticated && rank && !search.trim() && (!levelFilter || levelFilter === "All"))
+        ? Math.max(rank, 20)
+        : 100;
 
-        setTotal(tot);
-        setPlayers((prev) => replace ? list : [...prev, ...list]);
-        setHasMore((replace ? list.length : players.length + list.length) < tot);
-        setPage(pageNum);
-      })
-      .catch(() => {})
-      .finally(() => setter(false));
-  }, [search, levelFilter]); // eslint-disable-line
+      const params = { limit };
+      if (search.trim()) params.search = search.trim();
+      if (levelFilter && levelFilter !== "All") params.level = levelFilter;
 
-  // Reset on search/filter change
+      return leaderboardApi.getTop(params);
+    }).then((res) => {
+      const body = res?.data?.data ?? res?.data;
+      const raw  = body?.data ?? body?.items ?? body?.users ?? body;
+      setPlayers(Array.isArray(raw) ? raw : []);
+    }).catch(() => {})
+    .finally(() => setLoading(false));
+  }, [isAuthenticated, search, levelFilter]); // eslint-disable-line
+
   useEffect(() => {
     setPlayers([]);
-    setPage(1);
-    fetchPage(1, true);
-  }, [search, levelFilter]); // eslint-disable-line
-
-  function loadMore() {
-    fetchPage(page + 1, false);
-  }
+    load();
+  }, [search, levelFilter, isAuthenticated]); // eslint-disable-line
 
   return (
     <div>
       {/* Compteur */}
       {!loading && (
         <p className="text-[13px] text-gray-400 mb-3">
-          {total > 0
-            ? `${fmt(players.length)} / ${fmt(total)} participants`
+          {players.length > 0
+            ? myRank
+              ? `Votre rang : #${myRank} — ${fmt(players.length)} participants affichés`
+              : `${fmt(players.length)} participants`
             : search ? t("no_results_search") : t("no_participants")}
         </p>
       )}
@@ -153,9 +151,9 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
             : players.length === 0
               ? <p className="text-center text-gray-400 text-sm py-10">{t("no_results")}</p>
               : players.map((u, i) => {
-                  const rank  = u.rank ?? u.position ?? i + 1;
-                  const uid   = u.id ?? u.userId ?? u.user?.id ?? u.user?.userId;
-                  const isMe  = Boolean(myId && uid === myId);
+                  const rank = u.rank ?? u.position ?? i + 1;
+                  const uid  = u.id ?? u.userId ?? u.user?.id ?? u.user?.userId;
+                  const isMe = Boolean(myId && uid === myId);
                   return (
                     <LeaderboardRow
                       key={u.id ?? i}
@@ -173,25 +171,6 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
                   );
                 })
           }
-
-          {/* Charger plus */}
-          {!loading && hasMore && (
-            <div className="flex justify-center py-4 border-t border-gray-100">
-              <button
-                onClick={loadMore}
-                disabled={loadingMore}
-                className="flex items-center gap-2 bg-[#111] text-white text-[13px] font-semibold px-6 py-2.5 rounded-lg hover:bg-[#222] transition disabled:opacity-50 cursor-pointer"
-              >
-                {loadingMore ? (
-                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                  </svg>
-                ) : null}
-                {loadingMore ? t("loading_more") : t("load_more")}
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -19,12 +19,14 @@ const STREAK_DAYS = [
 
 function useCountdown(deadline) {
   const [remaining, setRemaining] = useState("");
+  const [expired, setExpired]     = useState(false);
 
   useEffect(() => {
-    if (!deadline) { setRemaining(""); return; }
+    if (!deadline) { setRemaining(""); setExpired(false); return; }
+    setExpired(false);
     function tick() {
       const diff = new Date(deadline) - Date.now();
-      if (diff <= 0) { setRemaining("00:00:00"); return; }
+      if (diff <= 0) { setRemaining(""); setExpired(true); return; }
       const h = Math.floor(diff / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
       const s = Math.floor((diff % 60000) / 1000);
@@ -35,7 +37,7 @@ function useCountdown(deadline) {
     return () => clearInterval(id);
   }, [deadline]);
 
-  return remaining;
+  return { remaining, expired };
 }
 
 export default function BonusHero() {
@@ -77,7 +79,7 @@ export default function BonusHero() {
   const currentDay         = streak?.currentDay ?? 1;
   const todayClaimed       = streak?.todayClaimed ?? false;
   const nextClaimDeadline  = streak?.nextClaimDeadline ?? null;
-  const countdown          = useCountdown(todayClaimed ? nextClaimDeadline : null);
+  const { remaining: countdown, expired: countdownExpired } = useCountdown(todayClaimed ? nextClaimDeadline : null);
 
   return (
     <section className="relative flex items-center justify-center bg-[#0d2e2a] lg:min-h-180">
@@ -158,20 +160,14 @@ export default function BonusHero() {
               </svg>
               {t("loading")}
             </div>
-          ) : todayClaimed ? (
-            <div className="flex flex-col items-center gap-3">
-              <button
-                disabled
-                className="bg-secondary text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-70 cursor-default"
-              >
-                {t("claimed")}
-              </button>
-              {countdown && (
-                <p className="text-[12px] lg:text-[13px]" style={{ color: "rgba(255,255,255,0.55)" }}>
-                  {t("streak_expires_in")} <span className="font-bold tabular-nums" style={{ color: "#F87171" }}>{countdown}</span>
-                </p>
-              )}
-            </div>
+          ) : todayClaimed && !countdownExpired ? (
+            <button
+              disabled
+              className="flex flex-col items-center bg-secondary text-white font-bold px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-80 cursor-default"
+            >
+              <span className="text-[11px] lg:text-[13px] font-normal opacity-80">{t("claimed")}</span>
+              <span className="text-[18px] lg:text-[22px] tabular-nums tracking-widest leading-tight">{countdown || "—:——:——"}</span>
+            </button>
           ) : (
             <button
               onClick={handleClaim}

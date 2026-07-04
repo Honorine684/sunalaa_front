@@ -73,16 +73,94 @@ function Spinner({ color = "currentColor" }) {
   );
 }
 
+/* ── Media popup modal ── */
+function MediaModal({ mission, remaining, timerDone, busy, onClaim, onClose }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+      style={{ backgroundColor: "rgba(0,0,0,0.92)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full text-white hover:bg-white/10 transition"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      </button>
+
+      {/* Media */}
+      <div className="w-full flex items-center justify-center px-4" style={{ maxHeight: "70vh" }}>
+        {mission.contentType === "VIDEO" ? (
+          <video
+            src={mission.contentUrl}
+            controls
+            autoPlay
+            playsInline
+            className="rounded-xl"
+            style={{ maxWidth: "min(90vw, 720px)", maxHeight: "70vh", backgroundColor: "#000", display: "block" }}
+          />
+        ) : (
+          <img
+            src={mission.contentUrl}
+            alt={mission.title}
+            className="rounded-xl"
+            style={{ maxWidth: "min(90vw, 720px)", maxHeight: "70vh", objectFit: "contain", display: "block" }}
+          />
+        )}
+      </div>
+
+      {/* Timer / claim */}
+      <div className="mt-6 px-4 w-full flex flex-col items-center gap-3" style={{ maxWidth: 400 }}>
+        <p className="text-white font-semibold text-[15px] text-center">{mission.title}</p>
+        {timerDone ? (
+          <button
+            onClick={onClaim}
+            disabled={busy}
+            className="w-full py-3 rounded-xl text-white text-[15px] font-bold hover:brightness-110 transition disabled:opacity-60 flex items-center justify-center gap-2"
+            style={{ backgroundColor: "#3FAE8C" }}
+          >
+            {busy && <Spinner color="white" />}
+            {busy ? "Vérification…" : "Réclamer les points"}
+          </button>
+        ) : (
+          <div className="w-full flex flex-col gap-2">
+            <div className="relative h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>
+              <div
+                className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000"
+                style={{
+                  width: `${Math.min(100, ((mission.timeRequired - remaining) / mission.timeRequired) * 100)}%`,
+                  backgroundColor: "#E6B84C",
+                }}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-2 py-3 rounded-xl text-[15px] font-semibold" style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)" }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Disponible dans <span className="tabular-nums font-bold" style={{ color: "#E6B84C" }}>{fmtTime(remaining)}</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function MissionsSectionInner() {
   const t = useTranslations("MissionsSection");
   const { isAuthenticated, refreshUser } = useAuth();
   const searchParams = useSearchParams();
   const highlightId = searchParams?.get("mission") ?? null;
 
-  const [missions, setMissions]       = useState([]);
-  const [loading, setLoading]         = useState(true);
-  const [loadingId, setLoadingId]     = useState(null);
+  const [missions, setMissions]             = useState([]);
+  const [loading, setLoading]               = useState(true);
+  const [loadingId, setLoadingId]           = useState(null);
   const [remainingTimes, setRemainingTimes] = useState({});
+  const [mediaModalId, setMediaModalId]     = useState(null);
 
   const prevStatuses = useRef({});
   const missionRefs  = useRef({});
@@ -121,6 +199,7 @@ function MissionsSectionInner() {
     setRemainingTimes(initial);
 
     const intervalId = setInterval(() => {
+      if (document.visibilityState !== "visible") return; // pause when tab inactive
       setRemainingTimes((prev) => {
         const next = { ...prev };
         let anyActive = false;
@@ -196,6 +275,9 @@ function MissionsSectionInner() {
       setMissions((prev) =>
         prev.map((m) => m.id === mission.id ? { ...m, userStatus: "PENDING" } : m)
       );
+      if (mission.contentType === "VIDEO" || mission.contentType === "IMAGE") {
+        setMediaModalId(mission.id);
+      }
     } catch {
       missionsApi.getMyMissions()
         .then((res) => { const raw = res.data?.data ?? res.data; if (Array.isArray(raw)) setMissions(raw); })
@@ -225,8 +307,21 @@ function MissionsSectionInner() {
   }
 
   /* ── Render ── */
+  const modalMission = mediaModalId ? missions.find((m) => m.id === mediaModalId) : null;
+
   return (
     <section className="bg-white py-16 relative overflow-hidden">
+      {/* Media popup */}
+      {modalMission && (
+        <MediaModal
+          mission={modalMission}
+          remaining={remainingTimes[modalMission.id] ?? 0}
+          timerDone={!modalMission.timeRequired || (remainingTimes[modalMission.id] ?? 0) <= 0}
+          busy={loadingId === modalMission.id}
+          onClaim={async () => { await handleComplete(modalMission.id); setMediaModalId(null); }}
+          onClose={() => setMediaModalId(null)}
+        />
+      )}
       <div className="absolute left-[13%] top-44.5 pointer-events-none select-none">
         {[338, 281, 224, 140].map((size) => (
           <div key={size} className="absolute rounded-full border border-secondary/25"
@@ -368,27 +463,20 @@ function MissionsSectionInner() {
                     </div>
                   </div>
 
-                  {/* Media content — shown when PENDING */}
+                  {/* Voir le contenu — shown when PENDING + media */}
                   {pending && isMedia && mission.contentUrl && (
-                    <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(0,0,0,0.08)" }}>
+                    <button
+                      onClick={() => setMediaModalId(mission.id)}
+                      className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[13px] font-medium transition hover:brightness-95"
+                      style={{ backgroundColor: "rgba(31,78,70,0.07)", color: "#1F4E46", border: "1px solid rgba(31,78,70,0.15)" }}
+                    >
                       {mission.contentType === "VIDEO" ? (
-                        <video
-                          src={mission.contentUrl}
-                          controls
-                          autoPlay
-                          playsInline
-                          className="w-full"
-                          style={{ maxHeight: 220, backgroundColor: "#000", display: "block" }}
-                        />
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="23 7 16 12 23 17 23 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       ) : (
-                        <img
-                          src={mission.contentUrl}
-                          alt={mission.title}
-                          className="w-full object-cover"
-                          style={{ maxHeight: 200, display: "block" }}
-                        />
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2"/><polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       )}
-                    </div>
+                      Voir le contenu
+                    </button>
                   )}
 
                   {/* Actions */}
