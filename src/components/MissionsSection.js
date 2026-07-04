@@ -222,11 +222,13 @@ function MissionsSectionInner() {
           if (next[id] > 0) {
             const mission = pending.find((m) => String(m.id) === String(id));
             const isMedia = mission?.contentType === "VIDEO" || mission?.contentType === "IMAGE";
-            // Media missions only count when their modal is open
-            if (isMedia && String(mediaModalIdRef.current) !== String(id)) return;
+            if (isMedia && String(mediaModalIdRef.current) !== String(id)) {
+              anyActive = true; // garder l'intervalle vivant même si on ne décompte pas
+              return;
+            }
             next[id] = Math.max(0, next[id] - 1);
+            if (next[id] > 0) anyActive = true;
           }
-          if (next[id] > 0) anyActive = true;
         });
         if (!anyActive) clearInterval(intervalId);
         return next;
