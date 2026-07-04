@@ -76,75 +76,86 @@ function Spinner({ color = "currentColor" }) {
 /* ── Media popup modal ── */
 function MediaModal({ mission, remaining, timerDone, busy, onClaim, onClose }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-      style={{ backgroundColor: "rgba(0,0,0,0.92)" }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      {/* Close */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full text-white hover:bg-white/10 transition"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        </svg>
-      </button>
+    <div className="fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: "rgba(0,0,0,0.95)" }}>
 
-      {/* Media */}
-      <div className="w-full flex items-center justify-center px-4" style={{ maxHeight: "70vh" }}>
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-4 pt-4 pb-2 shrink-0">
+        <p className="text-white font-semibold text-[15px] truncate pr-4">{mission.title}</p>
+        <button
+          onClick={onClose}
+          className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full active:bg-white/20 transition"
+          style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Media — scrollable zone */}
+      <div className="flex-1 flex items-center justify-center px-4 overflow-hidden">
         {mission.contentType === "VIDEO" ? (
           <video
             src={mission.contentUrl}
             controls
             autoPlay
             playsInline
-            className="rounded-xl"
-            style={{ maxWidth: "min(90vw, 720px)", maxHeight: "70vh", backgroundColor: "#000", display: "block" }}
+            className="rounded-xl w-full"
+            style={{ maxWidth: 720, maxHeight: "60vh", backgroundColor: "#000", display: "block" }}
           />
         ) : (
           <img
             src={mission.contentUrl}
             alt={mission.title}
             className="rounded-xl"
-            style={{ maxWidth: "min(90vw, 720px)", maxHeight: "70vh", objectFit: "contain", display: "block" }}
+            style={{ maxWidth: "min(100%, 720px)", maxHeight: "60vh", objectFit: "contain", display: "block" }}
           />
         )}
       </div>
 
-      {/* Timer / claim */}
-      <div className="mt-6 px-4 w-full flex flex-col items-center gap-3" style={{ maxWidth: 400 }}>
-        <p className="text-white font-semibold text-[15px] text-center">{mission.title}</p>
+      {/* Bottom bar — timer / claim / close */}
+      <div className="shrink-0 px-4 pb-8 pt-4 flex flex-col gap-3" style={{ maxWidth: 480, width: "100%", margin: "0 auto" }}>
+        {/* Progress bar */}
+        {!timerDone && (
+          <div className="relative h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>
+            <div
+              className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000"
+              style={{
+                width: `${Math.min(100, ((mission.timeRequired - remaining) / mission.timeRequired) * 100)}%`,
+                backgroundColor: "#E6B84C",
+              }}
+            />
+          </div>
+        )}
+
         {timerDone ? (
           <button
             onClick={onClaim}
             disabled={busy}
-            className="w-full py-3 rounded-xl text-white text-[15px] font-bold hover:brightness-110 transition disabled:opacity-60 flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl text-white text-[16px] font-bold hover:brightness-110 transition disabled:opacity-60 flex items-center justify-center gap-2"
             style={{ backgroundColor: "#3FAE8C" }}
           >
             {busy && <Spinner color="white" />}
             {busy ? "Vérification…" : "Réclamer les points"}
           </button>
         ) : (
-          <div className="w-full flex flex-col gap-2">
-            <div className="relative h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>
-              <div
-                className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000"
-                style={{
-                  width: `${Math.min(100, ((mission.timeRequired - remaining) / mission.timeRequired) * 100)}%`,
-                  backgroundColor: "#E6B84C",
-                }}
-              />
-            </div>
-            <div className="flex items-center justify-center gap-2 py-3 rounded-xl text-[15px] font-semibold" style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)" }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              Disponible dans <span className="tabular-nums font-bold" style={{ color: "#E6B84C" }}>{fmtTime(remaining)}</span>
-            </div>
+          <div className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-[15px] font-semibold" style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)" }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            Disponible dans{" "}
+            <span className="tabular-nums font-bold" style={{ color: "#E6B84C" }}>{fmtTime(remaining)}</span>
           </div>
         )}
+
+        <button
+          onClick={onClose}
+          className="w-full py-4 rounded-2xl text-[15px] font-semibold transition active:opacity-70"
+          style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }}
+        >
+          Fermer
+        </button>
       </div>
     </div>
   );
@@ -162,9 +173,13 @@ function MissionsSectionInner() {
   const [remainingTimes, setRemainingTimes] = useState({});
   const [mediaModalId, setMediaModalId]     = useState(null);
 
-  const prevStatuses = useRef({});
-  const missionRefs  = useRef({});
-  const timerRef     = useRef(null);
+  const prevStatuses   = useRef({});
+  const missionRefs    = useRef({});
+  const timerRef       = useRef(null);
+  const mediaModalIdRef = useRef(null);
+
+  // Keep ref in sync so the interval closure can read current modal state
+  useEffect(() => { mediaModalIdRef.current = mediaModalId; }, [mediaModalId]);
 
   /* ── Scroll to highlighted mission ── */
   useEffect(() => {
@@ -204,7 +219,13 @@ function MissionsSectionInner() {
         const next = { ...prev };
         let anyActive = false;
         Object.keys(next).forEach((id) => {
-          if (next[id] > 0) { next[id] = Math.max(0, next[id] - 1); }
+          if (next[id] > 0) {
+            const mission = pending.find((m) => String(m.id) === String(id));
+            const isMedia = mission?.contentType === "VIDEO" || mission?.contentType === "IMAGE";
+            // Media missions only count when their modal is open
+            if (isMedia && String(mediaModalIdRef.current) !== String(id)) return;
+            next[id] = Math.max(0, next[id] - 1);
+          }
           if (next[id] > 0) anyActive = true;
         });
         if (!anyActive) clearInterval(intervalId);
