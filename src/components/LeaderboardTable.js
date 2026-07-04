@@ -107,20 +107,29 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
 
     rankPromise.then((rank) => {
       setMyRank(rank);
-      // If authenticated and no search/filter: fetch up to user's rank (min 20)
-      const limit = (isAuthenticated && rank && !search.trim() && (!levelFilter || levelFilter === "All"))
-        ? Math.max(rank, 20)
-        : 100;
+      const isDefault = !search.trim() && (!levelFilter || levelFilter === "All");
+      const limit = (isAuthenticated && rank && isDefault) ? rank : 100;
 
       const params = { limit };
       if (search.trim()) params.search = search.trim();
       if (levelFilter && levelFilter !== "All") params.level = levelFilter;
 
-      return leaderboardApi.getTop(params);
-    }).then((res) => {
+      return leaderboardApi.getTop(params).then((res) => ({ res, rank, isDefault }));
+    }).then(({ res, rank, isDefault }) => {
       const body = res?.data?.data ?? res?.data;
       const raw  = body?.data ?? body?.items ?? body?.users ?? body;
-      setPlayers(Array.isArray(raw) ? raw : []);
+      let list = Array.isArray(raw) ? raw : [];
+
+      // Slice to current user's position — nothing below the user should appear
+      if (isAuthenticated && rank && isDefault) {
+        const myIdx = list.findIndex((u) => {
+          const uid = u.id ?? u.userId ?? u.user?.id ?? u.user?.userId;
+          return uid === myId;
+        });
+        if (myIdx !== -1) list = list.slice(0, myIdx + 1);
+      }
+
+      setPlayers(list);
     }).catch(() => {})
     .finally(() => setLoading(false));
   }, [isAuthenticated, search, levelFilter]); // eslint-disable-line
