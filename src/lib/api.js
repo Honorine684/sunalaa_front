@@ -53,8 +53,8 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Proxy same-origin → évite le blocage cross-origin des cookies HttpOnly
-        await axios.post(`/api/auth/refresh`, {}, { withCredentials: true });
+        // Cookie snl_refresh_token envoyé automatiquement via withCredentials
+        await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
         processQueue(null);
         return api(original);
       } catch (err) {

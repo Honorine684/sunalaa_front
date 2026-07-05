@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Container from "./Container";
 import { usersApi, getApiError } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -96,6 +96,18 @@ export default function BonusHero() {
   const todayClaimed      = streak?.todayClaimed ?? false;
   const nextClaimDeadline = streak?.nextClaimDeadline ?? null;
   const { phase, waitRemaining, claimRemaining } = useStreakPhase(todayClaimed ? nextClaimDeadline : null);
+
+  // When the 24h lock ends and the 3h claim window opens, refetch streak so
+  // the day cards update (todayClaimed → false, currentDay advances on backend)
+  const prevPhaseRef = useRef(null);
+  useEffect(() => {
+    if (phase === "claim" && prevPhaseRef.current === "wait") {
+      usersApi.getStreak()
+        .then((res) => setStreak(res.data?.data ?? res.data))
+        .catch(() => {});
+    }
+    prevPhaseRef.current = phase;
+  }, [phase]);
 
   return (
     <section className="relative flex items-center justify-center bg-[#0d2e2a] lg:min-h-180">
