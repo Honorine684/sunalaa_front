@@ -17,27 +17,43 @@ const STREAK_DAYS = [
   { day: 7, snl: 80  },
 ];
 
-function useCountdown(deadline) {
-  const [remaining, setRemaining] = useState("");
-  const [expired, setExpired]     = useState(false);
+// deadline = when the claim window fully closes (e.g. 27h after last claim)
+// phase "wait"  → still in the 24h lock period → show wait countdown in button
+// phase "claim" → 3h claim window is open      → show claim btn + 3h countdown below
+// phase "expired" / null → claim immediately
+const CLAIM_WINDOW_MS = 3 * 3600 * 1000;
+
+function pad(n) { return String(n).padStart(2, "0"); }
+function hms(ms) {
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function useStreakPhase(deadline) {
+  const [state, setState] = useState({ phase: "none", waitRemaining: "", claimRemaining: "" });
 
   useEffect(() => {
-    if (!deadline) { setRemaining(""); setExpired(false); return; }
-    setExpired(false);
+    if (!deadline) { setState({ phase: "none", waitRemaining: "", claimRemaining: "" }); return; }
+
     function tick() {
       const diff = new Date(deadline) - Date.now();
-      if (diff <= 0) { setRemaining(""); setExpired(true); return; }
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      setRemaining(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`);
+      if (diff <= 0) {
+        setState({ phase: "expired", waitRemaining: "", claimRemaining: "" });
+      } else if (diff > CLAIM_WINDOW_MS) {
+        setState({ phase: "wait", waitRemaining: hms(diff - CLAIM_WINDOW_MS), claimRemaining: "" });
+      } else {
+        setState({ phase: "claim", waitRemaining: "", claimRemaining: hms(diff) });
+      }
     }
+
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [deadline]);
 
-  return { remaining, expired };
+  return state;
 }
 
 export default function BonusHero() {
@@ -76,10 +92,10 @@ export default function BonusHero() {
     }
   }
 
-  const currentDay         = streak?.currentDay ?? 1;
-  const todayClaimed       = streak?.todayClaimed ?? false;
-  const nextClaimDeadline  = streak?.nextClaimDeadline ?? null;
-  const { remaining: countdown, expired: countdownExpired } = useCountdown(todayClaimed ? nextClaimDeadline : null);
+  const currentDay        = streak?.currentDay ?? 1;
+  const todayClaimed      = streak?.todayClaimed ?? false;
+  const nextClaimDeadline = streak?.nextClaimDeadline ?? null;
+  const { phase, waitRemaining, claimRemaining } = useStreakPhase(todayClaimed ? nextClaimDeadline : null);
 
   return (
     <section className="relative flex items-center justify-center bg-[#0d2e2a] lg:min-h-180">
@@ -152,7 +168,7 @@ export default function BonusHero() {
           <p className="mt-4 text-[13px]" style={{ color: "#F87171" }}>{err}</p>
         )}
 
-        <div className="flex justify-center mt-10">
+        <div className="flex flex-col items-center gap-3 mt-10">
           {loading ? (
             <div className="flex items-center gap-2 text-white/60 text-[15px]">
               <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -160,15 +176,31 @@ export default function BonusHero() {
               </svg>
               {t("loading")}
             </div>
-          ) : todayClaimed && !countdownExpired ? (
+          ) : phase === "wait" ? (
+            /* 24h lock period — disabled button with countdown */
             <button
               disabled
               className="flex flex-col items-center bg-secondary text-white font-bold px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-80 cursor-default"
             >
               <span className="text-[11px] lg:text-[13px] font-normal opacity-80">{t("claimed")}</span>
-              <span className="text-[18px] lg:text-[22px] tabular-nums tracking-widest leading-tight">{countdown || "—:——:——"}</span>
+              <span className="text-[18px] lg:text-[22px] tabular-nums tracking-widest leading-tight">{waitRemaining || "—:——:——"}</span>
             </button>
+          ) : phase === "claim" ? (
+            /* 3h claim window — claim button active + countdown below */
+            <>
+              <button
+                onClick={handleClaim}
+                disabled={claiming}
+                className="bg-gold text-white font-bold text-[14px] lg:text-[16px] px-8 py-3 lg:px-16 lg:py-5 rounded-full hover:brightness-110 transition cursor-pointer shadow-lg disabled:opacity-60"
+              >
+                {claiming ? t("claiming") : t("claim_btn", { snl: STREAK_DAYS[(currentDay - 1) % 7]?.snl ?? 10 })}
+              </button>
+              <p className="text-[12px] lg:text-[13px] tabular-nums" style={{ color: "rgba(255,255,255,0.55)" }}>
+                {t("claim_window")} <span className="font-semibold text-white/80">{claimRemaining}</span>
+              </p>
+            </>
           ) : (
+            /* expired or not yet claimed */
             <button
               onClick={handleClaim}
               disabled={claiming}

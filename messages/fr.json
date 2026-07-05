@@ -93,7 +93,8 @@
     "claim_btn": "Réclamer +{snl} SNL",
     "claiming": "Réclamation…",
     "claim_success": "+{bonus} SNL ajoutés, Nouveau solde : {balance} SNL",
-    "streak_expires_in": "Streak expire dans"
+    "streak_expires_in": "Streak expire dans",
+    "claim_window": "Fenêtre de réclamation expire dans"
   },
   "MissionsSection": {
     "title": "Missions quotidiennes",
