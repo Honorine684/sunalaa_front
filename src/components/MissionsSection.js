@@ -161,6 +161,42 @@ function MediaModal({ mission, remaining, timerDone, busy, onClaim, onClose }) {
   );
 }
 
+function useResetCountdown(nextResetAt) {
+  const [display, setDisplay] = useState("");
+  useEffect(() => {
+    if (!nextResetAt) { setDisplay(""); return; }
+    function tick() {
+      const diff = new Date(nextResetAt) - Date.now();
+      if (diff <= 0) { setDisplay(""); return; }
+      const totalH = Math.floor(diff / 3600000);
+      const d = Math.floor(totalH / 24);
+      const h = totalH % 24;
+      const m = Math.floor((diff % 3600000) / 60000);
+      if (d > 0) setDisplay(`${d}j ${h}h`);
+      else if (h > 0) setDisplay(`${h}h ${String(m).padStart(2, "0")}min`);
+      else setDisplay(`${m} min`);
+    }
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, [nextResetAt]);
+  return display;
+}
+
+function ResetBadge({ nextResetAt, label }) {
+  const display = useResetCountdown(nextResetAt);
+  if (!display) return null;
+  return (
+    <div className="inline-flex items-center gap-1.5 mt-4 px-3 py-1.5 rounded-full text-[12px] font-medium" style={{ backgroundColor: "rgba(14,165,233,0.08)", color: "#0EA5E9" }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+        <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+      {label} <span className="font-bold tabular-nums">{display}</span>
+    </div>
+  );
+}
+
 function MissionsSectionInner() {
   const t = useTranslations("MissionsSection");
   const { isAuthenticated, refreshUser } = useAuth();
@@ -168,6 +204,7 @@ function MissionsSectionInner() {
   const highlightId = searchParams?.get("mission") ?? null;
 
   const [missions, setMissions]             = useState([]);
+  const [nextResetAt, setNextResetAt]       = useState(null);
   const [loading, setLoading]               = useState(true);
   const [loadingId, setLoadingId]           = useState(null);
   const [remainingTimes, setRemainingTimes] = useState({});
@@ -278,9 +315,12 @@ function MissionsSectionInner() {
   async function fetchMissions(silent = false) {
     if (!silent) setLoading(true);
     try {
-      const res = await missionsApi.getMyMissions();
-      const raw = res.data?.data ?? res.data;
-      applyMissions(Array.isArray(raw) ? raw : []);
+      const res  = await missionsApi.getMyMissions();
+      const body = res.data?.data ?? res.data;
+      // New response: { data: [...], nextResetAt: "..." }
+      const list = body?.data ?? (Array.isArray(body) ? body : []);
+      if (body?.nextResetAt) setNextResetAt(body.nextResetAt);
+      applyMissions(Array.isArray(list) ? list : []);
     } catch {
       if (!silent) setMissions([]);
     } finally {
@@ -395,6 +435,7 @@ function MissionsSectionInner() {
           <p className="max-w-lg mx-auto text-center text-[14px] lg:text-[18px]" style={{ fontWeight: 400, lineHeight: "1.6", color: "#0F172B" }}>
             {t("subtitle")}
           </p>
+          {nextResetAt && <ResetBadge nextResetAt={nextResetAt} label={t("reset_in")} />}
         </div>
 
         <p className="mb-5 text-[16px] lg:text-[24px]" style={{ fontWeight: 600, lineHeight: "1.4", color: "#0A3706" }}>

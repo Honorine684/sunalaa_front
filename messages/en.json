@@ -102,6 +102,7 @@
     "loading": "Loading missions…",
     "empty": "No missions available",
     "empty_sub": "Check back soon, new missions will be published shortly.",
+    "reset_in": "Resets in",
     "points_label": "Points to earn",
     "points": "{n} SNL",
     "start_btn": "Start",
