@@ -24,6 +24,15 @@ function lsRemove(key) {
   try { localStorage.removeItem(key); } catch {}
 }
 
+function authLog(event, detail = {}) {
+  try {
+    const logs = JSON.parse(localStorage.getItem("snl_auth_log") || "[]");
+    logs.push({ t: new Date().toISOString(), event, ...detail });
+    if (logs.length > 50) logs.splice(0, logs.length - 50);
+    localStorage.setItem("snl_auth_log", JSON.stringify(logs));
+  } catch {}
+}
+
 function clearSession() {
   lsRemove("snl_user");
   lsRemove("snl_login_time");
@@ -47,7 +56,16 @@ export function AuthProvider({ children }) {
 
     const stored = lsGet("snl_user");
     const loginTime = parseInt(lsGet("snl_login_time") ?? "0", 10);
-    const expired = !loginTime || Date.now() - loginTime > SESSION_DURATION_MS;
+    const elapsed = loginTime ? Date.now() - loginTime : null;
+    const expired = !loginTime || elapsed > SESSION_DURATION_MS;
+
+    authLog("mount", {
+      hasStored: !!stored,
+      loginTime: loginTime ? new Date(loginTime).toISOString() : null,
+      elapsedMin: elapsed ? Math.round(elapsed / 60000) : null,
+      expired,
+      cookies: document.cookie ? document.cookie.split(";").map((c) => c.trim().split("=")[0]) : [],
+    });
 
     if (stored && !expired) {
       try { setUser(normalizeUser(JSON.parse(stored))); } catch {}
@@ -62,6 +80,7 @@ export function AuthProvider({ children }) {
         })
         .catch((err) => {
           if (err?.response?.status === 401) {
+            authLog("logout_getme_401");
             authApi.logout().catch(() => {});
             clearSession();
             setUser(null);
@@ -70,6 +89,7 @@ export function AuthProvider({ children }) {
         .finally(() => setLoading(false));
     } else {
       if (stored) {
+        authLog("logout_session_expired", { elapsedMin: elapsed ? Math.round(elapsed / 60000) : null });
         authApi.logout().catch(() => {});
         clearSession();
       }
