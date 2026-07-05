@@ -131,7 +131,7 @@ function PodiumSlot({ user, rank, height, avatarSize = 56 }) {
 
 function PodiumSkeleton() {
   return (
-    <div className="flex items-end justify-center gap-3 mb-12 pt-10">
+    <div className="flex items-end justify-center gap-3 mb-12 pt-4 lg:pt-10">
       {[{ h: 80, w: 96 }, { h: 112, w: 112 }, { h: 64, w: 96 }].map((s, i) => (
         <div key={i} className="flex flex-col items-center gap-2">
           <Skeleton className="w-14 h-14 rounded-full" />
@@ -209,13 +209,13 @@ export default function ClassementPage() {
           ))}
         </div>
 
-        <div className="relative z-10 py-24 pb-40 text-center px-4">
-          <h1 className="font-black text-4xl text-white mb-4">Classement Global</h1>
-          <p className="text-lg mb-10 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.60)" }}>
+        <div className="relative z-10 py-6 pb-20 lg:py-24 lg:pb-40 text-center px-4">
+          <h1 className="font-black text-2xl lg:text-4xl text-white mb-2 lg:mb-4">Classement Global</h1>
+          <p className="text-sm lg:text-lg mb-4 lg:mb-10 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.60)" }}>
             Découvrez les meilleurs collecteurs de la communauté SUNALA
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:gap-3">
             <div className="bg-white rounded-full px-4 py-2 shadow text-sm font-semibold" style={{ color: "#1A3A34" }}>
               {loading ? "…" : `${fmt(totalCount ?? topList.length)} participants`}
             </div>
@@ -228,17 +228,17 @@ export default function ClassementPage() {
           </div>
         </div>
 
-        <div className="absolute -bottom-8 left-0 w-full h-32 bg-white"
+        <div className="absolute -bottom-6 left-0 w-full h-16 lg:h-32 bg-white"
           style={{ clipPath: "polygon(40% 0, 100% 0, 100% 100%, 0 100%, 32% 100%)" }} />
       </section>
 
       {/* ── Podium ── */}
-      <section className="bg-white relative z-10 -mt-10 pb-16">
+      <section className="bg-white relative z-10 -mt-5 lg:-mt-10 pb-16">
         <div className="max-w-5xl mx-auto px-4 lg:px-8">
           {loading ? (
             <PodiumSkeleton />
           ) : rank1 && rank2 && rank3 ? (
-            <div className="flex items-end justify-center gap-3 mb-12 pt-10">
+            <div className="flex items-end justify-center gap-3 mb-12 pt-4 lg:pt-10">
               <PodiumSlot user={rank2} rank={2} height={80} />
               <PodiumSlot user={rank1} rank={1} height={112} avatarSize={64} />
               <PodiumSlot user={rank3} rank={3} height={64} />
