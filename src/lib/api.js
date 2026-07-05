@@ -75,6 +75,7 @@ api.interceptors.response.use(
         authLog("refresh_fail", {
           status: err?.response?.status ?? "timeout",
           msg: err?.message,
+          body: err?.response?.data ?? null,
           cookies: document.cookie ? document.cookie.split(";").map((c) => c.trim().split("=")[0]) : [],
         });
         processQueue(err);
