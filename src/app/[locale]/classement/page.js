@@ -31,7 +31,7 @@ export default function ClassementPage() {
   return (
     <>
       <Navbar />
-      <Hero />
+      <Hero compact />
       <PodiumSection />
       <LeaderboardSection />
       <Footer />

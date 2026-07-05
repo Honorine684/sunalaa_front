@@ -61,7 +61,7 @@ export default function PodiumSection() {
   const rank3 = top3.find((u, i) => (u.rank ?? u.position ?? i + 1) === 3) ?? top3[2];
 
   return (
-    <section className="relative bg-white pt-24 pb-8 overflow-hidden">
+    <section className="relative bg-white pt-6 lg:pt-24 pb-8 overflow-hidden">
       {/* Cercles déco gauche */}
       <div className="absolute top-[45%] -translate-y-1/2 pointer-events-none hidden lg:block" style={{ left: 188 }}>
         {[338, 260, 180, 100].map((size) => (
