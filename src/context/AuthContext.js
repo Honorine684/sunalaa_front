@@ -111,10 +111,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (credentials) => {
+    authLog("login_attempt");
     const { data } = await authApi.login(credentials);
     const d = data?.data ?? data;
     if (d?.requiresTwoFactor || d?.twoFactorRequired || d?.mfaRequired) return data;
     saveSession(data);
+    authLog("login_success", {
+      cookies: typeof document !== "undefined"
+        ? document.cookie.split(";").map((c) => c.trim().split("=")[0]).filter(Boolean)
+        : [],
+    });
     return data;
   }, [saveSession]);
 

@@ -3,15 +3,25 @@
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1";
 
+function transformCookie(cookie) {
+  return cookie.trim()
+    .replace(/;\s*domain=[^;]*/gi, "; Domain=sunalaa.com")
+    .replace(/;\s*samesite=none/gi, "; SameSite=Lax");
+}
+
 export function relaySetCookies(backendRes, res) {
-  // getSetCookie() returns an array — safe with commas inside cookie values
-  const cookies = backendRes.headers.getSetCookie?.() ?? [];
+  let cookies = [];
+
+  if (typeof backendRes.headers.getSetCookie === "function") {
+    // Node 18.5+ / undici — returns proper array, safe with commas in values
+    cookies = backendRes.headers.getSetCookie();
+  } else {
+    // Fallback: split on commas not inside Expires date (e.g. "Fri, 01 Jan")
+    const raw = backendRes.headers.get("set-cookie") ?? "";
+    if (raw) cookies = raw.split(/,(?=[a-zA-Z_][a-zA-Z0-9_-]*=)/);
+  }
+
   cookies.forEach((cookie) => {
-    const cleaned = cookie
-      // Replace any Domain with .sunalaa.com so the cookie applies to all subdomains
-      // (api.sunalaa.com receives it too via withCredentials same-site requests)
-      .replace(/;\s*domain=[^;]*/gi, "; Domain=sunalaa.com")
-      .replace(/;\s*samesite=none/gi, "; SameSite=Lax");
-    res.headers.append("Set-Cookie", cleaned);
+    res.headers.append("Set-Cookie", transformCookie(cookie));
   });
 }
