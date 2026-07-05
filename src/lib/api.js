@@ -66,8 +66,8 @@ api.interceptors.response.use(
 
       try {
         authLog("refresh_attempt");
-        // Cookie snl_refresh_token envoyé automatiquement via withCredentials
-        await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        // Proxy same-origin — le browser envoie les cookies sunalaa.com, le serveur relaie au backend
+        await axios.post(`/api/auth/refresh`, {}, { withCredentials: true });
         authLog("refresh_ok");
         processQueue(null);
         return api(original);
@@ -105,9 +105,9 @@ export const healthApi = {
 export const authApi = {
   getVapidPublicKey: () => api.get("/auth/vapid-public-key"),
   register: (data) => api.post("/auth/register", data),
-  login: (data) => api.post("/auth/login", data),
-  logout: () => api.post("/auth/logout"),
-  refresh: (refreshToken) => api.post("/auth/refresh", { refreshToken }),
+  login: (data) => axios.post("/api/auth/login", data, { withCredentials: true }),
+  logout: () => axios.post("/api/auth/logout", {}, { withCredentials: true }),
+  refresh: (refreshToken) => axios.post("/api/auth/refresh", { refreshToken }, { withCredentials: true }),
   verifyEmail: (token) => api.post("/auth/verify-email", { token }),
   resendVerification: (email) => api.post("/auth/resend-verification", { email }),
   forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
