@@ -22,6 +22,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// ── Auth debug log (persiste dans localStorage, lisible après redirect) ──
+function authLog(event, detail = {}) {
+  try {
+    const logs = JSON.parse(localStorage.getItem("snl_auth_log") || "[]");
+    logs.push({ t: new Date().toISOString(), event, ...detail });
+    if (logs.length > 50) logs.splice(0, logs.length - 50); // garde les 50 derniers
+    localStorage.setItem("snl_auth_log", JSON.stringify(logs));
+  } catch {}
+}
+
 // ── Auto-refresh on 401 ───────────────────────────────────────────
 let isRefreshing = false;
 let failedQueue = [];
@@ -41,6 +51,8 @@ api.interceptors.response.use(
 
     const isAuthEndpoint = original.url?.includes("/auth/login") || original.url?.includes("/auth/register") || original.url?.includes("/auth/refresh");
     if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
+      authLog("401", { url: original.url });
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -53,11 +65,18 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
+        authLog("refresh_attempt");
         // Cookie snl_refresh_token envoyé automatiquement via withCredentials
         await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        authLog("refresh_ok");
         processQueue(null);
         return api(original);
       } catch (err) {
+        authLog("refresh_fail", {
+          status: err?.response?.status ?? "timeout",
+          msg: err?.message,
+          cookies: document.cookie ? document.cookie.split(";").map((c) => c.trim().split("=")[0]) : [],
+        });
         processQueue(err);
         lsRemove("snl_user");
         lsRemove("snl_login_time");
