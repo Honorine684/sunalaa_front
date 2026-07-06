@@ -413,9 +413,11 @@ export default function UsersManagement() {
 
         <div className="px-5 py-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px]">
           {[
-            { label: "Total", value: counts.total, color: "#45556C" },
-            { label: "Actifs", value: counts.actifs, color: "#059669" },
-            { label: "Supprimés", value: deletedCount, color: "#E11D48" },
+            { label: "Total",      value: counts.total,     color: "#45556C" },
+            { label: "Actifs",     value: counts.actifs,    color: "#059669" },
+            { label: "Suspendus",  value: counts.suspendus, color: "#D97706" },
+            { label: "Bannis",     value: counts.bannis,    color: "#E11D48" },
+            { label: "Supprimés",  value: deletedCount,     color: "#94A3B8" },
           ].map(({ label, value, color }) => (
             <span key={label} className="font-bold" style={{ color: "#45556C" }}>
               {label} :<span className="ml-1" style={{ color }}>{value}</span>
