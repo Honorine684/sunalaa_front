@@ -335,7 +335,7 @@ export default function UsersManagement() {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("Tous");
   const [viewUser, setViewUser] = useState(null);
-  const [deletedCount, setDeletedCount] = useState(0);
+  const [bannedCount, setBannedCount] = useState(0);
 
   useEffect(() => {
     adminApi.getUsers({ limit: 50, page: 1 })
@@ -354,7 +354,7 @@ export default function UsersManagement() {
 
   const handleDelete = useCallback((userId) => {
     setUsers((prev) => prev.filter((u) => u.id !== userId));
-    setDeletedCount((n) => n + 1);
+    setBannedCount((n) => n + 1);
   }, []);
 
   const filtered = users.filter((u) => {
@@ -413,11 +413,10 @@ export default function UsersManagement() {
 
         <div className="px-5 py-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px]">
           {[
-            { label: "Total",      value: counts.total,     color: "#45556C" },
-            { label: "Actifs",     value: counts.actifs,    color: "#059669" },
-            { label: "Suspendus",  value: counts.suspendus, color: "#D97706" },
-            { label: "Bannis",     value: counts.bannis,    color: "#E11D48" },
-            { label: "Supprimés",  value: deletedCount,     color: "#94A3B8" },
+            { label: "Total",     value: counts.total,     color: "#45556C" },
+            { label: "Actifs",    value: counts.actifs,    color: "#059669" },
+            { label: "Suspendus", value: counts.suspendus, color: "#D97706" },
+            { label: "Bannis",    value: bannedCount,      color: "#E11D48" },
           ].map(({ label, value, color }) => (
             <span key={label} className="font-bold" style={{ color: "#45556C" }}>
               {label} :<span className="ml-1" style={{ color }}>{value}</span>
