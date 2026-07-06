@@ -87,7 +87,7 @@ const CONTENT_TYPES = [
   { value: "VIDEO", label: "Vidéo" },
   { value: "IMAGE", label: "Image" },
 ];
-const COLS = ["MISSION", "TYPE", "RÉCOMPENSE", "STATUT", "COMPLÉTIONS", "DATE", "ACTIONS"];
+const COLS = ["MISSION", "TYPE", "RÉCOMPENSE", "STATUT", "COMPLÉTIONS", "DATE", ""];
 
 const EMPTY_FIELDS = {
   title: "", description: "", platform: "", actionUrl: "", reward: "",
@@ -691,7 +691,7 @@ export default function MissionsPage() {
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-slate-100">
       <div className="bg-white min-w-180">
-        <div className="grid grid-cols-[2.5fr_1fr_1.2fr_0.8fr_1fr_1.2fr_0.7fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
+        <div className="grid grid-cols-[2.5fr_1fr_1.2fr_0.8fr_1fr_1.2fr_1.2fr] px-6 py-3 border-b border-slate-100 rounded-t-xl" style={{ backgroundColor: "#E2E8F0" }}>
           {COLS.map((col) => (
             <span key={col} className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#45556C" }}>{col}</span>
           ))}
@@ -708,7 +708,7 @@ export default function MissionsPage() {
         ) : filtered.map((m, i) => (
           <div
             key={m.id}
-            className={["grid grid-cols-[2.5fr_1fr_1.2fr_0.8fr_1fr_1.2fr_0.7fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
+            className={["grid grid-cols-[2.5fr_1fr_1.2fr_0.8fr_1fr_1.2fr_1.2fr] px-6 py-4 items-center hover:bg-slate-50 transition-colors duration-150",
               i < filtered.length - 1 ? "border-b border-slate-100" : ""].join(" ")}
           >
             <div className="flex items-center gap-3">
@@ -745,11 +745,10 @@ export default function MissionsPage() {
               <button
                 onClick={() => handleToggle(m)}
                 title={m.isActive ? "Désactiver" : "Activer"}
-                className="transition cursor-pointer"
-                style={{ color: m.isActive ? "#059669" : "#94A3B8" }}
+                className="cursor-pointer shrink-0"
               >
-                <div className={`w-9 h-5 rounded-full relative transition-colors ${m.isActive ? "bg-secondary" : "bg-slate-300"}`}>
-                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${m.isActive ? "translate-x-4" : "translate-x-0.5"}`} />
+                <div className={`w-8 h-4 rounded-full relative transition-colors duration-200 ${m.isActive ? "bg-secondary" : "bg-slate-300"}`}>
+                  <span className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow-sm transition-transform duration-200 ${m.isActive ? "translate-x-4" : "translate-x-0.5"}`} />
                 </div>
               </button>
               <button onClick={() => setModal(m)} className="text-slate-400 hover:text-slate-600 transition cursor-pointer">
