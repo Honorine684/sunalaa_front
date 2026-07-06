@@ -598,10 +598,10 @@ export default function MissionsPage() {
     try {
       const res = await adminApi.getMissions({ page: 1, limit: 100 });
       const body = res.data?.data ?? res.data;
-      const list = (Array.isArray(body) ? body : (body?.data ?? [])).filter((m) => m.isActive !== false);
+      const list = Array.isArray(body) ? body : (body?.data ?? []);
       setMissions(list);
-      const total            = list.length;
-      const active           = list.filter((m) => m.isActive).length;
+      const total  = list.length;
+      const active = list.filter((m) => m.isActive).length;
       const totalCompletions = list.reduce((acc, m) => acc + (m._count?.userMissions ?? m.completionCount ?? 0), 0);
       const snlDistributed   = list.reduce((acc, m) => acc + (m._count?.userMissions ?? m.completionCount ?? 0) * (m.reward ?? 0), 0);
       setStats({ total, active, totalCompletions, snlDistributed });
@@ -621,6 +621,16 @@ export default function MissionsPage() {
       if (idx >= 0) { const next = [...prev]; next[idx] = saved; return next; }
       return [saved, ...prev];
     });
+  }
+
+  async function handleToggle(mission) {
+    const newActive = !mission.isActive;
+    setMissions((prev) => prev.map((m) => m.id === mission.id ? { ...m, isActive: newActive } : m));
+    try {
+      await adminApi.toggleMission(mission.id, newActive);
+    } catch {
+      setMissions((prev) => prev.map((m) => m.id === mission.id ? { ...m, isActive: mission.isActive } : m));
+    }
   }
 
   const statCards = [
@@ -730,12 +740,23 @@ export default function MissionsPage() {
                 {new Date(m.createdAt).toLocaleDateString("fr-FR")}
               </span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {/* Toggle activer/désactiver */}
+              <button
+                onClick={() => handleToggle(m)}
+                title={m.isActive ? "Désactiver" : "Activer"}
+                className="transition cursor-pointer"
+                style={{ color: m.isActive ? "#059669" : "#94A3B8" }}
+              >
+                <div className={`w-9 h-5 rounded-full relative transition-colors ${m.isActive ? "bg-secondary" : "bg-slate-300"}`}>
+                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${m.isActive ? "translate-x-4" : "translate-x-0.5"}`} />
+                </div>
+              </button>
               <button onClick={() => setModal(m)} className="text-slate-400 hover:text-slate-600 transition cursor-pointer">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
               <button onClick={() => setDeleteTarget(m)} className="hover:text-red-500 transition cursor-pointer" style={{ color: "#94A3B8" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             </div>
           </div>
