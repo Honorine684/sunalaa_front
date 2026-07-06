@@ -12,9 +12,9 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 export function generateStaticParams() {
@@ -30,6 +30,10 @@ export default async function LocaleLayout({ children, params }) {
 
   return (
     <html lang={locale} translate="no" className="notranslate">
+      <head>
+        <link rel="preconnect" href="https://api.sunalaa.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.sunalaa.com" />
+      </head>
       <body className={`${inter.className} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
