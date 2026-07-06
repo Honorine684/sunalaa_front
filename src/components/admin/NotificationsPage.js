@@ -59,6 +59,7 @@ function BroadcastModal({ onClose, onSent }) {
   const [uploading, setUploading]       = useState(false);
   const [uploadError, setUploadError]   = useState("");
   const [dragOver, setDragOver]         = useState(false);
+  const [hideImagePreview, setHideImagePreview] = useState(false);
   const fileInputRef = useRef(null);
 
   async function handleFileSelect(file) {
@@ -129,8 +130,8 @@ function BroadcastModal({ onClose, onSent }) {
         title:       title.trim(),
         message:     message.trim(),
         targetGroup: target,
-        ...(link.trim()  && { link:     link.trim() }),
-        ...(mediaUrl     && { imageUrl: mediaUrl }),
+        ...(link.trim()                     && { link:     link.trim() }),
+        ...(mediaUrl && !hideImagePreview   && { imageUrl: mediaUrl }),
       };
       const res = await adminApi.broadcastNotification(payload);
       onSent({
@@ -322,6 +323,25 @@ function BroadcastModal({ onClose, onSent }) {
               </div>
             )}
           </div>
+
+          {/* Option : masquer l'aperçu image */}
+          {mediaUrl && (
+            <label className="flex items-center gap-3 cursor-pointer select-none mt-1">
+              <div
+                onClick={() => setHideImagePreview((v) => !v)}
+                className="relative w-9 h-5 rounded-full transition-colors shrink-0"
+                style={{ backgroundColor: hideImagePreview ? "#E2E8F0" : "#3FAE8C" }}
+              >
+                <div
+                  className="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform"
+                  style={{ transform: hideImagePreview ? "translateX(1px)" : "translateX(17px)" }}
+                />
+              </div>
+              <span className="text-[13px]" style={{ color: "#45556C" }}>
+                {hideImagePreview ? "Image masquée dans la notification" : "Image visible dans la notification"}
+              </span>
+            </label>
+          )}
         </div>
 
         {/* Footer */}

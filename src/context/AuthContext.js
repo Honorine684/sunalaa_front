@@ -74,12 +74,21 @@ export function AuthProvider({ children }) {
         .then(({ data }) => {
           const fresh = normalizeUser(data?.data?.data ?? data?.data ?? data);
           if (fresh?.id) {
+            const st = (fresh.status ?? "").toLowerCase();
+            if (st === "banned" || st === "suspended") {
+              authLog("logout_banned_or_suspended", { status: st });
+              authApi.logout().catch(() => {});
+              clearSession();
+              setUser(null);
+              if (typeof window !== "undefined") window.location.href = "/login?reason=" + st;
+              return;
+            }
             setUser(fresh);
             lsSet("snl_user", JSON.stringify(fresh));
           }
         })
         .catch((err) => {
-          if (err?.response?.status === 401) {
+          if (err?.response?.status === 401 || err?.response?.status === 403) {
             authLog("logout_getme_401");
             authApi.logout().catch(() => {});
             clearSession();

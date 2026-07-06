@@ -53,9 +53,12 @@ function fmtDate(s) { return s ? new Date(s).toLocaleDateString("fr-FR", { day: 
 
 export default function UserDetailPage({ userId }) {
   const router = useRouter();
-  const [user, setUser]     = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState("");
+  const [user, setUser]         = useState(null);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState("");
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError]     = useState("");
+  const [confirmAction, setConfirmAction] = useState(null); // "suspend" | "ban" | "activate"
 
   useEffect(() => {
     if (!userId) return;
@@ -81,6 +84,26 @@ export default function UserDetailPage({ userId }) {
   if (error) return (
     <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 text-red-600 text-[14px]">{error}</div>
   );
+
+  async function handleStatusChange(action) {
+    setStatusLoading(true);
+    setStatusError("");
+    setConfirmAction(null);
+    try {
+      if (action === "ban") {
+        await adminApi.deleteUser(userId);
+        router.back();
+      } else {
+        const newStatus = action === "activate" ? "active" : "suspended";
+        await adminApi.updateUserStatus(userId, newStatus);
+        setUser((prev) => ({ ...prev, status: newStatus }));
+      }
+    } catch (err) {
+      setStatusError(getApiError(err));
+    } finally {
+      setStatusLoading(false);
+    }
+  }
 
   if (!user) return null;
 
@@ -129,6 +152,83 @@ export default function UserDetailPage({ userId }) {
           </div>
         </div>
       </div>
+
+      {/* Actions statut */}
+      {statusError && (
+        <div className="rounded-xl px-4 py-3 text-[13px] border" style={{ backgroundColor: "#FEF2F2", borderColor: "#FECACA", color: "#DC2626" }}>
+          {statusError}
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-3">
+        {status !== "active" && (
+          <button
+            onClick={() => setConfirmAction("activate")}
+            disabled={statusLoading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold border transition hover:brightness-95 disabled:opacity-50 cursor-pointer"
+            style={{ backgroundColor: "#ECFDF5", borderColor: "#A7F3D0", color: "#059669" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            Réactiver le compte
+          </button>
+        )}
+        {status !== "suspended" && (
+          <button
+            onClick={() => setConfirmAction("suspend")}
+            disabled={statusLoading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold border transition hover:brightness-95 disabled:opacity-50 cursor-pointer"
+            style={{ backgroundColor: "#FFF7ED", borderColor: "#FED7AA", color: "#D97706" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/><path d="M10 9v6M14 9v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            Suspendre
+          </button>
+        )}
+        {status !== "banned" && (
+          <button
+            onClick={() => setConfirmAction("ban")}
+            disabled={statusLoading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold border transition hover:brightness-95 disabled:opacity-50 cursor-pointer"
+            style={{ backgroundColor: "#FFF1F2", borderColor: "#FECDD3", color: "#E11D48" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/><path d="M4.93 4.93l14.14 14.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            Bannir
+          </button>
+        )}
+      </div>
+
+      {/* Confirmation modal */}
+      {confirmAction && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(15,23,43,0.45)" }}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 flex flex-col gap-4">
+            <h3 className="text-[16px] font-bold" style={{ color: "#0F172B" }}>
+              {confirmAction === "activate" && "Réactiver ce compte ?"}
+              {confirmAction === "suspend" && "Suspendre ce compte ?"}
+              {confirmAction === "ban"     && "Bannir cet utilisateur ?"}
+            </h3>
+            <p className="text-[13px]" style={{ color: "#64748B" }}>
+              {confirmAction === "activate" && `Le compte de ${displayName} sera réactivé et l'utilisateur pourra se reconnecter.`}
+              {confirmAction === "suspend"  && `${displayName} sera suspendu temporairement et ne pourra plus accéder à la plateforme.`}
+              {confirmAction === "ban"      && `Le compte de ${displayName} sera supprimé définitivement. Cette action est irréversible.`}
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setConfirmAction(null)}
+                className="px-4 py-2 rounded-xl border text-[13px] font-semibold hover:bg-slate-50 transition cursor-pointer"
+                style={{ borderColor: "#E2E8F0", color: "#64748B" }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={() => handleStatusChange(confirmAction)}
+                className="px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition hover:brightness-110 cursor-pointer"
+                style={{ backgroundColor: confirmAction === "activate" ? "#059669" : confirmAction === "suspend" ? "#D97706" : "#E11D48" }}
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats rapides */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
