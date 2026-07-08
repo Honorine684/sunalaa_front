@@ -97,11 +97,16 @@ export default function BonusHero() {
   const nextClaimDeadline = streak?.nextClaimDeadline ?? null;
   const { phase, waitRemaining, claimRemaining } = useStreakPhase(todayClaimed ? nextClaimDeadline : null);
 
-  // When the 24h lock ends and the 3h claim window opens, refetch streak so
-  // the day cards update (todayClaimed → false, currentDay advances on backend)
   const prevPhaseRef = useRef(null);
   useEffect(() => {
+    // 24h lock ends → 3h window opens: refetch so day cards update
     if (phase === "claim" && prevPhaseRef.current === "wait") {
+      usersApi.getStreak()
+        .then((res) => setStreak(res.data?.data ?? res.data))
+        .catch(() => {});
+    }
+    // 3h window closes without claiming → streak reset: refetch → Day 1
+    if (phase === "expired" && prevPhaseRef.current === "claim") {
       usersApi.getStreak()
         .then((res) => setStreak(res.data?.data ?? res.data))
         .catch(() => {});
@@ -189,7 +194,7 @@ export default function BonusHero() {
               {t("loading")}
             </div>
           ) : phase === "wait" ? (
-            /* 24h lock period — disabled button with countdown */
+            /* 24h lock — disabled button with countdown */
             <button
               disabled
               className="flex flex-col items-center bg-secondary text-white font-bold px-8 py-3 lg:px-16 lg:py-5 rounded-full opacity-80 cursor-default"
@@ -198,7 +203,7 @@ export default function BonusHero() {
               <span className="text-[18px] lg:text-[22px] tabular-nums tracking-widest leading-tight">{waitRemaining || "—:——:——"}</span>
             </button>
           ) : phase === "claim" ? (
-            /* 3h claim window — claim button active + countdown below */
+            /* 3h window is open — big countdown at bottom + claim button */
             <>
               <button
                 onClick={handleClaim}
@@ -207,9 +212,14 @@ export default function BonusHero() {
               >
                 {claiming ? t("claiming") : t("claim_btn", { snl: STREAK_DAYS[(currentDay - 1) % 7]?.snl ?? 10 })}
               </button>
-              <p className="text-[12px] lg:text-[13px] tabular-nums" style={{ color: "rgba(255,255,255,0.55)" }}>
-                {t("claim_window")} <span className="font-semibold text-white/80">{claimRemaining}</span>
-              </p>
+              <div className="flex flex-col items-center gap-1 mt-2">
+                <p className="text-[12px] lg:text-[13px]" style={{ color: "rgba(255,255,255,0.50)" }}>
+                  {t("next_bonus_in")}
+                </p>
+                <span className="text-white font-bold text-[30px] lg:text-[38px] tabular-nums tracking-widest leading-none">
+                  {claimRemaining || "—:——:——"}
+                </span>
+              </div>
             </>
           ) : (
             /* expired or not yet claimed */

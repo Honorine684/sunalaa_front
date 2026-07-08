@@ -548,9 +548,9 @@ function RegisterInner() {
                 />
                 <label htmlFor="terms" className="cursor-pointer" style={{ fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.7)" }}>
                   {t("terms_accept")}{" "}
-                  <Link href={`${prefix}/terms`} className="text-secondary hover:underline">{t("terms_of_service")}</Link>{" "}
+                  <Link href={`${prefix}/cgu`} className="text-secondary hover:underline">{t("terms_of_service")}</Link>{" "}
                   {t("terms_and")}{" "}
-                  <Link href={`${prefix}/privacy`} className="text-secondary hover:underline">{t("privacy_policy")}</Link>
+                  <Link href={`${prefix}/confidentialite`} className="text-secondary hover:underline">{t("privacy_policy")}</Link>
                 </label>
               </div>
               {errors.agreed && <p className="text-red-400 text-[12px] ml-6">{errors.agreed}</p>}

@@ -162,6 +162,44 @@ function MediaModal({ mission, remaining, timerDone, busy, onClaim, onClose }) {
 }
 
 
+function pad(n) { return String(n).padStart(2, "0"); }
+function formatCountdown(ms) {
+  if (ms <= 0) return "00:00:00";
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function ResetBadge({ nextResetAt }) {
+  const t = useTranslations("MissionsSection");
+  const [countdown, setCountdown] = useState("");
+
+  useEffect(() => {
+    function tick() {
+      const ms = new Date(nextResetAt) - Date.now();
+      setCountdown(formatCountdown(ms));
+    }
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [nextResetAt]);
+
+  return (
+    <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2.5 rounded-full w-fit mx-auto"
+      style={{ backgroundColor: "rgba(63,174,140,0.10)", border: "1px solid rgba(63,174,140,0.25)" }}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="#3FAE8C" strokeWidth="2"/>
+        <path d="M12 6v6l4 2" stroke="#3FAE8C" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+      <span className="text-[13px]" style={{ color: "#3FAE8C" }}>
+        {t("reset_in")}{" "}
+        <span className="font-bold tabular-nums">{countdown}</span>
+      </span>
+    </div>
+  );
+}
+
 function MissionsSectionInner() {
   const t = useTranslations("MissionsSection");
   const { isAuthenticated, refreshUser } = useAuth();
@@ -173,6 +211,7 @@ function MissionsSectionInner() {
   const [loadingId, setLoadingId]           = useState(null);
   const [remainingTimes, setRemainingTimes] = useState({});
   const [mediaModalId, setMediaModalId]     = useState(null);
+  const [nextResetAt, setNextResetAt]       = useState(null);
 
   const prevStatuses   = useRef({});
   const missionRefs    = useRef({});
@@ -284,6 +323,7 @@ function MissionsSectionInner() {
       // New response: { data: [...], nextResetAt: "..." }
       const list = body?.data ?? (Array.isArray(body) ? body : []);
       applyMissions(Array.isArray(list) ? list : []);
+      if (body?.nextResetAt) setNextResetAt(body.nextResetAt);
     } catch {
       if (!silent) setMissions([]);
     } finally {
@@ -398,6 +438,7 @@ function MissionsSectionInner() {
           <p className="max-w-lg mx-auto text-center text-[14px] lg:text-[18px]" style={{ fontWeight: 400, lineHeight: "1.6", color: "#0F172B" }}>
             {t("subtitle")}
           </p>
+          {nextResetAt && <ResetBadge nextResetAt={nextResetAt} />}
         </div>
 
         <p className="mb-5 text-[16px] lg:text-[24px]" style={{ fontWeight: 600, lineHeight: "1.4", color: "#0A3706" }}>
