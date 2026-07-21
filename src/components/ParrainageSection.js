@@ -26,16 +26,26 @@ function getLevelCount(stats, levelIndex) {
   return 0;
 }
 
+const glowStyle = `
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 0px rgba(63, 174, 140, 0); }
+    50%       { box-shadow: 0 0 14px 4px rgba(63, 174, 140, 0.6); }
+  }
+  .btn-pulse {
+    animation: glow-pulse 1.6s ease-in-out infinite;
+  }
+`;
+
 export default function ParrainageSection() {
   const t = useTranslations("ParrainageSection");
   const { user } = useAuth();
-  const [copied, setCopied]       = useState(false);
-  const [stats, setStats]         = useState(null);
-  const [levelCounts, setLevelCounts] = useState({ 1: null, 2: null, 3: null });
-  const [earnings, setEarnings]   = useState(null);
-  const [pending, setPending]     = useState(null);
-  const [claiming, setClaiming]   = useState({});
-  const [claimError, setClaimError] = useState("");
+  const [copied, setCopied]             = useState(false);
+  const [stats, setStats]               = useState(null);
+  const [levelCounts, setLevelCounts]   = useState({ 1: null, 2: null, 3: null });
+  const [earnings, setEarnings]         = useState(null);
+  const [pendingByLevel, setPendingByLevel] = useState({});
+  const [claiming, setClaiming]         = useState({});
+  const [claimError, setClaimError]     = useState("");
 
   const referralCode = user?.referralCode ?? user?.referral_code ?? "SUNALA";
   const referralLink = `https://sunalaa.com/register?ref=${referralCode}`;
@@ -46,9 +56,14 @@ export default function ParrainageSection() {
     { num: "3", title: t("step3_title"), desc: t("step3_desc") },
   ];
 
-  function fetchPendingAndEarnings() {
+  async function fetchPendingAndEarnings() {
     usersApi.getReferralPending()
-      .then((res) => setPending(res.data?.data ?? res.data))
+      .then((res) => {
+        const body = res.data?.data ?? res.data;
+        const map = {};
+        (body?.levels ?? []).forEach(({ level, pending }) => { map[level] = pending ?? 0; });
+        setPendingByLevel(map);
+      })
       .catch(() => {});
     usersApi.getReferralEarnings()
       .then((res) => setEarnings(res.data?.data ?? res.data))
@@ -83,29 +98,13 @@ export default function ParrainageSection() {
     setClaiming((prev) => ({ ...prev, [levelNum]: true }));
     try {
       await usersApi.claimReferral(levelNum);
-      fetchPendingAndEarnings();
+      await fetchPendingAndEarnings();
     } catch (err) {
       const msg = err?.response?.data?.message ?? "Claim failed. Please try again.";
       setClaimError(msg);
     } finally {
       setClaiming((prev) => ({ ...prev, [levelNum]: false }));
     }
-  }
-
-  function getPendingForLevel(levelNum) {
-    if (!pending) return 0;
-    if (Array.isArray(pending.levels)) {
-      const entry = pending.levels.find((l) => l.level === levelNum || l.levelNum === levelNum);
-      if (entry) return entry.pending ?? entry.pendingSnl ?? entry.amount ?? entry.snl ?? 0;
-    }
-    const key = `level${levelNum}`;
-    if (pending[key] != null) {
-      return typeof pending[key] === "object"
-        ? (pending[key].pending ?? pending[key].pendingSnl ?? pending[key].amount ?? 0)
-        : Number(pending[key]);
-    }
-    if (levelNum === 1 && pending.totalPending != null) return Number(pending.totalPending);
-    return 0;
   }
 
   function handleCopy() {
@@ -118,12 +117,13 @@ export default function ParrainageSection() {
     const levelNum   = i + 1;
     const count      = levelCounts[levelNum] ?? getLevelCount(stats, i);
     const bonusPct   = stats?.levels?.[i]?.bonusPercentage ?? cfg.bonus;
-    const pendingSnl = getPendingForLevel(levelNum);
+    const pendingSnl = pendingByLevel[levelNum] ?? 0;
     return { ...cfg, label: t(cfg.labelKey), sub: t(cfg.subKey), count, bonusPct, levelNum, pendingSnl };
   });
 
   return (
     <section className="bg-white py-16">
+      <style>{glowStyle}</style>
       <Container>
         <h2 className="font-bold text-primary mb-1 text-[18px] lg:text-[24px]" style={{ lineHeight: "32px", fontWeight: 700 }}>{t("title")}</h2>
         <p className="mb-8 text-[14px] lg:text-[16px]" style={{ fontWeight: 400, lineHeight: "24px", color: "#000000" }}>{t("subtitle")}</p>
@@ -215,7 +215,7 @@ export default function ParrainageSection() {
                       <button
                         onClick={() => handleClaim(level.levelNum)}
                         disabled={claiming[level.levelNum]}
-                        className="bg-secondary text-white hover:brightness-110 transition cursor-pointer shrink-0 flex items-center justify-center text-[12px] lg:text-[14px] disabled:opacity-60 disabled:cursor-not-allowed"
+                        className={`bg-secondary text-white hover:brightness-110 transition cursor-pointer shrink-0 flex items-center justify-center text-[12px] lg:text-[14px] disabled:opacity-60 disabled:cursor-not-allowed${claiming[level.levelNum] ? "" : " btn-pulse"}`}
                         style={{ minWidth: 90, height: 36, fontWeight: 500, borderRadius: 8, padding: "0 10px" }}
                       >
                         {claiming[level.levelNum] ? "..." : t("claim_btn", { snl: level.pendingSnl })}
