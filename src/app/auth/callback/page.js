@@ -16,13 +16,34 @@ function ssRemove(key) {
   try { sessionStorage.removeItem(key); } catch {}
 }
 
+const ERROR_MESSAGES = {
+  "Invalid referral code":                "Code de parrainage invalide.",
+  "This referral code is no longer active": "Ce code de parrainage n'est plus actif.",
+  "OAuth error":                           "Une erreur s'est produite lors de la connexion Google.",
+};
+
 export default function OAuthCallbackPage() {
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus]     = useState("loading");
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     (async () => {
       try {
-        const code = new URLSearchParams(window.location.search).get("code");
+        const params = new URLSearchParams(window.location.search);
+
+        // Backend a redirigé avec ?error= → afficher et rediriger vers /login
+        const backendError = params.get("error");
+        if (backendError) {
+          const friendly = ERROR_MESSAGES[backendError] ?? backendError;
+          setErrorMsg(friendly);
+          setStatus("backend_error");
+          setTimeout(() => {
+            window.location.replace("/login?error=" + encodeURIComponent(backendError));
+          }, 3000);
+          return;
+        }
+
+        const code = params.get("code");
         if (!code) {
           window.location.replace("/login?error=oauth_no_code");
           return;
@@ -80,6 +101,16 @@ export default function OAuthCallbackPage() {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
           <p className="text-white/70 text-[14px]">Signing you in...</p>
+        </div>
+      ) : status === "backend_error" ? (
+        <div className="flex flex-col items-center gap-4 text-center max-w-xs">
+          <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 8v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#fb923c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <p className="text-white font-semibold">{errorMsg}</p>
+          <p className="text-white/50 text-[13px]">Redirection vers la page de connexion...</p>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-4 text-center">

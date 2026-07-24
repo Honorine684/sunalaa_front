@@ -389,6 +389,10 @@ function MissionsSectionInner() {
         localStorage.removeItem(`snl_mission_remaining_${id}`);
         localStorage.removeItem(`snl_mission_start_${id}`);
       } catch {}
+      // Mission validée immédiatement (sans double validation) → mettre à jour le solde
+      if (newStatus === "COMPLETED" || newStatus === "completed") {
+        refreshUser().catch(() => {});
+      }
     } catch (err) {
       // Backend says timer not done yet → resync remaining from server value
       const errCode = err?.response?.data?.error;

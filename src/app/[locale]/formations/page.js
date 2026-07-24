@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FormationsHero from "@/components/FormationsHero";
-import FormationsContent from "@/components/FormationsContent";
 
 export const metadata = {
   title: "Courses & Masterclass on Crypto",
@@ -31,7 +30,6 @@ export default function FormationsPage() {
     <>
       <Navbar />
       <FormationsHero />
-      <FormationsContent />
       <Footer />
     </>
   );
