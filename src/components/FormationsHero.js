@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Container from "./Container";
+import { useTranslations } from "next-intl";
 
 export default function FormationsHero() {
+  const t = useTranslations("FormationsHero");
   return (
     <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-screen">
       <style>{`
@@ -91,7 +93,7 @@ export default function FormationsHero() {
         </div>
 
         <p className="cs-sub text-[15px] lg:text-[18px] max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.55)", lineHeight: "1.7", animationDelay: "0.6s" }}>
-          Des formations et masterclasses sur les cryptomonnaies arrivent très bientôt.
+          {t("coming_soon_sub")}
         </p>
       </Container>
     </section>
