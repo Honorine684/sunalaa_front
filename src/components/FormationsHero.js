@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 export default function FormationsHero() {
   const t = useTranslations("FormationsHero");
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-screen">
+    <section className="relative flex items-center justify-center overflow-hidden bg-[#0d2e2a] min-h-dvh">
       <style>{`
         @keyframes cs-fade-up {
           from { opacity: 0; transform: translateY(32px); }
@@ -39,6 +39,7 @@ export default function FormationsHero() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
           animation: cs-shimmer 3s linear infinite;
+          will-change: background-position;
         }
         .cs-sub {
           animation: cs-fade-up 0.9s 0.25s ease both;
@@ -46,6 +47,7 @@ export default function FormationsHero() {
         }
         .cs-ring {
           animation: cs-pulse-ring 3s ease-in-out infinite;
+          will-change: transform, opacity;
         }
         .cs-dot-1 { animation: cs-dot 1.4s 0s ease-in-out infinite; }
         .cs-dot-2 { animation: cs-dot 1.4s 0.25s ease-in-out infinite; }
