@@ -53,7 +53,6 @@ function StatCard({ label, value, color }) {
 
 function UserRow({ user, index, total }) {
   const active = isUserActive(user);
-  const snl = user?.points ?? user?.totalPoints ?? user?.snlBalance ?? 0;
   return (
     <div className={`flex items-center gap-3 py-2.5 ${index < total - 1 ? "border-b border-slate-100" : ""}`}>
       <div className="relative shrink-0">
@@ -67,7 +66,6 @@ function UserRow({ user, index, total }) {
         <p className="truncate text-[13px] font-medium" style={{ color: "#0F172B" }}>{getUserName(user)}</p>
         <p className="text-[11px]" style={{ color: "#94A3B8" }}>{active ? "Active" : "Inactive"}</p>
       </div>
-      <span className="text-[11px] font-medium shrink-0" style={{ color: "#94A3B8" }}>{fmt(snl)} SNL</span>
     </div>
   );
 }
