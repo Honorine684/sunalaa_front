@@ -30,7 +30,7 @@ export default async function ContactPage({ params }) {
       color: "#3FAE8C",
     },
     {
-      email: "support@sunalaa.com",
+      email: "honorinedede0@gmail.com",
       label: t("card2_label"),
       desc: t("card2_desc"),
       delay: t("card2_delay"),
