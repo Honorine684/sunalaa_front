@@ -383,14 +383,16 @@ function MissionsSectionInner() {
     try {
       const res = await missionsApi.complete(id);
       const updated = res.data?.data ?? res.data;
-      const newStatus = updated?.status ?? updated?.userStatus ?? "UNDER_REVIEW";
+      // status === "UNDER_REVIEW" uniquement si le backend le dit explicitement
+      // Absence du champ status = crédité immédiatement
+      const isUnderReview = updated?.status === "UNDER_REVIEW";
+      const newStatus = isUnderReview ? "UNDER_REVIEW" : "COMPLETED";
       setMissions((prev) => prev.map((m) => m.id === id ? { ...m, userStatus: newStatus } : m));
       try {
         localStorage.removeItem(`snl_mission_remaining_${id}`);
         localStorage.removeItem(`snl_mission_start_${id}`);
       } catch {}
-      // Mission validée immédiatement (sans double validation) → mettre à jour le solde
-      if (newStatus === "COMPLETED" || newStatus === "completed") {
+      if (!isUnderReview) {
         refreshUser().catch(() => {});
       }
     } catch (err) {
