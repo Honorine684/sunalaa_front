@@ -2,13 +2,17 @@
 
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import { usersApi } from "@/lib/api";
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
   const rawPathname = usePathname(); // URL brute : /fr/profil ou /profil
 
-  function switchTo(newLocale) {
+  async function switchTo(newLocale) {
     if (newLocale === locale) return;
+
+    // Informer le backend de la préférence de langue (notifications push)
+    usersApi.updateLocale(newLocale).catch(() => {});
 
     // Supprimer le préfixe /fr si présent
     let clean = rawPathname;

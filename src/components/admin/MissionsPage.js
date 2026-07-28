@@ -110,45 +110,61 @@ function MissionModal({ mission, onClose, onSaved }) {
       : { ...EMPTY_FIELDS }
   );
 
-  const [uploadState,  setUploadState]  = useState(null); // null | "uploading" | "done" | "error"
-  const [uploadedUrl,  setUploadedUrl]  = useState(isEdit ? (mission.contentUrl ?? "") : "");
-  const [previewUrl,   setPreviewUrl]   = useState(isEdit ? (mission.contentUrl ?? "") : "");
-  const [uploadError,  setUploadError]  = useState("");
+  const [uploadState,  setUploadState]  = useState({ fr: null, en: null });
+  const [uploadedUrl,  setUploadedUrl]  = useState({
+    fr: isEdit ? (mission.contentUrl_fr ?? mission.contentUrl ?? "") : "",
+    en: isEdit ? (mission.contentUrl_en ?? "") : "",
+  });
+  const [previewUrl,   setPreviewUrl]   = useState({
+    fr: isEdit ? (mission.contentUrl_fr ?? mission.contentUrl ?? "") : "",
+    en: isEdit ? (mission.contentUrl_en ?? "") : "",
+  });
+  const [uploadError,  setUploadError]  = useState({ fr: "", en: "" });
   const [notifySend,   setNotifySend]   = useState(false);
   const [notifTitle,   setNotifTitle]   = useState("");
   const [notifMessage, setNotifMessage] = useState("");
   const [loading,      setLoading]      = useState(false);
   const [error,        setError]        = useState("");
-  const fileRef = useRef(null);
+  const fileRefFr = useRef(null);
+  const fileRefEn = useRef(null);
 
   function set(key, val) { setFields((p) => ({ ...p, [key]: val })); }
 
   function handleContentTypeChange(ct) {
     set("contentType", ct);
     if (ct === "LINK") {
-      setUploadedUrl(""); setPreviewUrl(""); setUploadState(null); setUploadError("");
-      if (fileRef.current) fileRef.current.value = "";
+      setUploadedUrl({ fr: "", en: "" });
+      setPreviewUrl({ fr: "", en: "" });
+      setUploadState({ fr: null, en: null });
+      setUploadError({ fr: "", en: "" });
+      if (fileRefFr.current) fileRefFr.current.value = "";
+      if (fileRefEn.current) fileRefEn.current.value = "";
     }
   }
 
-  async function handleFileSelect(e) {
+  async function handleFileSelect(e, lang) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (previewUrl && previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
-    setPreviewUrl(URL.createObjectURL(file));
-    setUploadState("uploading"); setUploadError(""); setUploadedUrl("");
+    const prev = previewUrl[lang];
+    if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+    setPreviewUrl((p) => ({ ...p, [lang]: URL.createObjectURL(file) }));
+    setUploadState((p) => ({ ...p, [lang]: "uploading" }));
+    setUploadError((p) => ({ ...p, [lang]: "" }));
+    setUploadedUrl((p) => ({ ...p, [lang]: "" }));
     const fd = new FormData();
     fd.append("file", file);
     try {
       const res = await adminApi.uploadMissionMedia(fd);
       const data = res.data?.data ?? res.data;
-      setUploadedUrl(data.url);
+      setUploadedUrl((p) => ({ ...p, [lang]: data.url }));
       if (data.contentType) set("contentType", data.contentType);
-      setUploadState("done");
+      setUploadState((p) => ({ ...p, [lang]: "done" }));
     } catch (err) {
-      setUploadError(getApiError(err));
-      setUploadState("error");
-      setPreviewUrl(""); if (fileRef.current) fileRef.current.value = "";
+      setUploadError((p) => ({ ...p, [lang]: getApiError(err) }));
+      setUploadState((p) => ({ ...p, [lang]: "error" }));
+      setPreviewUrl((p) => ({ ...p, [lang]: "" }));
+      const ref = lang === "fr" ? fileRefFr : fileRefEn;
+      if (ref.current) ref.current.value = "";
     }
   }
 
@@ -159,8 +175,8 @@ function MissionModal({ mission, onClose, onSaved }) {
     if (fields.contentType === "LINK" && !fields.actionUrl.trim()) {
       setError("URL requise pour un lien externe."); return;
     }
-    if ((fields.contentType === "VIDEO" || fields.contentType === "IMAGE") && !uploadedUrl) {
-      setError("Veuillez uploader un fichier avant de sauvegarder."); return;
+    if ((fields.contentType === "VIDEO" || fields.contentType === "IMAGE") && !uploadedUrl.fr && !uploadedUrl.en) {
+      setError("Veuillez uploader au moins un fichier (FR ou EN) avant de sauvegarder."); return;
     }
     if (notifySend && (!notifTitle.trim() || !notifMessage.trim())) {
       setError("Titre et message de notification requis."); return;
@@ -173,7 +189,8 @@ function MissionModal({ mission, onClose, onSaved }) {
         platform: fields.platform || null,
         actionUrl: fields.actionUrl.trim() || null,
         timeRequired: fields.timeRequired ? Number(fields.timeRequired) : null,
-        contentUrl: uploadedUrl || null,
+        contentUrl_fr: uploadedUrl.fr || null,
+        contentUrl_en: uploadedUrl.en || null,
       };
       const res = isEdit
         ? await adminApi.updateMission(mission.id, payload)
@@ -188,7 +205,7 @@ function MissionModal({ mission, onClose, onSaved }) {
           message:     notifMessage.trim(),
           targetGroup: "all",
           link:        missionLink,
-          ...(fields.contentType === "IMAGE" && uploadedUrl ? { imageUrl: uploadedUrl } : {}),
+          ...(fields.contentType === "IMAGE" && (uploadedUrl.fr || uploadedUrl.en) ? { imageUrl: uploadedUrl.fr || uploadedUrl.en } : {}),
         }).catch(() => {}); // ne pas bloquer si la notif échoue
       }
 
@@ -274,53 +291,59 @@ function MissionModal({ mission, onClose, onSaved }) {
             </div>
           )}
 
-          {/* Upload fichier — VIDEO ou IMAGE */}
+          {/* Upload fichier — VIDEO ou IMAGE (FR + EN) */}
           {isMedia && (
-            <div className="flex flex-col gap-3">
-              <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
-                {fields.contentType === "VIDEO" ? "Fichier vidéo" : "Image"} <span className="font-normal text-slate-400">(max {fields.contentType === "VIDEO" ? "200 MB" : "10 MB"})</span>
-              </label>
+            <div className="flex flex-col gap-4">
+              {[
+                { lang: "fr", label: "🇫🇷 Média FR", fileRef: fileRefFr },
+                { lang: "en", label: "🇬🇧 Média EN", fileRef: fileRefEn },
+              ].map(({ lang, label, fileRef: ref }) => (
+                <div key={lang} className="flex flex-col gap-2">
+                  <label className="text-[13px] font-semibold" style={{ color: "#0F172B" }}>
+                    {label} <span className="font-normal text-slate-400">(optionnel — max {fields.contentType === "VIDEO" ? "200 MB" : "10 MB"})</span>
+                  </label>
 
-              {/* Preview */}
-              {previewUrl && fields.contentType === "VIDEO" && (
-                <video src={previewUrl} controls className="w-full rounded-xl max-h-40 object-contain bg-black" />
-              )}
-              {previewUrl && fields.contentType === "IMAGE" && (
-                <img src={previewUrl} alt="preview" className="w-full rounded-xl max-h-40 object-cover" />
-              )}
+                  {previewUrl[lang] && fields.contentType === "VIDEO" && (
+                    <video src={previewUrl[lang]} controls className="w-full rounded-xl max-h-40 object-contain bg-black" />
+                  )}
+                  {previewUrl[lang] && fields.contentType === "IMAGE" && (
+                    <img src={previewUrl[lang]} alt={`preview ${lang}`} className="w-full rounded-xl max-h-40 object-cover" />
+                  )}
 
-              <input ref={fileRef} type="file"
-                accept={fields.contentType === "VIDEO" ? "video/mp4,video/*" : "image/jpeg,image/png,image/webp,image/gif"}
-                onChange={handleFileSelect} className="hidden" />
+                  <input ref={ref} type="file"
+                    accept={fields.contentType === "VIDEO" ? "video/mp4,video/*" : "image/jpeg,image/png,image/webp,image/gif"}
+                    onChange={(e) => handleFileSelect(e, lang)} className="hidden" />
 
-              <button type="button" onClick={() => fileRef.current?.click()}
-                disabled={uploadState === "uploading"}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed text-[13px] font-semibold transition cursor-pointer hover:bg-slate-50 disabled:opacity-60"
-                style={{ borderColor: "#CBD5E1", color: "#64748B" }}>
-                {uploadState === "uploading" ? (
-                  <>
-                    <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="#3FAE8C" strokeWidth="3" strokeDasharray="40 20"/>
-                    </svg>
-                    Upload en cours…
-                  </>
-                ) : uploadState === "done" ? (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round"/>
-                    </svg>
-                    <span style={{ color: "#3FAE8C" }}>Fichier uploadé — Changer</span>
-                  </>
-                ) : (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Cliquer pour uploader
-                  </>
-                )}
-              </button>
-              {uploadError && <p className="text-[12px]" style={{ color: "#EF4444" }}>{uploadError}</p>}
+                  <button type="button" onClick={() => ref.current?.click()}
+                    disabled={uploadState[lang] === "uploading"}
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed text-[13px] font-semibold transition cursor-pointer hover:bg-slate-50 disabled:opacity-60"
+                    style={{ borderColor: "#CBD5E1", color: "#64748B" }}>
+                    {uploadState[lang] === "uploading" ? (
+                      <>
+                        <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#3FAE8C" strokeWidth="3" strokeDasharray="40 20"/>
+                        </svg>
+                        Upload en cours…
+                      </>
+                    ) : uploadState[lang] === "done" ? (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                          <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round"/>
+                        </svg>
+                        <span style={{ color: "#3FAE8C" }}>Fichier uploadé — Changer</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Cliquer pour uploader
+                      </>
+                    )}
+                  </button>
+                  {uploadError[lang] && <p className="text-[12px]" style={{ color: "#EF4444" }}>{uploadError[lang]}</p>}
+                </div>
+              ))}
             </div>
           )}
 

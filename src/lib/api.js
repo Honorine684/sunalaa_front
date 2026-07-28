@@ -146,6 +146,7 @@ export const usersApi = {
   getReferralEarnings:  () => api.get("/users/me/referral-earnings"),
   transferPoints:       (data) => api.post("/users/me/points/transfer", data),
   getReferralPending:  () => api.get("/users/me/referral/pending"),
+  updateLocale:        (locale) => api.patch("/users/me", { locale }),
   claimReferral:       (level) => api.post("/users/me/referral/claim", undefined, { params: level != null ? { level } : {} }),
   claimWelcomeBonus:   () => api.post("/users/me/welcome-bonus/claim"),
   claimProfileBonus:   () => api.post("/users/me/profile-completion/claim"),

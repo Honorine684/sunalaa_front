@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { authApi } from "@/lib/api";
+import { authApi, usersApi } from "@/lib/api";
 
 const SESSION_DURATION_MS = 5 * 3600 * 1000; // 5h
 
@@ -117,6 +117,11 @@ export function AuthProvider({ children }) {
     lsSet("snl_login_time", String(Date.now()));
     document.cookie = `snl_user_role=${(norm?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
     setUser(norm);
+    // Sync locale préférence avec le backend (pour les notifications push)
+    if (typeof window !== "undefined") {
+      const locale = window.location.pathname.startsWith("/fr") ? "fr" : "en";
+      usersApi.updateLocale(locale).catch(() => {});
+    }
   }, []);
 
   const login = useCallback(async (credentials) => {
