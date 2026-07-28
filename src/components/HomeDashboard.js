@@ -6,6 +6,7 @@ import Container from "./Container";
 import CollecteModal from "./CollecteModal";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useLocale, useTranslations } from "next-intl";
+import { getTransactionLabel } from "@/lib/transactionLabel";
 
 /* ── Skeleton ─────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
@@ -40,11 +41,12 @@ function fmt(n) {
 const TX_COLORS = { credit: "#10B981", debit: "#EF4444", transfer: "#3B82F6" };
 
 function TxRow({ tx, last }) {
+  const t = useTranslations("transactions");
   const isCredit = (tx.type ?? "").toLowerCase().includes("credit") ||
     (tx.amount ?? 0) > 0 && !((tx.type ?? "").toLowerCase().includes("debit"));
   const sign = isCredit ? "+" : "-";
   const color = TX_COLORS[isCredit ? "credit" : "debit"];
-  const label = tx.description ?? tx.label ?? tx.type ?? "Transaction";
+  const label = getTransactionLabel(tx.source ?? tx.type, tx.description ?? "", t);
   const date = tx.createdAt ?? tx.date ?? tx.timestamp;
   return (
     <div className={`flex items-center justify-between py-3 ${!last ? "border-b border-slate-100" : ""}`}>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usersApi, getApiError } from "@/lib/api";
+import { getTransactionLabel } from "@/lib/transactionLabel";
 
 const COLORS = ["#3FAE8C", "#8B5CF6", "#3B82F6", "#F59E0B", "#EF4444", "#1F4E46"];
 
@@ -323,6 +324,7 @@ function TokenCountdown() {
 /* ─── Main component ─────────────────────────────────────────────── */
 export default function ProfileTransfer({ onTransferComplete }) {
   const locale = useLocale();
+  const t = useTranslations("transactions");
   const [recipientUser, setRecipientUser] = useState(null);
   const [amount, setAmount]   = useState("");
   const [note, setNote]       = useState("");
@@ -514,10 +516,10 @@ export default function ProfileTransfer({ onTransferComplete }) {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {history.map((t, i) => {
-                  const isSent = t.source === "transfer_out" || t.type === "TRANSFER_OUT" || (t.amount < 0);
+                {history.map((tx, i) => {
+                  const isSent = tx.source === "transfer_out" || tx.type === "TRANSFER_OUT" || (tx.amount < 0);
                   return (
-                    <div key={t.id ?? i} className="flex items-center gap-3">
+                    <div key={tx.id ?? i} className="flex items-center gap-3">
                       <div
                         className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                         style={{ backgroundColor: isSent ? "#FEE2E2" : "#D1FAE5" }}
@@ -531,18 +533,15 @@ export default function ProfileTransfer({ onTransferComplete }) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] font-semibold truncate" style={{ color: "#0F172B" }}>
-                          {(() => {
-                            const desc = t.description?.replace(/null/gi, "").replace(/\s{2,}/g, " ").replace(/^[\s@—\-]+|[\s@—\-]+$/g, "").trim();
-                            return desc || (isSent ? "Transfer sent" : "Transfer received");
-                          })()}
+                          {getTransactionLabel(tx.source ?? tx.type, tx.description ?? "", t)}
                         </p>
-                        <p className="text-[11px] text-slate-400">{fmtDate(t.createdAt)}</p>
+                        <p className="text-[11px] text-slate-400">{fmtDate(tx.createdAt)}</p>
                       </div>
                       <span
                         className="text-[13px] font-bold shrink-0"
                         style={{ color: isSent ? "#EF4444" : "#10B981" }}
                       >
-                        {isSent ? "-" : "+"}{fmt(Math.abs(t.amount))} SNL
+                        {isSent ? "-" : "+"}{fmt(Math.abs(tx.amount))} SNL
                       </span>
                     </div>
                   );

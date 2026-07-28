@@ -1212,5 +1212,15 @@
     "contact_identity": "Toute demande doit inclure une preuve d'identité",
     "contact_updated": "Dernière mise à jour : Juin 2026 — Version 1.0 — SUNALA UAB, Vilnius, Lituanie",
     "back_home": "Retour à l'accueil"
+  },
+  "transactions": {
+    "daily_collect": "Collecte quotidienne",
+    "streak": "Bonus streak",
+    "welcome_bonus": "Bonus de bienvenue",
+    "profile_bonus": "Bonus profil complet",
+    "referral_bonus": "Bonus parrainage",
+    "mission": "Mission complétée",
+    "transfer_out": "Transfert vers {handle}",
+    "transfer_in": "Transfert reçu de {handle}"
   }
 }
