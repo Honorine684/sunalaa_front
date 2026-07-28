@@ -1,7 +1,7 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1";
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   try {
     const res = await fetch(`${API}/products/${id}`, { next: { revalidate: 3600 } });
     const json = await res.json();
@@ -14,13 +14,25 @@ export async function generateMetadata({ params }) {
         ? p.images[0]
         : `https://api.sunalaa.com${p.images[0]}`
       : "/images/sunala_LOGO.png";
+    const canonical = locale === "fr"
+      ? `https://sunalaa.com/fr/formations/${id}`
+      : `https://sunalaa.com/formations/${id}`;
     return {
       title,
       description,
+      alternates: {
+        canonical,
+        languages: {
+          "x-default": `https://sunalaa.com/formations/${id}`,
+          en: `https://sunalaa.com/formations/${id}`,
+          fr: `https://sunalaa.com/fr/formations/${id}`,
+        },
+      },
       openGraph: {
         title: `${title} | SUNALA`,
         description,
-        images: [{ url: image, width: 800, height: 600, alt: title }],
+        url: canonical,
+        images: [{ url: image, width: 1200, height: 630, alt: title }],
       },
       twitter: {
         card: "summary_large_image",

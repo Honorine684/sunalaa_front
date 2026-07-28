@@ -7,7 +7,10 @@ const jsonLd = [
     name: "SUNALA",
     url: "https://sunalaa.com",
     logo: "https://sunalaa.com/images/sunala_LOGO.png",
-    sameAs: [],
+    sameAs: [
+      "https://t.me/sunalaa",
+      "https://x.com/sunalaa",
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -39,9 +42,9 @@ export const metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
   icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
-    shortcut: "/icon.png",
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+    shortcut: "/icon-192.png",
   },
   appleWebApp: {
     capable: true,
@@ -51,13 +54,12 @@ export const metadata = {
   openGraph: {
     type: "website",
     siteName: "SUNALA",
-    locale: "fr_FR",
-    images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "SUNALA — Collectez des points SNL chaque jour" }],
   },
   twitter: {
     card: "summary_large_image",
     site: "@sunalaa",
-    images: ["/images/sunala_LOGO.png"],
+    images: ["/og.jpg"],
   },
 };
 
