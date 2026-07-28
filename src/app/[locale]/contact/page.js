@@ -114,10 +114,9 @@ export default async function ContactPage({ params }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {emailCards.map((card, i) => (
-              <a
+              <div
                 key={i}
-                href={`mailto:${card.email}`}
-                className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 group transition-shadow hover:shadow-md"
+                className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -136,10 +135,10 @@ export default async function ContactPage({ params }) {
                   <p className="text-[13px] font-bold mb-0.5" style={{ color: "#0F172B" }}>{card.label}</p>
                   <p className="text-[12px]" style={{ color: "#64748B" }}>{card.desc}</p>
                 </div>
-                <p className="text-[12px] font-semibold group-hover:underline" style={{ color: card.color }}>
+                <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
                   {card.email}
                 </p>
-              </a>
+              </div>
             ))}
           </div>
         </Container>
