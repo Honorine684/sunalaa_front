@@ -368,7 +368,18 @@ export default function ProfileTransfer({ onTransferComplete }) {
       fetchHistory();
       if (onTransferComplete && data?.newBalance != null) onTransferComplete(data.newBalance);
     } catch (err) {
-      setError(getApiError(err));
+      const code = err?.response?.data?.message?.code;
+      if (code === "KYC_REQUIRED_SENDER") {
+        setError(locale === "fr"
+          ? "Vous devez vérifier votre identité pour envoyer des points"
+          : "You must verify your identity to send points");
+      } else if (code === "KYC_REQUIRED_RECIPIENT") {
+        setError(locale === "fr"
+          ? "Ce destinataire n'a pas encore vérifié son identité"
+          : "This recipient has not verified their identity yet");
+      } else {
+        setError(getApiError(err));
+      }
     } finally {
       setLoading(false);
     }
