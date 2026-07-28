@@ -315,6 +315,9 @@ export function getApiError(error) {
   const data = error?.response?.data;
   if (!data) return error?.message || "An error occurred";
   if (Array.isArray(data.message)) return data.message.join(". ");
+  if (data.message && typeof data.message === "object") {
+    return data.error || error?.message || "An error occurred";
+  }
   return data.message || data.error || error?.message || "An error occurred";
 }
 

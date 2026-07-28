@@ -368,7 +368,8 @@ export default function ProfileTransfer({ onTransferComplete }) {
       fetchHistory();
       if (onTransferComplete && data?.newBalance != null) onTransferComplete(data.newBalance);
     } catch (err) {
-      const code = err?.response?.data?.message?.code;
+      const msg = err?.response?.data?.message;
+      const code = (msg && typeof msg === "object") ? msg.code : msg;
       if (code === "KYC_REQUIRED_SENDER") {
         setError(locale === "fr"
           ? "Vous devez vérifier votre identité pour envoyer des points"
