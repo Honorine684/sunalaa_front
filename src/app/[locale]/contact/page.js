@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
+import ContactForm from "@/components/ContactForm";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({ params }) {
@@ -158,66 +159,7 @@ export default async function ContactPage({ params }) {
               <p className="text-[14px] mt-2" style={{ color: "#64748B" }}>{t("form_subtitle")}</p>
             </div>
 
-            <div className="bg-[#F8FAFC] rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8 flex flex-col gap-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold" style={{ color: "#334155" }}>{t("form_name")}</label>
-                  <input
-                    type="text"
-                    placeholder={t("form_name_ph")}
-                    disabled
-                    className="w-full text-[13px] rounded-xl px-4 outline-none cursor-not-allowed"
-                    style={{ height: 42, backgroundColor: "rgba(255,255,255,0.8)", border: "1px solid #E2E8F0", color: "#94A3B8" }}
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold" style={{ color: "#334155" }}>{t("form_email")}</label>
-                  <input
-                    type="email"
-                    placeholder={t("form_email_ph")}
-                    disabled
-                    className="w-full text-[13px] rounded-xl px-4 outline-none cursor-not-allowed"
-                    style={{ height: 42, backgroundColor: "rgba(255,255,255,0.8)", border: "1px solid #E2E8F0", color: "#94A3B8" }}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold" style={{ color: "#334155" }}>{t("form_subject")}</label>
-                <select
-                  disabled
-                  className="w-full text-[13px] rounded-xl px-4 outline-none cursor-not-allowed appearance-none"
-                  style={{ height: 42, backgroundColor: "rgba(255,255,255,0.8)", border: "1px solid #E2E8F0", color: "#94A3B8" }}
-                >
-                  <option value="">{t("form_subject_ph")}</option>
-                  {subjectOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold" style={{ color: "#334155" }}>{t("form_message")}</label>
-                <textarea
-                  placeholder={t("form_message_ph")}
-                  rows={5}
-                  disabled
-                  className="w-full text-[13px] rounded-xl px-4 py-3 outline-none resize-none cursor-not-allowed"
-                  style={{ backgroundColor: "rgba(255,255,255,0.8)", border: "1px solid #E2E8F0", color: "#94A3B8" }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <button
-                  disabled
-                  className="w-full rounded-xl font-semibold text-[14px] cursor-not-allowed opacity-60"
-                  style={{ height: 46, backgroundColor: "#3FAE8C", color: "#ffffff" }}
-                >
-                  {t("form_submit")}
-                </button>
-                <p className="text-[11px] text-center" style={{ color: "#94A3B8" }}>{t("form_coming_soon")}</p>
-              </div>
-            </div>
+            <ContactForm subjectOptions={subjectOptions} />
           </div>
         </Container>
       </section>

@@ -16,8 +16,11 @@ export function useDashboard() {
   const [error, setError]               = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     function catchOrNull(promise) {
       return promise.catch((err) => {
+        if (controller.signal.aborted) return null;
         if (err?.response?.status === 401) {
           try { localStorage.removeItem("snl_user"); } catch {}
           try { document.cookie = "snl_user_role=; path=/; max-age=0"; } catch {}
@@ -35,6 +38,7 @@ export function useDashboard() {
       catchOrNull(usersApi.getStreak()),
     ])
       .then(([dashRes, netRes, txRes, profileRes, streakRes]) => {
+        if (controller.signal.aborted) return;
         if (dashRes) setData(dashRes.data?.data ?? dashRes.data);
         if (netRes)  setNetwork(netRes.data?.data ?? netRes.data);
 
@@ -59,14 +63,15 @@ export function useDashboard() {
           ?? null;
         if (rankVal != null && !isNaN(Number(rankVal))) setRank(Number(rankVal));
 
-        // Streak depuis /users/me/streak, fallback sur dashboard
         const streakData = streakRes?.data?.data ?? streakRes?.data;
         const streakVal  = streakData?.currentStreak ?? streakData?.streak ?? streakData?.currentDay
           ?? dashData?.streak ?? dashData?.currentStreak ?? dashData?.streakDay ?? 0;
         setStreak(Number(streakVal) || 0);
       })
-      .catch((err) => setError(getApiError(err)))
-      .finally(() => setLoading(false));
+      .catch((err) => { if (!controller.signal.aborted) setError(getApiError(err)); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+
+    return () => controller.abort();
   }, []);
 
   return { data, network, transactions, balance, levelData, referralCode, rank, streak, loading, error };

@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -20,6 +21,7 @@ export default async function BlogPage({ params }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Blog" });
   const prefix = locale === "fr" ? "/fr" : "";
+  const isLoggedIn = !!(await cookies()).get("snl_user_role");
 
   const articles = [
     { key: "a1", category: t("a1_cat") },
@@ -110,20 +112,22 @@ export default async function BlogPage({ params }) {
         </Container>
       </section>
 
-      {/* ── Newsletter CTA ── */}
-      <section className="bg-primary py-16">
-        <Container className="flex flex-col items-center text-center gap-6">
-          <h2 className="text-white font-bold text-[26px] sm:text-[32px]">{t("cta_title")}</h2>
-          <p className="text-white/60 text-[15px]" style={{ maxWidth: 460 }}>{t("cta_subtitle")}</p>
-          <a
-            href={`${prefix}/register`}
-            className="px-8 py-3.5 rounded-full text-white font-semibold text-[15px] hover:brightness-110 transition"
-            style={{ backgroundColor: "#E6B84C" }}
-          >
-            {t("cta_btn")}
-          </a>
-        </Container>
-      </section>
+      {/* ── Newsletter CTA — masquée si déjà connecté ── */}
+      {!isLoggedIn && (
+        <section className="bg-primary py-16">
+          <Container className="flex flex-col items-center text-center gap-6">
+            <h2 className="text-white font-bold text-[26px] sm:text-[32px]">{t("cta_title")}</h2>
+            <p className="text-white/60 text-[15px]" style={{ maxWidth: 460 }}>{t("cta_subtitle")}</p>
+            <a
+              href={`${prefix}/register`}
+              className="px-8 py-3.5 rounded-full text-white font-semibold text-[15px] hover:brightness-110 transition"
+              style={{ backgroundColor: "#E6B84C" }}
+            >
+              {t("cta_btn")}
+            </a>
+          </Container>
+        </section>
+      )}
 
       <Footer />
     </>

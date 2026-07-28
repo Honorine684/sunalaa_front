@@ -164,6 +164,8 @@ export function AuthProvider({ children }) {
     lsSet("snl_login_time", String(Date.now()));
     document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; path=/; max-age=18000; SameSite=Lax${secure}`;
     setUser(u);
+    const locale = window.location.pathname.startsWith("/fr") ? "fr" : "en";
+    usersApi.updateLocale(locale).catch(() => {});
     return u;
   }, []);
 

@@ -57,17 +57,15 @@ export default function ParrainageSection() {
   ];
 
   async function fetchPendingAndEarnings() {
-    usersApi.getReferralPending()
-      .then((res) => {
+    await Promise.allSettled([
+      usersApi.getReferralPending().then((res) => {
         const body = res.data?.data ?? res.data;
         const map = {};
         (body?.levels ?? []).forEach(({ level, pending }) => { map[level] = pending ?? 0; });
         setPendingByLevel(map);
-      })
-      .catch(() => {});
-    usersApi.getReferralEarnings()
-      .then((res) => setEarnings(res.data?.data ?? res.data))
-      .catch(() => {});
+      }),
+      usersApi.getReferralEarnings().then((res) => setEarnings(res.data?.data ?? res.data)),
+    ]);
   }
 
   useEffect(() => {
@@ -100,7 +98,8 @@ export default function ParrainageSection() {
       await usersApi.claimReferral(levelNum);
       await fetchPendingAndEarnings();
     } catch (err) {
-      const msg = err?.response?.data?.message ?? "Claim failed. Please try again.";
+      const raw = err?.response?.data?.message;
+      const msg = typeof raw === "object" ? (raw?.code ?? "Claim failed") : (raw ?? "Claim failed. Please try again.");
       setClaimError(msg);
     } finally {
       setClaiming((prev) => ({ ...prev, [levelNum]: false }));

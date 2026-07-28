@@ -97,7 +97,7 @@ export default function BonusHero() {
   const nextClaimDeadline = streak?.nextClaimDeadline ?? null;
   const { phase, waitRemaining, claimRemaining } = useStreakPhase(todayClaimed ? nextClaimDeadline : null);
 
-  const prevPhaseRef = useRef(null);
+  const prevPhaseRef = useRef("wait");
   useEffect(() => {
     // 24h lock ends → 3h window opens: refetch so day cards update
     if (phase === "claim" && prevPhaseRef.current === "wait") {

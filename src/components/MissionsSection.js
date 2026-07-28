@@ -323,7 +323,7 @@ function MissionsSectionInner() {
       // New response: { data: [...], nextResetAt: "..." }
       const list = body?.data ?? (Array.isArray(body) ? body : []);
       applyMissions(Array.isArray(list) ? list : []);
-      if (body?.nextResetAt) setNextResetAt(body.nextResetAt);
+      setNextResetAt(body?.nextResetAt ?? null);
     } catch {
       if (!silent) setMissions([]);
     } finally {
