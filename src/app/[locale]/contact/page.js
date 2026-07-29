@@ -24,6 +24,7 @@ export default async function ContactPage({ params }) {
   const emailCards = [
     {
       email: "contact@sunalaa.com",
+      phone: "+337 57 83 49 86",
       label: t("card1_label"),
       desc: t("card1_desc"),
       delay: t("card1_delay"),
@@ -37,28 +38,32 @@ export default async function ContactPage({ params }) {
       color: "#3B82F6",
     },
     {
-      email: "legal@sunalaa.com",
+      email: "contact@sunalaa.com",
+      phone: "+337 57 83 49 86",
       label: t("card3_label"),
       desc: t("card3_desc"),
       delay: t("card3_delay"),
       color: "#8B5CF6",
     },
     {
-      email: "privacy@sunalaa.com",
+      email: "contact@sunalaa.com",
+      phone: "+337 57 83 49 86",
       label: t("card4_label"),
       desc: t("card4_desc"),
       delay: t("card4_delay"),
       color: "#E6B84C",
     },
     {
-      email: "partners@sunalaa.com",
+      email: "contact@sunalaa.com",
+      phone: "+337 57 83 49 86",
       label: t("card5_label"),
       desc: t("card5_desc"),
       delay: t("card5_delay"),
       color: "#22C55E",
     },
     {
-      email: "security@sunalaa.com",
+      email: "contact@sunalaa.com",
+      phone: "+337 57 83 49 86",
       label: t("card6_label"),
       desc: t("card6_desc"),
       delay: t("card6_delay"),
@@ -135,9 +140,16 @@ export default async function ContactPage({ params }) {
                   <p className="text-[13px] font-bold mb-0.5" style={{ color: "#0F172B" }}>{card.label}</p>
                   <p className="text-[12px]" style={{ color: "#64748B" }}>{card.desc}</p>
                 </div>
-                <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
-                  {card.email}
-                </p>
+                <div className="flex flex-col gap-1">
+                  <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
+                    {card.email}
+                  </p>
+                  {card.phone && (
+                    <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
+                      {card.phone}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
