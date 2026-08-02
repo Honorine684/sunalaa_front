@@ -48,6 +48,8 @@ export default function HowItWorks() {
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
 
+  const isFr = locale === "fr";
+
   const steps = [
     {
       num: t("step1_num"),
@@ -55,7 +57,7 @@ export default function HowItWorks() {
       desc: t("step1_desc"),
       btn: t("step1_btn"),
       href: `${prefix}/login`,
-      img: "/images/VIS INSCRIPTION.jpg",
+      img: isFr ? "/images/VIS INSCRIPTION.jpg" : "/images/VIS_INSCRIPTION_EN.jpg",
     },
     {
       num: t("step2_num"),
@@ -63,7 +65,7 @@ export default function HowItWorks() {
       desc: t("step2_desc"),
       btn: t("step2_btn"),
       href: `${prefix}/login`,
-      img: "/images/VIS COLLECTION.jpg",
+      img: isFr ? "/images/VIS COLLECTION.jpg" : "/images/VIS_COLLECTION_EN.jpg",
     },
     {
       num: t("step3_num"),
@@ -71,7 +73,7 @@ export default function HowItWorks() {
       desc: t("step3_desc"),
       btn: t("step3_btn"),
       href: `${prefix}/login`,
-      img: "/images/VIS RESEAU.jpg",
+      img: isFr ? "/images/VIS RESEAU.jpg" : "/images/VIS_RESEAU_EN.jpg",
     },
   ];
 
