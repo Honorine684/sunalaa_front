@@ -10,7 +10,7 @@ import { newsletterApi } from "@/lib/api";
 const SOCIALS = [
   {
     label: "Facebook",
-    href: "#",
+    href: "https://www.facebook.com/share/1Dc2MhmXGj/?mibextid=wwXIfr",
     bg: "#1877F2",
     icon: (
       <svg width="17" height="17" viewBox="0 0 24 24" fill="white">
@@ -20,7 +20,7 @@ const SOCIALS = [
   },
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/sunala.universe?igsh=MWwzY3N6dDRjMHJ1Mg%3D%3D&utm_source=qr",
     bg: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)",
     icon: (
       <svg width="17" height="17" viewBox="0 0 24 24" fill="white">
@@ -30,7 +30,7 @@ const SOCIALS = [
   },
   {
     label: "X",
-    href: "#",
+    href: "https://x.com/sunala_universe?s=11",
     bg: "#000000",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
@@ -40,7 +40,7 @@ const SOCIALS = [
   },
   {
     label: "Telegram",
-    href: "https://t.me/+bjyNFGSMyMk1N2Rk",
+    href: "https://t.me/sunala_agri",
     bg: "#229ED9",
     icon: (
       <svg width="17" height="17" viewBox="0 0 24 24" fill="white">
@@ -50,7 +50,7 @@ const SOCIALS = [
   },
   {
     label: "Discord",
-    href: "#",
+    href: "https://discord.gg/cQhSUWrHd",
     bg: "#5865F2",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white">

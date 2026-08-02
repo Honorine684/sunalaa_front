@@ -8,8 +8,11 @@ const jsonLd = [
     url: "https://sunalaa.com",
     logo: "https://sunalaa.com/images/sunala_LOGO.png",
     sameAs: [
-      "https://t.me/sunalaa",
-      "https://x.com/sunalaa",
+      "https://t.me/sunala_agri",
+      "https://x.com/sunala_universe",
+      "https://discord.gg/cQhSUWrHd",
+      "https://www.facebook.com/share/1Dc2MhmXGj/",
+      "https://www.instagram.com/sunala.universe",
     ],
   },
   {
