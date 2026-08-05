@@ -81,7 +81,6 @@ api.interceptors.response.use(
         lsRemove("snl_user");
         lsRemove("snl_login_time");
         if (typeof window !== "undefined") {
-          document.cookie = "snl_user_role=; path=/; max-age=0";
           window.location.href = "/login";
         }
         return Promise.reject(err);

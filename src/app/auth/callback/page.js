@@ -55,11 +55,9 @@ export default function OAuthCallbackPage() {
         const user = exchanged?.user ?? exchanged;
         const isNewUser = exchanged?.isNewUser === true;
 
-        const isProduction = window.location.hostname !== "localhost";
-        const cookieOpts = `path=/; max-age=86400; SameSite=Lax${isProduction ? "; Secure" : ""}`;
         lsSet("snl_user", JSON.stringify(user));
         lsSet("snl_login_time", String(Date.now()));
-        document.cookie = `snl_user_role=${(user?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
+
 
         const locale = ssGet("snl_oauth_locale") ?? "en";
         ssRemove("snl_oauth_locale");

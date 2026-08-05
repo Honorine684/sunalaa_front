@@ -21,7 +21,7 @@ export default async function BlogPage({ params }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Blog" });
   const prefix = locale === "fr" ? "/fr" : "";
-  const isLoggedIn = !!(await cookies()).get("snl_user_role");
+  const isLoggedIn = !!(await cookies()).get("snl_access_token");
 
   const articles = [
     { key: "a1", category: t("a1_cat") },

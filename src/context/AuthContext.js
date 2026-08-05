@@ -39,7 +39,7 @@ function clearSession() {
   // Nettoyage tokens stales (ancienne version pré-HttpOnly)
   lsRemove("snl_access_token");
   lsRemove("snl_refresh_token");
-  document.cookie = "snl_user_role=; path=/; max-age=0";
+  document.cookie = "snl_user_role=; path=/; max-age=0; SameSite=Lax";
 }
 
 const AuthContext = createContext(null);
@@ -110,12 +110,9 @@ export function AuthProvider({ children }) {
     // Tokens dans cookies HttpOnly posés par le backend — on stocke seulement l'user
     const d = raw?.data ?? raw;
     const u = d?.user ?? d;
-    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-    const cookieOpts = `path=/; max-age=18000; SameSite=Lax${secure}`;
     const norm = normalizeUser(u);
     lsSet("snl_user", JSON.stringify(norm));
     lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_user_role=${(norm?.role ?? "user").toLowerCase()}; ${cookieOpts}`;
     setUser(norm);
     // Sync locale préférence avec le backend (pour les notifications push)
     if (typeof window !== "undefined") {
@@ -159,10 +156,8 @@ export function AuthProvider({ children }) {
     // Cookie HttpOnly déjà posé par le backend via /auth/google/callback
     const { data } = await authApi.getMe();
     const u = normalizeUser(data?.data?.data ?? data?.data ?? data);
-    const secure = typeof window !== "undefined" && window.location.hostname !== "localhost" ? "; Secure" : "";
     lsSet("snl_user", JSON.stringify(u));
     lsSet("snl_login_time", String(Date.now()));
-    document.cookie = `snl_user_role=${(u?.role ?? "user").toLowerCase()}; path=/; max-age=18000; SameSite=Lax${secure}`;
     setUser(u);
     const locale = window.location.pathname.startsWith("/fr") ? "fr" : "en";
     usersApi.updateLocale(locale).catch(() => {});

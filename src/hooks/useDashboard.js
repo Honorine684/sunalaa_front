@@ -23,7 +23,6 @@ export function useDashboard() {
         if (controller.signal.aborted) return null;
         if (err?.response?.status === 401) {
           try { localStorage.removeItem("snl_user"); } catch {}
-          try { document.cookie = "snl_user_role=; path=/; max-age=0"; } catch {}
           window.location.href = "/login";
         }
         return null;

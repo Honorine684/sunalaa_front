@@ -19,7 +19,7 @@ async function isMaintenanceMode() {
   }
 }
 
-const PRIVATE_PATHS = ["/profil", "/admin", "/setup-username"];
+const PRIVATE_PATHS = ["/profil", "/setup-username"];
 const AUTH_PATHS    = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email"];
 
 function stripLocale(pathname) {
@@ -29,12 +29,26 @@ function stripLocale(pathname) {
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api") || pathname.startsWith("/auth/callback")) {
-    if (pathname.startsWith("/admin")) {
-      const role = request.cookies.get("snl_user_role")?.value;
-      if (role && !role.includes("admin")) {
-        return NextResponse.redirect(new URL("/profil", request.url));
-      }
+  if (pathname.startsWith("/api") || pathname.startsWith("/auth/callback")) {
+    return NextResponse.next();
+  }
+
+  // Admin : vérification du rôle côté serveur — snl_user_role ignoré
+  if (pathname.startsWith("/admin")) {
+    const token = request.cookies.get("snl_access_token")?.value;
+    if (!token) return new NextResponse(null, { status: 404 });
+    try {
+      const res = await fetch(`${API_BASE}/auth/me`, {
+        headers: { Cookie: `snl_access_token=${token}` },
+        signal: AbortSignal.timeout(3000),
+        cache: "no-store",
+      });
+      if (!res.ok) return new NextResponse(null, { status: 404 });
+      const json = await res.json();
+      const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
+      if (role !== "ADMIN") return new NextResponse(null, { status: 404 });
+    } catch {
+      return new NextResponse(null, { status: 404 });
     }
     return NextResponse.next();
   }
@@ -48,25 +62,22 @@ export async function middleware(request) {
     }
   }
 
-  // snl_user_role est le seul cookie effaçable par JS — utilisé comme indicateur de session active
-  // snl_access_token est HttpOnly (non effaçable par JS) → ne pas l'utiliser pour le routing
-  const role = request.cookies.get("snl_user_role")?.value;
-  const isAuthenticated = !!role;
+  // snl_access_token est HttpOnly → lisible côté serveur, non forgeable par JS client
+  const hasToken = !!request.cookies.get("snl_access_token")?.value;
 
   const isPrivate  = PRIVATE_PATHS.some((p) => cleanPath.startsWith(p));
   const isAuthPath = AUTH_PATHS.some((p) => cleanPath.startsWith(p));
 
-  if (isPrivate && !isAuthenticated) {
+  if (isPrivate && !hasToken) {
     const locale = pathname.startsWith("/fr") ? "/fr" : "";
     const loginUrl = new URL(`${locale}/login`, request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthPath && isAuthenticated) {
+  if (isAuthPath && hasToken) {
     const locale = pathname.startsWith("/fr") ? "/fr" : "";
-    const home = role.includes("admin") ? "/admin" : `${locale}/profil`;
-    return NextResponse.redirect(new URL(home, request.url));
+    return NextResponse.redirect(new URL(`${locale}/profil`, request.url));
   }
 
   return intlMiddleware(request);
