@@ -43,14 +43,11 @@ export async function middleware(request) {
         signal: AbortSignal.timeout(3000),
         cache: "no-store",
       });
-      console.error("[admin-auth] status:", res.status);
       if (!res.ok) return new NextResponse(null, { status: 404 });
       const json = await res.json();
       const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
-      console.error("[admin-auth] role:", role, "raw:", JSON.stringify(json).slice(0, 200));
-      if (role !== "ADMIN") return new NextResponse(null, { status: 404 });
-    } catch (err) {
-      console.error("[admin-auth] fetch /auth/me failed:", err?.message ?? err);
+      if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return new NextResponse(null, { status: 404 });
+    } catch {
       return new NextResponse(null, { status: 404 });
     }
     return NextResponse.next();
