@@ -47,7 +47,8 @@ export async function middleware(request) {
       const json = await res.json();
       const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
       if (role !== "ADMIN") return new NextResponse(null, { status: 404 });
-    } catch {
+    } catch (err) {
+      console.error("[admin-auth] fetch /auth/me failed:", err?.message ?? err);
       return new NextResponse(null, { status: 404 });
     }
     return NextResponse.next();

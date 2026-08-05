@@ -32,7 +32,8 @@ export default async function AdminLayout({ children }) {
     const json = await res.json();
     const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
     if (role !== "ADMIN") return notFound();
-  } catch {
+  } catch (err) {
+    console.error("[admin-layout] fetch /auth/me failed:", err?.message ?? err);
     return notFound();
   }
 
