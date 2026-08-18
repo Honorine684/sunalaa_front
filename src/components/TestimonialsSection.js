@@ -78,8 +78,8 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-[11px] mt-8" style={{ color: "rgba(255,255,255,0.35)" }}>
-          Individual results may vary and are not guaranteed. Testimonials reflect personal experiences.
+        <p className="text-center text-[11px] mt-8" style={{ color: "rgba(0,0,0,0.35)" }}>
+          {t("disclaimer")}
         </p>
 
         {/* CTA */}
