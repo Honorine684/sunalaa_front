@@ -28,8 +28,8 @@ export default function LandingHero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-10 lg:pt-16 pb-20 lg:pb-40">
           <div className="relative z-10 text-center lg:text-left">
             <h1 className="font-black text-[32px] sm:text-[44px] lg:text-[64px] text-white leading-none mb-6">
-              {t("h1_1")}<br />{t("h1_2")}<br />
-              <span style={{ color: "#3FAE8C" }}>SUNALA</span>
+              {t("h1_1")}<br />
+              <span style={{ color: "#3FAE8C" }}>SUNALA</span><br />{t("h1_2")}
             </h1>
             <p className="text-[16px] mb-10 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,0.70)" }}>
               {t("subtitle")}

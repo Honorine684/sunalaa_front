@@ -24,14 +24,14 @@ export default async function ContactPage({ params }) {
   const emailCards = [
     {
       email: "contact@sunalaa.com",
-      phone: "+337 57 83 49 86",
+      phone: "+33 7 57 83 49 86",
       label: t("card1_label"),
       desc: t("card1_desc"),
       delay: t("card1_delay"),
       color: "#3FAE8C",
     },
     {
-      email: "honorinedede0@gmail.com",
+      email: "support@sunalaa.com",
       label: t("card2_label"),
       desc: t("card2_desc"),
       delay: t("card2_delay"),
@@ -39,7 +39,7 @@ export default async function ContactPage({ params }) {
     },
     {
       email: "contact@sunalaa.com",
-      phone: "+337 57 83 49 86",
+      phone: "+33 7 57 83 49 86",
       label: t("card3_label"),
       desc: t("card3_desc"),
       delay: t("card3_delay"),
@@ -47,7 +47,7 @@ export default async function ContactPage({ params }) {
     },
     {
       email: "contact@sunalaa.com",
-      phone: "+337 57 83 49 86",
+      phone: "+33 7 57 83 49 86",
       label: t("card4_label"),
       desc: t("card4_desc"),
       delay: t("card4_delay"),
@@ -55,7 +55,7 @@ export default async function ContactPage({ params }) {
     },
     {
       email: "contact@sunalaa.com",
-      phone: "+337 57 83 49 86",
+      phone: "+33 7 57 83 49 86",
       label: t("card5_label"),
       desc: t("card5_desc"),
       delay: t("card5_delay"),
@@ -63,7 +63,7 @@ export default async function ContactPage({ params }) {
     },
     {
       email: "contact@sunalaa.com",
-      phone: "+337 57 83 49 86",
+      phone: "+33 7 57 83 49 86",
       label: t("card6_label"),
       desc: t("card6_desc"),
       delay: t("card6_delay"),

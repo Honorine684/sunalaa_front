@@ -77,8 +77,13 @@ export default function TestimonialsSection() {
           ))}
         </div>
 
+        {/* Disclaimer */}
+        <p className="text-center text-[11px] mt-8" style={{ color: "rgba(255,255,255,0.35)" }}>
+          Individual results may vary and are not guaranteed. Testimonials reflect personal experiences.
+        </p>
+
         {/* CTA */}
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center mt-6">
           <a
             href={`${prefix}/snl/usage`}
             className="inline-flex items-center gap-2 font-semibold text-[14px] px-5 py-2.5 rounded-full transition-all hover:brightness-110 group"
