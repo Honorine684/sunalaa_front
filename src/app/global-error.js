@@ -113,13 +113,13 @@ export default function GlobalError({ error, reset }) {
             <p>
               <strong>🇫🇷</strong> Une erreur inattendue s'est produite.
               Veuillez recharger la page. Si le problème persiste, contactez le support à{" "}
-              <a href="mailto:honorinedede0@gmail.com">honorinedede0@gmail.com</a>{" "}
+              <a href="mailto:contact@sunalaa.com">contact@sunalaa.com</a>{" "}
               en décrivant ce que vous faisiez au moment de l'erreur.
             </p>
             <p>
               <strong>🇬🇧</strong> An unexpected error occurred.
               Please reload the page. If the problem persists, contact support at{" "}
-              <a href="mailto:honorinedede0@gmail.com">honorinedede0@gmail.com</a>{" "}
+              <a href="mailto:contact@sunalaa.com">contact@sunalaa.com</a>{" "}
               and describe what you were doing when the error happened.
             </p>
           </div>
