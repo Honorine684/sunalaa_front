@@ -129,6 +129,11 @@ export default async function UsagePage({ params }) {
                 </div>
               ))}
             </div>
+              <p className="text-[11px] mt-3 leading-relaxed" style={{ color: "rgba(0,0,0,0.38)" }}>
+                {locale === "fr"
+                  ? <>Ces chiffres sont des scénarios illustratifs, pas des projections financières. Consultez notre <Link href={`${prefix}/risk-warning`} className="underline hover:opacity-70">Avertissement sur les risques</Link>.</>
+                  : <>These figures are illustrative scenarios, not financial projections. See our <Link href={`${prefix}/risk-warning`} className="underline hover:opacity-70">Risk Warning</Link>.</>}
+              </p>
           </div>
 
           {/* Scénario 3 */}
