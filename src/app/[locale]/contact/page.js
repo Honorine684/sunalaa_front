@@ -24,7 +24,6 @@ export default async function ContactPage({ params }) {
   const emailCards = [
     {
       email: "contact@sunalaa.com",
-      phone: "+33 7 57 83 49 86",
       label: t("card1_label"),
       desc: t("card1_desc"),
       delay: t("card1_delay"),
@@ -36,38 +35,6 @@ export default async function ContactPage({ params }) {
       desc: t("card2_desc"),
       delay: t("card2_delay"),
       color: "#3B82F6",
-    },
-    {
-      email: "contact@sunalaa.com",
-      phone: "+33 7 57 83 49 86",
-      label: t("card3_label"),
-      desc: t("card3_desc"),
-      delay: t("card3_delay"),
-      color: "#8B5CF6",
-    },
-    {
-      email: "contact@sunalaa.com",
-      phone: "+33 7 57 83 49 86",
-      label: t("card4_label"),
-      desc: t("card4_desc"),
-      delay: t("card4_delay"),
-      color: "#E6B84C",
-    },
-    {
-      email: "contact@sunalaa.com",
-      phone: "+33 7 57 83 49 86",
-      label: t("card5_label"),
-      desc: t("card5_desc"),
-      delay: t("card5_delay"),
-      color: "#22C55E",
-    },
-    {
-      email: "contact@sunalaa.com",
-      phone: "+33 7 57 83 49 86",
-      label: t("card6_label"),
-      desc: t("card6_desc"),
-      delay: t("card6_delay"),
-      color: "#F43F5E",
     },
   ];
 
@@ -117,7 +84,7 @@ export default async function ContactPage({ params }) {
               {t("emails_title")}
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
             {emailCards.map((card, i) => (
               <div
                 key={i}
@@ -144,10 +111,10 @@ export default async function ContactPage({ params }) {
                   <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
                     {card.email}
                   </p>
-                  {card.phone && (
-                    <p className="text-[12px] font-semibold select-all" style={{ color: card.color }}>
-                      {card.phone}
-                    </p>
+                  {i === 0 && (
+                    <a href="tel:+33757834986" className="text-[12px] font-semibold hover:underline" style={{ color: card.color }}>
+                      +33 7 57 83 49 86
+                    </a>
                   )}
                 </div>
               </div>
