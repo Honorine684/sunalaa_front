@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
+import { useEffect, useState } from "react";
 
 const COLORS = ["#3FAE8C", "#E6B84C", "#1F4E46"];
 
@@ -16,12 +17,42 @@ function Stars() {
   );
 }
 
+function fmtMembers(n) {
+  if (n == null) return null;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M+`;
+  if (n >= 1_000) return `${Math.floor(n / 100) / 10}k+`;
+  return `${n}+`;
+}
+
+function fmtPoints(n) {
+  if (n == null) return null;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M+`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k+`;
+  return `${n}`;
+}
+
 export default function TestimonialsSection() {
   const t = useTranslations("Testimonials");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
-
   const items = t.raw("items");
+
+  const [liveStats, setLiveStats] = useState({ members: null, totalPoints: null });
+
+  useEffect(() => {
+    fetch("/api/platform-stats")
+      .then((r) => r.json())
+      .then((d) => setLiveStats(d))
+      .catch(() => {});
+  }, []);
+
+  const membersValue  = fmtMembers(liveStats.members)  ?? t("stats.members");
+  const pointsValue   = fmtPoints(liveStats.totalPoints) ?? t("stats.points");
+
+  const statRows = [
+    { value: membersValue, label: t("stats.membersLabel") },
+    { value: pointsValue,  label: t("stats.pointsLabel") },
+  ];
 
   return (
     <section className="relative bg-white py-20 lg:py-28 overflow-hidden">
@@ -63,13 +94,9 @@ export default function TestimonialsSection() {
           ))}
         </div>
 
-        {/* Social proof bar */}
+        {/* Live stats bar */}
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12">
-          {[
-            { value: t("stats.members"),  label: t("stats.membersLabel") },
-            { value: t("stats.rating"),   label: t("stats.ratingLabel") },
-            { value: t("stats.points"),   label: t("stats.pointsLabel") },
-          ].map(({ value, label }) => (
+          {statRows.map(({ value, label }) => (
             <div key={label} className="text-center">
               <p className="font-black text-[28px] leading-none" style={{ color: "#1F4E46" }}>{value}</p>
               <p className="text-[13px] mt-1" style={{ color: "#94A3B8" }}>{label}</p>

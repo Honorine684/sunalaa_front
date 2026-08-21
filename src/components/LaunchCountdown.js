@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-const LAUNCH_DATE = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2026-10-01T00:00:00Z");
+const LAUNCH_DATE = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2027-01-21T00:00:00Z");
 
 function pad(n) {
   return String(n).padStart(2, "0");

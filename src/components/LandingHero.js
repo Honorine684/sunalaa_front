@@ -7,13 +7,35 @@ import { useTranslations, useLocale } from "next-intl";
 import LaunchCountdown from "./LaunchCountdown";
 import { useAuth } from "@/context/AuthContext";
 
+function fmtMembers(n) {
+  if (n == null) return "12,847";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 10_000) return `${Math.floor(n / 1000)},${String(n % 1000).padStart(3, "0")}`;
+  return n.toLocaleString("en-US");
+}
+
+function fmtPoints(n) {
+  if (n == null) return "2.4M+";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M+`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k+`;
+  return `${n}+`;
+}
+
 export default function LandingHero() {
   const t = useTranslations("LandingHero");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
+  const [liveStats, setLiveStats] = useState({ members: null, totalPoints: null });
+
   useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    fetch("/api/platform-stats")
+      .then((r) => r.json())
+      .then((d) => setLiveStats(d))
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: "#1F4E46" }}>
@@ -84,23 +106,9 @@ export default function LandingHero() {
                 </svg>
               </div>
               <div>
-                <div style={{ fontSize: 36, lineHeight: "40px", fontWeight: 700, color: "#000000" }}>12,847</div>
+                <div style={{ fontSize: 36, lineHeight: "40px", fontWeight: 700, color: "#000000" }}>{fmtMembers(liveStats.members)}</div>
                 <div style={{ fontSize: 16, lineHeight: "24px", fontWeight: 600, color: "rgba(0,0,0,0.50)" }}>{t("stat_members")}</div>
               </div>
-            </div>
-
-            <div className="absolute bg-white rounded-2xl shadow-xl px-5 py-8 text-center"
-              style={{ top: "18%", right: "-30px", minWidth: 160 }}>
-              <div className="flex justify-center mb-2">
-                <svg width="64" height="64" viewBox="0 0 52 52">
-                  <circle cx="26" cy="26" r="20" fill="none" stroke="#E2E8F0" strokeWidth="5"/>
-                  <circle cx="26" cy="26" r="20" fill="none" stroke="#3FAE8C" strokeWidth="5"
-                    strokeDasharray={`${2 * Math.PI * 20 * 0.65} ${2 * Math.PI * 20 * 0.35}`}
-                    strokeLinecap="round" transform="rotate(-90 26 26)" />
-                </svg>
-              </div>
-              <div className="font-black text-3xl leading-none" style={{ color: "#0F172B" }}>65%</div>
-              <div className="text-sm text-slate-500 mt-1 leading-snug">{t("stat_activity")}</div>
             </div>
 
             <div className="absolute bg-white rounded-2xl shadow-xl p-5 flex items-center gap-4"
@@ -111,7 +119,7 @@ export default function LandingHero() {
                 </svg>
               </div>
               <div>
-                <div className="font-black text-2xl leading-none" style={{ color: "#0F172B" }}>2.4M+</div>
+                <div className="font-black text-2xl leading-none" style={{ color: "#0F172B" }}>{fmtPoints(liveStats.totalPoints)}</div>
                 <div className="text-sm text-slate-500 mt-1">{t("stat_points")}</div>
               </div>
             </div>

@@ -216,7 +216,7 @@ function RecipientSearch({ selected, onSelect, onClear, error, onErrorClear }) {
 
 /* ─── Token Countdown ────────────────────────────────────────────── */
 function useCountdown() {
-  const exchangeDate = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2026-10-18");
+  const exchangeDate = new Date(process.env.NEXT_PUBLIC_SNL_EXCHANGE_DATE || "2027-01-21");
   const launchDate   = new Date(process.env.NEXT_PUBLIC_SNL_LAUNCH_DATE   || "2026-06-18");
 
   const [now, setNow] = useState(null);
