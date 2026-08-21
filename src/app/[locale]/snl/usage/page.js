@@ -75,6 +75,9 @@ export default async function UsagePage({ params }) {
           {/* Scénario 1 */}
           <div className="rounded-3xl p-7 sm:p-9 relative overflow-hidden"
             style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(31,78,70,0.08)" }}>
+            <span className="text-[10px] font-bold tracking-widest uppercase block mb-2" style={{ color: "#3FAE8C" }}>
+              {t("s1_tag")}
+            </span>
             <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: "#3FAE8C" }} />
             <h2 className="font-black text-[20px] sm:text-[26px] leading-tight mb-4" style={{ color: "#0F172B" }}>
               {t("s1_title")}
@@ -106,6 +109,9 @@ export default async function UsagePage({ params }) {
           {/* Scénario 2 */}
           <div className="rounded-3xl p-7 sm:p-9 relative overflow-hidden"
             style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(31,78,70,0.08)" }}>
+            <span className="text-[10px] font-bold tracking-widest uppercase block mb-2" style={{ color: "#E6B84C" }}>
+              {t("s2_tag")}
+            </span>
             <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: "#E6B84C" }} />
             <h2 className="font-black text-[20px] sm:text-[26px] leading-tight mb-4" style={{ color: "#0F172B" }}>
               {t("s2_title")}

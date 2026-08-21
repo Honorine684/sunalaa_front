@@ -27,6 +27,7 @@ export default async function RoadmapPage({ params }) {
       label: t("p0_label"),
       title: t("p0_title"),
       period: t("p0_period"),
+      status: t("p0_status"),
       color: "#3FAE8C",
       items: [
         { text: t("p0_i1"), done: true },
@@ -42,6 +43,7 @@ export default async function RoadmapPage({ params }) {
       label: t("p1_label"),
       title: t("p1_title"),
       period: t("p1_period"),
+      status: t("p1_status"),
       color: "#E6B84C",
       items: [
         { text: t("p1_i1"), done: null },
@@ -55,6 +57,7 @@ export default async function RoadmapPage({ params }) {
       label: t("p2_label"),
       title: t("p2_title"),
       period: t("p2_period"),
+      status: t("p2_status"),
       color: "#3B82F6",
       items: [
         { text: t("p2_i1"), done: null },
@@ -69,6 +72,7 @@ export default async function RoadmapPage({ params }) {
       label: t("p3_label"),
       title: t("p3_title"),
       period: t("p3_period"),
+      status: t("p3_status"),
       color: "#8B5CF6",
       items: [
         { text: t("p3_i1"), done: null },
@@ -82,6 +86,7 @@ export default async function RoadmapPage({ params }) {
       label: t("p4_label"),
       title: t("p4_title"),
       period: t("p4_period"),
+      status: t("p4_status"),
       color: "#F43F5E",
       items: [
         { text: t("p4_i1"), done: null },
@@ -131,12 +136,16 @@ export default async function RoadmapPage({ params }) {
                     style={{ backgroundColor: `${phase.color}18`, color: phase.color }}>
                     {phase.num}
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-bold tracking-widest uppercase" style={{ color: phase.color }}>
                       {phase.label} — {phase.period}
                     </p>
                     <p className="text-[17px] font-bold mt-0.5" style={{ color: "#0F172B" }}>{phase.title}</p>
                   </div>
+                  <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full"
+                    style={{ backgroundColor: `${phase.color}15`, color: phase.color }}>
+                    {phase.status}
+                  </span>
                 </div>
                 {/* Phase items */}
                 <div className="px-6 py-5 flex flex-col gap-3">

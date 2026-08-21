@@ -46,13 +46,17 @@ export default async function SnlPage({ params }) {
     { href: "#valeur", label: t("nav_value") },
   ];
 
+  const phaseAvailable = { label: t("phase_available"), color: "#3FAE8C", bg: "rgba(63,174,140,0.10)" };
+  const phasePlanned   = { label: t("phase_planned"),   color: "#E6B84C", bg: "rgba(230,184,76,0.10)" };
+  const phaseFuture    = { label: t("phase_future"),    color: "#8B5CF6", bg: "rgba(139,92,246,0.10)" };
+
   const utilites = [
-    { num: "01", title: tUtil("util1_title"), desc: tUtil("util1_desc"), example: tUtil("util1_example"), color: "#3FAE8C" },
-    { num: "02", title: tUtil("util2_title"), desc: tUtil("util2_desc"), example: tUtil("util2_example"), color: "#E6B84C" },
-    { num: "03", title: tUtil("util3_title"), desc: tUtil("util3_desc"), example: tUtil("util3_example"), color: "#3FAE8C" },
-    { num: "04", title: tUtil("util4_title"), desc: tUtil("util4_desc"), example: tUtil("util4_example"), color: "#1F4E46" },
-    { num: "05", title: tUtil("util5_title"), desc: tUtil("util5_desc"), example: tUtil("util5_example"), color: "#E6B84C" },
-    { num: "06", title: tUtil("util6_title"), desc: tUtil("util6_desc"), example: tUtil("util6_example"), color: "#3FAE8C" },
+    { num: "01", title: tUtil("util1_title"), desc: tUtil("util1_desc"), example: tUtil("util1_example"), color: "#3FAE8C", phase: phasePlanned },
+    { num: "02", title: tUtil("util2_title"), desc: tUtil("util2_desc"), example: tUtil("util2_example"), color: "#E6B84C", phase: phaseAvailable },
+    { num: "03", title: tUtil("util3_title"), desc: tUtil("util3_desc"), example: tUtil("util3_example"), color: "#3FAE8C", phase: phaseFuture },
+    { num: "04", title: tUtil("util4_title"), desc: tUtil("util4_desc"), example: tUtil("util4_example"), color: "#1F4E46", phase: phasePlanned },
+    { num: "05", title: tUtil("util5_title"), desc: tUtil("util5_desc"), example: tUtil("util5_example"), color: "#E6B84C", phase: phasePlanned },
+    { num: "06", title: tUtil("util6_title"), desc: tUtil("util6_desc"), example: tUtil("util6_example"), color: "#3FAE8C", phase: phasePlanned },
   ];
 
   const mechs = [
@@ -197,12 +201,18 @@ export default async function SnlPage({ params }) {
           style={{ width: 260, opacity: 0.05, filter: "brightness(0)", left: -40, top: 500 }} />
         <div className="max-w-3xl mx-auto px-6 relative z-10">
           <div className="flex flex-col gap-6">
-            {utilites.map(({ num, title, desc, example, color }) => (
+            {utilites.map(({ num, title, desc, example, color, phase }) => (
               <div key={num} className="rounded-3xl p-7 sm:p-9 relative overflow-hidden bg-white"
                 style={{ border: "1px solid rgba(31,78,70,0.08)" }}>
                 <span className="absolute top-5 right-7 font-black text-[56px] leading-none select-none pointer-events-none"
                   style={{ color: "rgba(15,23,43,0.04)" }}>{num}</span>
-                <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: color }} />
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="h-1 w-10 rounded-full" style={{ backgroundColor: color }} />
+                  <span className="text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full"
+                    style={{ backgroundColor: phase.bg, color: phase.color }}>
+                    {phase.label}
+                  </span>
+                </div>
                 <h3 className="font-bold text-[18px] sm:text-[20px] mb-3 leading-snug" style={{ color: "#0F172B" }}>{title}</h3>
                 <p className="text-[14px] leading-relaxed mb-4" style={{ color: "#45556C" }}>{desc}</p>
                 <div className="rounded-xl px-4 py-3 text-[13px] leading-relaxed font-medium"

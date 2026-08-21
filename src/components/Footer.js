@@ -70,20 +70,24 @@ function FootCol({ title, links }) {
       <ul className="flex flex-col gap-3">
         {links.map((l) => (
           <li key={l.label}>
-            <Link
-              href={l.href}
-              className="text-[13px] transition-colors flex items-center gap-2"
-              style={{ color: "rgba(255,255,255,0.55)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.9)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
-            >
-              {l.label}
-              {l.soon && (
+            {l.soon ? (
+              <span className="text-[13px] flex items-center gap-2 cursor-default" style={{ color: "rgba(255,255,255,0.30)" }}>
+                {l.label}
                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: "#E6B84C22", color: "#E6B84C", border: "1px solid #E6B84C44" }}>
                   {l.soon}
                 </span>
-              )}
-            </Link>
+              </span>
+            ) : (
+              <Link
+                href={l.href}
+                className="text-[13px] transition-colors flex items-center gap-2"
+                style={{ color: "rgba(255,255,255,0.55)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.9)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
+              >
+                {l.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

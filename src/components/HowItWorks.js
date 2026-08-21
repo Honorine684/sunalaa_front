@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
@@ -47,32 +49,29 @@ export default function HowItWorks() {
   const t = useTranslations("HowItWorks");
   const locale = useLocale();
   const prefix = locale === "fr" ? "/fr" : "";
-
   const isFr = locale === "fr";
+  const [expanded, setExpanded] = useState({});
 
   const steps = [
     {
       num: t("step1_num"),
       title: t("step1_title"),
       desc: t("step1_desc"),
-      btn: t("step1_btn"),
-      href: `${prefix}/login`,
+      more: [t("step1_more_1"), t("step1_more_2"), t("step1_more_3"), t("step1_more_4")],
       img: isFr ? "/images/VIS INSCRIPTION.jpg" : "/images/VIS_INSCRIPTION_EN.jpg",
     },
     {
       num: t("step2_num"),
       title: t("step2_title"),
       desc: t("step2_desc"),
-      btn: t("step2_btn"),
-      href: `${prefix}/login`,
+      more: [t("step2_more_1"), t("step2_more_2"), t("step2_more_3"), t("step2_more_4"), t("step2_more_5")],
       img: isFr ? "/images/VIS COLLECTION.jpg" : "/images/VIS_COLLECTION_EN.jpg",
     },
     {
       num: t("step3_num"),
       title: t("step3_title"),
       desc: t("step3_desc"),
-      btn: t("step3_btn"),
-      href: `${prefix}/login`,
+      more: [t("step3_more_1"), t("step3_more_2"), t("step3_more_3"), t("step3_more_4"), t("step3_more_5")],
       img: isFr ? "/images/VIS RESEAU.jpg" : "/images/VIS_RESEAU_EN.jpg",
     },
   ];
@@ -128,14 +127,25 @@ export default function HowItWorks() {
                   <h3 className="font-black text-[20px] sm:text-[32px] leading-normal mb-4" style={{ color: "#0F172B" }}>
                     {step.title}
                   </h3>
-                  <p className="text-[16px] mb-8" style={{ color: "#45556C", lineHeight: "28px", letterSpacing: "0.01em" }}>{step.desc}</p>
-                  <Link
-                    href={step.href}
-                    className="inline-flex items-center px-8 py-4 rounded-full font-bold text-[16px] text-white transition-opacity hover:opacity-90"
+                  <p className="text-[16px] mb-5" style={{ color: "#45556C", lineHeight: "28px", letterSpacing: "0.01em" }}>{step.desc}</p>
+                  {expanded[idx] && (
+                    <div className="flex flex-col gap-3 mb-6">
+                      {step.more.map((p, i) => (
+                        <p key={i} className="text-[15px]" style={{ color: "#45556C", lineHeight: "26px" }}>{p}</p>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={() => setExpanded((prev) => ({ ...prev, [idx]: !prev[idx] }))}
+                    className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-[16px] text-white transition-opacity hover:opacity-90"
                     style={{ backgroundColor: "#E5B858" }}
                   >
-                    {step.btn}
-                  </Link>
+                    {expanded[idx] ? t("read_less_btn") : t("read_more_btn")}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                      style={{ transform: expanded[idx] ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
                 </div>
 
                 <div className={isEven ? "lg:order-first" : ""}>
