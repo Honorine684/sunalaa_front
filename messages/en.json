@@ -45,7 +45,7 @@
     "read_less_btn": "Read less",
     "step1_num": "01",
     "step1_title": "Create your account",
-    "step1_desc": "Create your account in seconds. Registration is free, no credit card or investment required. Enter your email, set a password, and you're ready to start earning.",
+    "step1_desc": "Create your account in seconds. Registration is free, no credit card or investment required. Enter your email, set a password, and you're ready to start collecting points.",
     "step1_more_1": "Getting started with SUNALA is simple and completely free.",
     "step1_more_2": "Create your account in just a few steps by entering your email address and setting a secure password. No credit card, deposit, or investment is required to join the platform.",
     "step1_more_3": "Once your account is created, you can access your SUNALA dashboard, discover available activities, collect SNL points, participate in community missions, and start building your progress within the SUNALA ecosystem.",
@@ -60,7 +60,7 @@
     "step2_more_5": "The more consistently you participate in eligible activities, the more opportunities you have to accumulate SNL points within the SUNALA ecosystem.",
     "step3_num": "03",
     "step3_title": "Invite your network",
-    "step3_desc": "Share your unique referral link with friends, family and community. Earn a bonus on every claim made by your referrals, up to 3 levels deep. The more active your network, the more SNL you earn.",
+    "step3_desc": "Share your unique referral link with friends, family and community. Earn a bonus on every claim made by your referrals, up to 3 levels deep. The more active your network, the more SNL points you can earn.",
     "step3_more_1": "Grow the SUNALA community by inviting people you know.",
     "step3_more_2": "After creating your account, you receive a unique referral link that you can share with your friends, family, online communities, and social media followers.",
     "step3_more_3": "When people join SUNALA through your referral link and participate in eligible activities, you can earn referral bonuses based on their activity. The referral system can reward activity across up to three levels of your network.",
@@ -70,10 +70,10 @@
   },
   "WhySunala": {
     "title": "Why SUNALA?",
-    "subtitle": "A platform designed to reward both your engagement and your community's. Every action counts: grow, share and prepare for the SNL token launch.",
+    "subtitle": "A platform designed to reward both your engagement and your community's. Every action counts. Build your network, complete missions and prepare for the $SNL token launch.",
     "card1_title": "Daily collection",
     "card1_desc": "Earn SNL points every day in seconds",
-    "card2_title": "Rewarding progression",
+    "card2_title": "Progress & rewards",
     "card2_desc": "Level up and unlock exclusive benefits",
     "card3_title": "Rewarded referrals",
     "card3_desc": "Invite your community and grow together",
@@ -191,7 +191,7 @@
     "newsletter_btn": "OK",
     "newsletter_done": "Thanks, you're subscribed!",
     "disclaimer_bold": "Document under legal validation.",
-    "disclaimer_text": "Our Terms of Use and Privacy Policy are currently being finalized with our legal counsel as part of the official registration of SUNALA UAB in Lithuania. By using this platform, you acknowledge having read the provisional versions currently available. The $SNL token has not yet launched - accumulated points do not constitute a financial asset.",
+    "disclaimer_text": "Our Terms of Use and Privacy Policy are currently being finalized with our legal counsel as part of the official registration of SUNALA UAB in Lithuania. By using this platform, you acknowledge having read the provisional versions currently available. The $SNL token has not yet launched. Accumulated points do not constitute a financial asset.",
     "bar_copyright": "© 2026 SUNALA UAB. All rights reserved.",
     "bar_mentions": "Legal Notice",
     "bar_cgu": "ToU",
@@ -357,7 +357,7 @@
         "name": "Anonymous",
         "country": "Senegal 🇸🇳",
         "initials": "A",
-        "text": "I referred 12 people in my neighbourhood. Thanks to the referral system, my earnings have tripled in two weeks. It is simple, free and it really works."
+        "text": "I referred 12 people in my neighbourhood. Thanks to the referral system, my points have tripled in two weeks. It is simple, free and easy to use."
       },
       {
         "name": "Anonymous",
