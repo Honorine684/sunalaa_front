@@ -270,7 +270,6 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
               <div
                 key={tip.id}
                 className="flex items-start gap-4 px-5 py-4 hover:bg-slate-50/60 transition-colors"
-                style={{ borderLeft: `3px solid ${tip.color}` }}
               >
                 {/* Icon */}
                 <div

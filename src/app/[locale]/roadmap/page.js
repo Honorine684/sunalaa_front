@@ -130,8 +130,7 @@ export default async function RoadmapPage({ params }) {
             {phases.map((phase, idx) => (
               <div key={idx} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 {/* Phase header */}
-                <div className="flex items-center gap-4 px-6 py-5 border-b border-slate-100"
-                  style={{ borderLeft: `4px solid ${phase.color}` }}>
+                <div className="flex items-center gap-4 px-6 py-5 border-b border-slate-100">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-bold text-[13px]"
                     style={{ backgroundColor: `${phase.color}18`, color: phase.color }}>
                     {phase.num}
