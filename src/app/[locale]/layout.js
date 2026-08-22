@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/context/AuthContext";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
+import PresenceBeacon from "@/components/PresenceBeacon";
 import PwaRegister from "@/components/PwaRegister";
 import PushNotifPrompt from "@/components/PushNotifPrompt";
 import IOSInstallBanner from "@/components/IOSInstallBanner";
@@ -47,6 +48,7 @@ export default async function LocaleLayout({ children, params }) {
       <body className={`${inter.className} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
+            <PresenceBeacon />
             <ErrorBoundary>
               <AnnouncementBanner />
             </ErrorBoundary>
