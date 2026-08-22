@@ -156,8 +156,8 @@
     "claim_btn": "+{snl} SNL",
     "claimed": "Up to date",
     "no_referrals": "No referrals",
-    "info_1": "Every point earned by a referral automatically credits you a SNL bonus - collect, missions, streak, registration, profile, transfers received.",
-    "info_2": "The bonus is held pending at each referral collect. Claim it by clicking the button at each level."
+    "info_1": "Every point earned by a referral automatically generates an SNL bonus for you based on their eligible activities, including daily collections, missions, streaks, registrations, profile completion and received transfers.",
+    "info_2": "Your referral bonus remains pending until the referred user completes an eligible collection. Once available, you can claim the bonus by clicking the claim button for the corresponding referral level."
   },
   "Footer": {
     "brand_desc": "The AgriFi ecosystem connecting real African agriculture to the blockchain.",
