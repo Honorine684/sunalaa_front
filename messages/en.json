@@ -91,7 +91,7 @@
   },
   "LandingCTA": {
     "title": "Ready to start?",
-    "subtitle": "Join thousands of members already accumulating their SNL points ahead of the community token launch",
+    "subtitle": "Join thousands of members already accumulating their SNL points ahead of the $SNL token launch",
     "cta": "Get started for free",
     "secondary": "Want to understand why $SNL has value?"
   },
@@ -141,7 +141,7 @@
     "step1_title": "Share your link",
     "step1_desc": "Invite your friends, family and community to join SUNALA",
     "step2_title": "They sign up",
-    "step2_desc": "Your referrals create their account and earn SNL points: daily collect, missions, streak, registration, profile, transfers…",
+    "step2_desc": "Your referrals create their account and collect SNL points: daily collect, missions, streak, registration, profile, transfers…",
     "step3_title": "You win together",
     "step3_desc": "You receive your % on every point your referrals earn, no exceptions - collect, missions, streak, registration, profile, transfers.",
     "gains_title": "Your earnings by level",
@@ -190,7 +190,7 @@
     "newsletter_placeholder": "Your email",
     "newsletter_btn": "OK",
     "newsletter_done": "Thanks, you're subscribed!",
-    "disclaimer_bold": "Document under legal validation.",
+    "disclaimer_bold": "Legal documentation currently under review.",
     "disclaimer_text": "Our Terms of Use and Privacy Policy are currently being finalized with our legal counsel as part of the official registration of SUNALA UAB in Lithuania. By using this platform, you acknowledge having read the provisional versions currently available. The $SNL token has not yet launched. Accumulated points do not constitute a financial asset.",
     "bar_copyright": "© 2026 SUNALA UAB. All rights reserved.",
     "bar_mentions": "Legal Notice",
@@ -311,7 +311,7 @@
   },
   "Formations": {
     "title": "Courses & Masterclasses",
-    "subtitle": "Train yourself in crypto and earn SNL",
+    "subtitle": "Train yourself in crypto and collect SNL points",
     "loading": "Loading courses…",
     "empty": "No courses available yet",
     "free": "Free",
@@ -369,9 +369,9 @@
   },
   "SNLValeur": {
     "meta_title": "Why $SNL has value",
-    "meta_desc": "The value of the SNL token is based on scarcity, growing demand and utility within the SUNALA ecosystem. Understand the economic fundamentals of SNL.",
+    "meta_desc": "The value of the $SNL token is based on scarcity, growing demand and utility within the SUNALA ecosystem. Understand the economic fundamentals of SNL.",
     "og_title": "Value of $SNL | SUNALA",
-    "og_desc": "Scarcity, demand and utility: why the SUNALA SNL token has value and how it evolves.",
+    "og_desc": "Scarcity, demand and utility: why the SUNALA $SNL token has value and how it evolves.",
     "hero_badge": "Tokenomics",
     "hero_h1_1": "Why the value of",
     "hero_h1_2": "grows over time",
@@ -437,7 +437,7 @@
   },
   "SNLMain": {
     "meta_title": "Understanding the $SNL token",
-    "meta_desc": "Everything about the SUNALA SNL token: its utility, value, uses in the ecosystem and how to accumulate it for free every day.",
+    "meta_desc": "Everything about the SUNALA $SNL token: its utility, value, uses in the ecosystem and how to accumulate it for free every day.",
     "og_title": "The $SNL token | SUNALA",
     "og_desc": "What is $SNL? Discover SUNALA's native token, its utility and how to accumulate it for free.",
     "nav_understand": "What is it?",
@@ -463,13 +463,13 @@
     "why1_title": "Access key",
     "why1_desc": "Certain advanced features of the SUNALA ecosystem, including plots, Farm Nodes and agricultural NFTs, require $SNL.",
     "why2_title": "Reward",
-    "why2_desc": "Eligible activities currently earn SNL points. These points may be converted into $SNL at the official token launch.",
+    "why2_desc": "Eligible activities currently allow you to collect SNL points. These points may be converted into $SNL at the official token launch.",
     "why3_title": "Real investment",
     "why3_desc": "The $SNL is the only currency accepted to invest in real tokenized African agricultural land."
   },
   "SNLUtilite": {
     "meta_title": "Utility of the $SNL token",
-    "meta_desc": "The SNL token is the access key to the SUNALA ecosystem. Understand its role, functions and why it is at the heart of the platform.",
+    "meta_desc": "The $SNL token is the access key to the SUNALA ecosystem. Understand its role, functions and why it is at the heart of the platform.",
     "og_title": "Utility of $SNL | SUNALA",
     "og_desc": "The SNL is the key to the SUNALA ecosystem. Discover its utility and central role in the platform.",
     "hero_badge": "The 6 concrete utilities",
@@ -499,7 +499,7 @@
   },
   "SNLUsage": {
     "meta_title": "What is $SNL used for?",
-    "meta_desc": "Discover all the concrete uses of the SNL token on SUNALA: payments, access to training, referral rewards and much more.",
+    "meta_desc": "Discover all the concrete uses of the $SNL token on SUNALA: payments, access to training, referral rewards and much more.",
     "og_title": "Uses of $SNL | SUNALA",
     "og_desc": "What is SNL used for? Payments, training, referrals, all the use cases of the SUNALA token.",
     "hero_badge": "Real scenarios",
@@ -636,7 +636,7 @@
   "FormationsHero": {
     "title_1": "Courses & Masterclass on",
     "title_brand": "Cryptocurrencies",
-    "subtitle": "Accumulate SNL points through your daily activity and prepare\nfor the arrival of the community token",
+    "subtitle": "Accumulate SNL points through your daily activity and prepare\nfor the arrival of the $SNL token",
     "cta": "Start a course",
     "coming_soon_sub": "Courses and masterclasses on cryptocurrencies are coming very soon."
   },
