@@ -628,10 +628,10 @@
     "cta_btn": "Get started for free"
   },
   "Hero": {
-    "title_1": "Fastest & secure platform",
-    "title_2": "to invest in",
-    "subtitle": "Accumulate SNL points through your daily activity\nand prepare for the arrival of the community token",
-    "cta": "Try for FREE"
+    "title_1": "Who will be in the",
+    "title_2": "Top 100 of",
+    "subtitle": "Top 100 members get priority access to exclusive launch benefits. Your position changes every day. Collect. Recruit. Climb.",
+    "cta": "I want my spot — Free registration"
   },
   "FormationsHero": {
     "title_1": "Courses & Masterclass on",
@@ -690,7 +690,7 @@
     "view_top": "View top 100",
     "your_rank": "Your current rank",
     "goal": "Goal",
-    "leaderboard_tip": "Collect regularly and invite your network to climb the leaderboard",
+    "leaderboard_tip": "Your position changes every day. Collect. Recruit. Climb.",
     "tx_title": "Recent transactions",
     "tx_sub": "Your latest SNL movements",
     "tx_empty": "No transactions yet.",

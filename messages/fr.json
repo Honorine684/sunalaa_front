@@ -628,10 +628,10 @@
     "cta_btn": "Commencer gratuitement"
   },
   "Hero": {
-    "title_1": "Plateforme rapide & sécurisée",
-    "title_2": "pour investir dans",
-    "subtitle": "Accumulez des points SNL grâce à votre activité quotidienne\net préparez-vous à l'arrivée du token communautaire",
-    "cta": "Essayer GRATUITEMENT"
+    "title_1": "Qui sera dans le",
+    "title_2": "Top 100 de",
+    "subtitle": "Les membres du Top 100 auront accès en priorité aux avantages exclusifs du lancement. Ta position change chaque jour. Collecte. Recrute. Monte.",
+    "cta": "Je veux ma place — Inscription gratuite"
   },
   "FormationsHero": {
     "title_1": "Cours & Masterclass sur les",
@@ -690,7 +690,7 @@
     "view_top": "Voir le top 100",
     "your_rank": "Votre rang actuel",
     "goal": "Objectif",
-    "leaderboard_tip": "Collectez régulièrement et invitez votre réseau pour grimper dans le classement",
+    "leaderboard_tip": "Ta position change chaque jour. Collecte. Recrute. Monte.",
     "tx_title": "Transactions récentes",
     "tx_sub": "Vos derniers mouvements SNL",
     "tx_empty": "Aucune transaction pour l'instant.",
