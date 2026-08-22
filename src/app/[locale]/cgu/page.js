@@ -245,7 +245,7 @@ export default async function CGUPage({ params }) {
                   </thead>
                   <tbody>
                     {referralRows.map((row, i) => {
-                      const parts = row.split(" — ");
+                      const parts = row.split(" - ");
                       return (
                         <tr key={i} style={{ backgroundColor: i % 2 === 0 ? "#fff" : "#F0F9F6" }}>
                           <td style={{ padding: "9px 14px", color: "#334155", fontWeight: 600 }}>{parts[0]}</td>
