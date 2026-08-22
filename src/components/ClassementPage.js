@@ -316,7 +316,7 @@ export default function ClassementPage() {
                           {getDisplayName(u)}
                         </span>
                         {isMe && (
-                          <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: "#2DD4BF", color: "#1A3A34" }}>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: "#3FAE8C", color: "#fff" }}>
                             Vous
                           </span>
                         )}
@@ -362,7 +362,7 @@ export default function ClassementPage() {
                         <span className="font-semibold text-sm text-white">
                           {getDisplayName(myEntry ?? authUser)}
                         </span>
-                        <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: "#2DD4BF", color: "#1A3A34" }}>
+                        <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: "#3FAE8C", color: "#fff" }}>
                           Vous
                         </span>
                       </div>

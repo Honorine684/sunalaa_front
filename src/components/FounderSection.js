@@ -4,9 +4,7 @@ export default function FounderSection() {
   const t = useTranslations("FounderSection");
 
   return (
-    <section className="relative bg-white py-20 lg:py-28 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(31,78,70,0.05) 0%, transparent 70%)" }} />
+    <section className="relative py-20 lg:py-28 overflow-hidden" style={{ backgroundColor: "#EDF2ED" }}>
 
       <div className="max-w-4xl mx-auto px-4 lg:px-8 relative z-10">
         <div className="flex justify-center mb-8">

@@ -15,7 +15,7 @@ function IllustrationStep1() {
       <text x="90" y="109" textAnchor="middle" fill="white" fontSize="8" fontFamily="sans-serif" fontWeight="bold">
         S&apos;inscrire
       </text>
-      <circle cx="148" cy="32" r="14" fill="#2DD4BF" />
+      <circle cx="148" cy="32" r="14" fill="#3FAE8C" />
       <path d="M142 32l4 4 8-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -119,7 +119,7 @@ export default function HowItWorks() {
                   {!step.img && (
                     <div
                       className="font-black leading-none mb-4 select-none"
-                      style={{ fontSize: 80, color: "#2DD4BF", opacity: 0.20 }}
+                      style={{ fontSize: 80, color: "#1F4E46", opacity: 0.12 }}
                     >
                       {step.num}
                     </div>

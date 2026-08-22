@@ -73,7 +73,7 @@ export default function TestimonialsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item, i) => (
             <div key={item.name}
-              className="rounded-[28px] p-7 flex flex-col gap-5 hover:scale-[1.02] transition-transform duration-300"
+              className="rounded-[28px] p-7 flex flex-col gap-5"
               style={{ backgroundColor: "#F8FAFC", border: "1px solid rgba(15,23,43,0.06)" }}>
               <Stars />
               <p className="text-[14px] leading-relaxed flex-1" style={{ color: "#45556C" }}>

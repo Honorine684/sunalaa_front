@@ -76,7 +76,7 @@ export default function LeaderboardRow({ rank, username, subtitle, country, scor
               </span>
             )}
             {isMe && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0" style={{ backgroundColor: "#2DD4BF", color: "#1A3A34" }}>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0" style={{ backgroundColor: "#3FAE8C", color: "#fff" }}>
                 You
               </span>
             )}

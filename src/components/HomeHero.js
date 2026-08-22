@@ -263,7 +263,7 @@ export default function HomeHero({ onCollected }) {
           {/* Success */}
           {state === "success" && result && (
             <div className="flex flex-col items-center gap-3 w-full">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #00BC7D, #00BBA7)" }}>
+              <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: "#3FAE8C" }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -299,7 +299,7 @@ export default function HomeHero({ onCollected }) {
                 onClick={handleCollect}
                 disabled={state === "loading"}
                 className="w-full flex items-center justify-center gap-2 font-bold text-[15px] text-white cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60"
-                style={{ height: 52, borderRadius: 14, background: "linear-gradient(135deg, #009966, #009689)" }}
+                style={{ height: 52, borderRadius: 14, backgroundColor: "#3FAE8C" }}
               >
                 {state === "loading" ? (
                   <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">

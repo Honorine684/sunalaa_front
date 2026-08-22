@@ -170,7 +170,7 @@ export default function CollecteModal({ onClose, onCollected }) {
 
         <div
           className="w-20 h-20 sm:w-32 sm:h-32 flex items-center justify-center shrink-0 rounded-full"
-          style={{ background: "linear-gradient(135deg, #00BC7D, #00BBA7)" }}
+          style={{ backgroundColor: "#3FAE8C" }}
         >
           {state === "success" ? (
             <svg className="w-8 h-8 sm:w-13 sm:h-13" viewBox="0 0 24 24" fill="none">
@@ -270,7 +270,7 @@ export default function CollecteModal({ onClose, onCollected }) {
           <button
             onClick={onClose}
             className="w-full flex items-center justify-center gap-3 font-bold text-[16px] text-white cursor-pointer transition-opacity hover:opacity-90"
-            style={{ height: 52, borderRadius: 12, background: "linear-gradient(135deg, #009966, #009689)", border: "none" }}
+            style={{ height: 52, borderRadius: 12, backgroundColor: "#3FAE8C", border: "none" }}
           >
             {state === "success" ? t("close") : t("understood")}
           </button>
@@ -278,7 +278,7 @@ export default function CollecteModal({ onClose, onCollected }) {
           <button
             onClick={onClose}
             className="w-full flex items-center justify-center gap-3 font-bold text-[16px] text-white cursor-pointer transition-opacity hover:opacity-90"
-            style={{ height: 52, borderRadius: 12, background: "linear-gradient(135deg, #009966, #009689)", border: "none" }}
+            style={{ height: 52, borderRadius: 12, backgroundColor: "#3FAE8C", border: "none" }}
           >
             {t("close")}
           </button>
@@ -287,7 +287,7 @@ export default function CollecteModal({ onClose, onCollected }) {
             onClick={handleCollect}
             disabled={state === "loading"}
             className="w-full flex items-center justify-center gap-3 font-bold text-[16px] text-white cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60"
-            style={{ height: 52, borderRadius: 12, background: "linear-gradient(135deg, #009966, #009689)", border: "none" }}
+            style={{ height: 52, borderRadius: 12, backgroundColor: "#3FAE8C", border: "none" }}
           >
             {state === "loading" ? (
               <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none">

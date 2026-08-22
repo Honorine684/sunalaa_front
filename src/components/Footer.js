@@ -299,7 +299,10 @@ export default function Footer() {
           </div>
           {/* Locale switcher */}
           <div className="flex items-center gap-2">
-            <span className="text-[14px]">🌐</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.40)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>
+            </svg>
             <a href={locale === "fr" ? "/" : "/fr"}
               className="text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors cursor-pointer"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.50)", border: "1px solid rgba(255,255,255,0.10)" }}

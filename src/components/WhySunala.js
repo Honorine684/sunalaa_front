@@ -5,14 +5,14 @@ export default function WhySunala() {
   const t = useTranslations("WhySunala");
 
   const cards = [
-    { titleKey: "card1_title", descKey: "card1_desc", icon: <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#00FFA0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg> },
+    { titleKey: "card1_title", descKey: "card1_desc", icon: <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#3FAE8C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg> },
     { titleKey: "card2_title", descKey: "card2_desc", img: "/images/growth.png" },
     { titleKey: "card3_title", descKey: "card3_desc", img: "/images/money.png" },
     { titleKey: "card4_title", descKey: "card4_desc", img: "/images/card.png" },
   ];
 
   return (
-    <section className="relative overflow-hidden pt-10 pb-24 lg:pt-12 lg:pb-32 bg-white">
+    <section className="relative overflow-hidden pt-10 pb-24 lg:pt-12 lg:pb-32" style={{ backgroundColor: "#F5F7F5" }}>
       <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="font-bold mb-4 text-[22px] sm:text-[48px]" style={{ lineHeight: "1.1", letterSpacing: "0.35px", color: "#0F172B" }}>
@@ -26,7 +26,7 @@ export default function WhySunala() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {cards.map((card) => (
             <div key={card.titleKey}
-              className="rounded-[55px] flex flex-col items-center text-center gap-6 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              className="rounded-3xl flex flex-col items-center text-center gap-6"
               style={{ backgroundColor: "#1F4E46", padding: "44px 44px" }}>
               <div className="flex items-center justify-center">
                 {card.icon && card.icon}
