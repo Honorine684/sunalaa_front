@@ -19,7 +19,15 @@ async function isMaintenanceMode() {
   }
 }
 
-const PRIVATE_PATHS = ["/profil", "/setup-username"];
+const PRIVATE_PATHS = [
+  "/profil",
+  "/setup-username",
+  "/collecter",
+  "/formations",
+  "/classement",
+  "/bonus",
+  "/notifications",
+];
 const AUTH_PATHS    = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email"];
 
 function stripLocale(pathname) {
