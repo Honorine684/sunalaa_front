@@ -93,7 +93,7 @@ export default async function UtilitePage({ params }) {
                 </h3>
                 <p className="text-[14px] leading-relaxed mb-4" style={{ color: "#45556C" }}>{desc}</p>
                 <div className="rounded-xl px-4 py-3 text-[13px] leading-relaxed font-medium"
-                  style={{ borderLeft: `3px solid ${color}`, backgroundColor: "rgba(31,78,70,0.04)", color: "#1F4E46" }}>
+                  style={{ backgroundColor: "rgba(31,78,70,0.05)", color: "#1F4E46", borderRadius: 10 }}>
                   {example}
                 </div>
               </div>
