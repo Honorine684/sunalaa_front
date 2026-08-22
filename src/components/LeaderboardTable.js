@@ -146,7 +146,7 @@ export default function LeaderboardTable({ search = "", levelFilter = "" }) {
         <p className="text-[13px] text-gray-400 mb-3">
           {players.length > 0
             ? myRank
-              ? `Votre rang : #${myRank} — ${fmt(players.length)} participants affichés`
+              ? `Votre rang : #${myRank}, ${fmt(players.length)} participants affichés`
               : `${fmt(players.length)} participants`
             : search ? t("no_results_search") : t("no_participants")}
         </p>
