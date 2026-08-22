@@ -141,9 +141,9 @@
     "step1_title": "Partagez votre lien",
     "step1_desc": "Invitez vos amis, votre famille et votre communauté à rejoindre SUNALA",
     "step2_title": "Ils s'inscrivent",
-    "step2_desc": "Vos filleuls créent leur compte et gagnent des points SNL : collecte quotidienne, missions, streak, inscription, profil, transferts…",
+    "step2_desc": "Vos filleuls créent leur compte et collectent des points SNL : collectes quotidiennes, missions, streaks, inscriptions, complétion de profil, transferts…",
     "step3_title": "Vous gagnez ensemble",
-    "step3_desc": "Vous recevez votre % sur tous les points gagnés par vos filleuls, sans exception : collecte, missions, streak, inscription, profil, transferts.",
+    "step3_desc": "Vous recevez votre % sur tous les points gagnés par vos filleuls, sans exception : collectes quotidiennes, missions, streaks, inscriptions, complétion de profil, transferts reçus.",
     "gains_title": "Vos gains par niveau",
     "level1": "Niveau 1",
     "level1_sub": "Vos invitations directes",
@@ -156,7 +156,7 @@
     "claim_btn": "+{snl} SNL",
     "claimed": "À jour",
     "no_referrals": "Aucun filleul",
-    "info_1": "Chaque point gagné par un filleul vous crédite automatiquement un bonus SNL : collecte, missions, streak, inscription, profil, transferts reçus.",
+    "info_1": "Chaque point gagné par un filleul génère automatiquement un bonus SNL pour vous en fonction de ses activités éligibles, notamment les collectes quotidiennes, missions, streaks, inscriptions, complétion de profil et transferts reçus.",
     "info_2": "Le bonus est mis en attente à chaque collecte du filleul. Réclamez-le en cliquant sur le bouton de chaque niveau."
   },
   "Footer": {

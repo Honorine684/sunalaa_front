@@ -82,7 +82,7 @@ export default function ProfileCompletionBonus({ profile, onNavigate, onUploadPh
           </div>
           <p className="text-white text-[13px] font-semibold">
             {locale === "fr"
-              ? "Bonus profil complet réclamé — 1000 SNL crédités !"
+              ? "Bonus profil complet réclamé, 1000 SNL crédités !"
               : "Profile completion bonus claimed, 1000 SNL credited!"}
           </p>
         </div>
