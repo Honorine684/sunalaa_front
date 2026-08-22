@@ -1,23 +1,21 @@
 import { NextResponse } from "next/server";
 
-// Module-level store — persists for the lifetime of the process (single Docker container)
-// userId (string) → last-seen timestamp (ms)
+// userId → { ts, displayName, email }
 const store = new Map();
-const WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+const WINDOW_MS = 5 * 60 * 1000;
 
 function cleanup() {
   const cutoff = Date.now() - WINDOW_MS;
-  for (const [id, ts] of store) {
-    if (ts < cutoff) store.delete(id);
+  for (const [id, entry] of store) {
+    if (entry.ts < cutoff) store.delete(id);
   }
 }
 
-// Called by logged-in users every 30s to signal presence
 export async function POST(req) {
   try {
-    const { userId } = await req.json();
+    const { userId, displayName, email } = await req.json();
     if (!userId) return NextResponse.json({ ok: false }, { status: 400 });
-    store.set(String(userId), Date.now());
+    store.set(String(userId), { ts: Date.now(), displayName: displayName || null, email: email || null });
     cleanup();
     return NextResponse.json({ ok: true });
   } catch {
@@ -25,8 +23,14 @@ export async function POST(req) {
   }
 }
 
-// Admin dashboard polls this to get online count
 export async function GET() {
   cleanup();
-  return NextResponse.json({ count: store.size });
+  const users = [...store.entries()].map(([id, { ts, displayName, email }]) => ({
+    userId: id,
+    displayName,
+    email,
+    lastSeen: ts,
+  }));
+  users.sort((a, b) => b.lastSeen - a.lastSeen);
+  return NextResponse.json({ count: store.size, users });
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { adminApi, healthApi, getApiError } from "@/lib/api";
 import StatCard from "./StatCard";
 
@@ -40,6 +41,10 @@ function LiveStatCard({ count, loading }) {
         : <p className="text-[28px] font-bold leading-none" style={{ color: "#1F4E46" }}>{fmt(count)}</p>
       }
       <p className="text-[11px] mt-1.5" style={{ color: "#94A3B8" }}>actifs dans les 5 dernières min.</p>
+      <Link href="/admin/presence" className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-70" style={{ color: "#3FAE8C" }}>
+        Voir la liste
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </Link>
     </div>
   );
 }

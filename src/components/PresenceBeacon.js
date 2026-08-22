@@ -8,11 +8,20 @@ export default function PresenceBeacon() {
   useEffect(() => {
     if (!user?.id) return;
 
+    const displayName =
+      user.username ||
+      [user.firstName, user.lastName].filter(Boolean).join(" ") ||
+      null;
+
     const ping = () => {
       fetch("/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id }),
+        body: JSON.stringify({
+          userId: user.id,
+          displayName,
+          email: user.email || null,
+        }),
       }).catch(() => {});
     };
 
