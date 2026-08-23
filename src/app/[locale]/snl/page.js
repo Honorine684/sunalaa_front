@@ -388,8 +388,8 @@ export default async function SnlPage({ params }) {
             ))}
           </div>
 
-          {/* Supply totale */}
-          <div className="rounded-3xl p-7 sm:p-9 text-center mb-16 relative overflow-hidden bg-white"
+          {/* Supply totale — temporairement masqué */}
+          {/* <div className="rounded-3xl p-7 sm:p-9 text-center mb-16 relative overflow-hidden bg-white"
             style={{ border: "1px solid rgba(31,78,70,0.08)" }}>
             <img src="/images/Group.png" alt="" aria-hidden="true"
               className="absolute select-none pointer-events-none"
@@ -410,7 +410,7 @@ export default async function SnlPage({ params }) {
               <span className="text-center" style={{ color: "#E6B84C" }}>{tValeur("supply_burns")}</span>
               <span>1 000 000 000</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
