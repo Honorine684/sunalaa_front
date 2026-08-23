@@ -26,7 +26,7 @@ export default function GlobalError({ error, reset }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Erreur — SUNALA</title>
+        <title>Erreur : SUNALA</title>
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body {

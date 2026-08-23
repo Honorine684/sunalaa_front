@@ -106,12 +106,12 @@ const TIPS = [
     ),
     en: {
       title: "Add a profile photo",
-      desc: "Put a face to your username — tap the camera icon on your avatar to upload a photo.",
+      desc: "Put a face to your username: tap the camera icon on your avatar to upload a photo.",
       cta: "Upload photo",
     },
     fr: {
       title: "Ajoutez une photo de profil",
-      desc: "Mettez un visage sur votre pseudo — appuyez sur l'icône appareil photo sur votre avatar.",
+      desc: "Mettez un visage sur votre pseudo : appuyez sur l'icône appareil photo sur votre avatar.",
       cta: "Ajouter une photo",
     },
     condition: (p) => !p?.avatar,

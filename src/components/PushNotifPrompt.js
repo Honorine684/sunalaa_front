@@ -15,7 +15,7 @@ const TEXT = {
     cta: "Enable notifications",
     skip: "Maybe later",
     granted: "Notifications enabled!",
-    denied: "Notifications blocked — enable them in your browser settings.",
+    denied: "Notifications blocked: enable them in your browser settings.",
   },
   fr: {
     title: "Restez informé",
@@ -23,7 +23,7 @@ const TEXT = {
     cta: "Activer les notifications",
     skip: "Plus tard",
     granted: "Notifications activées !",
-    denied: "Notifications bloquées — activez-les dans les paramètres de votre navigateur.",
+    denied: "Notifications bloquées : activez-les dans les paramètres de votre navigateur.",
   },
 };
 

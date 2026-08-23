@@ -12,7 +12,7 @@ const Footer           = dynamic(() => import("@/components/Footer"));
 const WelcomePopup     = dynamic(() => import("@/components/WelcomePopup"));
 
 export const metadata = {
-  title: "Collectez des points SNL chaque jour — Rejoignez la communauté",
+  title: "Collectez des points SNL chaque jour : Rejoignez la communauté",
   description:
     "SUNALA vous permet de collecter 100 points SNL par jour, de parrainer vos proches et de gagner des bonus à chaque collecte. Rejoignez des milliers de membres actifs.",
   alternates: {
@@ -21,14 +21,14 @@ export const metadata = {
   },
   openGraph: {
     url: "https://sunalaa.com",
-    title: "SUNALA — Collectez des points SNL chaque jour",
+    title: "SUNALA : Collectez des points SNL chaque jour",
     description:
       "Collectez 100 SNL par jour, parrainez vos proches et progressez ensemble. Rejoignez la communauté SUNALA.",
     images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SUNALA — Collectez des points SNL chaque jour",
+    title: "SUNALA : Collectez des points SNL chaque jour",
     description: "Collectez 100 SNL par jour, parrainez vos proches et progressez ensemble.",
     images: ["/images/sunala_LOGO.png"],
   },
@@ -42,7 +42,13 @@ const jsonLd = {
   logo: "https://sunalaa.com/images/sunala_LOGO.png",
   description:
     "SUNALA est une plateforme qui permet de collecter des points SNL quotidiennement, de parrainer ses proches et de progresser ensemble dans un réseau de récompenses.",
-  sameAs: [],
+  sameAs: [
+    "https://t.me/sunala_agri",
+    "https://x.com/sunala_universe",
+    "https://discord.gg/cQhSUWrHd",
+    "https://www.facebook.com/share/1Dc2MhmXGj/",
+    "https://www.instagram.com/sunala.universe",
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",

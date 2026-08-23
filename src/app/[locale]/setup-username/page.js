@@ -229,7 +229,7 @@ export default function SetupUsernamePage() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M20 6L9 17l-5-5" stroke="#3FAE8C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Available — sunalaa.com/ref/{username.trim()}
+                  Available: sunalaa.com/ref/{username.trim()}
                 </p>
               )}
               {usernameStatus === "taken" && suggestions.length > 0 && (

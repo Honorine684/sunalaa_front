@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
     id: "/",
-    name: "SUNALAA — Points SNL",
+    name: "SUNALAA : Points SNL",
     short_name: "SUNALAA",
     description:
       "Collectez des points SNL chaque jour, parrainez vos proches et progressez ensemble.",

@@ -31,7 +31,7 @@ const jsonLd = [
 export const metadata = {
   metadataBase: new URL("https://sunalaa.com"),
   title: {
-    default: "SUNALA — Collect SNL points every day",
+    default: "SUNALA : Collect SNL points every day",
     template: "%s | SUNALA",
   },
   description:
@@ -57,7 +57,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     siteName: "SUNALA",
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "SUNALA — Collectez des points SNL chaque jour" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "SUNALA : Collectez des points SNL chaque jour" }],
   },
   twitter: {
     card: "summary_large_image",
