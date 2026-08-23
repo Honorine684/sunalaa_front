@@ -34,6 +34,7 @@ export default function OnlineUsersPage() {
   const [data, setData]       = useState({ count: 0, users: [] });
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(null);
+  const [removing, setRemoving] = useState(new Set());
 
   const fetchData = () => {
     fetch("/api/presence")
@@ -44,6 +45,25 @@ export default function OnlineUsersPage() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
+  };
+
+  const removeUser = async (userId) => {
+    setRemoving((prev) => new Set([...prev, userId]));
+    await fetch("/api/presence", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    }).catch(() => {});
+    setData((prev) => ({
+      ...prev,
+      users: prev.users.filter((u) => u.userId !== userId),
+      count: Math.max(0, prev.count - 1),
+    }));
+    setRemoving((prev) => {
+      const next = new Set(prev);
+      next.delete(userId);
+      return next;
+    });
   };
 
   useEffect(() => {
@@ -59,7 +79,7 @@ export default function OnlineUsersPage() {
         <div>
           <h1 className="text-[22px] font-bold" style={{ color: "#0F172B" }}>Présence en direct</h1>
           <p className="text-[13px] mt-0.5" style={{ color: "#94A3B8" }}>
-            Membres connectés dans les 5 dernières minutes · rafraîchissement toutes les 30s
+            Membres connectés dans les 90 dernières secondes · rafraîchissement toutes les 30s
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -164,14 +184,24 @@ export default function OnlineUsersPage() {
                     </span>
                   </div>
 
-                  {/* Link to user profile */}
-                  <Link
-                    href={`/admin/utilisateurs/${u.userId}`}
-                    className="shrink-0 text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-colors"
-                    style={{ backgroundColor: "#F1F5F9", color: "#45556C" }}
-                  >
-                    Voir
-                  </Link>
+                  {/* Actions */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Link
+                      href={`/admin/utilisateurs/${u.userId}`}
+                      className="text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-colors"
+                      style={{ backgroundColor: "#F1F5F9", color: "#45556C" }}
+                    >
+                      Voir
+                    </Link>
+                    <button
+                      onClick={() => removeUser(u.userId)}
+                      disabled={removing.has(u.userId)}
+                      className="text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-colors disabled:opacity-50"
+                      style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
+                    >
+                      Retirer
+                    </button>
+                  </div>
                 </div>
               );
             })}

@@ -51,7 +51,13 @@ export async function middleware(request) {
         signal: AbortSignal.timeout(3000),
         cache: "no-store",
       });
-      if (!res.ok) return NextResponse.redirect(new URL("/login", request.url));
+      if (!res.ok) {
+        // 401/403 = pas de droits → login ; 5xx/autre = API instable → on laisse passer
+        if (res.status === 401 || res.status === 403) {
+          return NextResponse.redirect(new URL("/login", request.url));
+        }
+        return NextResponse.next();
+      }
       const json = await res.json();
       const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
       if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return NextResponse.redirect(new URL("/login", request.url));
