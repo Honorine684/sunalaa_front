@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { AuthProvider } from "@/context/AuthContext";
 import "@/app/globals.css";
 
@@ -21,19 +21,18 @@ export default async function AdminLayout({ children }) {
   const cookieStore = await cookies();
   const token = cookieStore.get("snl_access_token")?.value;
 
-  if (!token) return redirect("/login");
+  if (!token) return notFound();
 
   try {
     const res = await fetch(`${API_BASE}/auth/me`, {
       headers: { Cookie: `snl_access_token=${token}` },
       cache: "no-store",
     });
-    if (!res.ok) return redirect("/login");
+    if (!res.ok) return notFound();
     const json = await res.json();
     const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
-    if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return redirect("/login");
+    if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return notFound();
   } catch {
-    // API timeout — on laisse passer, le middleware a déjà vérifié
     return notFound();
   }
 
