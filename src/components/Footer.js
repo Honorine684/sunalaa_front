@@ -202,7 +202,7 @@ export default function Footer() {
             { label: t("proj_whitepaper"), href: "#", soon: t("soon") },
             { label: t("proj_roadmap"),    href: `${prefix}/roadmap` },
             { label: t("proj_token"),      href: `${prefix}/snl/valeur` },
-            { label: t("proj_blog"),       href: `${prefix}/blog` },
+            { label: t("proj_blog"),       href: "#", soon: t("soon") },
           ]} />
 
           {/* Légal + Newsletter */}

@@ -137,7 +137,7 @@ export default async function RoadmapPage({ params }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-bold tracking-widest uppercase" style={{ color: phase.color }}>
-                      {phase.label} — {phase.period}
+                      {phase.label} : {phase.period}
                     </p>
                     <p className="text-[17px] font-bold mt-0.5" style={{ color: "#0F172B" }}>{phase.title}</p>
                   </div>
