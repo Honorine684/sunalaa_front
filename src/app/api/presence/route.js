@@ -23,6 +23,17 @@ export async function POST(req) {
   }
 }
 
+export async function DELETE(req) {
+  try {
+    const { userId } = await req.json();
+    if (!userId) return NextResponse.json({ ok: false }, { status: 400 });
+    store.delete(String(userId));
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ ok: false }, { status: 400 });
+  }
+}
+
 export async function GET() {
   cleanup();
   const users = [...store.entries()].map(([id, { ts, displayName, email }]) => ({

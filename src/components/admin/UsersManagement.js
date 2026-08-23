@@ -99,6 +99,7 @@ function ActionMenu({ user, onStatusChange, onDelete }) {
     setLoading(true);
     try {
       await adminApi.deleteUser(user.id);
+      fetch("/api/presence", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId: user.id }) }).catch(() => {});
       onDelete(user.id);
       setOpen(false);
     } catch (e) {
