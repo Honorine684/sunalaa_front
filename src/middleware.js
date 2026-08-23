@@ -56,7 +56,7 @@ export async function middleware(request) {
       const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
       if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return new NextResponse(null, { status: 404 });
     } catch {
-      return new NextResponse(null, { status: 404 });
+      return NextResponse.redirect(new URL("/login", request.url));
     }
     return NextResponse.next();
   }

@@ -2,7 +2,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import OnlineUsersPage from "@/components/admin/OnlineUsersPage";
 
 export const metadata = {
-  title: "Présence en direct — Administration SUNALA",
+  title: "Présence en direct : Administration SUNALA",
 };
 
 export default function PresencePage() {

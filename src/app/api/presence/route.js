@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 // userId → { ts, displayName, email }
 const store = new Map();
-const WINDOW_MS = 5 * 60 * 1000;
+const WINDOW_MS = 90 * 1000;
 
 function cleanup() {
   const cutoff = Date.now() - WINDOW_MS;
