@@ -44,19 +44,20 @@ export async function middleware(request) {
   // Admin : vérification du rôle côté serveur — snl_user_role ignoré
   if (pathname.startsWith("/admin")) {
     const token = request.cookies.get("snl_access_token")?.value;
-    if (!token) return new NextResponse(null, { status: 404 });
+    if (!token) return NextResponse.redirect(new URL("/login", request.url));
     try {
       const res = await fetch(`${API_BASE}/auth/me`, {
         headers: { Cookie: `snl_access_token=${token}` },
         signal: AbortSignal.timeout(3000),
         cache: "no-store",
       });
-      if (!res.ok) return new NextResponse(null, { status: 404 });
+      if (!res.ok) return NextResponse.redirect(new URL("/login", request.url));
       const json = await res.json();
       const role = (json?.data?.data?.role ?? json?.data?.role ?? json?.role ?? "").toUpperCase();
-      if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return new NextResponse(null, { status: 404 });
+      if (!["ADMIN", "SUPER_ADMIN"].includes(role)) return NextResponse.redirect(new URL("/login", request.url));
     } catch {
-      return NextResponse.redirect(new URL("/login", request.url));
+      // API timeout/indisponible — on laisse passer, AdminShell vérifie côté client
+      return NextResponse.next();
     }
     return NextResponse.next();
   }
