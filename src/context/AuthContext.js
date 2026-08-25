@@ -44,8 +44,20 @@ function clearSession() {
 
 const AuthContext = createContext(null);
 
+// Lit la session stockée synchronement (évite le flash "déconnecté" au changement de langue)
+function readStoredUser() {
+  if (typeof window === "undefined") return null;
+  const stored = lsGet("snl_user");
+  const loginTime = parseInt(lsGet("snl_login_time") ?? "0", 10);
+  const elapsed = loginTime ? Date.now() - loginTime : null;
+  if (stored && loginTime && elapsed <= SESSION_DURATION_MS) {
+    try { return normalizeUser(JSON.parse(stored)); } catch {}
+  }
+  return null;
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => readStoredUser());
   const [loading, setLoading] = useState(true);
 
   // Restore session on mount
@@ -68,8 +80,7 @@ export function AuthProvider({ children }) {
     });
 
     if (stored && !expired) {
-      try { setUser(normalizeUser(JSON.parse(stored))); } catch {}
-      // Valide silencieusement — cookie HttpOnly envoyé automatiquement
+      // user déjà set synchronement via readStoredUser() — on valide seulement côté backend
       authApi.getMe()
         .then(({ data }) => {
           const fresh = normalizeUser(data?.data?.data ?? data?.data ?? data);
