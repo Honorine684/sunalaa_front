@@ -46,8 +46,8 @@ export default function TestimonialsSection() {
       .catch(() => {});
   }, []);
 
-  const membersValue  = fmtMembers(liveStats.members)  ?? t("stats.members");
-  const pointsValue   = fmtPoints(liveStats.totalPoints) ?? t("stats.points");
+  const membersValue  = fmtMembers(liveStats.members)  ?? "—";
+  const pointsValue   = fmtPoints(liveStats.totalPoints) ?? "—";
 
   const statRows = [
     { value: membersValue, label: t("stats.membersLabel") },

@@ -16,7 +16,7 @@ export const metadata = {
     url: "https://sunalaa.com/bonus",
     title: "Bonus & Récompenses | SUNALA",
     description:
-      "Missions quotidiennes, parrainage 3 niveaux, bonus SNL à réclamer. Maximisez vos gains sur SUNALA.",
+      "Missions quotidiennes, parrainage 3 niveaux, bonus SNL à réclamer. Maximisez vos points SNL sur SUNALA.",
     images: [{ url: "/images/sunala_LOGO.png", width: 800, height: 600, alt: "SUNALA Bonus" }],
   },
   twitter: {

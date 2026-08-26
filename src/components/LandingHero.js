@@ -8,14 +8,14 @@ import LaunchCountdown from "./LaunchCountdown";
 import { useAuth } from "@/context/AuthContext";
 
 function fmtMembers(n) {
-  if (n == null) return "12,847";
+  if (n == null) return null;
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 10_000) return `${Math.floor(n / 1000)},${String(n % 1000).padStart(3, "0")}`;
   return n.toLocaleString("en-US");
 }
 
 function fmtPoints(n) {
-  if (n == null) return "2.4M+";
+  if (n == null) return null;
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M+`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k+`;
   return `${n}+`;
@@ -106,7 +106,7 @@ export default function LandingHero() {
                 </svg>
               </div>
               <div>
-                <div style={{ fontSize: 36, lineHeight: "40px", fontWeight: 700, color: "#000000" }}>{fmtMembers(liveStats.members)}</div>
+                <div style={{ fontSize: 36, lineHeight: "40px", fontWeight: 700, color: "#000000" }}>{fmtMembers(liveStats.members) ?? "—"}</div>
                 <div style={{ fontSize: 16, lineHeight: "24px", fontWeight: 600, color: "rgba(0,0,0,0.50)" }}>{t("stat_members")}</div>
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function LandingHero() {
                 </svg>
               </div>
               <div>
-                <div className="font-black text-2xl leading-none" style={{ color: "#0F172B" }}>{fmtPoints(liveStats.totalPoints)}</div>
+                <div className="font-black text-2xl leading-none" style={{ color: "#0F172B" }}>{fmtPoints(liveStats.totalPoints) ?? "—"}</div>
                 <div className="text-sm text-slate-500 mt-1">{t("stat_points")}</div>
               </div>
             </div>
