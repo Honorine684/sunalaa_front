@@ -88,10 +88,10 @@ export default async function UsagePage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#3FAE8C" }}>{t("s1_result_label")}</p>
               {[
-                { label: t("s1_row1"), value: "9 000 pts" },
-                { label: t("s1_row2"), value: "2 500 pts" },
-                { label: t("s1_row3"), value: "3 000 pts" },
-                { label: t("s1_row4"), value: "6 250 pts" },
+                { label: t("s1_row1"), value: "9,000 pts" },
+                { label: t("s1_row2"), value: "2,500 pts" },
+                { label: t("s1_row3"), value: "3,000 pts" },
+                { label: t("s1_row4"), value: "6,250 pts" },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center py-2.5"
                   style={{ borderBottom: "1px solid rgba(31,78,70,0.06)" }}>
@@ -99,9 +99,12 @@ export default async function UsagePage({ params }) {
                   <span className="text-[13px] font-semibold" style={{ color: "#3FAE8C" }}>{value}</span>
                 </div>
               ))}
-              <div className="flex justify-between items-center pt-3">
+              <div className="flex justify-between items-center pt-3 border-t" style={{ borderColor: "rgba(31,78,70,0.10)" }}>
                 <span className="text-[14px] font-bold" style={{ color: "#0F172B" }}>{t("s1_total")}</span>
-                <span className="text-[15px] font-black" style={{ color: "#1F4E46" }}>~21 $SNL</span>
+                <div className="text-right">
+                  <span className="text-[15px] font-black block" style={{ color: "#1F4E46" }}>20,750 pts</span>
+                  <span className="text-[12px] font-semibold" style={{ color: "#3FAE8C" }}>≈ 20.75 $SNL</span>
+                </div>
               </div>
             </div>
           </div>
@@ -122,7 +125,7 @@ export default async function UsagePage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#E6B84C" }}>{t("s2_result_label")}</p>
               {[
-                { label: t("s2_row1"), value: "45 000 pts" },
+                { label: t("s2_row1"), value: "45,000 pts" },
                 { label: t("s2_row2"), value: "45 $SNL" },
                 { label: t("s2_row3"), value: "$4.50" },
                 { label: t("s2_row4"), value: "$22.50" },
@@ -158,7 +161,7 @@ export default async function UsagePage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#1F4E46" }}>{t("s3_result_label")}</p>
               {[
-                { label: t("s3_row1"), value: "5 000 $SNL" },
+                { label: t("s3_row1"), value: "5,000 $SNL" },
                 { label: t("s3_row2"), value: t("s3_val2") },
                 { label: t("s3_row3"), value: t("s3_val3") },
                 { label: t("s3_row4"), value: t("s3_val4") },

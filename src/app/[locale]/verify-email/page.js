@@ -12,7 +12,7 @@ const TEXT = {
     loading_title: "Verifying your email…",
     loading_desc:  "Please wait a few seconds.",
     success_title: "Email verified!",
-    success_desc:  "Your account is now active. You can log in and start earning SNL points.",
+    success_desc:  "Your account is now active. You can log in and start collecting SNL points.",
     success_cta:   "Log in",
     error_title:   "Invalid or expired link",
     error_desc:    "This verification link is no longer valid. It may have expired or already been used.",

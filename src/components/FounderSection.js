@@ -32,7 +32,7 @@ export default function FounderSection() {
             </div>
             <div>
               <p className="font-bold text-[15px]" style={{ color: "#0F172B" }}>{t("founder_title")}</p>
-              <p className="text-[13px]" style={{ color: "#3FAE8C" }}>SUNALA</p>
+              <p className="text-[13px]" style={{ color: "#3FAE8C" }}>{t("founder_role")}</p>
             </div>
           </div>
         </div>

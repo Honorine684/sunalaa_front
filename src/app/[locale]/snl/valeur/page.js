@@ -107,7 +107,7 @@ export default async function ValeurPage({ params }) {
               {t("supply_label")}
             </p>
             <p className="font-black text-[34px] sm:text-[48px] leading-none mb-2 tracking-wide" style={{ color: "#0F172B" }}>
-              1 000 000 000
+              1,000,000,000
             </p>
             <p className="text-[13px] mb-7" style={{ color: "#94A3B8" }}>
               {t("supply_never")}
@@ -119,7 +119,7 @@ export default async function ValeurPage({ params }) {
             <div className="flex justify-between items-start text-[11px]" style={{ color: "#94A3B8" }}>
               <span>0 $SNL</span>
               <span className="text-center" style={{ color: "#E6B84C" }}>{t("supply_burns")}</span>
-              <span>1 000 000 000</span>
+              <span>1,000,000,000</span>
             </div>
           </div> */}
         </div>

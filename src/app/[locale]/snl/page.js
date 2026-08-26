@@ -265,10 +265,10 @@ export default async function SnlPage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#3FAE8C" }}>{tUsage("s1_result_label")}</p>
               {[
-                { label: tUsage("s1_row1"), value: "9 000 pts" },
-                { label: tUsage("s1_row2"), value: "2 500 pts" },
-                { label: tUsage("s1_row3"), value: "3 000 pts" },
-                { label: tUsage("s1_row4"), value: "6 250 pts" },
+                { label: tUsage("s1_row1"), value: "9,000 pts" },
+                { label: tUsage("s1_row2"), value: "2,500 pts" },
+                { label: tUsage("s1_row3"), value: "3,000 pts" },
+                { label: tUsage("s1_row4"), value: "6,250 pts" },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between items-center py-2.5"
                   style={{ borderBottom: "1px solid rgba(31,78,70,0.06)" }}>
@@ -276,9 +276,12 @@ export default async function SnlPage({ params }) {
                   <span className="text-[13px] font-semibold" style={{ color: "#3FAE8C" }}>{value}</span>
                 </div>
               ))}
-              <div className="flex justify-between items-center pt-3">
+              <div className="flex justify-between items-center pt-3 border-t" style={{ borderColor: "rgba(31,78,70,0.10)" }}>
                 <span className="text-[14px] font-bold" style={{ color: "#0F172B" }}>{tUsage("s1_total")}</span>
-                <span className="text-[15px] font-black" style={{ color: "#1F4E46" }}>~21 $SNL</span>
+                <div className="text-right">
+                  <span className="text-[15px] font-black block" style={{ color: "#1F4E46" }}>20,750 pts</span>
+                  <span className="text-[12px] font-semibold" style={{ color: "#3FAE8C" }}>≈ 20.75 $SNL</span>
+                </div>
               </div>
             </div>
           </div>
@@ -296,7 +299,7 @@ export default async function SnlPage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#E6B84C" }}>{tUsage("s2_result_label")}</p>
               {[
-                { label: tUsage("s2_row1"), value: "45 000 pts" },
+                { label: tUsage("s2_row1"), value: "45,000 pts" },
                 { label: tUsage("s2_row2"), value: "45 $SNL" },
                 { label: tUsage("s2_row3"), value: "$4.50" },
                 { label: tUsage("s2_row4"), value: "$22.50" },
@@ -327,7 +330,7 @@ export default async function SnlPage({ params }) {
             <div className="rounded-2xl p-5" style={{ backgroundColor: "white", border: "1px solid rgba(31,78,70,0.08)" }}>
               <p className="text-[10px] font-bold tracking-widest uppercase mb-4" style={{ color: "#1F4E46" }}>{tUsage("s3_result_label")}</p>
               {[
-                { label: tUsage("s3_row1"), value: "5 000 $SNL" },
+                { label: tUsage("s3_row1"), value: "5,000 $SNL" },
                 { label: tUsage("s3_row2"), value: tUsage("s3_val2") },
                 { label: tUsage("s3_row3"), value: tUsage("s3_val3") },
                 { label: tUsage("s3_row4"), value: tUsage("s3_val4") },
@@ -398,7 +401,7 @@ export default async function SnlPage({ params }) {
               {tValeur("supply_label")}
             </p>
             <p className="font-black text-[34px] sm:text-[48px] leading-none mb-2 tracking-wide" style={{ color: "#0F172B" }}>
-              1 000 000 000
+              1,000,000,000
             </p>
             <p className="text-[13px] mb-7" style={{ color: "#94A3B8" }}>{tValeur("supply_never")}</p>
             <div className="relative h-3 rounded-full overflow-hidden mb-3" style={{ backgroundColor: "rgba(31,78,70,0.10)" }}>
@@ -408,7 +411,7 @@ export default async function SnlPage({ params }) {
             <div className="flex justify-between items-start text-[11px]" style={{ color: "#94A3B8" }}>
               <span>0 $SNL</span>
               <span className="text-center" style={{ color: "#E6B84C" }}>{tValeur("supply_burns")}</span>
-              <span>1 000 000 000</span>
+              <span>1,000,000,000</span>
             </div>
           </div> */}
         </div>
