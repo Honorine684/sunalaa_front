@@ -1026,7 +1026,7 @@
     "art3_2_row10_action": "Bonus de bienvenue",
     "art3_2_row10_points": "+200 points",
     "art3_3_title": "3.3 Conversion des Points",
-    "art3_3_desc": "Le taux de conversion est fixé à 1 point SNL = 1 $SNL. Les points non convertis dans un délai de 90 jours après l'ouverture de la conversion expirent définitivement.",
+    "art3_3_desc": "Le taux de conversion est proportionnel : X points SNL = X $SNL. Les points non convertis dans un délai de 90 jours après l'ouverture de la conversion expirent définitivement.",
     "art4_title": "Article 4 : Programme de Commissions SUNALA Academy",
     "art4_intro": "Ce programme est distinct du bonus de parrainage en points SNL (jusqu'à 3 niveaux), déjà actif sur la plateforme, qui récompense les utilisateurs d'un pourcentage des points collectés par leurs filleuls. Le Programme de Commissions Academy sera activé lors du lancement officiel de SUNALA Academy. Une fois actif, sur chaque achat de l'offre Academy (35 USD), 25 USD seront redistribués au réseau de parrainage sur 6 niveaux :",
     "art4_level": "Niveau",
