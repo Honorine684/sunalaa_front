@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
+import { usePromptSlot } from "@/context/PromptContext";
 import { useAuth } from "@/context/AuthContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
@@ -34,7 +35,8 @@ export default function PushNotifPrompt() {
   const t = TEXT[locale] ?? TEXT.en;
 
   const [visible, setVisible]   = useState(false);
-  const [feedback, setFeedback] = useState(null); // null | "granted" | "denied"
+  const [feedback, setFeedback] = useState(null);
+  const allowed = usePromptSlot("push", visible); // null | "granted" | "denied"
 
   useEffect(() => {
     if (!isAuthenticated || !supported) return;
@@ -66,7 +68,7 @@ export default function PushNotifPrompt() {
     }
   }
 
-  if (!visible) return null;
+  if (!visible || !allowed) return null;
 
   return (
     <div

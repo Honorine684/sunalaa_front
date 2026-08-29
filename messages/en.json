@@ -109,7 +109,9 @@
     "claim_success": "+{bonus} SNL points added, new balance: {balance} SNL points",
     "streak_expires_in": "Streak resets in",
     "claim_window": "Claim window expires in",
-    "next_bonus_in": "Next bonus in"
+    "next_bonus_in": "Next bonus in",
+    "load_error": "Unable to load your streak. Please check your connection.",
+    "retry": "Try again"
   },
   "MissionsSection": {
     "title": "Daily Missions",

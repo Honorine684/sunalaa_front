@@ -15,18 +15,6 @@ export default function manifest() {
     categories: ["finance", "lifestyle"],
     icons: [
       {
-        src: "/icon.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "any",
-      },
-      {
-        src: "/icon.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "maskable",
-      },
-      {
         src: "/icon-192.png",
         sizes: "192x192",
         type: "image/png",
@@ -39,10 +27,16 @@ export default function manifest() {
         purpose: "maskable",
       },
       {
-        src: "/apple-icon.png",
-        sizes: "180x180",
+        src: "/icon.png",
+        sizes: "512x512",
         type: "image/png",
         purpose: "any",
+      },
+      {
+        src: "/icon.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };

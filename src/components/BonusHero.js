@@ -61,16 +61,23 @@ export default function BonusHero() {
   const { isAuthenticated } = useAuth();
   const [streak, setStreak]       = useState(null);
   const [loading, setLoading]     = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [claiming, setClaiming]   = useState(false);
   const [claimResult, setResult]  = useState(null);
   const [err, setErr]             = useState("");
 
-  useEffect(() => {
-    if (!isAuthenticated) { setLoading(false); return; }
+  function fetchStreak() {
+    setLoadError(false);
+    setLoading(true);
     usersApi.getStreak()
       .then((res) => setStreak(res.data?.data ?? res.data))
-      .catch(() => setStreak(null))
+      .catch(() => setLoadError(true))
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    if (!isAuthenticated) { setLoading(false); return; }
+    fetchStreak();
   }, [isAuthenticated]);
 
   async function handleClaim() {
@@ -132,6 +139,20 @@ export default function BonusHero() {
         <p className="text-[13px] lg:text-[15px] mb-6 lg:mb-12 whitespace-pre-line" style={{ color: "rgba(255,255,255,0.60)" }}>
           {t("subtitle")}
         </p>
+
+        {loadError && (
+          <div className="mb-6 flex flex-col items-center gap-2">
+            <p className="text-[13px]" style={{ color: "rgba(255,255,255,0.55)" }}>
+              {t("load_error")}
+            </p>
+            <button
+              onClick={fetchStreak}
+              className="text-[12px] font-semibold px-4 py-1.5 rounded-full border border-white/20 text-white hover:bg-white/10 transition cursor-pointer"
+            >
+              {t("retry")}
+            </button>
+          </div>
+        )}
 
         <div className="flex flex-wrap justify-center gap-1.5 sm:gap-3 lg:gap-4">
           {STREAK_DAYS.map(({ day, snl }) => {

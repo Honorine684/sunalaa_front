@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
+import { usePromptSlot } from "@/context/PromptContext";
 
 const DAILY_KEY = "snl_ios_install_daily";
 const MAX_PER_DAY = 4;
@@ -52,6 +53,7 @@ export default function IOSInstallBanner() {
   const locale = useLocale();
   const t = TEXT[locale] ?? TEXT.en;
   const [visible, setVisible] = useState(false);
+  const allowed = usePromptSlot("install-ios", visible);
 
   useEffect(() => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -72,7 +74,7 @@ export default function IOSInstallBanner() {
     setVisible(false);
   }
 
-  if (!visible) return null;
+  if (!visible || !allowed) return null;
 
   return (
     <div

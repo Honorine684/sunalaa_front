@@ -173,6 +173,7 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
   const locale = useLocale();
   const [dismissed, setDismissed] = useState([]);
   const [copied, setCopied]       = useState(false);
+  const [noLink, setNoLink]       = useState(false);
 
   useEffect(() => { setDismissed(getDismissed()); }, []);
 
@@ -207,13 +208,29 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
     }
     else if (tip.action === "copy_referral") {
       const username = profile?.username ?? profile?.referralCode ?? "";
+      if (!username) {
+        setNoLink(true);
+        setTimeout(() => setNoLink(false), 2500);
+        onNavigate?.("profil");
+        return;
+      }
       const link = `${window.location.origin}/ref/${username}`;
-      try {
-        navigator.clipboard?.writeText(link).then?.(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2500);
-        });
-      } catch {}
+      const confirm = () => { setCopied(true); setTimeout(() => setCopied(false), 2500); };
+      const fallback = () => {
+        const ta = document.createElement("textarea");
+        ta.value = link;
+        ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;pointer-events:none";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand("copy"); confirm(); } catch {}
+        document.body.removeChild(ta);
+      };
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(link).then(confirm).catch(fallback);
+      } else {
+        fallback();
+      }
     }
   }
 
@@ -291,7 +308,9 @@ export default function ProfileTips({ profile, onNavigate, onUploadPhoto }) {
                   >
                     {tip.id === "copy_referral" && copied
                       ? (locale === "fr" ? "Copié !" : "Copied!")
-                      : t.cta}
+                      : tip.id === "copy_referral" && noLink
+                        ? (locale === "fr" ? "Complétez votre profil →" : "Complete your profile →")
+                        : t.cta}
                     {tip.id !== "copy_referral" && (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                         <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
