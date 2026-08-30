@@ -11,6 +11,7 @@ import PushNotifPrompt from "@/components/PushNotifPrompt";
 import IOSInstallBanner from "@/components/IOSInstallBanner";
 import PwaInstallPrompt from "@/components/PwaInstallPrompt";
 import { PromptProvider } from "@/context/PromptContext";
+import SessionWarning from "@/components/SessionWarning";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const inter = Inter({
@@ -51,7 +52,7 @@ export default async function LocaleLayout({ children, params }) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <PresenceBeacon />
-            <ErrorBoundary>
+            <ErrorBoundary fallback={null}>
               <AnnouncementBanner />
             </ErrorBoundary>
             {children}
@@ -61,6 +62,7 @@ export default async function LocaleLayout({ children, params }) {
               <IOSInstallBanner />
               <PwaInstallPrompt />
             </PromptProvider>
+            <SessionWarning />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

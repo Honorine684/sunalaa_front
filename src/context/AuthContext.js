@@ -3,7 +3,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { authApi, usersApi } from "@/lib/api";
 
-const SESSION_DURATION_MS = 5 * 3600 * 1000; // 5h
+export const SESSION_DURATION_MS = 5 * 3600 * 1000; // 5h
+export const SESSION_WARNING_MS  = 10 * 60 * 1000;  // avertir 10 min avant
 
 const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || "https://api.sunalaa.com/api/v1").replace("/api/v1", "");
 
@@ -167,6 +168,7 @@ export function AuthProvider({ children }) {
     // Cookie HttpOnly déjà posé par le backend via /auth/google/callback
     const { data } = await authApi.getMe();
     const u = normalizeUser(data?.data?.data ?? data?.data ?? data);
+    if (!u?.id) throw new Error("invalid_user");
     lsSet("snl_user", JSON.stringify(u));
     lsSet("snl_login_time", String(Date.now()));
     setUser(u);
@@ -174,6 +176,7 @@ export function AuthProvider({ children }) {
     usersApi.updateLocale(locale).catch(() => {});
     return u;
   }, []);
+
 
   const refreshUser = useCallback(async () => {
     try {

@@ -143,9 +143,14 @@ export default function ProfileKyc() {
         ...(selfieUrl ? { selfie: selfieUrl }       : {}),
       };
       await usersApi.submitKyc(payload);
-      // Re-fetch pour avoir le vrai statut persisté côté backend
-      const updated = await usersApi.getKyc();
-      setKyc(updated.data?.data ?? updated.data);
+      // Soumission réussie — on tente de rafraîchir le statut
+      // Si le re-fetch échoue, on pose un statut local pour ne pas bloquer l'user
+      try {
+        const updated = await usersApi.getKyc();
+        setKyc(updated.data?.data ?? updated.data);
+      } catch {
+        setKyc((prev) => ({ ...prev, status: "pending" }));
+      }
       setShowForm(false);
       setFrontFile(null); setBackFile(null); setSelfieFile(null);
       setFrontUrl(null); setBackUrl(null); setSelfieUrl(null);
