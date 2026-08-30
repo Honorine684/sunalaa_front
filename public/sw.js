@@ -1,5 +1,5 @@
-const CACHE_STATIC = "sunalaa-static-v3";
-const CACHE_PAGES  = "sunalaa-pages-v3";
+const CACHE_STATIC = "sunalaa-static-abc123def4";
+const CACHE_PAGES  = "sunalaa-pages-abc123def4";
 
 const STATIC_PREFIXES = ["/_next/static/", "/images/"];
 const STATIC_EXT = /\.(png|jpg|jpeg|svg|ico|webp|avif|woff2?|ttf)$/;
